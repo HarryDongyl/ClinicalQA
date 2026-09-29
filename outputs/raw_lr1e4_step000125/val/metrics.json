@@ -1,0 +1,393 @@
+{
+  "label": "raw_lr1e4_step000125",
+  "split": "val",
+  "q5_ids": [
+    "val_041",
+    "val_077",
+    "val_096",
+    "val_134",
+    "val_135",
+    "val_192",
+    "val_245"
+  ],
+  "stop_reasons": {
+    "answer": 250
+  },
+  "subsets": {
+    "full": {
+      "n": 250,
+      "extractive_accuracy": {
+        "k": 99,
+        "n": 100,
+        "rate": 0.99,
+        "ci95": [
+          0.9455,
+          0.9982
+        ]
+      },
+      "numeric_accuracy": {
+        "k": 30,
+        "n": 50,
+        "rate": 0.6,
+        "ci95": [
+          0.4618,
+          0.7239
+        ]
+      },
+      "tool_selection_accuracy": {
+        "k": 61,
+        "n": 62,
+        "rate": 0.9839,
+        "ci95": [
+          0.9141,
+          0.9971
+        ]
+      },
+      "tool_argument_accuracy": {
+        "k": 55,
+        "n": 62,
+        "rate": 0.8871,
+        "ci95": [
+          0.7848,
+          0.9442
+        ]
+      },
+      "tool_argument_accuracy_given_call": {
+        "k": 55,
+        "n": 61,
+        "rate": 0.9016,
+        "ci95": [
+          0.8016,
+          0.9541
+        ]
+      },
+      "tool_execution_success": {
+        "k": 61,
+        "n": 62,
+        "rate": 0.9839,
+        "ci95": [
+          0.9141,
+          0.9971
+        ]
+      },
+      "tool_result_in_answer": {
+        "k": 61,
+        "n": 62,
+        "rate": 0.9839,
+        "ci95": [
+          0.9141,
+          0.9971
+        ]
+      },
+      "tool_e2e": {
+        "k": 55,
+        "n": 62,
+        "rate": 0.8871,
+        "ci95": [
+          0.7848,
+          0.9442
+        ]
+      },
+      "uncertainty_detection_rate": {
+        "k": 35,
+        "n": 38,
+        "rate": 0.9211,
+        "ci95": [
+          0.792,
+          0.9728
+        ]
+      },
+      "over_call_rate": {
+        "k": 1,
+        "n": 188,
+        "rate": 0.0053,
+        "ci95": [
+          0.0009,
+          0.0295
+        ]
+      },
+      "over_refusal_rate": {
+        "k": 2,
+        "n": 212,
+        "rate": 0.0094,
+        "ci95": [
+          0.0026,
+          0.0337
+        ]
+      },
+      "unsupported_argument_rate": {
+        "k": 7,
+        "n": 62,
+        "rate": 0.1129,
+        "ci95": [
+          0.0558,
+          0.2152
+        ]
+      },
+      "errors": {
+        "extractive": {
+          "correct": 99,
+          "direction_mismatch": 1
+        },
+        "numeric_reasoning": {
+          "correct": 30,
+          "number_mismatch": 13,
+          "direction_mismatch": 6,
+          "over_refusal": 1
+        },
+        "tool_call": {
+          "correct": 55,
+          "wrong_args_ungrounded": 6,
+          "no_call_abstained": 1
+        },
+        "uncertain": {
+          "correct": 35,
+          "fabricated_value": 2,
+          "missing_field_not_named": 1
+        }
+      },
+      "macro_task_success": 0.8496
+    },
+    "q5_grounded": {
+      "n": 243,
+      "extractive_accuracy": {
+        "k": 99,
+        "n": 100,
+        "rate": 0.99,
+        "ci95": [
+          0.9455,
+          0.9982
+        ]
+      },
+      "numeric_accuracy": {
+        "k": 30,
+        "n": 50,
+        "rate": 0.6,
+        "ci95": [
+          0.4618,
+          0.7239
+        ]
+      },
+      "tool_selection_accuracy": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "tool_argument_accuracy": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "tool_argument_accuracy_given_call": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "tool_execution_success": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "tool_result_in_answer": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "tool_e2e": {
+        "k": 55,
+        "n": 55,
+        "rate": 1.0,
+        "ci95": [
+          0.9347,
+          1.0
+        ]
+      },
+      "uncertainty_detection_rate": {
+        "k": 35,
+        "n": 38,
+        "rate": 0.9211,
+        "ci95": [
+          0.792,
+          0.9728
+        ]
+      },
+      "over_call_rate": {
+        "k": 1,
+        "n": 188,
+        "rate": 0.0053,
+        "ci95": [
+          0.0009,
+          0.0295
+        ]
+      },
+      "over_refusal_rate": {
+        "k": 1,
+        "n": 205,
+        "rate": 0.0049,
+        "ci95": [
+          0.0009,
+          0.0271
+        ]
+      },
+      "unsupported_argument_rate": {
+        "k": 1,
+        "n": 56,
+        "rate": 0.0179,
+        "ci95": [
+          0.0032,
+          0.0945
+        ]
+      },
+      "errors": {
+        "extractive": {
+          "correct": 99,
+          "direction_mismatch": 1
+        },
+        "numeric_reasoning": {
+          "correct": 30,
+          "number_mismatch": 13,
+          "direction_mismatch": 6,
+          "over_refusal": 1
+        },
+        "tool_call": {
+          "correct": 55
+        },
+        "uncertain": {
+          "correct": 35,
+          "fabricated_value": 2,
+          "missing_field_not_named": 1
+        }
+      },
+      "macro_task_success": 0.8778
+    },
+    "q5_only": {
+      "n": 7,
+      "extractive_accuracy": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "ci95": null
+      },
+      "numeric_accuracy": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "ci95": null
+      },
+      "tool_selection_accuracy": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.8571,
+        "ci95": [
+          0.4869,
+          0.9743
+        ]
+      },
+      "tool_argument_accuracy": {
+        "k": 0,
+        "n": 7,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.3543
+        ]
+      },
+      "tool_argument_accuracy_given_call": {
+        "k": 0,
+        "n": 6,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.3903
+        ]
+      },
+      "tool_execution_success": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.8571,
+        "ci95": [
+          0.4869,
+          0.9743
+        ]
+      },
+      "tool_result_in_answer": {
+        "k": 6,
+        "n": 7,
+        "rate": 0.8571,
+        "ci95": [
+          0.4869,
+          0.9743
+        ]
+      },
+      "tool_e2e": {
+        "k": 0,
+        "n": 7,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.3543
+        ]
+      },
+      "uncertainty_detection_rate": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "ci95": null
+      },
+      "over_call_rate": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "ci95": null
+      },
+      "over_refusal_rate": {
+        "k": 1,
+        "n": 7,
+        "rate": 0.1429,
+        "ci95": [
+          0.0257,
+          0.5131
+        ]
+      },
+      "unsupported_argument_rate": {
+        "k": 6,
+        "n": 6,
+        "rate": 1.0,
+        "ci95": [
+          0.6097,
+          1.0
+        ]
+      },
+      "errors": {
+        "extractive": {},
+        "numeric_reasoning": {},
+        "tool_call": {
+          "wrong_args_ungrounded": 6,
+          "no_call_abstained": 1
+        },
+        "uncertain": {}
+      },
+      "macro_task_success": null
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "rule": {
+    "subset": "q5_grounded",
+    "tie_margin": 0.005
+  },
+  "candidates": [
+    {
+      "label": "raw_lr1e4_step000125",
+      "order": 0,
+      "macro": 0.8778,
+      "unsupported_calls": 1,
+      "over_calls": 1
+    },
+    {
+      "label": "raw_lr1e4_step000250",
+      "order": 1,
+      "macro": 0.8648,
+      "unsupported_calls": 1,
+      "over_calls": 0
+    }
+  ],
+  "selected": "raw_lr1e4_step000125",
+  "checkpoints": {
+    "raw_lr1e4_step000125": "/workspace/clinqa/checkpoints/raw_lr1e4/checkpoint-125",
+    "raw_lr1e4_step000250": "/workspace/clinqa/checkpoints/raw_lr1e4/checkpoint-250"
+  }
+}
