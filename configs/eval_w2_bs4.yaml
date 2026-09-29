@@ -1,0 +1,25 @@
+# Validation generation only. Use explicit new labels and epoch adapter paths.
+# Selection is deliberately not configured: scorer-v2 adjudication comes first.
+format_config: configs/format_core.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 4
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
+  w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/final}
+  w2_filtered_lr1e4_mb4: {adapter: checkpoints/w2_filtered_lr1e4_mb4/final}
+  w2_filtered_lr1p5e4_mb4: {adapter: checkpoints/w2_filtered_lr1p5e4_mb4/final}
+  w2_filtered_lr2e4_mb4: {adapter: checkpoints/w2_filtered_lr2e4_mb4/final}

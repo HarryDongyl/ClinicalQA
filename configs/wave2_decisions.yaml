@@ -1,0 +1,48 @@
+# Planning registry, not an input to clinqa.train or clinqa.evaluate. See EXPERIMENT_JOURNAL W2-PLAN-003.
+status: proposed_not_run
+decision_split: val
+test_permitted_for_decisions: false
+scorer:
+  implementation: src/clinqa/scoring_v2.py
+  command: .venv/bin/python scripts/rescore_validation_v2.py
+  automatic_selection_permitted: false
+  gate: complete_required_adjudication_and_freeze_rubric
+  next: calibrated_semantic_judge_for_review_items  # design only; backend and calibration sample not chosen
+# One factor per step, in this order; each step inherits the previous step's decision.
+queue:
+  - id: E1
+    factor: inference_system_prompt
+    status: prepared_not_run
+    command: make prompt-ablation
+    arms: {v1: configs/eval_w2_prompt_v1.yaml, v2: configs/eval_w2_prompt_v2.yaml}
+    weights: [base, checkpoints/raw_lr1e4/checkpoint-125, checkpoints/q5filtered_lr5e5/checkpoint-121]
+    primary_arm: base  # adapters were trained with v1, so v2 is an input shift for them
+    determinism_reference: [base, raw_lr1e4_step000125, q5filtered_lr5e5_step000121]
+  - id: E2a
+    factor: generation_batch_size
+    status: configs_exist_not_run
+    reference: 2
+    arms: [configs/eval_w2_bs4.yaml, configs/eval_w2_bs8.yaml]
+  - id: E2b
+    factor: training_micro_batch
+    status: configs_exist_not_run
+    arms: [configs/train/w2_filtered_lr1e4_mb1.yaml, configs/train/w2_filtered_lr1e4_mb4.yaml]
+  - id: E3
+    factor: learning_rate
+    status: configs_exist_not_run
+    arms: [configs/train/w2_filtered_lr1p5e4_mb4.yaml, configs/train/w2_filtered_lr2e4_mb4.yaml]
+    conditional: lr2e4_only_if_lr1p5e4_stable_and_not_worse
+  - id: E4
+    factor: q5_training_labels
+    status: blocked_on_annotation_audit
+  - id: E5
+    factor: pre_call_sentence_in_sft_targets
+    status: not_designed_in_code
+prompt_v2_in_training: separate_labeled_experiment_not_in_E1_to_E3
+q5_relabel:
+  status: train_only_proposal_requires_annotation_audit
+  proposals: reports/q5_uncertain_proposals/
+  preserve_canonical_data: true
+  compare_against: q5_filtered
+  never_relabel_validation_or_test: true
+  never_increase_tool_tolerance_from_test_observations: true

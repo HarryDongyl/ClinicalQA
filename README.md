@@ -13,13 +13,22 @@ The assignment text is in [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md) (moved there 
 
 ## Status
 
+Current development policy: **validation only; repair measurement before selecting another model**.
+The first-wave runs are complete. The new bounded scorer and unresolved-review workflow are described in
+[Scorer v2](docs/SCORER_V2.md); the maintained observations, parameters and proposed next runs are in
+[Experiment journal](docs/EXPERIMENT_JOURNAL.md). Run `make score-v2 OUT=reports/scorer_v2_new_review`
+to score saved validation predictions into a new directory. Do not use the legacy `select`/`freeze`
+commands to announce a v2 winner before adjudication. The higher-LR/batch configurations and Q5
+relabel proposals are prepared, not trained or promoted.
+
 | Phase | Scope | Status |
 |---|---|---|
 | 0-1b | Data copy + checksums, tools, 19 quality checks, data report, train views | done |
 | 2 | Native Qwen chat formatting, assistant-only loss masks, token lengths, formatted examples | done (CPU-verified) |
-| 3 | Scorer (fixtures + gold-copy checks), rollout state machine, evaluation/compare/select | done (CPU-verified) |
-| 4 | QLoRA training script + smoke test | implemented; GPU run pending |
-| 5 | Base + three QLoRA runs on RunPod, freeze, frozen test run, REPORT | pending (needs GPU) |
+| 3 | Legacy scorer, rollout state machine, evaluation/compare/select | historical v1; retained for reproducibility |
+| 4 | QLoRA training script + smoke test | first-wave GPU runs completed |
+| 5 | Base + three QLoRA runs and their downloaded artifacts | reviewed; see experiment journal |
+| 6 | Validation-only contract scorer v2 and wave-two configurations | implemented; semantic adjudication and new GPU runs pending |
 
 Plan: [docs/PLAN.md](docs/PLAN.md). Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) (revision 3: D-018 onward).
 Target: one 24GB NVIDIA GPU, Qwen3-4B-Instruct-2507 QLoRA SFT. RL is not required; see PLAN section 11.

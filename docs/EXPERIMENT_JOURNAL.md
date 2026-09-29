@@ -1,6 +1,121 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-09-29. Entry W1-REVIEW-001.
+Maintained record. Last updated: 2026-09-29. Latest entry: W2-PLAN-003.
+
+## W2-PLAN-003 — ordered one-factor queue; E1 prompt ablation prepared
+
+Date: 2026-09-29. Planning and CPU validation only; no generation, training, external grading or test inspection. Parameters and decision rules below are fixed **before** any E1 output exists.
+
+**Order (one factor per step, validation only).** Each step starts from the preceding step's decision and changes nothing else.
+
+| Step | Factor | Arms | Held fixed | Status |
+|---|---|---|---|---|
+| E1 | System prompt at inference | v1 vs v2-reference on base, raw1e4 step125, filtered5e5 step121 | Weights, batch 2, budgets, decoding, code state | prepared, not run |
+| E2a | Generation batch size | 2 (reference) vs 4 vs 8 on one fixed adapter | Prompt from E1, budgets, weights | configs exist, not run |
+| E2b | Training micro-batch | w2_filtered_lr1e4_mb1 vs _mb4 (effective batch 16) | Filtered view, 1e-4, prompt v1 in training | configs exist, not run |
+| E3 | Learning rate | 1e-4 -> 1.5e-4 -> 2e-4 (last only if 1.5e-4 is stable and not worse) | Micro-batch chosen in E2b | configs exist, not run |
+| E4 | Q5 training labels | filtered vs audited relabel view | Best E3 setting | blocked on annotation audit of 78 proposals |
+| E5 | Short pre-call sentence in SFT tool-call targets | empty vs one-sentence call content | Best E4 setting, same budgets | not designed in code; separate data-transformation experiment |
+
+Prompt v2 inside SFT is a separate, labeled training-input change and is not part of E1-E3. The call-turn sentence (E5) is tested on its own: the parser already keeps accompanying text, but training targets are empty, so a prompt line alone is not expected to produce, or to improve, reasoning.
+
+**E1 design.** Configs `configs/eval_w2_prompt_v1.yaml` and `configs/eval_w2_prompt_v2.yaml` differ only in `format_config`. CPU check: the resolved evaluation protocols differ only in `format_config` and `prompt_sha256`. The format configs also differ in `output_dir`, `eval_splits` and `length_report`, which rollout does not read. The rendered system prompts differ by exactly the one reference-range line. `make prompt-ablation` writes six validation labels `w2p_{v1,v2}_{base,raw_lr1e4,q5filtered_lr5e5}`, scores them with scorer v2 into `reports/w2_prompt_ablation/`, and writes item-level rollout diffs (`scripts/compare_rollouts.py`).
+
+- Matched control: `scoring_v2.py` was added after wave one, so the recorded source hash differs from wave-one runs. Both arms are therefore regenerated under one code state instead of reusing wave-one v1 outputs. No other `src/clinqa` file changed.
+- Determinism: the regenerated v1 arm is compared item by item with `base`, `raw_lr1e4_step000125` and `q5filtered_lr5e5_step000121`. If they are not identical (for example, a different GPU host), the v1-rerun drift is the noise floor for reading v1-vs-v2 differences.
+- Confound: both adapters were trained with the v1 prompt, so v2 is an input shift for them. The base arm is the primary estimate of the prompt effect; adapter arms show whether the rule still acts after SFT.
+
+**E1 decision rule (applied only after the scorer v2 rubric is frozen).** Adopt v2 for inference only if, in the base arm and without regression in the adapter arms: adjudicated reference-range and numeric outcomes improve beyond the v1-rerun noise floor, and unresolved-review counts are reported per arm, not dropped. The guardrails are that there are no new unsupported calls on the seven validation Q5 cases, grounded tool E2E does not fall below the arm's v1 result, adjudicated answerable-case refusals do not increase, and mean new tokens rise by at most 10%. Otherwise keep v1 as the incumbent. Generation can proceed before adjudication; the decision cannot.
+
+**Cost estimate (planning, from wave-one timings on an RTX 4090):** about 400 s per base pass and 570-580 s per adapter pass, so about 55 minutes of generation plus setup. At $0.74/hr that is roughly $0.80-0.90. About $7 of the $10 budget remains.
+
+**Scorer next step (design, not implemented).** Deterministic checks stay authoritative; a deterministic fail is never overridden. A semantic judge resolves only `review` items against the fixed SCORER_V2 rubric. It returns structured JSON per claim (supported / contradicted / not_supplied / unresolved, with quoted evidence) and a decision. It is pinned (model, revision, prompt hash, temperature 0) and cached by input hash. It is calibrated once against human decisions on a stratified validation sample split into development and holdout halves, with predeclared agreement and false-pass thresholds, then frozen and applied automatically to every checkpoint. No per-step human labeling during training. Open choices: judge backend (local model on the pod vs external API; SCORER_V2 currently states no external upload) and calibration sample size / labeler.
+
+## W2-RESEARCH-002 — repository-informed prompt and evaluator review
+
+Date: 2026-09-29. Documentation-only review; no new training, inference, external grading or test inspection. See `docs/REPOSITORY_DESIGN_REVIEW.md` for source links, design boundaries and next decisions.
+
+- Verified actual configuration wiring: default training/evaluation still use system v1. The one-rule reference v2 exists as a separate candidate, not an active or validated replacement.
+- Inspected official HealthBench scorer and meta-evaluator, BFCL AST checker and prompt templates, and tau2 agent/evaluator source. Borrow criterion-level semantics, evaluator calibration, typed tool checks, explicit missing-parameter policy, and separate protocol/policy/task outcomes. Do not copy their output formats or domain objectives wholesale.
+- Proposed a versioned deterministic-plus-semantic evaluator with evidence-bearing JSON, caching, bounded failures and explicit unresolved coverage. This is not implemented. Current v2 remains a bounded checker; automatic semantic checkpoint selection remains disabled. One-time calibration is separate from unattended SFT, which optimizes token cross-entropy and requires no per-step human labeling.
+- Confirmed the parser already preserves text accompanying tool calls, while SFT tool-call targets have empty content. A short purpose sentence is a separate ablation; include pre-call claims in evaluation and reconsider first-token call-probability diagnostics if used.
+- Keep reference-prompt testing separate from tool-precondition wording, explanation style, learning rate and Q5 relabeling. All empirical decisions remain validation-only. Test-only conversion observations remain quarantined.
+- Existing delivery status is unchanged: 83 previously passed scorer tests, 1,750 validation predictions rescored, new configs prepared but not run, and 78 inactive Q5 proposals. No new full semantic winner is claimed.
+
+## W2-EVAL-001 — scorer redesign and validation-only decision policy
+
+**This entry supersedes the earlier experiment queue and interpretation of lexical answer scores.** The earlier W1 review is retained below as history. Its test observations must not guide this wave's scorer, prompts, tolerances, learning rates, batch settings, checkpoint choice, or training annotations. No test data or predictions were opened for the new scoring implementation or its validation report. Training-only annotation auditing is permitted; validation is the sole performance-development split.
+
+### Completed changes
+
+- Implemented `src/clinqa/scoring_v2.py`: prediction-independent question contracts, input-derived reference comparisons and calculations, cross-sentence subject tracking, compositional negation, explicit contradiction checks, and pass/fail/review results. Gold phrasing and its optional intermediate numbers are no longer an extractive/numeric correctness oracle.
+- Preserved `metrics.py` and original outputs as v1. Tool syntax, execution, completion and legacy argument counters remain separate from semantic answer scoring. Missing-input policy success is also reported separately from tool E2E.
+- Added `scripts/rescore_validation_v2.py` and `make score-v2`. They score seven validation evaluations (1,750 predictions), store contracts and evidence, and emit a blinded adjudication packet that includes automatic passes as well as failures. The command cannot read a test split and refuses to overwrite an existing report directory.
+- Added synthetic adversarial/metamorphic tests. All 83 cases in the new scorer and historical train/validation scorer suites passed. The 1,750-row validation audit, source hashes and unchanged training-source hash also passed verification. See `docs/SCORER_V2.md` for the design, limitations, and adjudication release gate.
+- Added a one-rule reference-grounding prompt variant, four proposed filtered-training configurations, and evaluation batch-size 4/8 configurations. No new training or generation was launched.
+- Produced 78 **unreviewed training-only** Q5 uncertain-label proposals in `reports/q5_uncertain_proposals/`. Original data and the active filtered view were not changed; proposals are not registered for training.
+
+### Observations, interpretation, and corresponding actions
+
+| Observation from permitted evidence | Interpretation | Action and status |
+|---|---|---|
+| Base answers often state a value and explain it in a later sentence; `not within` was mishandled. | v1 measures answer style as well as correctness, disproportionately penalizing some base outputs. | Implemented subject-scoped discourse checks and set-valued negation. `val_010`, `val_018`, and `val_023` are diagnostic examples; the code has no record-ID exceptions. |
+| Gold numeric answers include unrequested percentages, intermediate arithmetic, and explanations. | Reproducing every gold number is not the task objective. | Compute mandatory values from question + input. Check optional assertions for truth when deterministically supported, rather than requiring them. |
+| Some validation records have vitals in the table and explicit lab ranges in the note. Others omit required reference bounds entirely. | “Only table ranges” would discard valid input; missing input cannot be repaired by trusting gold. | Prompt uses explicitly supplied ranges from table, note, or question. Missing/ambiguous evidence goes to review. `val_085`, for example, supplies BUN in the note but does not supply the 20 mg/dL boundary assumed by gold. |
+| SFT greatly improves tool protocol completion and recognized uncertainty behavior. | These are genuine behavioral gains, distinct from inflated lexical task-score gains. | Retain and separately report executable tool and protocol checks. Do not discard them when revising free-text scoring. |
+| On validation Q5 cases, raw1e4 epoch one makes six unsupported calls; filtered5e5 epoch one makes none and abstains on all seven. Both have 55/55 legacy grounded tool E2E. | Filtered training is the stronger safety-oriented starting point on current validation evidence; this is not proof it dominates every task. | Use filtered training for the next controlled comparisons. Keep missing-input behavior as a separate selection constraint. |
+| Validation numeric errors include 99 versus 100 giving a difference of 9 (`val_062`), incorrect comparisons, and wrong extra assertions. | Numeric reasoning remains a credible weakness, but its exact rate and model ranking need adjudication after scorer repair. | Prioritize numeric obligations, reference binding, units, operation selection and coverage; do not infer a full numeric accuracy from resolved cases alone. |
+| Train loss and teacher-forced validation CE continue improving; v1 generated metrics fluctuate. | There is no clear classic train/validation-loss divergence in these runs. Lack of that pattern does not prove unlimited training is safe. | Do not diagnose overfitting from a small legacy-score decline. Retain both epoch checkpoints and choose using the repaired, adjudicated validation rubric. |
+| Raw 1e-4 outperforms raw 5e-5 on the original validation metric and has lower validation CE. | A higher LR is worth testing, not already proven superior. Data policy and scoring bias remain confounders. | Prepare filtered 1e-4, then 1.5e-4 and conditionally 2e-4, with all other settings held fixed within the LR comparison. |
+| Single-example training used 7.81 GiB peak VRAM in the recorded runs. | Micro-batch 4 is a reasonable memory/throughput hypothesis, not a verified capacity guarantee. | Prepared micro-batch 4 + accumulation 4, retaining effective batch 16. First compare against micro-batch 1 + accumulation 16. Test longest sequences and mask/padding behavior on GPU before full training. |
+| Evaluation generation used batch size 2. | Batch 4/8 may improve throughput; dynamic rollout padding can change memory and numerical behavior. | Prepared separate batch 4/8 configs. Compare validation completions, tool events, peak VRAM and wall time against batch 2 before standardizing. Do not change decoding/token/call limits at the same time. |
+| The user notes integer rounding during imperial conversion, but this observation originated in test. | It is unavailable as development evidence for this wave. | Quarantine it as a historical observation. No new rounding tolerance, targeted training example, prompt rule, or model selection is based on it. Existing conversion checks remain unchanged. |
+| Removing Q5 cases prevents contradictory tool supervision; relabeling could teach the intended missing-input behavior directly. | Relabeling is a different training-policy experiment, with its own annotation risks and count changes. | Stage train-only proposals and audit them before creating a new view. Never relabel validation/test to improve scores. |
+
+### What the new scores do and do not establish
+
+The new report is `reports/scorer_v2_validation/REPORT.md`; the schema and rubric are in `docs/SCORER_V2.md`. Many base false negatives become automatic passes, including the reviewed cross-sentence examples. However, many open note questions and clinical/numeric subquestions require adjudication. In the current bounded checker, base extractive results are 53 pass / 5 fail / 42 review; raw1e4 epoch one is 62 / 1 / 37; filtered5e5 epoch one is 63 / 0 / 37. **These are not replacement full accuracies.** The unresolved cases must not be counted as failures or silently excluded from model comparisons.
+
+The independent tool-argument and grounding verifiers also disagree on some calls, including validation `val_104`. Such disagreement is a review item, not justification to widen conversion tolerances. A call that matches gold must still be checked against the input.
+
+No new four-task macro winner has been selected. Finish the model-blinded review, including a balanced sample of automatic passes/failures, freeze the rubric, and only then promote a checkpoint. Existing v1 `select`/`freeze` commands do not implement this gate and are not suitable for announcing a v2 winner.
+
+### Prepared experiments: parameters before outcomes
+
+All runs below are **not run**. Shared: Qwen3-4B-Instruct-2507 at the existing pinned revision, NF4/BF16, LoRA r16/alpha32/dropout0.05, seed42, max length2048, two epochs, cosine schedule, 3% warmup, existing filtered view with 1,922 unchanged records, v1 prompt unless explicitly testing the prompt variant. Keep both epoch checkpoints; epoch-one uses the two-epoch LR schedule.
+
+| Run ID | Learning rate | Micro-batch | Accumulation | Effective batch | Purpose |
+|---|---:|---:|---:|---:|---|
+| w2_filtered_lr1e4_mb1 | 1e-4 | 1 | 16 | 16 | Complete the missing filtered/LR comparison |
+| w2_filtered_lr1e4_mb4 | 1e-4 | 4 | 4 | 16 | Isolate batching/throughput changes |
+| w2_filtered_lr1p5e4_mb4 | 1.5e-4 | 4 | 4 | 16 | First higher-LR probe |
+| w2_filtered_lr2e4_mb4 | 2e-4 | 4 | 4 | 16 | Conditional second probe after stable 1.5e-4 results |
+
+Changing micro-batch is not guaranteed to be mathematically identical even with the same effective batch: padding, loss normalization over varying assistant-token counts, accumulation order and floating-point behavior can matter. Check these before interpreting a difference as a learning-rate effect. Do not automatically scale LR by four merely because micro-batch changed. Smaller warmup fractions or more epochs are separate factors, not bundled into this comparison.
+
+Generation batch configs are `configs/eval_w2_bs4.yaml` and `configs/eval_w2_bs8.yaml`. Token/call budgets remain 256 tokens per turn, 512 total, one call, two assistant turns. Explicit adapter overrides should point to the epoch under evaluation, not assume `final` is the best checkpoint. These configs intentionally omit legacy selection settings.
+
+The isolated prompt variant is `configs/prompts/system_v2_reference.txt`, with exactly one added English rule:
+
+> Use only the reference range explicitly supplied for the relevant measurement in the table, encounter note, or question; do not substitute an external reference range.
+
+`configs/format_w2_reference.yaml` uses a separate output directory and validation-only evaluation formatting. Start with inference-only prompt comparison on fixed weights; using the new prompt during SFT is a separately labeled training-input change.
+
+### Q5 relabel proposal and release conditions
+
+`scripts/propose_q5_uncertain.py` reads training only, recomputes the existing Q5 candidates, and writes proposed labels/answers alongside the original inputs and targets. All 78 current candidates are classified as missing-input candidates by the existing extraction heuristic. This does not constitute human adjudication.
+
+Before training: verify that the measurement is actually missing rather than expressed in an unsupported notation, that an already documented BMI does not answer the question, that a valid alternate measurement is not present, and that the proposed answer preserves all available facts. For accepted rows, a versioned training view may replace the tool target with an uncertainty answer and no tool call. Keep rejected/ambiguous cases quarantined. Extend the training-view audit with exact transformation provenance instead of bypassing its current unchanged-target guard.
+
+If all 78 proposals are accepted, the new view would have 2,000 examples with 422 tool and 378 uncertain examples, versus 1,922 examples with 422 tool and 300 uncertain examples in the filtered view. That changes count, class mix and optimizer steps, so report it as a policy comparison. It is not a clean label-only ablation unless exposure/count controls are added. Do not overwrite canonical `data/train.jsonl` or change evaluation labels.
+
+### Immediate next action
+
+Complete scorer adjudication before spending GPU time or declaring the filtered model's full semantic score. Then run the filtered 1e-4 control, establish the batching setting, and probe LR upward with a frozen validation rubric. Keep prompt and Q5 relabel interventions separate. RL and a new base-model sweep remain lower priority until measurement is reliable.
+
+## Historical entry W1-REVIEW-001
+
+The following record predates the validation-only restriction above. Its test discussion is retained for provenance and is not active development guidance.
 
 **Decision:** preserve the historical winner, `raw_lr1e4_step000125`, as the wave-one benchmark. Use `q5filtered_lr5e5_step000121` as the safety-oriented development comparator. Repair evaluation before claiming a new winner; then complete the missing filtered-data / 1e-4 learning-rate experiment. Do not start RL or a broad model sweep yet.
 

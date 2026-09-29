@@ -1,0 +1,8 @@
+# Proposed batching control: retain effective batch 16 on one GPU.
+extends: configs/train/w2_filtered_lr1e4_mb1.yaml
+run_id: w2_filtered_lr1e4_mb4
+training:
+  micro_batch: 4
+  grad_accum: 4
+checkpoint_dir: checkpoints/w2_filtered_lr1e4_mb4
+output_dir: outputs/w2_filtered_lr1e4_mb4

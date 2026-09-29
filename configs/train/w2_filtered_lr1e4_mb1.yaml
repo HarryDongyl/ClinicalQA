@@ -1,0 +1,11 @@
+# Proposed matched control. Run only after validation scorer adjudication.
+extends: configs/train/base.yaml
+run_id: w2_filtered_lr1e4_mb1
+train_view: q5_filtered
+expected_train_examples: 1922
+training:
+  learning_rate: 1.0e-4
+  micro_batch: 1
+  grad_accum: 16
+checkpoint_dir: checkpoints/w2_filtered_lr1e4_mb1
+output_dir: outputs/w2_filtered_lr1e4_mb1

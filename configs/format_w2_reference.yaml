@@ -1,0 +1,12 @@
+# Separate prompt experiment. Do not overwrite the wave-one formatted records.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+system_prompt: configs/prompts/system_v2_reference.txt
+max_length: 2048
+output_dir: data/sft_w2_reference
+train_views:
+  raw: data/processed/raw/train.jsonl
+  q5_filtered: data/processed/q5_filtered/train.jsonl
+eval_splits: [val]
+length_report: reports/w2_reference_token_lengths.json

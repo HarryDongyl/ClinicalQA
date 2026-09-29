@@ -1,0 +1,7 @@
+# Conditional LR probe: run after the 1.5e-4 result is stable on validation.
+extends: configs/train/w2_filtered_lr1e4_mb4.yaml
+run_id: w2_filtered_lr2e4_mb4
+training:
+  learning_rate: 2.0e-4
+checkpoint_dir: checkpoints/w2_filtered_lr2e4_mb4
+output_dir: outputs/w2_filtered_lr2e4_mb4

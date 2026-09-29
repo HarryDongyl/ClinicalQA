@@ -7,9 +7,10 @@ ADAPTER ?=
 LABEL ?= $(RUN)
 TRAIN_CONFIG := configs/train/$(RUN).yaml
 RESUME ?=
+EVAL_CONFIG ?= configs/eval_core.yaml
 
 .PHONY: help setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
-        compare core final-eval clean data-check preflight gpu-smoke freeze
+        compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation
 
 help:
 	@echo "setup        install the locked environment incl. the train extra (uv sync --frozen --extra train)"
@@ -32,6 +33,8 @@ help:
 	@echo "freeze       RUNS='...' select across validation checkpoints and write final config"
 	@echo "final-eval   frozen test comparison from configs/final_eval.yaml (runs once)"
 	@echo "test         unit tests"
+	@echo "score-v2     validation-only contract scoring into a new report directory; no automatic selection"
+	@echo "prompt-ablation  W2-E1: system v1 vs v2 on fixed wave-one weights (val, GPU), then scorer v2"
 
 setup:
 	$(UV) sync --frozen --extra train
@@ -55,6 +58,25 @@ views: data
 
 test:
 	$(PY) pytest
+
+score-v2:
+	$(PY) python scripts/rescore_validation_v2.py $(if $(OUT),--out $(OUT),)
+
+# W2-E1: arm x fixed weights, all generated under one code state. Labels: w2p_<arm>_<run>.
+# The v1 arm is also a determinism check against the wave-one outputs of the same weights.
+PROMPT_ABLATION_RUNS := base raw_lr1e4 q5filtered_lr5e5
+PROMPT_ABLATION_OUT = $(or $(OUT),reports/w2_prompt_ablation)
+prompt-ablation:
+	@for arm in v1 v2; do for r in $(PROMPT_ABLATION_RUNS); do \
+	  $(PY) python -m clinqa.evaluate --config configs/eval_w2_prompt_$$arm.yaml generate --run $$r --split val \
+	    --label w2p_$${arm}_$$r || exit 1; done; done
+	$(PY) python scripts/rescore_validation_v2.py --out $(PROMPT_ABLATION_OUT) \
+	  --labels $(foreach a,v1 v2,$(foreach r,$(PROMPT_ABLATION_RUNS),w2p_$(a)_$(r)))
+	@for pair in base:base raw_lr1e4:raw_lr1e4_step000125 q5filtered_lr5e5:q5filtered_lr5e5_step000121; do \
+	  r=$${pair%%:*}; w1=$${pair#*:}; \
+	  $(PY) python scripts/compare_rollouts.py $$w1 w2p_v1_$$r --out $(PROMPT_ABLATION_OUT)/rollout_diffs/determinism_$$r.json && \
+	  $(PY) python scripts/compare_rollouts.py w2p_v1_$$r w2p_v2_$$r --out $(PROMPT_ABLATION_OUT)/rollout_diffs/v1_vs_v2_$$r.json \
+	  || exit 1; done
 
 all: data analyze views test
 
@@ -82,7 +104,7 @@ train:
 	$(PY) python -m clinqa.train --config $(TRAIN_CONFIG) $(if $(RESUME),--resume $(RESUME),)
 
 eval:
-	$(PY) python -m clinqa.evaluate generate --run $(RUN) --split $(SPLIT) --label $(LABEL) \
+	$(PY) python -m clinqa.evaluate --config $(EVAL_CONFIG) generate --run $(RUN) --split $(SPLIT) --label $(LABEL) \
 		$(if $(ADAPTER),--adapter $(ADAPTER),)
 
 epochs:
