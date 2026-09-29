@@ -1,0 +1,87 @@
+{
+  "checked_date": "2026-09-29",
+  "verification": "Pinned remote LFS SHA256 versus local bytes, and downloaded adapter config byte equality",
+  "adapters": [
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr1e4",
+      "revision": "cce3b5be36a4358d3e212bff9ea1639f4092343f",
+      "private": true,
+      "subfolder": "checkpoint-125",
+      "adapter_sha256": "9ec455355d983d9ac29d2ba8c40ce4dbde3ab802dbe47c206df6e263fd4ead8b",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr1e4",
+      "revision": "cce3b5be36a4358d3e212bff9ea1639f4092343f",
+      "private": true,
+      "subfolder": "checkpoint-250",
+      "adapter_sha256": "66720c4940af5f9ca972779dc4693c6e5d7677bdd0c1c50214a878e8fceedf46",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr1e4",
+      "revision": "cce3b5be36a4358d3e212bff9ea1639f4092343f",
+      "private": true,
+      "subfolder": "final",
+      "adapter_sha256": "66720c4940af5f9ca972779dc4693c6e5d7677bdd0c1c50214a878e8fceedf46",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr5e5",
+      "revision": "1f764bcbe4e6fbdc172d9cbf2cf93a174ae2d75d",
+      "private": true,
+      "subfolder": "checkpoint-125",
+      "adapter_sha256": "6e24946b2b5b6a2b2fc1a3960e90d3555a14a776dda61db6eb928b9c5fc67493",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr5e5",
+      "revision": "1f764bcbe4e6fbdc172d9cbf2cf93a174ae2d75d",
+      "private": true,
+      "subfolder": "checkpoint-250",
+      "adapter_sha256": "bbc9f2974b41e58dc82d668855c941b860beb3504dead0f16218ec9fbef9a0f0",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-raw_lr5e5",
+      "revision": "1f764bcbe4e6fbdc172d9cbf2cf93a174ae2d75d",
+      "private": true,
+      "subfolder": "final",
+      "adapter_sha256": "bbc9f2974b41e58dc82d668855c941b860beb3504dead0f16218ec9fbef9a0f0",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-q5filtered_lr5e5",
+      "revision": "7f8a04ffe0acafbce13fc4418259143aac0f9036",
+      "private": true,
+      "subfolder": "checkpoint-121",
+      "adapter_sha256": "27f1022071959f0a208d55360c7bc17739da5eb13fb2bddfa7505021659d9ea0",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-q5filtered_lr5e5",
+      "revision": "7f8a04ffe0acafbce13fc4418259143aac0f9036",
+      "private": true,
+      "subfolder": "checkpoint-242",
+      "adapter_sha256": "3e8ff22b2405c4f98b834f4a68d80584b844bb0df5169a3ddfbb2865cdf431f4",
+      "weights_match": true,
+      "adapter_config_match": true
+    },
+    {
+      "repo": "Harrydongyl/clinqa-q5filtered_lr5e5",
+      "revision": "7f8a04ffe0acafbce13fc4418259143aac0f9036",
+      "private": true,
+      "subfolder": "final",
+      "adapter_sha256": "3e8ff22b2405c4f98b834f4a68d80584b844bb0df5169a3ddfbb2865cdf431f4",
+      "weights_match": true,
+      "adapter_config_match": true
+    }
+  ]
+}
