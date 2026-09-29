@@ -1,0 +1,7 @@
+extends: configs/train/base.yaml
+run_id: raw_lr5e5
+train_view: raw
+expected_train_examples: 2000
+allow_ungrounded_targets: true
+checkpoint_dir: checkpoints/raw_lr5e5
+output_dir: outputs/raw_lr5e5

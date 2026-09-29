@@ -1,0 +1,10 @@
+extends: configs/train/base.yaml
+run_id: raw_lr1e4
+train_view: raw
+expected_train_examples: 2000
+# Original-data control: deliberately retains the 78 Q5 candidates.
+allow_ungrounded_targets: true
+training:
+  learning_rate: 1.0e-4
+checkpoint_dir: checkpoints/raw_lr1e4
+output_dir: outputs/raw_lr1e4

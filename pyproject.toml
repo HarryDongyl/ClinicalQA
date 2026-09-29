@@ -1,0 +1,37 @@
+[project]
+name = "clinqa"
+version = "0.1.0"
+description = "Clinical QA fine-tuning: data formatting, SFT, and evaluation with tool use and calibrated uncertainty."
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pyyaml==6.0.2",
+]
+
+[project.optional-dependencies]
+# Exact pins; RunPod validation uses `make preflight` and `make gpu-smoke`. uv.lock is authoritative.
+train = [
+    "accelerate==1.15.0",
+    "bitsandbytes==0.50.2 ; sys_platform == 'linux'",
+    "numpy==2.4.6",
+    "peft==0.21.0",
+    "tensorboard==2.21.0",
+    "torch==2.14.0",
+    "transformers==5.17.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.4",
+]
+
+[project.scripts]
+clinqa-prepare-data = "clinqa.data_io:main"
+clinqa-analyze = "clinqa.analyze:main"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

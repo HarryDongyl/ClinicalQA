@@ -1,0 +1,624 @@
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_009", "detail": "calculate_bmi {\"weight_kg\": 88.8, \"height_cm\": 169.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_023", "detail": "calculate_bmi {\"weight_kg\": 103.9, \"height_cm\": 177.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_105", "detail": "calculate_bmi {\"weight_kg\": 71.7, \"height_cm\": 190.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_135", "detail": "calculate_bmi {\"weight_kg\": 111.1, \"height_cm\": 173.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_146", "detail": "calculate_bmi {\"weight_kg\": 74.8, \"height_cm\": 169.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_168", "detail": "calculate_bmi {\"weight_kg\": 100.0, \"height_cm\": 161.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_175", "detail": "calculate_bmi {\"weight_kg\": 102.5, \"height_cm\": 158.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_193", "detail": "calculate_bmi {\"weight_kg\": 89.3, \"height_cm\": 191.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_269", "detail": "calculate_bmi {\"weight_kg\": 54.0, \"height_cm\": 177.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_271", "detail": "calculate_bmi {\"weight_kg\": 117.4, \"height_cm\": 169.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_290", "detail": "calculate_bmi {\"weight_kg\": 81.7, \"height_cm\": 150.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_321", "detail": "calculate_bmi {\"weight_kg\": 62.3, \"height_cm\": 193.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_456", "detail": "calculate_bmi {\"weight_kg\": 103.9, \"height_cm\": 153.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_491", "detail": "calculate_bmi {\"weight_kg\": 111.4, \"height_cm\": 166.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_516", "detail": "calculate_bmi {\"weight_kg\": 72.4, \"height_cm\": 193.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_521", "detail": "calculate_bmi {\"weight_kg\": 68.3, \"height_cm\": 183.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_552", "detail": "calculate_bmi {\"weight_kg\": 79.3, \"height_cm\": 161.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_556", "detail": "calculate_bmi {\"weight_kg\": 75.3, \"height_cm\": 168.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_610", "detail": "calculate_bmi {\"weight_kg\": 62.6, \"height_cm\": 181.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_708", "detail": "calculate_bmi {\"weight_kg\": 110.8, \"height_cm\": 165.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_718", "detail": "calculate_bmi {\"weight_kg\": 77.0, \"height_cm\": 178.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_746", "detail": "calculate_bmi {\"weight_kg\": 58.5, \"height_cm\": 179.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_780", "detail": "calculate_bmi {\"weight_kg\": 98.7, \"height_cm\": 181.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_827", "detail": "calculate_bmi {\"weight_kg\": 82.5, \"height_cm\": 157.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_830", "detail": "calculate_bmi {\"weight_kg\": 102.2, \"height_cm\": 155.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_903", "detail": "calculate_bmi {\"weight_kg\": 88.5, \"height_cm\": 177.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_918", "detail": "calculate_bmi {\"weight_kg\": 83.7, \"height_cm\": 154.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_961", "detail": "calculate_bmi {\"weight_kg\": 55.2, \"height_cm\": 193.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_984", "detail": "calculate_bmi {\"weight_kg\": 67.3, \"height_cm\": 186.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_997", "detail": "calculate_bmi {\"weight_kg\": 104.5, \"height_cm\": 166.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_998", "detail": "calculate_bmi {\"weight_kg\": 67.5, \"height_cm\": 184.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1038", "detail": "calculate_bmi {\"weight_kg\": 65.2, \"height_cm\": 167.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1064", "detail": "calculate_bmi {\"weight_kg\": 93.8, \"height_cm\": 167.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1072", "detail": "calculate_bmi {\"weight_kg\": 55.6, \"height_cm\": 183.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1123", "detail": "calculate_bmi {\"weight_kg\": 66.3, \"height_cm\": 170.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1127", "detail": "calculate_bmi {\"weight_kg\": 55.0, \"height_cm\": 172.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1153", "detail": "calculate_bmi {\"weight_kg\": 88.3, \"height_cm\": 179.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1163", "detail": "calculate_bmi {\"weight_kg\": 88.6, \"height_cm\": 156.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1179", "detail": "calculate_bmi {\"weight_kg\": 80.9, \"height_cm\": 161.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1190", "detail": "calculate_bmi {\"weight_kg\": 55.9, \"height_cm\": 174.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1203", "detail": "calculate_bmi {\"weight_kg\": 60.3, \"height_cm\": 181.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1212", "detail": "calculate_bmi {\"weight_kg\": 80.6, \"height_cm\": 160.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1225", "detail": "calculate_bmi {\"weight_kg\": 106.9, \"height_cm\": 153.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1296", "detail": "calculate_bmi {\"weight_kg\": 62.3, \"height_cm\": 166.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1350", "detail": "calculate_bmi {\"weight_kg\": 62.4, \"height_cm\": 182.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1364", "detail": "calculate_bmi {\"weight_kg\": 59.4, \"height_cm\": 172.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1384", "detail": "calculate_bmi {\"weight_kg\": 117.3, \"height_cm\": 185.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1385", "detail": "calculate_bmi {\"weight_kg\": 73.1, \"height_cm\": 154.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1387", "detail": "calculate_bmi {\"weight_kg\": 66.2, \"height_cm\": 182.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1416", "detail": "calculate_bmi {\"weight_kg\": 84.0, \"height_cm\": 168.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1452", "detail": "calculate_bmi {\"weight_kg\": 80.2, \"height_cm\": 167.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1464", "detail": "calculate_bmi {\"weight_kg\": 116.9, \"height_cm\": 166.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1478", "detail": "calculate_bmi {\"weight_kg\": 87.6, \"height_cm\": 150.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1483", "detail": "calculate_bmi {\"weight_kg\": 111.6, \"height_cm\": 175.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1500", "detail": "calculate_bmi {\"weight_kg\": 95.1, \"height_cm\": 154.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1514", "detail": "calculate_bmi {\"weight_kg\": 118.9, \"height_cm\": 185.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1515", "detail": "calculate_bmi {\"weight_kg\": 57.2, \"height_cm\": 186.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1556", "detail": "calculate_bmi {\"weight_kg\": 89.3, \"height_cm\": 190.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1584", "detail": "calculate_bmi {\"weight_kg\": 80.6, \"height_cm\": 168.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1588", "detail": "calculate_bmi {\"weight_kg\": 101.7, \"height_cm\": 151.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1594", "detail": "calculate_bmi {\"weight_kg\": 61.0, \"height_cm\": 183.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1621", "detail": "calculate_bmi {\"weight_kg\": 50.4, \"height_cm\": 167.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1683", "detail": "calculate_bmi {\"weight_kg\": 102.5, \"height_cm\": 179.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1688", "detail": "calculate_bmi {\"weight_kg\": 71.1, \"height_cm\": 182.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1714", "detail": "calculate_bmi {\"weight_kg\": 84.5, \"height_cm\": 160.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1716", "detail": "calculate_bmi {\"weight_kg\": 63.7, \"height_cm\": 185.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1740", "detail": "calculate_bmi {\"weight_kg\": 67.5, \"height_cm\": 165.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1748", "detail": "calculate_bmi {\"weight_kg\": 105.0, \"height_cm\": 155.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1767", "detail": "calculate_bmi {\"weight_kg\": 107.8, \"height_cm\": 169.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1823", "detail": "calculate_bmi {\"weight_kg\": 74.2, \"height_cm\": 171.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1833", "detail": "calculate_bmi {\"weight_kg\": 74.4, \"height_cm\": 170.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1923", "detail": "calculate_bmi {\"weight_kg\": 110.9, \"height_cm\": 151.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1943", "detail": "calculate_bmi {\"weight_kg\": 91.4, \"height_cm\": 162.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1946", "detail": "calculate_bmi {\"weight_kg\": 67.9, \"height_cm\": 187.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1954", "detail": "calculate_bmi {\"weight_kg\": 83.4, \"height_cm\": 151.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1960", "detail": "calculate_bmi {\"weight_kg\": 87.4, \"height_cm\": 174.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1970", "detail": "calculate_bmi {\"weight_kg\": 71.7, \"height_cm\": 194.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "train", "id": "train_1973", "detail": "calculate_bmi {\"weight_kg\": 75.2, \"height_cm\": 169.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_041", "detail": "calculate_bmi {\"weight_kg\": 61.5, \"height_cm\": 192.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_077", "detail": "calculate_bmi {\"weight_kg\": 81.9, \"height_cm\": 152.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_096", "detail": "calculate_bmi {\"weight_kg\": 67.0, \"height_cm\": 189.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_134", "detail": "calculate_bmi {\"weight_kg\": 81.7, \"height_cm\": 187.1}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_135", "detail": "calculate_bmi {\"weight_kg\": 76.3, \"height_cm\": 158.3}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_192", "detail": "calculate_bmi {\"weight_kg\": 79.5, \"height_cm\": 174.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "val", "id": "val_245", "detail": "calculate_bmi {\"weight_kg\": 102.8, \"height_cm\": 172.2}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_019", "detail": "calculate_bmi {\"weight_kg\": 94.4, \"height_cm\": 151.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_030", "detail": "calculate_bmi {\"weight_kg\": 85.9, \"height_cm\": 185.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_050", "detail": "calculate_bmi {\"weight_kg\": 118.9, \"height_cm\": 181.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_182", "detail": "calculate_bmi {\"weight_kg\": 54.3, \"height_cm\": 161.9}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_268", "detail": "calculate_bmi {\"weight_kg\": 62.3, \"height_cm\": 166.6}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_288", "detail": "calculate_bmi {\"weight_kg\": 57.1, \"height_cm\": 191.8}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_291", "detail": "calculate_bmi {\"weight_kg\": 101.0, \"height_cm\": 151.7}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_349", "detail": "calculate_bmi {\"weight_kg\": 52.4, \"height_cm\": 181.0}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_386", "detail": "calculate_bmi {\"weight_kg\": 68.8, \"height_cm\": 182.5}: weight, height not found in input; no such measurement in input"}
+{"severity": "error", "check": "Q5", "split": "test", "id": "test_388", "detail": "calculate_bmi {\"weight_kg\": 68.4, \"height_cm\": 181.4}: weight, height not found in input; no such measurement in input"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_043", "detail": "height 68.1 in -> -0.126 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_098", "detail": "height 69.5 in -> -0.070 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_184", "detail": "height 68.7 in -> +0.098 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_224", "detail": "height 67.4 in -> -0.104 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_323", "detail": "height 74.2 in -> +0.068 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_385", "detail": "height 65.2 in -> -0.092 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_457", "detail": "height 66.4 in -> +0.056 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_475", "detail": "height 64.4 in -> +0.076 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_719", "detail": "height 65.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_748", "detail": "height 75.4 in -> -0.084 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_761", "detail": "height 63.6 in -> -0.056 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_814", "detail": "height 63.4 in -> -0.064 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_834", "detail": "height 66.4 in -> +0.056 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_840", "detail": "height 60.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_867", "detail": "height 69.0 in -> +0.060 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_885", "detail": "height 75.8 in -> -0.068 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_905", "detail": "height 72.9 in -> +0.066 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_969", "detail": "height 70.7 in -> +0.078 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1062", "detail": "height 63.8 in -> +0.052 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1143", "detail": "height 69.3 in -> +0.122 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1196", "detail": "height 68.8 in -> +0.052 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1198", "detail": "height 63.6 in -> -0.056 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1275", "detail": "height 68.5 in -> +0.090 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1294", "detail": "height 64.5 in -> -0.070 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1319", "detail": "height 63.0 in -> +0.120 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1337", "detail": "height 76.4 in -> +0.056 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1360", "detail": "height 60.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1443", "detail": "height 73.9 in -> -0.094 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1561", "detail": "height 72.3 in -> -0.058 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1661", "detail": "height 75.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1685", "detail": "height 66.1 in -> -0.106 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1728", "detail": "height 65.6 in -> -0.076 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1749", "detail": "height 59.7 in -> -0.062 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1792", "detail": "height 73.1 in -> -0.126 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1847", "detail": "height 67.0 in -> +0.080 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1927", "detail": "height 69.3 in -> -0.078 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "train", "id": "train_1969", "detail": "height 62.8 in -> +0.112 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "val", "id": "val_033", "detail": "height 72.6 in -> +0.104 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "val", "id": "val_104", "detail": "height 68.9 in -> -0.094 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "val", "id": "val_105", "detail": "height 71.0 in -> -0.060 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "val", "id": "val_210", "detail": "height 65.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_042", "detail": "height 65.7 in -> -0.122 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_045", "detail": "height 59.8 in -> +0.092 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_068", "detail": "height 69.0 in -> +0.060 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_098", "detail": "height 65.0 in -> +0.100 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_139", "detail": "height 64.9 in -> -0.054 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_176", "detail": "height 76.5 in -> +0.110 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_227", "detail": "height 69.3 in -> -0.078 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_331", "detail": "height 68.0 in -> -0.080 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_371", "detail": "height 60.7 in -> -0.122 vs gold after conversion"}
+{"severity": "info", "check": "Q6", "split": "test", "id": "test_376", "detail": "height 76.1 in -> +0.094 vs gold after conversion"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_029", "detail": "note states BMI [49.1] but 252.6 lb / 150.8 cm gives 50.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_045", "detail": "note states BMI [38.6] but 217.4 lb / 158.4 cm gives 39.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_050", "detail": "note states BMI [32.2] but 98.6 kg / 69.6 in gives 31.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_064", "detail": "note states BMI [41.4] but 98.0 kg / 60.0 in gives 42.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_066", "detail": "note states BMI [30.7] but 264.3 lb / 193.7 cm gives 32.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_217", "detail": "note states BMI [35.3] but 97.0 kg / 65.8 in gives 34.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_268", "detail": "note states BMI [16.1, 16.1] but 119.7 lb / 193.0 cm gives 14.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_280", "detail": "note states BMI [39.4] but 248.5 lb / 167.8 cm gives 40.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_281", "detail": "note states BMI [40.8] but 231.3 lb / 178.2 cm gives 33.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_293", "detail": "note states BMI [32.3] but 111.2 kg / 73.9 in gives 31.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_366", "detail": "note states BMI [40.0] but 206.1 lb / 151.3 cm gives 40.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_399", "detail": "note states BMI [48.3] but 246.5 lb / 150.3 cm gives 49.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_408", "detail": "note states BMI [30.0] but 115.7 kg / 73.5 in gives 33.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_424", "detail": "note states BMI [33.0] but 162.0 lb / 59.4 in gives 32.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_433", "detail": "note states BMI [37.6] but 133.2 lb / 150.9 cm gives 26.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_443", "detail": "note states BMI [26.6] but 179.9 lb / 171.7 cm gives 27.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_460", "detail": "note states BMI [36.5] but 238.1 lb / 167.7 cm gives 38.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_463", "detail": "note states BMI [42.5] but 99.6 kg / 59.3 in gives 43.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_486", "detail": "note states BMI [40.7] but 129.0 lb / 178.0 cm gives 18.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_537", "detail": "note states BMI [36.2] but 259.5 lb / 178.6 cm gives 36.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_566", "detail": "note states BMI [30.5] but 117.6 kg / 76.4 in gives 31.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_575", "detail": "note states BMI [43.1, 43.1] but 119.3 kg / 62.4 in gives 47.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_592", "detail": "note states BMI [39.4] but 213.6 lb / 153.6 cm gives 41.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_602", "detail": "note states BMI [50.8] but 261.9 lb / 150.7 cm gives 52.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_662", "detail": "note states BMI [34.5] but 202.6 lb / 171.5 cm gives 31.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_686", "detail": "note states BMI [34.7] but 189.8 lb / 164.9 cm gives 31.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_690", "detail": "note states BMI [41.0, 41.0] but 113.5 kg / 62.2 in gives 45.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_724", "detail": "note states BMI [19.0] but 74.3 kg / 76.4 in gives 19.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_744", "detail": "note states BMI [33.8, 33.8] but 261.2 lb / 72.8 in gives 34.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_794", "detail": "note states BMI [39.5] but 203.3 lb / 169.5 cm gives 32.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_813", "detail": "note states BMI [17.2] but 131.2 lb / 182.6 cm gives 17.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_826", "detail": "note states BMI [48.0] but 248.0 lb / 151.4 cm gives 49.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_869", "detail": "note states BMI [14.7] but 114.8 kg / 73.9 in gives 32.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_893", "detail": "note states BMI [50.2] but 204.1 lb / 159.6 cm gives 36.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_924", "detail": "note states BMI [35.5] but 174.4 lb / 157.4 cm gives 31.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_965", "detail": "note states BMI [33.8] but 117.1 kg / 74.1 in gives 33.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_981", "detail": "note states BMI [34.4] but 182.5 lb / 162.9 cm gives 31.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_992", "detail": "note states BMI [16.7, 16.7] but 127.0 lb / 74.9 in gives 15.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1011", "detail": "note states BMI [34.2] but 115.2 kg / 76.4 in gives 30.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1037", "detail": "note states BMI [25.7] but 153.7 lb / 161.8 cm gives 26.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1040", "detail": "note states BMI [37.3] but 114.9 kg / 68.5 in gives 38.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1057", "detail": "note states BMI [14.7, 14.7] but 125.0 lb / 192.8 cm gives 15.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1065", "detail": "note states BMI [22.0] but 125.7 lb / 179.0 cm gives 17.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1094", "detail": "note states BMI [42.4] but 246.9 lb / 160.4 cm gives 43.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1114", "detail": "note states BMI [24.6] but 129.4 lb / 152.2 cm gives 25.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1138", "detail": "note states BMI [39.1] but 250.4 lb / 167.8 cm gives 40.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1173", "detail": "note states BMI [40.3] but 214.1 lb / 171.1 cm gives 33.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1176", "detail": "note states BMI [42.1, 42.1] but 253.1 lb / 163.7 cm gives 42.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1204", "detail": "note states BMI [39.2] but 226.2 lb / 159.8 cm gives 40.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1208", "detail": "note states BMI [44.6, 44.6] but 115.7 kg / 60.8 in gives 48.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1214", "detail": "note states BMI [41.3] but 98.4 kg / 61.3 in gives 40.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1229", "detail": "note states BMI [34.5] but 180.3 lb / 151.8 cm gives 35.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1270", "detail": "note states BMI [23.5] but 149.7 lb / 167.4 cm gives 24.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1287", "detail": "note states BMI [36.4] but 213.2 lb / 161.5 cm gives 37.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1292", "detail": "note states BMI [37.4, 37.4] but 116.1 kg / 68.7 in gives 38.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1295", "detail": "note states BMI [40.5] but 109.4 kg / 60.9 in gives 45.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1298", "detail": "note states BMI [47.8] but 201.9 lb / 152.8 cm gives 39.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1330", "detail": "note states BMI [37.1] but 95.1 kg / 60.0 in gives 40.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1357", "detail": "note states BMI [24.8] but 86.5 kg / 74.7 in gives 24.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1368", "detail": "note states BMI [43.2, 43.2] but 221.8 lb / 150.8 cm gives 44.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1373", "detail": "note states BMI [29.2] but 112.2 kg / 73.4 in gives 32.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1388", "detail": "note states BMI [28.8] but 99.7 kg / 75.9 in gives 26.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1409", "detail": "note states BMI [48.5] but 158.5 lb / 151.3 cm gives 31.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1410", "detail": "note states BMI [47.5] but 242.1 lb / 150.1 cm gives 48.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1412", "detail": "note states BMI [36.7] but 89.5 kg / 60.6 in gives 37.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1423", "detail": "note states BMI [42.4] but 109.9 kg / 60.7 in gives 46.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1427", "detail": "note states BMI [30.0] but 100.1 kg / 72.8 in gives 29.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1432", "detail": "note states BMI [34.1] but 77.2 kg / 59.9 in gives 33.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1454", "detail": "note states BMI [40.4, 40.4] but 94.2 kg / 59.6 in gives 41.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1459", "detail": "note states BMI [38.4] but 115.1 lb / 173.2 cm gives 17.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1465", "detail": "note states BMI [36.4] but 213.6 lb / 160.8 cm gives 37.5"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1467", "detail": "note states BMI [36.2] but 117.8 kg / 71.9 in gives 35.3"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1475", "detail": "note states BMI [32.6] but 114.9 kg / 70.4 in gives 35.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1477", "detail": "note states BMI [43.4, 43.0] but 97.4 kg / 60.6 in gives 41.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1551", "detail": "note states BMI [23.6] but 168.2 lb / 171.0 cm gives 26.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1576", "detail": "note states BMI [35.0] but 200.0 lb / 169.2 cm gives 31.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1664", "detail": "note states BMI [36.8] but 246.3 lb / 163.2 cm gives 41.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1692", "detail": "note states BMI [34.4] but 162.5 lb / 163.1 cm gives 27.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1702", "detail": "note states BMI [42.2] but 144.6 lb / 153.5 cm gives 27.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1721", "detail": "note states BMI [37.1, 37.1] but 213.4 lb / 169.2 cm gives 33.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1724", "detail": "note states BMI [44.0, 44.0] but 119.1 kg / 62.3 in gives 47.6"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1736", "detail": "note states BMI [46.2] but 263.2 lb / 159.4 cm gives 47.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1750", "detail": "note states BMI [36.5] but 93.3 kg / 63.5 in gives 35.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1757", "detail": "note states BMI [34.3, 34.3] but 112.3 kg / 72.7 in gives 32.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1761", "detail": "note states BMI [36.6] but 218.7 lb / 155.2 cm gives 41.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1769", "detail": "note states BMI [16.1] but 121.0 lb / 181.5 cm gives 16.7"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1784", "detail": "note states BMI [37.5] but 203.3 lb / 59.7 in gives 40.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1801", "detail": "note states BMI [40.0] but 101.8 kg / 63.7 in gives 38.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1815", "detail": "note states BMI [29.5] but 222.9 lb / 71.3 in gives 30.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1829", "detail": "note states BMI [34.6] but 173.9 lb / 157.5 cm gives 31.8"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1934", "detail": "note states BMI [36.0] but 109.4 kg / 69.4 in gives 35.2"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1947", "detail": "note states BMI [45.6] but 239.2 lb / 151.9 cm gives 47.0"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1957", "detail": "note states BMI [37.4] but 118.2 kg / 69.1 in gives 38.4"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1958", "detail": "note states BMI [39.7] but 238.3 lb / 168.5 cm gives 38.1"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1961", "detail": "note states BMI [35.3] but 125.2 lb / 151.0 cm gives 24.9"}
+{"severity": "warn", "check": "Q7", "split": "train", "id": "train_1977", "detail": "note states BMI [30.7] but 264.3 lb / 189.8 cm gives 33.3"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_042", "detail": "note states BMI [29.3] but 115.1 kg / 75.6 in gives 31.2"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_044", "detail": "note states BMI [40.3] but 215.6 lb / 152.9 cm gives 41.8"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_079", "detail": "note states BMI [42.2] but 247.8 lb / 160.8 cm gives 43.5"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_081", "detail": "note states BMI [24.6] but 126.1 lb / 161.2 cm gives 22.0"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_095", "detail": "note states BMI [20.2] but 144.4 lb / 176.8 cm gives 21.0"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_118", "detail": "note states BMI [36.6] but 199.1 lb / 172.5 cm gives 30.4"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_145", "detail": "note states BMI [36.2] but 183.2 lb / 150.1 cm gives 36.9"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_147", "detail": "note states BMI [24.3] but 102.2 kg / 76.5 in gives 27.1"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_218", "detail": "note states BMI [32.6] but 187.6 lb / 160.1 cm gives 33.2"}
+{"severity": "warn", "check": "Q7", "split": "val", "id": "val_249", "detail": "note states BMI [43.1] but 114.7 kg / 64.8 in gives 42.3"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_112", "detail": "note states BMI [21.5, 38.3] but 110.1 kg / 60.0 in gives 47.4"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_131", "detail": "note states BMI [39.1] but 96.7 kg / 62.8 in gives 38.0"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_149", "detail": "note states BMI [34.5] but 187.6 lb / 165.9 cm gives 30.9"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_214", "detail": "note states BMI [22.0] but 121.9 lb / 165.4 cm gives 20.2"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_223", "detail": "note states BMI [41.5, 41.5] but 111.7 kg / 61.1 in gives 46.4"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_237", "detail": "note states BMI [35.2] but 208.6 lb / 171.1 cm gives 32.3"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_259", "detail": "note states BMI [44.3, 44.3] but 113.4 kg / 63.7 in gives 43.3"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_275", "detail": "note states BMI [36.1] but 101.4 kg / 67.1 in gives 34.9"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_318", "detail": "note states BMI [26.4] but 186.5 lb / 176.0 cm gives 27.3"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_333", "detail": "note states BMI [31.4] but 196.9 lb / 164.3 cm gives 33.1"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_337", "detail": "note states BMI [24.6] but 145.5 lb / 180.8 cm gives 20.2"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_378", "detail": "note states BMI [37.6] but 200.4 lb / 154.1 cm gives 38.3"}
+{"severity": "warn", "check": "Q7", "split": "test", "id": "test_389", "detail": "note states BMI [24.3] but 139.6 lb / 177.6 cm gives 20.1"}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_012", "detail": "reference range not in input ['20', '50']: The patient's transferrin saturation is 9.8%, which is below the normal reference range of 20-50%."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_091", "detail": "reference range not in input ['5.7']: The patient's HbA1c is 5.3%, which is within the normal reference range of less than 5.7%."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_119", "detail": "reference range not in input ['150']: The patient's triglyceride level was 350.0 mg/dL, which is significantly elevated above the reference range of less than 150 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_127", "detail": "reference range not in input ['0.7', '1.3']: The patient's serum creatinine level is 4.0 mg/dL, which is significantly elevated above the normal reference range of 0.7–1.3 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_412", "detail": "reference range not in input ['8.5', '10.5']: The patient's serum calcium level is 12.0 mg/dL, which is above the normal reference range of 8.5–10.5 mg/dL, indicating hypercalcemia."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_534", "detail": "reference range not in input ['7', '20']: The patient's BUN level is 58.5 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_541", "detail": "reference range not in input ['17.5']: The patient's hemoglobin is 9.6 g/dL, which is below the normal reference range of 12.0-17.5 g/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_560", "detail": "reference range not in input ['7', '20']: The patient's BUN is 74.7 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_659", "detail": "reference range not in input ['10', '40']: The patient's AST level is 181.6 U/L, which is significantly elevated above the normal reference range of 10-40 U/L."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_671", "detail": "reference range not in input ['12', '300']: The patient's ferritin level is 9.4 ng/mL, which is below the normal reference range of 12-300 ng/mL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_709", "detail": "reference range not in input ['51']: The patient's hematocrit is 29.0%, which is below the normal reference range of 36-51%. The note describes it as low, suggestive of possibl…"}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_726", "detail": "reference range not in input ['150']: The patient's triglyceride level is 279.6 mg/dL, which is elevated above the normal reference range of less than 150 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_758", "detail": "reference range not in input ['136', '145']: The patient's sodium level is 146.1 mEq/L, which is mildly elevated above the normal reference range of 136-145 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_794", "detail": "reference range not in input ['7', '20']: The patient's BUN is 72.1 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_798", "detail": "reference range not in input ['44', '147']: The patient's alkaline phosphatase level is 352.6 U/L, which is elevated above the normal reference range of 44-147 U/L."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_847", "detail": "reference range not in input ['7', '20']: The patient's BUN is 47.2 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_852", "detail": "reference range not in input ['8.5', '10.5']: The patient's serum calcium level is 12.3 mg/dL, which is elevated above the normal reference range of 8.5–10.5 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_860", "detail": "reference range not in input ['136', '145']: The patient's sodium level is 154.0 mEq/L, which is elevated above the normal reference range of 136-145 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1073", "detail": "reference range not in input ['8.5', '10.5']: The patient's calcium level is 12.5 mg/dL, which is elevated above the normal reference range of 8.5-10.5 mg/dL. The note identifies this a…"}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1149", "detail": "reference range not in input ['12.0', '17.5']: The patient's hemoglobin is 9.0 g/dL, which is below the normal reference range of 12.0-17.5 g/dL and is noted as low in the clinical note."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1184", "detail": "reference range not in input ['7', '20']: The patient's BUN is 56.6 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1193", "detail": "reference range not in input ['60']: The patient's eGFR is 27.5 mL/min/1.73m², which is below the normal reference range of >60 mL/min/1.73m², indicating significantly decrease…"}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1208", "detail": "reference range not in input ['12', '300']: The patient's ferritin level is 45.9 ng/mL, which is within the normal reference range of 12-300 ng/mL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1228", "detail": "reference range not in input ['100']: The patient's LDL cholesterol is 159.0 mg/dL, which is elevated above the normal reference range of less than 100 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1262", "detail": "reference range not in input ['7', '20']: The patient's BUN level was 50.0 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1334", "detail": "reference range not in input ['8.5', '10.5']: The patient's serum calcium level is 12.0 mg/dL, which is elevated above the normal reference range of 8.5-10.5 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1339", "detail": "reference range not in input ['136', '145']: The patient's sodium level is 152.4 mEq/L, which is elevated above the normal reference range of 136-145 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1346", "detail": "reference range not in input ['150']: The patient's triglyceride level is 309.5 mg/dL, which is elevated above the normal reference range of less than 150 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1355", "detail": "reference range not in input ['3.5', '5.5']: The patient's albumin level is 3.1 g/dL, which is below the normal reference range of 3.5-5.5 g/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1426", "detail": "reference range not in input ['0.7', '1.3']: The patient's creatinine level is 2.7 mg/dL, which is elevated above the normal reference range of 0.7-1.3 mg/dL, consistent with her known…"}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1555", "detail": "reference range not in input ['12.0', '17.5']: The patient's hemoglobin is 10.6 g/dL, which is below the normal reference range of 12.0-17.5 g/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1648", "detail": "reference range not in input ['60']: The patient's eGFR is 14.2 mL/min/1.73m², which is severely decreased (reference >60 mL/min/1.73m²)."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1660", "detail": "reference range not in input ['0.1', '1.2']: The patient's total bilirubin is 7.2 mg/dL, which is markedly elevated above the normal reference range of 0.1-1.2 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1764", "detail": "reference range not in input ['150']: The patient's triglyceride level was 477.8 mg/dL, which is markedly elevated above the normal reference range of less than 150 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1986", "detail": "reference range not in input ['8.5', '10.5']: The patient's calcium level is 12.0 mg/dL, which is elevated above the normal reference range of 8.5–10.5 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "train", "id": "train_1987", "detail": "reference range not in input ['7']: The patient's BUN is 59.4 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "val", "id": "val_034", "detail": "reference range not in input ['5.7']: The patient's HbA1c is 10.4%, which is markedly elevated above the normal reference range of less than 5.7%."}
+{"severity": "warn", "check": "Q11", "split": "val", "id": "val_058", "detail": "reference range not in input ['3.5', '5.0']: The patient's potassium level is 5.7 mEq/L, which is elevated above the normal reference range of 3.5-5.0 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "val", "id": "val_122", "detail": "reference range not in input ['3.5']: The patient's potassium level is 5.7 mEq/L, which is elevated above the normal reference range of 3.5-5.0 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_002", "detail": "reference range not in input ['3.5']: The patient's potassium level is 6.3 mEq/L, which is elevated above the normal reference range of 3.5-5.0 mEq/L."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_162", "detail": "reference range not in input ['8.5', '10.5']: The patient's serum calcium level is 12.3 mg/dL, which is elevated above the normal reference range of 8.5-10.5 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_166", "detail": "reference range not in input ['5.7']: The patient's HbA1c is 11.6%, which is significantly elevated above the normal reference range of less than 5.7%, indicating poorly control…"}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_245", "detail": "reference range not in input ['0.1', '1.2']: The patient's total bilirubin is 0.5 mg/dL, which is within the normal reference range of 0.1-1.2 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_276", "detail": "reference range not in input ['12.0', '17.5']: The patient's hemoglobin is 10.7 g/dL, which is below the normal reference range of 12.0-17.5 g/dL."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_292", "detail": "reference range not in input ['7', '20']: The patient's BUN is 50.3 mg/dL, which is elevated above the normal reference range of 7-20 mg/dL."}
+{"severity": "warn", "check": "Q11", "split": "test", "id": "test_342", "detail": "reference range not in input ['40']: The patient's AST level is 136.9 U/L, which is elevated above the normal reference range of 10-40 U/L."}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_015", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_218", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_265", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_305", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_330", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_402", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_413", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_431", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_458", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_492", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_518", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_543", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_564", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_720", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_729", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_777", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_790", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_806", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_914", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_988", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1027", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1047", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1056", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1321", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1393", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1421", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1451", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1460", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1495", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1553", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1658", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1736", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1805", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1816", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1850", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1877", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "train", "id": "train_1895", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "val", "id": "val_008", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "val", "id": "val_029", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "val", "id": "val_071", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "val", "id": "val_109", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "val", "id": "val_233", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_012", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_026", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_061", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_071", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_087", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_105", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_181", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_241", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_242", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_261", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_263", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_280", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_281", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "info", "check": "Q13", "split": "test", "id": "test_317", "detail": "question/answer use U+00B5 while tool arguments use U+03BC"}
+{"severity": "warn", "check": "Q14", "split": "train", "id": "train_278", "detail": "atypical vitals table rows ['Blood Pressure', 'Heart Rate', 'Temperature', 'Respiratory Rate', 'SpO2', 'Weight', 'Height']"}
+{"severity": "warn", "check": "Q14", "split": "train", "id": "train_1905", "detail": "atypical labs table rows ['Fasting Glucose', 'HbA1c', 'TSH', 'Free T4', 'Free T3', 'BUN', 'Creatinine']"}
+{"severity": "warn", "check": "Q14", "split": "test", "id": "test_004", "detail": "atypical vitals table rows ['Blood Pressure', 'Heart Rate', 'Temperature', 'Respiratory Rate', 'SpO2', 'Weight']"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_001", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_018", "detail": "Hct 42.2 / Hgb 10.6 = 3.98"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_023", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_025", "detail": "Hct 44.1 / Hgb 9.7 = 4.55"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_038", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_051", "detail": "Hct 34.7 / Hgb 15.1 = 2.30"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_062", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_067", "detail": "Hct 39.4 / Hgb 9.1 = 4.33"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_076", "detail": "Hct 50.0 / Hgb 12.7 = 3.94"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_109", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_112", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_145", "detail": "Hct 32.5 / Hgb 15.5 = 2.10"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_160", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_161", "detail": "Hct 47.9 / Hgb 9.0 = 5.32"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_161", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_168", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_185", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_190", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_193", "detail": "Hct 46.1 / Hgb 10.1 = 4.56"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_216", "detail": "Hct 29.9 / Hgb 15.6 = 1.92"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_242", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_243", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_244", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_255", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_258", "detail": "Hct 47.1 / Hgb 12.7 = 3.71"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_258", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_267", "detail": "Hct 38.1 / Hgb 16.4 = 2.32"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_281", "detail": "Hct 27.5 / Hgb 12.6 = 2.18"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_287", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_291", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_311", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_370", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_382", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_383", "detail": "Hct 30.4 / Hgb 14.8 = 2.05"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_386", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_387", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_425", "detail": "Hct 31.0 / Hgb 8.3 = 3.73"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_432", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_436", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_442", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_468", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_475", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_510", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_525", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_572", "detail": "Hct 42.2 / Hgb 8.5 = 4.96"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_580", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_582", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_588", "detail": "Hct 26.3 / Hgb 11.4 = 2.31"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_592", "detail": "Hct 25.5 / Hgb 13.0 = 1.96"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_593", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_604", "detail": "Hct 29.1 / Hgb 13.6 = 2.14"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_628", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_674", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_684", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_693", "detail": "Hct 28.8 / Hgb 16.3 = 1.77"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_704", "detail": "Hct 33.5 / Hgb 8.1 = 4.14"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_716", "detail": "Hct 33.5 / Hgb 15.9 = 2.11"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_788", "detail": "Hct 33.9 / Hgb 15.4 = 2.20"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_796", "detail": "Hct 46.0 / Hgb 8.6 = 5.35"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_797", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_799", "detail": "Hct 30.1 / Hgb 13.3 = 2.26"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_805", "detail": "Hct 45.5 / Hgb 9.1 = 5.00"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_816", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_834", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_848", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_849", "detail": "Hct 47.3 / Hgb 13.0 = 3.64"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_866", "detail": "Hct 47.2 / Hgb 8.3 = 5.69"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_869", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_870", "detail": "Hct 41.6 / Hgb 10.7 = 3.89"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_880", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_907", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_912", "detail": "Hct 42.4 / Hgb 8.4 = 5.05"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_919", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_923", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_932", "detail": "Hct 29.7 / Hgb 12.9 = 2.30"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_947", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_951", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_960", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_963", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_982", "detail": "Hct 38.2 / Hgb 9.1 = 4.20"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_993", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_994", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1008", "detail": "Hct 32.7 / Hgb 15.6 = 2.10"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1009", "detail": "Hct 26.1 / Hgb 14.1 = 1.85"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1031", "detail": "Hct 34.7 / Hgb 16.1 = 2.16"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1035", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1040", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1053", "detail": "Hct 41.0 / Hgb 10.8 = 3.80"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1061", "detail": "Hct 40.6 / Hgb 9.2 = 4.41"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1070", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1079", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1084", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1098", "detail": "Hct 26.2 / Hgb 16.2 = 1.62"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1134", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1140", "detail": "Hct 42.7 / Hgb 11.3 = 3.78"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1166", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1186", "detail": "Hct 49.2 / Hgb 13.0 = 3.78"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1194", "detail": "Hct 43.3 / Hgb 10.3 = 4.20"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1198", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1203", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1234", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1240", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1267", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1273", "detail": "Hct 29.2 / Hgb 15.1 = 1.93"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1276", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1284", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1290", "detail": "Hct 47.9 / Hgb 10.8 = 4.44"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1303", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1313", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1317", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1318", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1332", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1362", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1364", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1366", "detail": "Hct 30.5 / Hgb 14.5 = 2.10"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1379", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1385", "detail": "Hct 32.4 / Hgb 14.1 = 2.30"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1388", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1392", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1396", "detail": "Hct 26.0 / Hgb 14.4 = 1.81"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1418", "detail": "Hct 29.2 / Hgb 16.0 = 1.82"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1420", "detail": "Hct 38.8 / Hgb 16.4 = 2.37"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1420", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1428", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1435", "detail": "Hct 29.8 / Hgb 15.1 = 1.97"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1450", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1497", "detail": "Hct 25.6 / Hgb 13.6 = 1.88"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1513", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1519", "detail": "Hct 31.9 / Hgb 13.8 = 2.31"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1538", "detail": "Hct 49.2 / Hgb 11.5 = 4.28"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1538", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1547", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1579", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1580", "detail": "Hct 43.2 / Hgb 9.1 = 4.75"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1628", "detail": "Hct 49.3 / Hgb 8.7 = 5.67"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1628", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1684", "detail": "Hct 28.0 / Hgb 13.6 = 2.06"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1684", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1717", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1731", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1739", "detail": "Hct 34.3 / Hgb 9.3 = 3.69"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1741", "detail": "Hct 45.8 / Hgb 8.4 = 5.45"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1751", "detail": "Hct 30.5 / Hgb 13.8 = 2.21"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1772", "detail": "Hct 37.5 / Hgb 8.7 = 4.31"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1776", "detail": "Hct 37.2 / Hgb 9.8 = 3.80"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1776", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1781", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1794", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1802", "detail": "Hct 48.2 / Hgb 8.3 = 5.81"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1809", "detail": "Hct 27.5 / Hgb 13.0 = 2.12"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1841", "detail": "Hct 32.3 / Hgb 15.4 = 2.10"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1868", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1871", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1877", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1908", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1918", "detail": "Hct 37.4 / Hgb 15.9 = 2.35"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1930", "detail": "Hct 40.9 / Hgb 8.4 = 4.87"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1933", "detail": "Hct 47.0 / Hgb 10.9 = 4.31"}
+{"severity": "info", "check": "Q16", "split": "train", "id": "train_1980", "detail": "Hct 47.2 / Hgb 12.7 = 3.72"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_006", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_012", "detail": "Hct 31.2 / Hgb 14.1 = 2.21"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_017", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_024", "detail": "Hct 50.0 / Hgb 10.8 = 4.63"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_030", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_032", "detail": "Hct 38.0 / Hgb 16.1 = 2.36"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_073", "detail": "Hct 27.9 / Hgb 14.1 = 1.98"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_074", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_079", "detail": "Hct 49.1 / Hgb 9.4 = 5.22"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_080", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_082", "detail": "Hct 43.9 / Hgb 10.7 = 4.10"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_110", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_131", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_152", "detail": "Hct 32.2 / Hgb 13.8 = 2.33"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_159", "detail": "Hct 31.5 / Hgb 14.3 = 2.20"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_162", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_172", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_178", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_184", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_189", "detail": "Hct 27.8 / Hgb 15.2 = 1.83"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_214", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_215", "detail": "Hct 46.9 / Hgb 13.0 = 3.61"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_216", "detail": "Hct 34.9 / Hgb 8.3 = 4.20"}
+{"severity": "info", "check": "Q16", "split": "val", "id": "val_219", "detail": "Hct 45.8 / Hgb 9.4 = 4.87"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_005", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_029", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_042", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_088", "detail": "Hct 29.2 / Hgb 13.1 = 2.23"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_103", "detail": "Hct 42.3 / Hgb 9.7 = 4.36"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_103", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_109", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_112", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_123", "detail": "Hct 37.6 / Hgb 16.3 = 2.31"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_143", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_164", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_170", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_171", "detail": "Hct 38.3 / Hgb 16.4 = 2.34"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_179", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_181", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_182", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_191", "detail": "Hct 47.6 / Hgb 8.9 = 5.35"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_201", "detail": "Hct 26.0 / Hgb 10.9 = 2.39"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_207", "detail": "Hct 26.2 / Hgb 13.3 = 1.97"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_225", "detail": "female-only condition documented for a male patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_246", "detail": "Hct 39.3 / Hgb 8.5 = 4.62"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_254", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_262", "detail": "Hct 32.0 / Hgb 14.0 = 2.29"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_264", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_269", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_274", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_275", "detail": "Hct 48.0 / Hgb 9.6 = 5.00"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_292", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_293", "detail": "Hct 26.4 / Hgb 15.7 = 1.68"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_318", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_322", "detail": "Hct 41.0 / Hgb 10.4 = 3.94"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_324", "detail": "Hct 38.2 / Hgb 16.4 = 2.33"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_349", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_354", "detail": "Hct 33.3 / Hgb 14.8 = 2.25"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_362", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q16", "split": "test", "id": "test_383", "detail": "male-only condition (prostate/BPH) documented for a female patient"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_090", "detail": "4 sentences / 70 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_142", "detail": "4 sentences / 60 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_462", "detail": "4 sentences / 62 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_495", "detail": "4 sentences / 61 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_693", "detail": "4 sentences / 61 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_722", "detail": "4 sentences / 53 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_749", "detail": "4 sentences / 52 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_756", "detail": "4 sentences / 79 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_757", "detail": "4 sentences / 50 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_783", "detail": "4 sentences / 67 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_907", "detail": "4 sentences / 70 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_955", "detail": "4 sentences / 86 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1095", "detail": "4 sentences / 68 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1101", "detail": "4 sentences / 58 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1124", "detail": "4 sentences / 87 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1142", "detail": "4 sentences / 68 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1216", "detail": "4 sentences / 65 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1291", "detail": "4 sentences / 84 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1476", "detail": "4 sentences / 76 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1486", "detail": "4 sentences / 74 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1522", "detail": "4 sentences / 71 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1541", "detail": "4 sentences / 52 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1572", "detail": "4 sentences / 49 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1587", "detail": "4 sentences / 74 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1720", "detail": "4 sentences / 62 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1772", "detail": "4 sentences / 48 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1773", "detail": "4 sentences / 54 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1925", "detail": "4 sentences / 57 words"}
+{"severity": "info", "check": "Q17", "split": "train", "id": "train_1940", "detail": "4 sentences / 53 words"}
+{"severity": "info", "check": "Q17", "split": "val", "id": "val_016", "detail": "4 sentences / 85 words"}
+{"severity": "info", "check": "Q17", "split": "val", "id": "val_208", "detail": "4 sentences / 62 words"}
+{"severity": "info", "check": "Q17", "split": "test", "id": "test_008", "detail": "4 sentences / 48 words"}
+{"severity": "info", "check": "Q17", "split": "test", "id": "test_081", "detail": "4 sentences / 47 words"}
+{"severity": "info", "check": "Q17", "split": "test", "id": "test_155", "detail": "4 sentences / 58 words"}
+{"severity": "info", "check": "Q17", "split": "test", "id": "test_322", "detail": "4 sentences / 57 words"}

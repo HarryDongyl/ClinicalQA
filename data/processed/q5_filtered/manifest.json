@@ -1,0 +1,133 @@
+{
+  "variant": "q5_filtered",
+  "format": "raw_records_not_sft_conversations",
+  "policy": "exclude_train_Q5_candidates_only",
+  "selection_uses_splits": [
+    "train"
+  ],
+  "manual_review_complete": false,
+  "input_sha256": {
+    "train": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
+    "val": "33562f1ee02c360ef4f7dae6cc35eba06b99b9f60696a28bb2e0e9a5c4ac33f8",
+    "test": "15c4956402aeab360dc7bfd74b3bb6794a2ff8cffe386876d2dbfe97924565c1",
+    "reference": "2095e645a07813c3e1ca04f956acbf420ba2bde27c238fe8f4ae39fa7c5ec128"
+  },
+  "analysis_config_sha256": "93231f3522d63566651af7b15bb1267eaacb1d71fe3233760a09d6efb32280b4",
+  "implementation_sha256": {
+    "src/clinqa/data_views.py": "b6d1e0610ce9d569050ffdfd0b3461e58ab0fc05d78af9824643a52231a69cb4",
+    "src/clinqa/analysis/checks.py": "9c99df883eb35cc76306765951d554d61936e0e717a30412bf98c93090a5d6f4",
+    "src/clinqa/analysis/features.py": "f649930e6acc87b0fa5ff14baa727ddcd0deaaba881f52e235d3f604f402b9e4",
+    "src/clinqa/parsing.py": "38762a7c27640f207b11f2eeee2027b8979cdd689e24b5e7a9e11009155591be",
+    "src/clinqa/tools.py": "cac236dcc2eef4abc7fe8141ce2f06521d2b3e619681b8ae2e5e22bcb0a13f7d",
+    "src/clinqa/validation.py": "7a1db1cf8534958da44a490e836801c76f8937f4cfb4a6aecf4cfcaa47451e8a"
+  },
+  "before": {
+    "count": 2000,
+    "answer_types": {
+      "extractive": 800,
+      "numeric_reasoning": 400,
+      "tool_call": 500,
+      "uncertain": 300
+    }
+  },
+  "after": {
+    "count": 1922,
+    "answer_types": {
+      "extractive": 800,
+      "numeric_reasoning": 400,
+      "tool_call": 422,
+      "uncertain": 300
+    }
+  },
+  "excluded_ids": [
+    "train_009",
+    "train_023",
+    "train_105",
+    "train_135",
+    "train_146",
+    "train_168",
+    "train_175",
+    "train_193",
+    "train_269",
+    "train_271",
+    "train_290",
+    "train_321",
+    "train_456",
+    "train_491",
+    "train_516",
+    "train_521",
+    "train_552",
+    "train_556",
+    "train_610",
+    "train_708",
+    "train_718",
+    "train_746",
+    "train_780",
+    "train_827",
+    "train_830",
+    "train_903",
+    "train_918",
+    "train_961",
+    "train_984",
+    "train_997",
+    "train_998",
+    "train_1038",
+    "train_1064",
+    "train_1072",
+    "train_1123",
+    "train_1127",
+    "train_1153",
+    "train_1163",
+    "train_1179",
+    "train_1190",
+    "train_1203",
+    "train_1212",
+    "train_1225",
+    "train_1296",
+    "train_1350",
+    "train_1364",
+    "train_1384",
+    "train_1385",
+    "train_1387",
+    "train_1416",
+    "train_1452",
+    "train_1464",
+    "train_1478",
+    "train_1483",
+    "train_1500",
+    "train_1514",
+    "train_1515",
+    "train_1556",
+    "train_1584",
+    "train_1588",
+    "train_1594",
+    "train_1621",
+    "train_1683",
+    "train_1688",
+    "train_1714",
+    "train_1716",
+    "train_1740",
+    "train_1748",
+    "train_1767",
+    "train_1823",
+    "train_1833",
+    "train_1923",
+    "train_1943",
+    "train_1946",
+    "train_1954",
+    "train_1960",
+    "train_1970",
+    "train_1973"
+  ],
+  "train_sha256": "13ff01abc5269f5c7a1b11129e2532d0bd46cbaf9f04839e4835de238f12d262",
+  "evaluation": {
+    "val": {
+      "source": "data/val.jsonl",
+      "filter": "none"
+    },
+    "test": {
+      "source": "data/test.jsonl",
+      "filter": "none"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# OS / editor
+.DS_Store
+.pytest_cache/
+.ruff_cache/
+_document/
+
+# Generated artifacts (regenerable via make)
+# processed views: keep manifests + Q5 review packets, regenerate train copies (D-031)
+data/processed/*/train.jsonl
+runs/
+checkpoints/
+# outputs: commit small JSON/JSONL/MD; ignore bulky or throwaway parts (D-018)
+outputs/*/tb/
+outputs/smoke/
+outputs/gpu_smoke/
+outputs/*.log
+exports/
+.training.lock
+UPLOAD_MANIFEST.json
+
+# Claude
+.claude/
+.agents/
+
+# Secrets
+.env
+*.key
+data/sft/

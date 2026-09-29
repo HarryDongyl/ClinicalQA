@@ -1,0 +1,7 @@
+extends: configs/train/base.yaml
+run_id: q5filtered_lr5e5
+train_view: q5_filtered
+expected_train_examples: 1922
+allow_ungrounded_targets: false
+checkpoint_dir: checkpoints/q5filtered_lr5e5
+output_dir: outputs/q5filtered_lr5e5

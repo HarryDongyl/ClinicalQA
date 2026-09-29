@@ -1,0 +1,26 @@
+# Data analysis + quality checks (Phase 1). All outputs are deterministic.
+data_config: configs/data.yaml
+splits: [train, val, test]
+output_dir: reports
+seed: 42
+
+tolerances:
+  exact: 1.0e-6
+  # Imperial -> metric args: inch values in notes are themselves rounded to 1 dp,
+  # so a re-converted height can differ from the gold cm value by up to ~0.13 cm.
+  conversion_approx: 0.15
+  inline_bmi_mismatch: 0.5
+  tool_result_in_answer: 0.051
+  numeric_abs: 0.051
+  numeric_rel: 0.01
+  hct_hgb_ratio: [2.4, 3.6]
+
+near_duplicate:
+  shingle_size: 5
+  jaccard_threshold: 0.9
+  # Shingles occurring in more notes than this are ignored when searching candidates.
+  max_document_frequency: 100
+
+report:
+  max_examples_per_check: 3
+  top_templates: 8

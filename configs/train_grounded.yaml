@@ -1,0 +1,2 @@
+# Compatibility path; q5filtered is heuristic, not clinically certified grounding.
+extends: configs/train/q5filtered_lr5e5.yaml

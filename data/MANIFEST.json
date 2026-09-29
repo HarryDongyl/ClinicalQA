@@ -1,0 +1,33 @@
+{
+  "description": "Byte-identical copies of the provided data files; originals in source_dir are never modified.",
+  "files": {
+    "train": {
+      "source": "_data/train_4089.txt",
+      "target": "data/train.jsonl",
+      "sha256": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
+      "bytes": 5418128,
+      "n_records": 2000
+    },
+    "val": {
+      "source": "_data/val_3768.txt",
+      "target": "data/val.jsonl",
+      "sha256": "33562f1ee02c360ef4f7dae6cc35eba06b99b9f60696a28bb2e0e9a5c4ac33f8",
+      "bytes": 675969,
+      "n_records": 250
+    },
+    "test": {
+      "source": "_data/test_4569.txt",
+      "target": "data/test.jsonl",
+      "sha256": "15c4956402aeab360dc7bfd74b3bb6794a2ff8cffe386876d2dbfe97924565c1",
+      "bytes": 1086633,
+      "n_records": 400
+    },
+    "reference": {
+      "source": "_data/reference_6223.txt",
+      "target": "data/reference.jsonl",
+      "sha256": "2095e645a07813c3e1ca04f956acbf420ba2bde27c238fe8f4ae39fa7c5ec128",
+      "bytes": 72065,
+      "n_records": 149
+    }
+  }
+}

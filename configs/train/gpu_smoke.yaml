@@ -1,0 +1,15 @@
+extends: configs/train/q5filtered_lr5e5.yaml
+run_id: gpu_smoke
+# Four answer types, both tools, metric and imperial BMI; targets unchanged.
+example_ids: [train_000, train_004, train_003, train_046, train_006, train_015]
+training:
+  learning_rate: 5.0e-4
+  epochs: 10
+  grad_accum: 1
+  scheduler: constant
+  warmup_ratio: 0.0
+  logging_steps: 1
+  save_steps: 50
+val_loss: false
+checkpoint_dir: checkpoints/gpu_smoke
+output_dir: outputs/gpu_smoke

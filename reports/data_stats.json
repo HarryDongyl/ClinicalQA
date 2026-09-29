@@ -1,0 +1,1617 @@
+{
+  "stats": {
+    "splits": [
+      "train",
+      "val",
+      "test"
+    ],
+    "counts": {
+      "train": 2000,
+      "val": 250,
+      "test": 400
+    },
+    "answer_type": {
+      "train": {
+        "extractive": {
+          "n": 800,
+          "pct": 40.0
+        },
+        "numeric_reasoning": {
+          "n": 400,
+          "pct": 20.0
+        },
+        "tool_call": {
+          "n": 500,
+          "pct": 25.0
+        },
+        "uncertain": {
+          "n": 300,
+          "pct": 15.0
+        }
+      },
+      "val": {
+        "extractive": {
+          "n": 100,
+          "pct": 40.0
+        },
+        "numeric_reasoning": {
+          "n": 50,
+          "pct": 20.0
+        },
+        "tool_call": {
+          "n": 62,
+          "pct": 24.8
+        },
+        "uncertain": {
+          "n": 38,
+          "pct": 15.2
+        }
+      },
+      "test": {
+        "extractive": {
+          "n": 160,
+          "pct": 40.0
+        },
+        "numeric_reasoning": {
+          "n": 80,
+          "pct": 20.0
+        },
+        "tool_call": {
+          "n": 100,
+          "pct": 25.0
+        },
+        "uncertain": {
+          "n": 60,
+          "pct": 15.0
+        }
+      }
+    },
+    "answer_type_spec": {
+      "extractive": 40.0,
+      "numeric_reasoning": 20.0,
+      "tool_call": 25.0,
+      "uncertain": 15.0
+    },
+    "note_words": {
+      "train": {
+        "n": 2000,
+        "mean": 274.5,
+        "median": 273,
+        "min": 217,
+        "p5": 244,
+        "p95": 311,
+        "max": 377
+      },
+      "val": {
+        "n": 250,
+        "mean": 273.7,
+        "median": 272,
+        "min": 231,
+        "p5": 245,
+        "p95": 312,
+        "max": 367
+      },
+      "test": {
+        "n": 400,
+        "mean": 274.9,
+        "median": 274,
+        "min": 225,
+        "p5": 241,
+        "p95": 311,
+        "max": 343
+      }
+    },
+    "note_words_by_type": {
+      "train": {
+        "extractive": {
+          "n": 800,
+          "mean": 286.5,
+          "median": 286,
+          "min": 240,
+          "p5": 256,
+          "p95": 321,
+          "max": 377
+        },
+        "numeric_reasoning": {
+          "n": 400,
+          "mean": 272.2,
+          "median": 271,
+          "min": 223,
+          "p5": 245,
+          "p95": 300,
+          "max": 341
+        },
+        "tool_call": {
+          "n": 500,
+          "mean": 262.2,
+          "median": 261,
+          "min": 217,
+          "p5": 238,
+          "p95": 291,
+          "max": 319
+        },
+        "uncertain": {
+          "n": 300,
+          "mean": 266.0,
+          "median": 264,
+          "min": 221,
+          "p5": 238,
+          "p95": 298,
+          "max": 321
+        }
+      },
+      "val": {
+        "extractive": {
+          "n": 100,
+          "mean": 286.3,
+          "median": 283,
+          "min": 236,
+          "p5": 256,
+          "p95": 323,
+          "max": 367
+        },
+        "numeric_reasoning": {
+          "n": 50,
+          "mean": 268.3,
+          "median": 267,
+          "min": 239,
+          "p5": 250,
+          "p95": 295,
+          "max": 322
+        },
+        "tool_call": {
+          "n": 62,
+          "mean": 261.5,
+          "median": 260,
+          "min": 231,
+          "p5": 241,
+          "p95": 286,
+          "max": 293
+        },
+        "uncertain": {
+          "n": 38,
+          "mean": 267.4,
+          "median": 266,
+          "min": 243,
+          "p5": 245,
+          "p95": 293,
+          "max": 298
+        }
+      },
+      "test": {
+        "extractive": {
+          "n": 160,
+          "mean": 286.2,
+          "median": 285,
+          "min": 237,
+          "p5": 258,
+          "p95": 317,
+          "max": 343
+        },
+        "numeric_reasoning": {
+          "n": 80,
+          "mean": 272.3,
+          "median": 269,
+          "min": 232,
+          "p5": 246,
+          "p95": 300,
+          "max": 318
+        },
+        "tool_call": {
+          "n": 100,
+          "mean": 265.0,
+          "median": 262,
+          "min": 230,
+          "p5": 236,
+          "p95": 299,
+          "max": 322
+        },
+        "uncertain": {
+          "n": 60,
+          "mean": 264.4,
+          "median": 266,
+          "min": 225,
+          "p5": 231,
+          "p95": 293,
+          "max": 311
+        }
+      }
+    },
+    "question_words": {
+      "train": {
+        "n": 2000,
+        "mean": 17.6,
+        "median": 15,
+        "min": 6,
+        "p5": 9,
+        "p95": 31,
+        "max": 50
+      },
+      "val": {
+        "n": 250,
+        "mean": 17.8,
+        "median": 15,
+        "min": 6,
+        "p5": 9,
+        "p95": 32,
+        "max": 48
+      },
+      "test": {
+        "n": 400,
+        "mean": 17.6,
+        "median": 15,
+        "min": 6,
+        "p5": 9,
+        "p95": 30,
+        "max": 40
+      }
+    },
+    "answer_words": {
+      "train": {
+        "n": 2000,
+        "mean": 38.5,
+        "median": 43,
+        "min": 5,
+        "p5": 11,
+        "p95": 68,
+        "max": 92
+      },
+      "val": {
+        "n": 250,
+        "mean": 38.4,
+        "median": 44,
+        "min": 5,
+        "p5": 15,
+        "p95": 67,
+        "max": 85
+      },
+      "test": {
+        "n": 400,
+        "mean": 38.4,
+        "median": 43,
+        "min": 5,
+        "p5": 11,
+        "p95": 66,
+        "max": 80
+      }
+    },
+    "answer_words_by_type": {
+      "extractive": {
+        "n": 1060,
+        "mean": 17.4,
+        "median": 17,
+        "min": 5,
+        "p5": 7,
+        "p95": 27,
+        "max": 44
+      },
+      "numeric_reasoning": {
+        "n": 530,
+        "mean": 51.4,
+        "median": 49,
+        "min": 20,
+        "p5": 36,
+        "p95": 72,
+        "max": 92
+      },
+      "tool_call": {
+        "n": 662,
+        "mean": 51.1,
+        "median": 51,
+        "min": 28,
+        "p5": 40,
+        "p95": 62,
+        "max": 73
+      },
+      "uncertain": {
+        "n": 398,
+        "mean": 56.6,
+        "median": 55,
+        "min": 31,
+        "p5": 39,
+        "p95": 77,
+        "max": 90
+      }
+    },
+    "answer_sentences": {
+      "train": {
+        "1": 748,
+        "2": 892,
+        "3": 331,
+        "4": 29
+      },
+      "val": {
+        "1": 92,
+        "2": 113,
+        "3": 43,
+        "4": 2
+      },
+      "test": {
+        "1": 143,
+        "2": 178,
+        "3": 75,
+        "4": 4
+      }
+    },
+    "approx_tokens": {
+      "prompt": {
+        "n": 2650,
+        "mean": 553.4,
+        "median": 551,
+        "min": 442,
+        "p5": 494,
+        "p95": 618,
+        "max": 704
+      },
+      "answer": {
+        "n": 2650,
+        "mean": 61.4,
+        "median": 68,
+        "min": 6,
+        "p5": 18,
+        "p95": 108,
+        "max": 145
+      }
+    },
+    "table_type": {
+      "train": {
+        "labs": {
+          "n": 1393,
+          "pct": 69.7
+        },
+        "vitals": {
+          "n": 607,
+          "pct": 30.4
+        }
+      },
+      "val": {
+        "labs": {
+          "n": 184,
+          "pct": 73.6
+        },
+        "vitals": {
+          "n": 66,
+          "pct": 26.4
+        }
+      },
+      "test": {
+        "labs": {
+          "n": 288,
+          "pct": 72.0
+        },
+        "vitals": {
+          "n": 112,
+          "pct": 28.0
+        }
+      }
+    },
+    "table_panel": {
+      "train": {
+        "cbc": 161,
+        "coagulation": 180,
+        "iron": 185,
+        "lipid": 158,
+        "liver": 167,
+        "metabolic": 163,
+        "mixed": 1,
+        "renal": 186,
+        "thyroid": 192,
+        "vitals": 606,
+        "vitals+body": 1
+      },
+      "val": {
+        "cbc": 23,
+        "coagulation": 17,
+        "iron": 25,
+        "lipid": 28,
+        "liver": 22,
+        "metabolic": 19,
+        "renal": 21,
+        "thyroid": 29,
+        "vitals": 66
+      },
+      "test": {
+        "cbc": 38,
+        "coagulation": 35,
+        "iron": 27,
+        "lipid": 34,
+        "liver": 37,
+        "metabolic": 31,
+        "renal": 51,
+        "thyroid": 35,
+        "vitals": 111,
+        "vitals+body": 1
+      }
+    },
+    "table_rows": {
+      "train": {
+        "n": 2000,
+        "mean": 4.7,
+        "median": 5,
+        "min": 3,
+        "p5": 3,
+        "p95": 6,
+        "max": 7
+      },
+      "val": {
+        "n": 250,
+        "mean": 4.6,
+        "median": 5,
+        "min": 3,
+        "p5": 3,
+        "p95": 6,
+        "max": 6
+      },
+      "test": {
+        "n": 400,
+        "mean": 4.8,
+        "median": 5,
+        "min": 3,
+        "p5": 3,
+        "p95": 6,
+        "max": 6
+      }
+    },
+    "answer_type_by_table_type": {
+      "extractive": {
+        "labs": 742,
+        "vitals": 318
+      },
+      "numeric_reasoning": {
+        "labs": 364,
+        "vitals": 166
+      },
+      "tool_call": {
+        "labs": 481,
+        "vitals": 181
+      },
+      "uncertain": {
+        "labs": 278,
+        "vitals": 120
+      }
+    },
+    "answer_type_by_panel": {
+      "cbc": {
+        "extractive": 89,
+        "numeric_reasoning": 42,
+        "tool_call": 50,
+        "uncertain": 41
+      },
+      "coagulation": {
+        "extractive": 88,
+        "numeric_reasoning": 52,
+        "tool_call": 59,
+        "uncertain": 33
+      },
+      "iron": {
+        "extractive": 90,
+        "numeric_reasoning": 38,
+        "tool_call": 74,
+        "uncertain": 35
+      },
+      "lipid": {
+        "extractive": 74,
+        "numeric_reasoning": 47,
+        "tool_call": 63,
+        "uncertain": 36
+      },
+      "liver": {
+        "extractive": 92,
+        "numeric_reasoning": 45,
+        "tool_call": 59,
+        "uncertain": 30
+      },
+      "metabolic": {
+        "extractive": 83,
+        "numeric_reasoning": 39,
+        "tool_call": 57,
+        "uncertain": 34
+      },
+      "mixed": {
+        "extractive": 0,
+        "numeric_reasoning": 1,
+        "tool_call": 0,
+        "uncertain": 0
+      },
+      "renal": {
+        "extractive": 131,
+        "numeric_reasoning": 45,
+        "tool_call": 45,
+        "uncertain": 37
+      },
+      "thyroid": {
+        "extractive": 95,
+        "numeric_reasoning": 55,
+        "tool_call": 74,
+        "uncertain": 32
+      },
+      "vitals": {
+        "extractive": 317,
+        "numeric_reasoning": 166,
+        "tool_call": 181,
+        "uncertain": 119
+      },
+      "vitals+body": {
+        "extractive": 1,
+        "numeric_reasoning": 0,
+        "tool_call": 0,
+        "uncertain": 1
+      }
+    },
+    "tool_calls": {
+      "train": {
+        "examples_with_tool_calls": 500,
+        "pct_of_split": 25.0,
+        "calls_per_example": {
+          "1": 500
+        },
+        "by_tool": {
+          "calculate_bmi": 410,
+          "unit_convert": 90
+        },
+        "unit_convert_conversions": {
+          "mg/dL -> mmol/L (cholesterol)": 29,
+          "mg/dL -> mmol/L (glucose)": 21,
+          "mg/dL -> μmol/L (creatinine)": 40
+        }
+      },
+      "val": {
+        "examples_with_tool_calls": 62,
+        "pct_of_split": 24.8,
+        "calls_per_example": {
+          "1": 62
+        },
+        "by_tool": {
+          "calculate_bmi": 47,
+          "unit_convert": 15
+        },
+        "unit_convert_conversions": {
+          "mg/dL -> mmol/L (cholesterol)": 7,
+          "mg/dL -> mmol/L (glucose)": 3,
+          "mg/dL -> μmol/L (creatinine)": 5
+        }
+      },
+      "test": {
+        "examples_with_tool_calls": 100,
+        "pct_of_split": 25.0,
+        "calls_per_example": {
+          "1": 100
+        },
+        "by_tool": {
+          "calculate_bmi": 77,
+          "unit_convert": 23
+        },
+        "unit_convert_conversions": {
+          "mg/dL -> mmol/L (cholesterol)": 7,
+          "mg/dL -> mmol/L (glucose)": 2,
+          "mg/dL -> μmol/L (creatinine)": 14
+        }
+      }
+    },
+    "note_style": {
+      "train": {
+        "markdown": 817,
+        "plain": 1183
+      },
+      "val": {
+        "markdown": 94,
+        "plain": 156
+      },
+      "test": {
+        "markdown": 159,
+        "plain": 241
+      }
+    },
+    "section_presence_pct": {
+      "train": {
+        "cc": 100.0,
+        "hpi": 100.0,
+        "pmh": 100.0,
+        "medications": 100.0,
+        "allergies": 23.4,
+        "vitals": 93.2,
+        "exam": 99.6,
+        "labs": 56.5,
+        "assessment_plan": 100.0
+      },
+      "val": {
+        "cc": 100.0,
+        "hpi": 100.0,
+        "pmh": 100.0,
+        "medications": 100.0,
+        "allergies": 24.8,
+        "vitals": 90.0,
+        "exam": 99.2,
+        "labs": 48.8,
+        "assessment_plan": 100.0
+      },
+      "test": {
+        "cc": 100.0,
+        "hpi": 100.0,
+        "pmh": 100.0,
+        "medications": 100.0,
+        "allergies": 26.5,
+        "vitals": 90.8,
+        "exam": 99.8,
+        "labs": 56.8,
+        "assessment_plan": 100.0
+      }
+    },
+    "allergy_status": {
+      "train": {
+        "absent": 1528,
+        "nkda": 437,
+        "not_documented": 35
+      },
+      "val": {
+        "absent": 187,
+        "nkda": 57,
+        "not_documented": 6
+      },
+      "test": {
+        "absent": 289,
+        "nkda": 103,
+        "not_documented": 8
+      }
+    },
+    "inline_bmi_in_note": {
+      "train": 709,
+      "val": 89,
+      "test": 139
+    },
+    "sex": {
+      "train": {
+        "F": 1032,
+        "M": 968
+      },
+      "val": {
+        "F": 145,
+        "M": 105
+      },
+      "test": {
+        "F": 206,
+        "M": 194
+      }
+    },
+    "age": {
+      "train": {
+        "n": 2000,
+        "mean": 55.0,
+        "median": 54,
+        "min": 18,
+        "p5": 21,
+        "p95": 89,
+        "max": 92
+      },
+      "val": {
+        "n": 250,
+        "mean": 54.8,
+        "median": 54,
+        "min": 18,
+        "p5": 22,
+        "p95": 88,
+        "max": 92
+      },
+      "test": {
+        "n": 400,
+        "mean": 54.0,
+        "median": 55,
+        "min": 18,
+        "p5": 20,
+        "p95": 88,
+        "max": 92
+      }
+    },
+    "medications_per_note": {
+      "train": {
+        "n": 2000,
+        "mean": 3.0,
+        "median": 3,
+        "min": 0,
+        "p5": 1,
+        "p95": 5,
+        "max": 6
+      },
+      "val": {
+        "n": 250,
+        "mean": 3.3,
+        "median": 3,
+        "min": 1,
+        "p5": 1,
+        "p95": 5,
+        "max": 5
+      },
+      "test": {
+        "n": 400,
+        "mean": 3.0,
+        "median": 3,
+        "min": 1,
+        "p5": 1,
+        "p95": 5,
+        "max": 5
+      }
+    },
+    "body_measurement_units_in_note": {
+      "extractive": {
+        "weight:none height:none": 403,
+        "weight:kg height:cm": 326,
+        "weight:kg height:in": 142,
+        "weight:lb height:cm": 138,
+        "weight:lb height:in": 49,
+        "weight:kg height:none": 1,
+        "weight:lb height:none": 1
+      },
+      "numeric_reasoning": {
+        "weight:none height:none": 218,
+        "weight:kg height:cm": 127,
+        "weight:lb height:cm": 76,
+        "weight:kg height:in": 75,
+        "weight:lb height:in": 26,
+        "weight:lb height:none": 4,
+        "weight:kg height:none": 3,
+        "weight:none height:cm": 1
+      },
+      "tool_call": {
+        "weight:none height:none": 207,
+        "weight:kg height:cm": 198,
+        "weight:lb height:cm": 112,
+        "weight:kg height:in": 99,
+        "weight:lb height:in": 46
+      },
+      "uncertain": {
+        "weight:none height:none": 85,
+        "weight:kg height:cm": 72,
+        "weight:kg height:none": 63,
+        "weight:none height:cm": 46,
+        "weight:kg height:in": 36,
+        "weight:lb height:cm": 34,
+        "weight:lb height:none": 26,
+        "weight:none height:in": 20,
+        "weight:lb height:in": 16
+      }
+    },
+    "bmi_questions_by_type": {
+      "extractive": 1,
+      "numeric_reasoning": 11,
+      "tool_call": 534,
+      "uncertain": 148
+    },
+    "uncertain_category": {
+      "train": {
+        "allergy": 56,
+        "dose": 63,
+        "height": 65,
+        "timestamp": 65,
+        "weight": 51
+      },
+      "val": {
+        "allergy": 9,
+        "dose": 7,
+        "height": 8,
+        "timestamp": 6,
+        "weight": 8
+      },
+      "test": {
+        "allergy": 14,
+        "dose": 10,
+        "height": 13,
+        "timestamp": 12,
+        "weight": 11
+      }
+    },
+    "numeric_reasoning_categories": {
+      "difference": 474,
+      "other": 1,
+      "percentage": 77,
+      "ranking": 211,
+      "ratio": 63,
+      "threshold": 526
+    },
+    "question_templates": {
+      "extractive": {
+        "n_examples": 1060,
+        "n_distinct_templates": 464,
+        "top": [
+          {
+            "template": "What is the patient's transferrin saturation, and is it within the normal reference range?",
+            "n": 27
+          },
+          {
+            "template": "What is the patient's Free T# level and is it within the normal reference range?",
+            "n": 22
+          },
+          {
+            "template": "Is the patient's Free T# level within the normal reference range?",
+            "n": 20
+          },
+          {
+            "template": "What is the patient's ferritin level and is it within the normal reference range?",
+            "n": 20
+          },
+          {
+            "template": "What is the patient's D-dimer level and is it within the normal reference range?",
+            "n": 19
+          },
+          {
+            "template": "What is the patient's creatinine level, and is it within the normal reference range?",
+            "n": 18
+          },
+          {
+            "template": "What is the patient's phosphorus level and is it within the normal reference range?",
+            "n": 17
+          },
+          {
+            "template": "What is the patient's HbA#c level, and is it within the normal reference range?",
+            "n": 16
+          }
+        ]
+      },
+      "numeric_reasoning": {
+        "n_examples": 530,
+        "n_distinct_templates": 483,
+        "top": [
+          {
+            "template": "Which lab value is most significantly outside the normal range, and by how much does it exceed the upper limit of normal?",
+            "n": 10
+          },
+          {
+            "template": "Which lab value is most significantly outside its normal reference range, and by how much does it exceed the upper limit of normal?",
+            "n": 6
+          },
+          {
+            "template": "By how many times the upper limit of normal is the patient's TSH elevated?",
+            "n": 4
+          },
+          {
+            "template": "By how much does the patient's Free T# exceed the upper limit of the normal reference range, and what percentage above the upper limit does this represent?",
+            "n": 4
+          },
+          {
+            "template": "Which lab value is most significantly outside the normal reference range, and by how much does it exceed the upper limit of normal?",
+            "n": 4
+          },
+          {
+            "template": "By how many percentage points is the patient's transferrin saturation below the lower limit of the normal reference range?",
+            "n": 3
+          },
+          {
+            "template": "By how many times does the patient's D-dimer exceed the upper limit of normal, and which lab value is most significantly outside the reference range?",
+            "n": 3
+          },
+          {
+            "template": "Which lab value is outside the normal reference range, and by how much does it exceed the upper limit of normal?",
+            "n": 3
+          }
+        ]
+      },
+      "tool_call": {
+        "n_examples": 662,
+        "n_distinct_templates": 221,
+        "top": [
+          {
+            "template": "What is this patient's BMI based on her recorded weight and height?",
+            "n": 116
+          },
+          {
+            "template": "What is this patient's BMI based on his recorded weight and height?",
+            "n": 91
+          },
+          {
+            "template": "What is this patient's body mass index (BMI) based on her recorded weight and height?",
+            "n": 50
+          },
+          {
+            "template": "What is this patient's body mass index (BMI) based on his recorded weight and height?",
+            "n": 23
+          },
+          {
+            "template": "What is this patient's BMI based on the recorded weight and height?",
+            "n": 13
+          },
+          {
+            "template": "What is this patient's body mass index (BMI)?",
+            "n": 13
+          },
+          {
+            "template": "What is this patient's body mass index (BMI), and how does it factor into her clinical picture?",
+            "n": 11
+          },
+          {
+            "template": "What is this patient's total cholesterol level expressed in mmol/L?",
+            "n": 11
+          }
+        ]
+      },
+      "uncertain": {
+        "n_examples": 398,
+        "n_distinct_templates": 373,
+        "top": [
+          {
+            "template": "Can you calculate this patient's BMI based on the information documented in the clinical note?",
+            "n": 8
+          },
+          {
+            "template": "Can you calculate this patient's BMI based on the documented clinical note?",
+            "n": 5
+          },
+          {
+            "template": "Can you calculate this patient's BMI based on the documented clinical information?",
+            "n": 4
+          },
+          {
+            "template": "What is this patient's BMI, and does it fall within a normal range?",
+            "n": 4
+          },
+          {
+            "template": "Can you calculate this patient's BMI based on the information provided in the clinical note?",
+            "n": 3
+          },
+          {
+            "template": "Can you calculate this patient's BMI based on the documented encounter note?",
+            "n": 2
+          },
+          {
+            "template": "Can you calculate this patient's BMI based on the documented encounter?",
+            "n": 2
+          },
+          {
+            "template": "What dose of levetiracetam was initiated for seizure management in this patient?",
+            "n": 2
+          }
+        ]
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "Q1",
+      "title": "Schema validity",
+      "status": "pass",
+      "severity_if_flagged": "error",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "empty_cells": {
+          "INR / Unit": 232
+        }
+      },
+      "notes": [
+        "Empty table cells are schema-valid but must be rendered explicitly by the table serializer: INR / Unit (232)"
+      ]
+    },
+    {
+      "id": "Q2",
+      "title": "ID uniqueness and naming",
+      "status": "pass",
+      "severity_if_flagged": "error",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {},
+      "notes": []
+    },
+    {
+      "id": "Q3",
+      "title": "Duplicates and near-duplicates",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "notes_reused_within_split": {
+          "train": 0,
+          "val": 0,
+          "test": 0
+        },
+        "distinct_note_templates_numbers_masked": {
+          "train": {
+            "distinct": 2000,
+            "records": 2000
+          },
+          "val": {
+            "distinct": 250,
+            "records": 250
+          },
+          "test": {
+            "distinct": 400,
+            "records": 400
+          }
+        },
+        "max_jaccard_vs_train": {
+          "val": {
+            "p50": 0.076,
+            "p90": 0.113,
+            "p99": 0.14,
+            "max": 0.151,
+            ">= 0.9": 0
+          },
+          "test": {
+            "p50": 0.077,
+            "p90": 0.106,
+            "p99": 0.156,
+            "max": 0.2,
+            ">= 0.9": 0
+          }
+        },
+        "note_template_shared_with_train": {
+          "val": 0,
+          "test": 0
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q4",
+      "title": "Gold tool results reproduce with our tools",
+      "status": "pass",
+      "severity_if_flagged": "error",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "tool_calls_checked": 662
+      },
+      "notes": []
+    },
+    {
+      "id": "Q5",
+      "title": "Tool arguments are grounded in the input",
+      "status": "error",
+      "severity_if_flagged": "error",
+      "flags_by_split": {
+        "train": 78,
+        "val": 7,
+        "test": 10,
+        "reference": 0
+      },
+      "metrics": {
+        "grounding_patterns": {
+          "train": {
+            "weight:note/kg height:note/cm": 209,
+            "weight:missing height:missing": 78,
+            "unit_convert value:table": 57,
+            "unit_convert value:note": 33,
+            "weight:note/lb height:note/cm": 31,
+            "weight:note/lb height:note/in": 28,
+            "weight:question/kg height:question/cm": 20,
+            "weight:note/kg height:note/in": 14,
+            "weight:question/lb height:question/in": 11,
+            "weight:question/lb height:question/cm": 10,
+            "weight:question/kg height:question/in": 9
+          },
+          "val": {
+            "weight:note/kg height:note/cm": 25,
+            "unit_convert value:table": 13,
+            "weight:missing height:missing": 7,
+            "weight:note/lb height:note/cm": 6,
+            "weight:question/kg height:question/cm": 4,
+            "weight:note/lb height:note/in": 3,
+            "unit_convert value:note": 2,
+            "weight:note/kg height:note/in": 2
+          },
+          "test": {
+            "weight:note/kg height:note/cm": 36,
+            "unit_convert value:table": 16,
+            "weight:missing height:missing": 10,
+            "weight:note/lb height:note/in": 8,
+            "unit_convert value:note": 7,
+            "weight:question/kg height:question/cm": 7,
+            "weight:note/kg height:note/in": 5,
+            "weight:note/lb height:note/cm": 5,
+            "weight:question/lb height:question/cm": 3,
+            "weight:question/kg height:question/in": 2,
+            "weight:question/lb height:question/in": 1
+          }
+        },
+        "bmi_args_only_in_question": {
+          "train": 50,
+          "val": 4,
+          "test": 13
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q6",
+      "title": "Imperial -> metric rounding convention",
+      "status": "info",
+      "severity_if_flagged": "info",
+      "flags_by_split": {
+        "train": 37,
+        "val": 4,
+        "test": 10,
+        "reference": 0
+      },
+      "metrics": {
+        "converted_args": {
+          "height:approx": 51,
+          "height:converted": 32,
+          "weight:converted": 106
+        },
+        "max_abs_metric_diff": 0.126,
+        "chained_bmi_minus_gold": {
+          "+0.0": 118,
+          "+0.1": 11,
+          "-0.1": 9
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q7",
+      "title": "BMI stated in the note vs. computed BMI",
+      "status": "warn",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 96,
+        "val": 10,
+        "test": 13,
+        "reference": 0
+      },
+      "metrics": {
+        "notes_with_stated_bmi_and_measurements": 619,
+        "stated_bmi_consistent": 500,
+        "inconsistency_size_bmi_units": {
+          "0.5-1": 39,
+          "1-2": 33,
+          "2-5": 30,
+          ">=5": 17
+        },
+        "tool_call_stated_bmi_vs_gold_result": {},
+        "uncertain_bmi_questions_with_stated_bmi": {
+          "train": 0,
+          "val": 0,
+          "test": 0
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q8",
+      "title": "answer_type label consistency",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "bmi_decision_table": {
+          "tool_call | weight+height both present": 439,
+          "tool_call | weight+height missing": 95,
+          "uncertain | weight+height missing": 148
+        },
+        "uncertain_verified": {
+          "allergy": 79,
+          "dose": 80,
+          "height": 86,
+          "timestamp (not machine-verifiable)": 83,
+          "weight": 70
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q9",
+      "title": "Final answer incorporates the tool result",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {},
+      "notes": []
+    },
+    {
+      "id": "Q10",
+      "title": "Arithmetic in numeric_reasoning gold answers (heuristic)",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "equations_checked": 133,
+        "by_amounts_checked": 389,
+        "by_amounts_verified": 389
+      },
+      "notes": []
+    },
+    {
+      "id": "Q11",
+      "title": "Numbers in extractive answers appear in the input",
+      "status": "warn",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 36,
+        "val": 3,
+        "test": 7,
+        "reference": 0
+      },
+      "metrics": {
+        "extractive_answers_checked": 1060,
+        "flag_kinds": {
+          "reference range not in input": 46
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q12",
+      "title": "Note text vs. table value conflicts",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "analytes_compared": {
+          "ALT": 30,
+          "AST": 16,
+          "Albumin": 30,
+          "Alkaline Phosphatase": 17,
+          "BUN": 41,
+          "Blood Pressure": 79,
+          "Calcium": 33,
+          "Creatinine": 86,
+          "D-dimer": 28,
+          "Ferritin": 18,
+          "Free T3": 21,
+          "Free T4": 34,
+          "Glucose (fasting)": 27,
+          "HDL": 14,
+          "HbA1c": 94,
+          "Heart Rate": 42,
+          "Hematocrit": 18,
+          "Hemoglobin": 53,
+          "INR": 36,
+          "LDL": 34,
+          "PT": 3,
+          "Phosphorus": 43,
+          "Platelets": 28,
+          "Potassium": 15,
+          "Respiratory Rate": 8,
+          "Serum Iron": 9,
+          "Sodium": 15,
+          "SpO2": 98,
+          "TIBC": 8,
+          "TSH": 51,
+          "Temperature": 15,
+          "Total Bilirubin": 26,
+          "Total Cholesterol": 18,
+          "Total Protein": 19,
+          "Transferrin Saturation": 26,
+          "Triglycerides": 17,
+          "Uric Acid": 33,
+          "WBC": 36,
+          "aPTT": 24,
+          "eGFR": 84
+        },
+        "analytes_conflicting": {},
+        "rounded_restatements": [
+          "train/train_755 Glucose (fasting): note ['87'] vs table 87.4",
+          "test/test_075 ALT: note ['133'] vs table 133.3",
+          "test/test_075 AST: note ['118'] vs table 118.3"
+        ]
+      },
+      "notes": []
+    },
+    {
+      "id": "Q13",
+      "title": "Unicode and unit-spelling variants",
+      "status": "info",
+      "severity_if_flagged": "info",
+      "flags_by_split": {
+        "train": 37,
+        "val": 5,
+        "test": 14,
+        "reference": 0
+      },
+      "metrics": {
+        "char_inventory": {
+          "U+00B0 DEGREE SIGN": {
+            "answer": 63,
+            "note": 2043,
+            "question": 16,
+            "table": 785
+          },
+          "U+00B2 SUPERSCRIPT TWO": {
+            "answer": 745,
+            "note": 552,
+            "question": 17,
+            "table": 258
+          },
+          "U+00B3 SUPERSCRIPT THREE": {
+            "answer": 168,
+            "note": 235,
+            "question": 3,
+            "table": 444
+          },
+          "U+00B5 MICRO SIGN": {
+            "answer": 81,
+            "question": 56
+          },
+          "U+00D7 MULTIPLICATION SIGN": {
+            "answer": 51,
+            "note": 2
+          },
+          "U+00F7 DIVISION SIGN": {
+            "answer": 30
+          },
+          "U+03BC GREEK SMALL LETTER MU": {
+            "answer": 352,
+            "note": 475,
+            "question": 10,
+            "table": 918,
+            "tool_args": 59
+          },
+          "U+2013 EN DASH": {
+            "answer": 314,
+            "note": 7251,
+            "question": 9
+          },
+          "U+2014 EM DASH": {
+            "answer": 177,
+            "note": 2533
+          },
+          "U+2212 MINUS SIGN": {
+            "answer": 35
+          },
+          "U+2248 ALMOST EQUAL TO": {
+            "answer": 78
+          },
+          "U+2264 LESS-THAN OR EQUAL TO": {
+            "answer": 4,
+            "note": 1,
+            "question": 1
+          },
+          "U+2265 GREATER-THAN OR EQUAL TO": {
+            "answer": 25,
+            "note": 4,
+            "question": 19
+          }
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q14",
+      "title": "Table values and reference ranges are parseable",
+      "status": "warn",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 2,
+        "val": 0,
+        "test": 1,
+        "reference": 0
+      },
+      "metrics": {
+        "atypical_tables": {
+          "vitals+body": 2,
+          "mixed": 1
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q15",
+      "title": "extractive vs. numeric_reasoning boundary",
+      "status": "pass",
+      "severity_if_flagged": "info",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "range_wording_pct": {
+          "extractive": 65.1,
+          "numeric_reasoning": 93.0
+        },
+        "templates_shared_between_types": []
+      },
+      "notes": []
+    },
+    {
+      "id": "Q16",
+      "title": "Clinical plausibility (synthetic-data artefacts)",
+      "status": "info",
+      "severity_if_flagged": "info",
+      "flags_by_split": {
+        "train": 159,
+        "val": 24,
+        "test": 36,
+        "reference": 0
+      },
+      "metrics": {
+        "counts": {
+          "female-only condition in male patient": 20,
+          "hct/hgb ratio out of range": 92,
+          "male-only condition in female patient": 107,
+          "note self-annotates a chart discrepancy": 86
+        },
+        "notes_with_two_drugs_of_same_class": {
+          "ACE inhibitor / ARB": 40,
+          "beta-blocker": 27,
+          "anticoagulant": 25,
+          "DPP-4 inhibitor": 18,
+          "SGLT2 inhibitor": 14,
+          "PPI": 11,
+          "statin": 11,
+          "SSRI": 9,
+          "gabapentinoid": 9
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q17",
+      "title": "Gold answer length",
+      "status": "info",
+      "severity_if_flagged": "info",
+      "flags_by_split": {
+        "train": 29,
+        "val": 2,
+        "test": 4,
+        "reference": 0
+      },
+      "metrics": {
+        "sentences_by_type": {
+          "extractive": {
+            "1": 966,
+            "2": 87,
+            "3": 7
+          },
+          "numeric_reasoning": {
+            "1": 9,
+            "2": 314,
+            "3": 197,
+            "4": 10
+          },
+          "tool_call": {
+            "2": 634,
+            "3": 28
+          },
+          "uncertain": {
+            "1": 8,
+            "2": 148,
+            "3": 217,
+            "4": 25
+          }
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q18",
+      "title": "Cross-split contamination",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "val": {
+          "note+question": 0,
+          "note": 0,
+          "question+answer": 0
+        },
+        "test": {
+          "note+question": 0,
+          "note": 0,
+          "question+answer": 7
+        }
+      },
+      "notes": []
+    },
+    {
+      "id": "Q19",
+      "title": "Reference file (Stretch B) integrity and coverage",
+      "status": "pass",
+      "severity_if_flagged": "warn",
+      "flags_by_split": {
+        "train": 0,
+        "val": 0,
+        "test": 0,
+        "reference": 0
+      },
+      "metrics": {
+        "entries": 149,
+        "by_category": {
+          "clinical_guideline": 48,
+          "clinical_reference": 18,
+          "contraindication": 11,
+          "dosing_guideline": 8,
+          "drug_interaction": 64
+        },
+        "drug_interaction_vocabulary": 40,
+        "pair_order": {
+          "alphabetical": 32,
+          "non-alphabetical": 32
+        },
+        "micro_unit_spellings_in_values": {
+          "uL": 6,
+          "ug": 3,
+          "umol": 4
+        },
+        "notes_with_covered_pair": {
+          "train": 474,
+          "val": 63,
+          "test": 93
+        },
+        "top_covered_pairs": {
+          "albuterol:metformin": 38,
+          "metformin:spironolactone": 34,
+          "metformin:sertraline": 32,
+          "calcium_carbonate:metformin": 30,
+          "amlodipine:metformin": 28,
+          "dapagliflozin:metformin": 28,
+          "insulin_glargine:metformin": 27,
+          "empagliflozin:metformin": 26,
+          "metformin:sitagliptin": 25,
+          "losartan:metformin": 24,
+          "furosemide:metformin": 23,
+          "aspirin:metformin": 22,
+          "atorvastatin:metformin": 22,
+          "ibuprofen:metformin": 22,
+          "amoxicillin:metformin": 19
+        },
+        "note_drugs_absent_from_interaction_keys": {
+          "pantoprazole": 192,
+          "rosuvastatin": 172,
+          "montelukast": 171,
+          "bisoprolol": 161,
+          "hydrochlorothiazide": 149,
+          "insulin_lispro": 147,
+          "levetiracetam": 5,
+          "mesalamine": 3,
+          "allopurinol": 2,
+          "entecavir": 2,
+          "methotrexate": 2,
+          "pancrelipase": 2,
+          "alendronate": 1,
+          "donepezil": 1,
+          "folic": 1,
+          "lithium": 1,
+          "lorazepam": 1
+        }
+      },
+      "notes": []
+    }
+  ],
+  "input_sha256": {
+    "train": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
+    "val": "33562f1ee02c360ef4f7dae6cc35eba06b99b9f60696a28bb2e0e9a5c4ac33f8",
+    "test": "15c4956402aeab360dc7bfd74b3bb6794a2ff8cffe386876d2dbfe97924565c1",
+    "reference": "2095e645a07813c3e1ca04f956acbf420ba2bde27c238fe8f4ae39fa7c5ec128"
+  }
+}

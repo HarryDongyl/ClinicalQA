@@ -1,0 +1,23 @@
+# Raw data preparation: copies the provided files byte-for-byte into data/
+# under the canonical names used by the assignment's Quick Start.
+source_dir: _data
+output_dir: data
+manifest: data/MANIFEST.json
+
+splits:
+  train:
+    source: train_4089.txt
+    target: train.jsonl
+    expected_count: 2000
+  val:
+    source: val_3768.txt
+    target: val.jsonl
+    expected_count: 250
+  test:
+    source: test_4569.txt
+    target: test.jsonl
+    expected_count: 400
+
+reference:
+  source: reference_6223.txt
+  target: reference.jsonl

@@ -1,0 +1,35 @@
+# Compatibility path for the raw_lr1e4 control; prefer configs/train/raw_lr1e4.yaml.
+run_id: raw_lr1e4
+extends: configs/train/base.yaml
+allow_ungrounded_targets: true
+expected_train_examples: 2000
+seed: 42
+format_config: configs/format_core.yaml
+train_view: raw
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4          # QLoRA on CUDA; ignored on CPU (smoke only)
+  attn: sdpa
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+training:
+  learning_rate: 1.0e-4
+  epochs: 2
+  micro_batch: 1
+  grad_accum: 16
+  scheduler: cosine
+  warmup_ratio: 0.03
+  max_grad_norm: 1.0
+  weight_decay: 0.0
+  gradient_checkpointing: true
+  logging_steps: 5
+max_examples: null           # null = all rows of the view
+val_loss: true               # teacher-forced val loss per answer type at each epoch end (diagnostic)
+checkpoint_dir: checkpoints/raw_lr1e4
+output_dir: outputs/raw_lr1e4
