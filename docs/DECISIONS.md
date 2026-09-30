@@ -1,7 +1,6 @@
-# Decisions — revision 3
+# Decisions — revision 4
 
-Updated 2026-09-28 following the project review and user authorization to update the plan and data processing. [PLAN.md](PLAN.md) is the current implementation specification. Routine design choices below are settled recommendations, not blockers waiting for repeated confirmation. GPU compatibility and measured results remain unknown.
-
+Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-051). Revision 3 was dated 2026-09-28. [PLAN.md](PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
 ## Current decisions (original IDs retained)
 
 - D-001: NVIDIA CUDA, Transformers + TRL + PEFT; single 24GB GPU target confirmed by the user.
@@ -64,6 +63,84 @@ Implementation scope and interfaces. These supersede earlier entries where they 
 - D-035: scorer hardening from an adversarial review on train/val only (test never read): negated direction words are dropped; direction is read from sentences containing the fact numbers; bound words ("upper limit") and non-lab hyper/hypo terms are non-directional; verbal thresholds ("less than 500") are context, not facts; abstention covers contractions and "needs to be obtained"; loose words (unknown/missing) count only near a documentation noun; fabrication checks accept only same-kind input values and cover spelled-out units, bare "weight was N" and asserted "no allergies"; numeric answers fail when the derived result is attached to another analyte's value. Each rule has a fixture in tests/test_metrics.py.
 - D-036: final-eval refuses a dirty/uncommitted tree and any adapter that is not checkpoints[selected] in outputs/<run>/selection.json; the final config hash and commit are written into each test run.json.
 
+## Revision 4 decisions (2026-09-30)
+
+These supersede earlier entries where they conflict. Superseded: D-014 (the repository is now committed; wave one is at `cb0a940`, "Final test evaluation"); D-022's "one R1 run, no sweep" (wave one trained three runs); the strict one-factor order in EXPERIMENT_JOURNAL W2-PLAN-003 (replaced by D-041); and the W2-PLAN-003 E3 skip condition (replaced by D-045).
+
+### Wave-one outcome
+
+- D-037: **The wave-one winner is kept as selected, and test was run once.** The frozen rule picked raw_lr1e4 step125: maximum grounded macro, 0.005 near-tie margin, unsupported-call and over-call tie-breaks within the grounded subset. It scored 87.78% legacy grounded macro on val. It was kept although it makes unsupported BMI calls on 6 of 7 validation Q5 cases, where filtered step121 makes none. *Reason:* the rule was frozen before outcomes were seen. Replacing the winner after seeing a regression would be outcome-driven selection, and it would invalidate the single test run. The Q5 regression is reported next to the result (journal section 3) instead of being hidden by re-selection. Test result, legacy scorer: 84.72% grounded macro vs 45.28% for base, Q5 no-call abstention 1/10 vs 9/10.
+- D-038: **Test is consumed; wave two is validation-only.** No wave-two decision reads test records, trajectories, scores or adjudication packets. `scripts/scorer_v2_agreement.py` reads test and is not run. Any future test run is labelled a *reused-test exploratory evaluation* under a new run identity, and the original final-evaluation artifacts are preserved. *Reason:* test was inspected for data auditing and has been evaluated once. A second selection against it would no longer estimate held-out performance. *Disclosure:* candidate scorer v2.1 contains fixes derived from test holdout1 (W2-AUDIT-004). This cannot be undone. It is disclosed, and no further test-driven change is allowed.
+- D-039: **The Q5-filtered view is the wave-two training base, and LR is raised to at least 1e-4.** Evidence (legacy scorer, val, paired stratified bootstrap with 5,000 resamples):
+  - LR effect within the raw view: raw1e4 minus raw5e5 at epoch one is +3.36 points grounded macro, 95% interval +0.66 to +6.61.
+  - Filtering effect at 5e-5: filtered minus raw is -0.14 points, 95% interval -3.68 to +3.34.
+  - Safety: filtered step121 keeps Q5 no-call abstention at 7/7, with unsupported arguments on 1/56 called examples vs 7/62 for raw1e4.
+
+  *Reason:* filtering gives the safety gain without a measurable grounded-score cost, and the higher LR is the only intervention with an interval excluding zero. Filtered at 1e-4 has never been trained, so it is the first rung (D-045). *Caveats:* the Q5 set is only 7 validation cases. Filtering also changes class balance and step count (1,922 examples, 121 steps per epoch vs 125). Q5 is a heuristic flag, not an adjudicated label.
+- D-040: **Three scorers are kept side by side, and none selects a model yet.**
+  - v1 legacy (`metrics.py`): kept as the historical record. It is the only implementation with paired bootstrap comparison.
+  - Bounded v2 (`scoring_v2.py`): kept.
+  - Candidate v2.1 (`scorer_v2.py`): installed hash-matched (`b15db3d0…`), and it reproduces 1,750 validation scores. It is diagnostic only. Known defects: false passes on executed negative probes; numeric membership alone can pass `check_text`; no coverage gate; canonical ranges are injected when none are supplied (val_085).
+
+  Next scorer design: deterministic checks remain authoritative. A pinned, cached semantic judge resolves only `review` items against a fixed rubric. It is calibrated once on a stratified validation sample (development and holdout halves, predeclared agreement and false-pass thresholds), then frozen and applied automatically to every checkpoint, with no per-item human labelling during training. The backend is not chosen. *Reason:* the audit showed v2.1 passing wrong answers, so selecting with it would reward scorer artifacts (W2-AUDIT-004, W2-INSTALL-005).
+
+### Wave-two round
+
+- D-041: **One bundled GPU round, per user decision.** One pod session runs E1 (prompt ablation on fixed weights) and the filtered LR ladder (D-045), both in the new batch setup (D-042). Command: `make w2-round`. *Reason:* pod setup, preflight and GPU smoke are paid once. The jobs are independent: E1 uses existing weights, and the ladder uses the v1 training prompt. Causal reading comes from matched contrasts, not wall-clock order (W2-INSTALL-005). *Consequence:* the prompt result cannot feed into the training prompt this round, so training stays on v1 (D-048).
+- D-042: **Batch setup: training micro-batch 4 with accumulation 4, and generation batch 4 (user decision).** The effective batch of 16 is unchanged.
+  - *Reason:* throughput. Wave-one mb1 training peaked at 7.81 GiB of 23.5 GiB.
+  - *Overrides:* W2-AUDIT-004 and W2-INSTALL-005, which advised training filtered 1e-4 at mb1 to match wave one and preflighting the batch changes separately.
+  - *Confounds, stated rather than removed:*
+    1. Every wave-two run differs from the wave-one runs in micro-batch as well as view or LR. The optimizer math is nominally the same at effective batch 16, but padding, reduction order and bf16 numerics differ. Filtered 1e-4 at mb4 vs filtered 5e-5 at mb1 therefore does not isolate LR, and the mb1 control `w2_filtered_lr1e4_mb1` is not run (E2b stays unmeasured, D-048).
+    2. Batched greedy generation with left padding can change outputs. Wave-one outputs (batch 2) are therefore not matched controls (D-043).
+  - The three LR rungs share one setup, so they are comparable with each other.
+  - *Why batch 4 and not 8:* 8 has not been tested for memory or latency at 512 total new tokens, and 4 is the smaller step.
+  - *VRAM risk:* the estimated mb4 peak is about 20–22 GB, dominated by fp32 logits over the 151k vocabulary at 2,048 tokens. If the first mb4 run hits CUDA OOM, `scripts/run_w2_round.sh` writes `outputs/w2_mb4_oom.txt` and switches the whole ladder to mb2 with accumulation 8 (same effective batch). All rungs therefore stay in one setup. This fallback is a deviation to be reported if it happens.
+- D-043: **Controls are regenerated under one code state and one generation batch.** The E1 v1 arm regenerates all four fixed checkpoints with the wave-two code and batch 4. Two comparisons follow:
+  - `w2p_v1_<run>` vs the wave-one label (`scripts/compare_rollouts.py`) measures drift from generation batch, code and host. That drift is the noise floor for reading v1-vs-v2 and ladder differences.
+  - Ladder checkpoints are compared with `w2p_v1_raw_lr1e4` and `w2p_v1_q5filtered_lr5e5`, not with the wave-one outputs.
+
+  *Reason:* the evaluation source hash changed after wave one (scorer modules were added), and so did the generation batch. Wave-one outputs are no longer matched controls.
+- D-044: **E1 crosses four fixed epoch-one checkpoints with prompts v1 and v2, and base is the primary arm.** The checkpoints are base, raw_lr1e4 step125, raw_lr5e5 step125 and q5filtered_lr5e5 step121; the output is 8 validation labels `w2p_{v1,v2}_<run>`. The two configs differ only in `format_config` and `prompt_sha256` (checked on CPU). Adapters are downloaded from the pinned HF revisions (journal section 9) and hash-checked against the wave-one manifests before use. raw_lr5e5 completes the crossing proposed in W2-INSTALL-005, at about 20 GPU-minutes extra.
+  - *Reason for base as primary:* the adapters were trained with v1, so v2 is an input shift for them. The adapter arms show whether the rule still acts after SFT.
+  - The W2-PLAN-003 decision rule is retained, with the D-043 drift as its noise floor.
+  - *Blocked:* no prompt decision is made until the scorer range policy is fixed. In val_085, v2.1 injects a canonical reference range that the supplied data lack, which conflicts with v2's rule to use the supplied range. Scoring v2 with that policy would penalize the behaviour v2 asks for.
+- D-045: **LR ladder on the filtered view: 1e-4, then 1.5e-4, then 2e-4.** Setup is micro-batch 4 (or the D-042 fallback) and the v1 training prompt, with everything else as wave one: base revision, LoRA r16/alpha32/dropout 0.05, cosine schedule with 3% warmup, 2 epochs, seed 42, 2,048 max length. Configs: `configs/train/w2_filtered_{lr1e4,lr1p5e4,lr2e4}_mb4.yaml`. Both epoch checkpoints (steps 121 and 242) are generated with v1. Epoch two is reported separately, not used as an extra hidden selection opportunity.
+  - *Skip rule:* 2e-4 is skipped only if the 1.5e-4 run is numerically unstable, meaning non-finite loss or grad_norm, or no manifest (`scripts/w2_epochs.py stable`). This replaces W2-PLAN-003's "stable and not worse".
+  - *Reason for the skip rule:* "not worse" cannot be judged on the pod, because no scorer is approved (D-040), and judging it with the legacy scorer would make the legacy scorer the selector. The 2e-4 run costs about $0.65, and saving its outputs lets it be scored later.
+  - *Why a ladder:* the only interval excluding zero points up in LR (D-039), and wave one never went above 1e-4.
+- D-046: **Budgets and decoding are unchanged.** Greedy decoding; one tool call, two assistant turns, 256 new tokens per turn and 512 total; same base and tokenizer revision; NF4. *Reason:* one factor per contrast. Only the prompt (E1) or the LR (ladder) changes within a comparison, on top of the declared batch change (D-042).
+- D-047: **The pod only generates. Scorer v2.1 and bounded v2 run on CPU after the pod is stopped.**
+  - On the pod, `clinqa.evaluate generate` also runs the legacy scorer, which is cheap and gives a sanity signal.
+  - v2.1 runs only through `scripts/score_v21_val.py`, which refuses test-like labels, an existing output directory and missing labels. `make w2-score` runs both scorers, the legacy paired comparisons and the rollout diffs.
+  - *Reason:* scorer work stays off the GPU bill, scoring can be repeated when the scorer changes (outputs keep full trajectories), and the wrapper enforces D-038 mechanically.
+- D-048: **Deferred, not run this round.**
+  - E4 Q5 relabel: the 78 train-only proposals need the annotation audit in W2-INSTALL-005.
+  - E5 pre-call sentence: it needs a separate data transformation, because training targets have empty call content, so a prompt line alone is not expected to produce reasoning.
+  - Prompt v2 inside training.
+  - The mb1 control.
+  - Generation batch 8.
+  - Seed-43 repeat.
+  - Qwen3-8B.
+
+  *Reason:* each changes something this round holds fixed, and the $10 budget does not cover them together.
+- D-049: **This round declares no winner.** The legacy, bounded v2 and v2.1 results are reported side by side. Paired intervals come from the legacy `compare` (the only paired-bootstrap implementation), and the legacy `select`/`freeze` commands are not used. A winner can be named only after two things: v2.1's defects are fixed using validation-only evidence, and the semantic judge is calibrated and frozen (D-040). *Reason:* announcing a winner from a scorer known to pass wrong answers would bias every later decision.
+- D-050: **The cross is optional, and off by default.** `CROSS=1` also generates prompt v2 on the ladder checkpoints. It is decided on budget after the main round. *Reason:* the prompt-by-LR interaction is secondary. E1 already measures the prompt on fixed weights, and v2 is an input shift for v1-trained adapters.
+- D-051: **Cost ceiling and stop rule.** Spend so far is about $2.97 of the $10 budget (RTX 4090 Secure at $0.74/hr).
+  - *Planning estimate from wave-one timings:* setup and smoke take about 15 minutes. E1 takes about 75 minutes (2 base passes at about 7 minutes, 6 adapter passes at about 10). Three training runs take at most about 42 minutes each at the wave-one rate; mb4 may be faster, which is unmeasured. Six epoch passes take about 60 minutes. The total is roughly 4–4.6 hours, about $3.0–3.4. CROSS adds about 1 hour, about $0.75.
+  - *Ceiling:* $5 for this round, keeping total spend at or below about $8.
+  - *If the ceiling is approaching:* drop CROSS first, then 2e-4, then stop after the current job. Outputs are pushed after every stage.
+  - Before the pod is terminated, adapters are uploaded to private HF and `git push` must succeed. The pod is created only after the user approves the price.
+
 ## Still to measure
 
-GPU model/driver/bf16 support; compatible pinned training stack; actual tokenizer lengths; throughput and memory; model baseline/SFT results; manual adjudication of the Q5 train review packet. None is replaced by a predicted or fabricated result.
+Measured in wave one: GPU, driver and bf16 support; the pinned training stack; tokenizer lengths; mb1 throughput and memory; baseline and SFT results under the legacy scorer.
+
+Still unknown, and not replaced by predicted or fabricated results:
+- the inference prompt v1 vs v2 effect (E1);
+- the filtered view at 1e-4 and above;
+- mb4 memory and throughput;
+- the generation drift from batch 4;
+- scorer validity (v2.1 repairs, semantic-judge calibration);
+- manual adjudication of the Q5 train review packet and relabel proposals;
+- seed variance.

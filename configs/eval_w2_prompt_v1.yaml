@@ -1,10 +1,11 @@
-# W2-E1 prompt ablation, arm v1: fixed wave-one weights, validation only (EXPERIMENT_JOURNAL W2-PLAN-003).
-# The two arms differ only in format_config (system prompt); batch size, budgets, model and adapters are identical.
-# Selection is deliberately not configured: score with scorer v2 (make score-v2), not the legacy selector.
+# Wave-two round, prompt arm v1 (EXPERIMENT_JOURNAL W2-PLAN-006; DECISIONS D-041 to D-045). Validation only.
+# The two arms differ only in format_config (system prompt); batch size, budgets, model and runs are identical.
+# Used for W2-E1 (fixed wave-one weights) and for the epoch checkpoints of the wave-two LR runs (--adapter).
+# Selection is deliberately not configured: score with scorer v2.1 (make score-v21), not the legacy selector.
 format_config: configs/format_core.yaml
 analysis_config: configs/analysis.yaml
 output_dir: outputs
-batch_size: 2  # wave-one reference; generation batching is a later, separate factor
+batch_size: 4  # wave-two generation batch (D-042); wave one used 2, so wave-one outputs are not matched controls
 budget:
   max_calls: 1
   max_assistant_turns: 2
@@ -21,4 +22,12 @@ model:
 runs:
   base: {adapter: null}
   raw_lr1e4: {adapter: checkpoints/raw_lr1e4/checkpoint-125}
+  raw_lr5e5: {adapter: checkpoints/raw_lr5e5/checkpoint-125}
   q5filtered_lr5e5: {adapter: checkpoints/q5filtered_lr5e5/checkpoint-121}
+  # Wave-two LR ladder: the adapter is always the epoch checkpoint passed with --adapter (scripts/w2_epochs.py).
+  w2_filtered_lr1e4_mb4: {adapter: checkpoints/w2_filtered_lr1e4_mb4/final}
+  w2_filtered_lr1p5e4_mb4: {adapter: checkpoints/w2_filtered_lr1p5e4_mb4/final}
+  w2_filtered_lr2e4_mb4: {adapter: checkpoints/w2_filtered_lr2e4_mb4/final}
+  w2_filtered_lr1e4_mb2: {adapter: checkpoints/w2_filtered_lr1e4_mb2/final}  # OOM fallback only (D-042)
+  w2_filtered_lr1p5e4_mb2: {adapter: checkpoints/w2_filtered_lr1p5e4_mb2/final}  # OOM fallback only (D-042)
+  w2_filtered_lr2e4_mb2: {adapter: checkpoints/w2_filtered_lr2e4_mb2/final}  # OOM fallback only (D-042)

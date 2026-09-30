@@ -1,0 +1,662 @@
+{
+ "g_000": {
+  "run": "raw_lr1e4_test",
+  "id": "test_119",
+  "v1": false,
+  "v2": true
+ },
+ "g_001": {
+  "run": "base_test",
+  "id": "test_373",
+  "v1": false,
+  "v2": true
+ },
+ "g_002": {
+  "run": "raw_lr1e4_test",
+  "id": "test_079",
+  "v1": true,
+  "v2": true
+ },
+ "g_003": {
+  "run": "base_test",
+  "id": "test_106",
+  "v1": false,
+  "v2": true
+ },
+ "g_004": {
+  "run": "raw_lr1e4_test",
+  "id": "test_392",
+  "v1": true,
+  "v2": true
+ },
+ "g_005": {
+  "run": "base_test",
+  "id": "test_110",
+  "v1": false,
+  "v2": false
+ },
+ "g_006": {
+  "run": "raw_lr1e4_test",
+  "id": "test_204",
+  "v1": true,
+  "v2": true
+ },
+ "g_007": {
+  "run": "base_test",
+  "id": "test_331",
+  "v1": false,
+  "v2": false
+ },
+ "g_008": {
+  "run": "raw_lr1e4_test",
+  "id": "test_181",
+  "v1": true,
+  "v2": true
+ },
+ "g_009": {
+  "run": "base_test",
+  "id": "test_261",
+  "v1": false,
+  "v2": true
+ },
+ "g_010": {
+  "run": "base_test",
+  "id": "test_062",
+  "v1": true,
+  "v2": true
+ },
+ "g_011": {
+  "run": "base_test",
+  "id": "test_147",
+  "v1": false,
+  "v2": true
+ },
+ "g_012": {
+  "run": "base_test",
+  "id": "test_327",
+  "v1": true,
+  "v2": true
+ },
+ "g_013": {
+  "run": "raw_lr1e4_test",
+  "id": "test_282",
+  "v1": false,
+  "v2": true
+ },
+ "g_014": {
+  "run": "raw_lr1e4_test",
+  "id": "test_215",
+  "v1": true,
+  "v2": true
+ },
+ "g_015": {
+  "run": "base_test",
+  "id": "test_205",
+  "v1": false,
+  "v2": true
+ },
+ "g_016": {
+  "run": "raw_lr1e4_test",
+  "id": "test_259",
+  "v1": true,
+  "v2": true
+ },
+ "g_017": {
+  "run": "base_test",
+  "id": "test_206",
+  "v1": false,
+  "v2": true
+ },
+ "g_018": {
+  "run": "raw_lr1e4_test",
+  "id": "test_019",
+  "v1": false,
+  "v2": true
+ },
+ "g_019": {
+  "run": "base_test",
+  "id": "test_399",
+  "v1": true,
+  "v2": true
+ },
+ "g_020": {
+  "run": "raw_lr1e4_test",
+  "id": "test_127",
+  "v1": true,
+  "v2": true
+ },
+ "g_021": {
+  "run": "base_test",
+  "id": "test_081",
+  "v1": true,
+  "v2": true
+ },
+ "g_022": {
+  "run": "raw_lr1e4_test",
+  "id": "test_054",
+  "v1": true,
+  "v2": true
+ },
+ "g_023": {
+  "run": "base_test",
+  "id": "test_122",
+  "v1": true,
+  "v2": true
+ },
+ "g_024": {
+  "run": "base_test",
+  "id": "test_222",
+  "v1": true,
+  "v2": true
+ },
+ "g_025": {
+  "run": "base_test",
+  "id": "test_094",
+  "v1": false,
+  "v2": false
+ },
+ "g_026": {
+  "run": "raw_lr1e4_test",
+  "id": "test_115",
+  "v1": true,
+  "v2": true
+ },
+ "g_027": {
+  "run": "base_test",
+  "id": "test_178",
+  "v1": true,
+  "v2": true
+ },
+ "g_028": {
+  "run": "base_test",
+  "id": "test_315",
+  "v1": true,
+  "v2": true
+ },
+ "g_029": {
+  "run": "base_test",
+  "id": "test_035",
+  "v1": true,
+  "v2": true
+ },
+ "g_030": {
+  "run": "raw_lr1e4_test",
+  "id": "test_021",
+  "v1": true,
+  "v2": true
+ },
+ "g_031": {
+  "run": "base_test",
+  "id": "test_091",
+  "v1": true,
+  "v2": true
+ },
+ "g_032": {
+  "run": "raw_lr1e4_test",
+  "id": "test_291",
+  "v1": false,
+  "v2": false
+ },
+ "g_033": {
+  "run": "raw_lr1e4_test",
+  "id": "test_396",
+  "v1": true,
+  "v2": true
+ },
+ "g_034": {
+  "run": "base_test",
+  "id": "test_075",
+  "v1": false,
+  "v2": false
+ },
+ "g_035": {
+  "run": "raw_lr1e4_test",
+  "id": "test_196",
+  "v1": true,
+  "v2": true
+ },
+ "g_036": {
+  "run": "base_test",
+  "id": "test_130",
+  "v1": true,
+  "v2": true
+ },
+ "g_037": {
+  "run": "base_test",
+  "id": "test_069",
+  "v1": false,
+  "v2": true
+ },
+ "g_038": {
+  "run": "raw_lr1e4_test",
+  "id": "test_061",
+  "v1": true,
+  "v2": true
+ },
+ "g_039": {
+  "run": "base_test",
+  "id": "test_076",
+  "v1": false,
+  "v2": true
+ },
+ "g_040": {
+  "run": "base_test",
+  "id": "test_299",
+  "v1": false,
+  "v2": false
+ },
+ "g_041": {
+  "run": "base_test",
+  "id": "test_280",
+  "v1": true,
+  "v2": false
+ },
+ "g_042": {
+  "run": "base_test",
+  "id": "test_123",
+  "v1": false,
+  "v2": true
+ },
+ "g_043": {
+  "run": "base_test",
+  "id": "test_279",
+  "v1": false,
+  "v2": true
+ },
+ "g_044": {
+  "run": "base_test",
+  "id": "test_040",
+  "v1": true,
+  "v2": true
+ },
+ "g_045": {
+  "run": "raw_lr1e4_test",
+  "id": "test_386",
+  "v1": false,
+  "v2": false
+ },
+ "g_046": {
+  "run": "base_test",
+  "id": "test_307",
+  "v1": false,
+  "v2": false
+ },
+ "g_047": {
+  "run": "base_test",
+  "id": "test_356",
+  "v1": false,
+  "v2": true
+ },
+ "g_048": {
+  "run": "base_test",
+  "id": "test_322",
+  "v1": true,
+  "v2": true
+ },
+ "g_049": {
+  "run": "base_test",
+  "id": "test_295",
+  "v1": false,
+  "v2": true
+ },
+ "g_050": {
+  "run": "base_test",
+  "id": "test_025",
+  "v1": false,
+  "v2": true
+ },
+ "g_051": {
+  "run": "base_test",
+  "id": "test_157",
+  "v1": false,
+  "v2": true
+ },
+ "g_052": {
+  "run": "raw_lr1e4_test",
+  "id": "test_124",
+  "v1": true,
+  "v2": true
+ },
+ "g_053": {
+  "run": "base_test",
+  "id": "test_112",
+  "v1": false,
+  "v2": true
+ },
+ "g_054": {
+  "run": "base_test",
+  "id": "test_150",
+  "v1": false,
+  "v2": true
+ },
+ "g_055": {
+  "run": "raw_lr1e4_test",
+  "id": "test_096",
+  "v1": true,
+  "v2": true
+ },
+ "g_056": {
+  "run": "base_test",
+  "id": "test_034",
+  "v1": true,
+  "v2": true
+ },
+ "g_057": {
+  "run": "raw_lr1e4_test",
+  "id": "test_032",
+  "v1": true,
+  "v2": true
+ },
+ "g_058": {
+  "run": "base_test",
+  "id": "test_306",
+  "v1": false,
+  "v2": true
+ },
+ "g_059": {
+  "run": "raw_lr1e4_test",
+  "id": "test_231",
+  "v1": true,
+  "v2": true
+ },
+ "g_060": {
+  "run": "raw_lr1e4_test",
+  "id": "test_193",
+  "v1": false,
+  "v2": true
+ },
+ "g_061": {
+  "run": "base_test",
+  "id": "test_183",
+  "v1": false,
+  "v2": true
+ },
+ "g_062": {
+  "run": "base_test",
+  "id": "test_024",
+  "v1": true,
+  "v2": true
+ },
+ "g_063": {
+  "run": "raw_lr1e4_test",
+  "id": "test_060",
+  "v1": true,
+  "v2": true
+ },
+ "g_064": {
+  "run": "raw_lr1e4_test",
+  "id": "test_007",
+  "v1": true,
+  "v2": true
+ },
+ "g_065": {
+  "run": "base_test",
+  "id": "test_330",
+  "v1": false,
+  "v2": true
+ },
+ "g_066": {
+  "run": "raw_lr1e4_test",
+  "id": "test_266",
+  "v1": true,
+  "v2": true
+ },
+ "g_067": {
+  "run": "raw_lr1e4_test",
+  "id": "test_053",
+  "v1": true,
+  "v2": true
+ },
+ "g_068": {
+  "run": "raw_lr1e4_test",
+  "id": "test_041",
+  "v1": true,
+  "v2": true
+ },
+ "g_069": {
+  "run": "base_test",
+  "id": "test_104",
+  "v1": true,
+  "v2": false
+ },
+ "g_070": {
+  "run": "raw_lr1e4_test",
+  "id": "test_145",
+  "v1": true,
+  "v2": true
+ },
+ "g_071": {
+  "run": "base_test",
+  "id": "test_271",
+  "v1": true,
+  "v2": true
+ },
+ "g_072": {
+  "run": "raw_lr1e4_test",
+  "id": "test_182",
+  "v1": false,
+  "v2": false
+ },
+ "g_073": {
+  "run": "raw_lr1e4_test",
+  "id": "test_336",
+  "v1": true,
+  "v2": true
+ },
+ "g_074": {
+  "run": "raw_lr1e4_test",
+  "id": "test_013",
+  "v1": true,
+  "v2": true
+ },
+ "g_075": {
+  "run": "base_test",
+  "id": "test_256",
+  "v1": false,
+  "v2": false
+ },
+ "g_076": {
+  "run": "raw_lr1e4_test",
+  "id": "test_230",
+  "v1": false,
+  "v2": true
+ },
+ "g_077": {
+  "run": "base_test",
+  "id": "test_107",
+  "v1": false,
+  "v2": false
+ },
+ "g_078": {
+  "run": "base_test",
+  "id": "test_358",
+  "v1": true,
+  "v2": true
+ },
+ "g_079": {
+  "run": "base_test",
+  "id": "test_144",
+  "v1": true,
+  "v2": true
+ },
+ "g_080": {
+  "run": "base_test",
+  "id": "test_221",
+  "v1": false,
+  "v2": true
+ },
+ "g_081": {
+  "run": "base_test",
+  "id": "test_265",
+  "v1": false,
+  "v2": true
+ },
+ "g_082": {
+  "run": "raw_lr1e4_test",
+  "id": "test_326",
+  "v1": true,
+  "v2": true
+ },
+ "g_083": {
+  "run": "raw_lr1e4_test",
+  "id": "test_189",
+  "v1": true,
+  "v2": true
+ },
+ "g_084": {
+  "run": "base_test",
+  "id": "test_398",
+  "v1": false,
+  "v2": false
+ },
+ "g_085": {
+  "run": "base_test",
+  "id": "test_252",
+  "v1": false,
+  "v2": true
+ },
+ "g_086": {
+  "run": "base_test",
+  "id": "test_308",
+  "v1": false,
+  "v2": true
+ },
+ "g_087": {
+  "run": "base_test",
+  "id": "test_148",
+  "v1": false,
+  "v2": false
+ },
+ "g_088": {
+  "run": "base_test",
+  "id": "test_155",
+  "v1": false,
+  "v2": false
+ },
+ "g_089": {
+  "run": "raw_lr1e4_test",
+  "id": "test_366",
+  "v1": false,
+  "v2": false
+ },
+ "g_090": {
+  "run": "raw_lr1e4_test",
+  "id": "test_136",
+  "v1": true,
+  "v2": true
+ },
+ "g_091": {
+  "run": "raw_lr1e4_test",
+  "id": "test_314",
+  "v1": true,
+  "v2": true
+ },
+ "g_092": {
+  "run": "raw_lr1e4_test",
+  "id": "test_177",
+  "v1": true,
+  "v2": true
+ },
+ "g_093": {
+  "run": "raw_lr1e4_test",
+  "id": "test_114",
+  "v1": false,
+  "v2": true
+ },
+ "g_094": {
+  "run": "raw_lr1e4_test",
+  "id": "test_349",
+  "v1": false,
+  "v2": false
+ },
+ "g_095": {
+  "run": "base_test",
+  "id": "test_095",
+  "v1": true,
+  "v2": true
+ },
+ "g_096": {
+  "run": "raw_lr1e4_test",
+  "id": "test_065",
+  "v1": true,
+  "v2": true
+ },
+ "g_097": {
+  "run": "raw_lr1e4_test",
+  "id": "test_046",
+  "v1": true,
+  "v2": true
+ },
+ "g_098": {
+  "run": "base_test",
+  "id": "test_042",
+  "v1": false,
+  "v2": false
+ },
+ "g_099": {
+  "run": "raw_lr1e4_test",
+  "id": "test_233",
+  "v1": true,
+  "v2": true
+ },
+ "g_100": {
+  "run": "base_test",
+  "id": "test_152",
+  "v1": false,
+  "v2": false
+ },
+ "g_101": {
+  "run": "raw_lr1e4_test",
+  "id": "test_105",
+  "v1": true,
+  "v2": true
+ },
+ "g_102": {
+  "run": "raw_lr1e4_test",
+  "id": "test_129",
+  "v1": true,
+  "v2": true
+ },
+ "g_103": {
+  "run": "raw_lr1e4_test",
+  "id": "test_174",
+  "v1": false,
+  "v2": true
+ },
+ "g_104": {
+  "run": "base_test",
+  "id": "test_173",
+  "v1": true,
+  "v2": true
+ },
+ "g_105": {
+  "run": "raw_lr1e4_test",
+  "id": "test_301",
+  "v1": true,
+  "v2": true
+ },
+ "g_106": {
+  "run": "raw_lr1e4_test",
+  "id": "test_244",
+  "v1": true,
+  "v2": true
+ },
+ "g_107": {
+  "run": "raw_lr1e4_test",
+  "id": "test_341",
+  "v1": true,
+  "v2": true
+ },
+ "g_108": {
+  "run": "base_test",
+  "id": "test_263",
+  "v1": false,
+  "v2": true
+ },
+ "g_109": {
+  "run": "base_test",
+  "id": "test_262",
+  "v1": false,
+  "v2": false
+ }
+}

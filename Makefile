@@ -10,7 +10,8 @@ RESUME ?=
 EVAL_CONFIG ?= configs/eval_core.yaml
 
 .PHONY: help setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
-        compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation
+        compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation \
+        w2-round w2-epochs w2-stable score-v21 w2-score
 
 help:
 	@echo "setup        install the locked environment incl. the train extra (uv sync --frozen --extra train)"
@@ -34,7 +35,12 @@ help:
 	@echo "final-eval   frozen test comparison from configs/final_eval.yaml (runs once)"
 	@echo "test         unit tests"
 	@echo "score-v2     validation-only contract scoring into a new report directory; no automatic selection"
-	@echo "prompt-ablation  W2-E1: system v1 vs v2 on fixed wave-one weights (val, GPU), then scorer v2"
+	@echo "prompt-ablation  W2-E1 generation only: system v1 vs v2 on fixed wave-one weights (val, GPU, batch 4)"
+	@echo "w2-round     RunPod: whole wave-two round (E1 + filtered LR ladder at mb4) [CROSS=1 adds prompt v2]"
+	@echo "w2-epochs    RUN=w2_run PROMPT=v1|v2  evaluate both epoch checkpoints on val, no selection (GPU)"
+	@echo "w2-stable    RUN=w2_run  exit 1 on non-finite loss/grad_norm or unfinished training"
+	@echo "score-v21    LABELS='...' OUT=dir  candidate scorer v2.1 on val labels (diagnostic, CPU)"
+	@echo "w2-score     local CPU: v2.1 + bounded v2 + legacy paired comparisons + rollout diffs for wave two"
 
 setup:
 	$(UV) sync --frozen --extra train
@@ -62,21 +68,49 @@ test:
 score-v2:
 	$(PY) python scripts/rescore_validation_v2.py $(if $(OUT),--out $(OUT),)
 
-# W2-E1: arm x fixed weights, all generated under one code state. Labels: w2p_<arm>_<run>.
-# The v1 arm is also a determinism check against the wave-one outputs of the same weights.
-PROMPT_ABLATION_RUNS := base raw_lr1e4 q5filtered_lr5e5
-PROMPT_ABLATION_OUT = $(or $(OUT),reports/w2_prompt_ablation)
+# W2-E1 generation (GPU): arm x fixed wave-one weights under one code state, batch 4. Labels: w2p_<arm>_<run>.
+# Scoring is separate and local (w2-score); the pod only generates and runs the legacy scorer (D-047).
+PROMPT_ABLATION_RUNS := base raw_lr1e4 raw_lr5e5 q5filtered_lr5e5
 prompt-ablation:
 	@for arm in v1 v2; do for r in $(PROMPT_ABLATION_RUNS); do \
 	  $(PY) python -m clinqa.evaluate --config configs/eval_w2_prompt_$$arm.yaml generate --run $$r --split val \
 	    --label w2p_$${arm}_$$r || exit 1; done; done
-	$(PY) python scripts/rescore_validation_v2.py --out $(PROMPT_ABLATION_OUT) \
-	  --labels $(foreach a,v1 v2,$(foreach r,$(PROMPT_ABLATION_RUNS),w2p_$(a)_$(r)))
-	@for pair in base:base raw_lr1e4:raw_lr1e4_step000125 q5filtered_lr5e5:q5filtered_lr5e5_step000121; do \
-	  r=$${pair%%:*}; w1=$${pair#*:}; \
-	  $(PY) python scripts/compare_rollouts.py $$w1 w2p_v1_$$r --out $(PROMPT_ABLATION_OUT)/rollout_diffs/determinism_$$r.json && \
-	  $(PY) python scripts/compare_rollouts.py w2p_v1_$$r w2p_v2_$$r --out $(PROMPT_ABLATION_OUT)/rollout_diffs/v1_vs_v2_$$r.json \
+
+w2-round:
+	CROSS=$(CROSS) bash scripts/run_w2_round.sh
+
+PROMPT ?= v1
+w2-epochs:
+	$(PY) python scripts/w2_epochs.py generate --run $(RUN) --prompt $(PROMPT)
+
+w2-stable:
+	$(PY) python scripts/w2_epochs.py stable --run $(RUN)
+
+score-v21:
+	@test -n "$(LABELS)" && test -n "$(OUT)" || (echo "usage: make score-v21 LABELS='a b' OUT=reports/new_dir"; exit 1)
+	$(PY) python scripts/score_v21_val.py --out $(OUT) --labels $(LABELS)
+
+# Wave-two scoring on CPU after the pod is stopped. Scores every wave-two validation label present:
+# E1 (w2p_*) and the LR-ladder epoch checkpoints (w2_filtered_*_step*). No winner is declared (D-049).
+W2_OUT = $(or $(OUT),reports/w2_round)
+W2_LABELS = $(sort $(patsubst outputs/%/val/scored.jsonl,%,$(wildcard outputs/w2p_*/val/scored.jsonl outputs/w2_filtered_*_step*/val/scored.jsonl)))
+w2-score:
+	@test -n "$(W2_LABELS)" || (echo "no wave-two validation outputs found"; exit 1)
+	$(PY) python scripts/score_v21_val.py --out $(W2_OUT)/v21 --labels $(W2_LABELS)
+	$(PY) python scripts/rescore_validation_v2.py --out $(W2_OUT)/bounded_v2 --labels $(W2_LABELS)
+	@for r in $(PROMPT_ABLATION_RUNS); do \
+	  test -f outputs/w2p_v1_$$r/val/scored.jsonl && test -f outputs/w2p_v2_$$r/val/scored.jsonl || continue; \
+	  $(PY) python -m clinqa.evaluate compare --a w2p_v1_$$r --b w2p_v2_$$r --split val >/dev/null && \
+	  $(PY) python scripts/compare_rollouts.py w2p_v1_$$r w2p_v2_$$r --out $(W2_OUT)/rollout_diffs/v1_vs_v2_$$r.json \
 	  || exit 1; done
+	@for pair in base:base raw_lr1e4:raw_lr1e4_step000125 raw_lr5e5:raw_lr5e5_step000125 q5filtered_lr5e5:q5filtered_lr5e5_step000121; do \
+	  r=$${pair%%:*}; w1=$${pair#*:}; test -f outputs/w2p_v1_$$r/val/scored.jsonl || continue; \
+	  $(PY) python scripts/compare_rollouts.py $$w1 w2p_v1_$$r --out $(W2_OUT)/rollout_diffs/drift_$$r.json || exit 1; done
+	@# References are the E1 v1 regenerations (same code state and generation batch), not the wave-one outputs.
+	@for l in $(filter w2_filtered_%,$(W2_LABELS)); do for ref in w2p_v1_raw_lr1e4 w2p_v1_q5filtered_lr5e5; do \
+	  test -f outputs/$$ref/val/scored.jsonl || continue; \
+	  $(PY) python -m clinqa.evaluate compare --a $$ref --b $$l --split val >/dev/null || exit 1; done; done
+	@echo "Reports in $(W2_OUT); legacy paired comparisons in outputs/compare_*_val_full.{md,json}"
 
 all: data analyze views test
 

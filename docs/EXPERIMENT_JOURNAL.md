@@ -1,6 +1,134 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-09-29. Latest entry: W2-PLAN-003.
+Maintained record. Last updated: 2026-09-30. Latest entry: W2-PLAN-006.
+
+## W2-PLAN-006 — bundled round: prompt ablation and filtered LR ladder in the new batch setup
+
+Date: 2026-09-30. Status: prepared, not run. No result in this entry is measured. The decisions and their reasons are in [DECISIONS.md](DECISIONS.md) D-037 to D-051. This entry records the roster, confounds, commands and cost.
+
+**User decision.** One GPU round covering the prompt ablation, the filtered view at LR 1e-4, and higher LRs, all at training micro-batch 4 with accumulation 4 and generation batch 4. The effective batch of 16 is unchanged. This overrides the W2-AUDIT-004 and W2-INSTALL-005 advice to train filtered 1e-4 at mb1 first and to preflight the batch changes separately. The option "rerun both filtered LR arms at micro-batch 4" from W2-INSTALL-005 is the one taken, applied to every new arm (D-041, D-042).
+
+### Roster
+
+| Stage | Arms | Labels | Prompt | Checkpoints |
+|---|---|---|---|---|
+| E1 prompt ablation (D-044) | base, raw_lr1e4, raw_lr5e5, q5filtered_lr5e5 | `w2p_{v1,v2}_<run>` (8) | v1 and v2 | fixed wave-one epoch-one: s125, s125, s121 |
+| LR ladder (D-045) | `w2_filtered_lr1e4_mb4`, then `lr1p5e4`, then `lr2e4` | `<run>_step000121`, `<run>_step000242` | v1 | both epochs |
+| Optional cross (D-050) | ladder runs | `w2p_v2_<run>_…` | v2 | both epochs |
+
+- Adapters are fetched from the pinned HF revisions in section 9 (raw_lr5e5 is newly included) and hash-checked against the wave-one manifests.
+- If the first mb4 run hits CUDA OOM, the runner writes `outputs/w2_mb4_oom.txt` and runs all rungs as `*_mb2` with accumulation 8.
+- 2e-4 is skipped only if 1.5e-4 has non-finite loss or grad_norm, or no manifest (`scripts/w2_epochs.py stable`).
+
+### Contrasts and what each can support
+
+- **Prompt:** `w2p_v2_<run>` vs `w2p_v1_<run>`, same weights, same code, batch 4. Base is the primary arm, because the adapters were trained with v1. There is no decision until the scorer range policy (val_085) is fixed.
+- **Drift noise floor:** `w2p_v1_<run>` vs the wave-one label (`raw_lr1e4_step000125`, `raw_lr5e5_step000125`, `q5filtered_lr5e5_step000121`, `base`). This measures the effect of generation batch 4 vs 2 plus the code state. Wave-one outputs are not matched controls (D-043).
+- **LR within the new setup:** 1e-4 vs 1.5e-4 vs 2e-4 at matched epochs. This is the clean ladder comparison.
+- **Filtered 1e-4 at mb4 vs wave one:** vs `w2p_v1_q5filtered_lr5e5` it is LR plus micro-batch, and vs `w2p_v1_raw_lr1e4` it is view plus micro-batch. Neither isolates one factor, because the mb1 control is not run.
+- **Epoch two:** reported separately and not used for selection in this round (D-049).
+
+### Commands
+
+```bash
+# local, before the pod: tree clean and pushed
+uv run --frozen pytest && git status && git push
+# pod (after make setup, uv run --frozen hf auth login):
+make w2-round            # CROSS=1 make w2-round to add the v2 cross
+# local, after pulling the pushed outputs; CPU only:
+make w2-score            # v2.1 via the guarded wrapper, bounded v2, legacy compare, rollout diffs
+```
+
+### Cost (planning estimate, not measured)
+
+The estimate uses wave-one timings: base generation about 398 s, adapter generation about 565–582 s at batch 2, and mb1 training about 2,520–2,621 s.
+
+| Stage | Estimate |
+|---|---|
+| setup, preflight, GPU smoke | about 15 min |
+| E1, 8 passes | about 75 min |
+| 3 training runs | at most about 42 min each; mb4 may be faster |
+| 6 epoch passes | about 60 min |
+| **total** | about 4–4.6 h, about $3.0–3.4 at $0.74/hr |
+| CROSS=1 | about +1 h, about +$0.75 |
+
+Spend so far is about $2.97 of $10, and the round ceiling is $5. If the ceiling approaches, drop CROSS first, then 2e-4, then stop after the current job (D-051).
+
+### After the run
+
+Record here, as measured facts:
+- the mb4 peak VRAM, sec/step and whether the fallback fired;
+- the drift counts;
+- the E1 v1-vs-v2 item diffs;
+- each ladder checkpoint under the legacy, bounded v2 and v2.1 scorers, with legacy paired intervals.
+
+Declare no winner until v2.1's validation-derived repairs are made and the semantic judge is calibrated (D-040, D-049).
+
+## W2-INSTALL-005 — scorer recovered; crossed experiment and Q5 plan
+
+Date: 2026-09-30. Installed Downloads/scorer_v2.py as `src/clinqa/scorer_v2.py` and Downloads/tests/test_scorer_v2.py as `tests/test_scorer_v2.py`. Originals remain in Downloads. Core SHA256 matches the supplied v2.1 report: `b15db3d0b12a4a798e4114e9b1b9573733debbb3362ae9492a4cd00f804a48f3`. All 16 supplied tests pass. Recomputed all 250 validation keys and all 1,750 saved validation scores with zero differences. No test split or test adjudication was read.
+
+Reproducibility is now established for these artifacts, but validity is not. Executed negative probes all falsely pass: val_004 with only heart rate; val_004 with the wrong beta-blocker atenolol; val_005 without the requested stage; val_003 with recall changed to 3 out of 2 rather than 2 out of 3. Source inspection confirms `check_text` can pass on numeric membership alone, `score` accepts all compiled checks without a coverage gate, and `note_facts` injects canonical ranges when none were supplied. Historical provenance concerns remain. Scoring policy was not silently changed during installation.
+
+### Parallel experiments with controlled comparisons
+
+Experiments do not have to run sequentially if the design is specified first. Independent training runs and fixed-weight prompt generations can run in any order; causal interpretation comes from matched contrasts, not wall-clock order. On one 24 GB GPU, queue full training jobs rather than launch competing training processes. CPU scoring and annotation auditing can proceed concurrently. Preserve all outputs for rescoring, and defer model/prompt selection until the measurement gate is passed.
+
+Recommended compact design:
+
+1. Complete the 2x2 data-policy/LR comparison: raw versus filtered, each at 5e-5 and 1e-4. Three wave-one arms already exist; train the missing filtered 1e-4 arm using micro-batch 1, accumulation 16, v1 training prompt, the same base revision/LoRA/seed/schedule and two epochs. Existing raw arms are historical controls, not a recommendation to train more unsupported targets.
+2. Apply inference prompt v1 versus v2 to every fixed checkpoint being compared. The primary epoch-one comparison has four checkpoints times two prompts, plus the base under both prompts. Keep epoch two as a separately reported checkpoint comparison, not an unreported extra selection opportunity. Match software/hardware/decoding/budgets and rerun controls if the generation environment differs materially.
+3. A filtered 1.5e-4 arm can be queued alongside filtered 1e-4 if both use the same micro-batch and training prompt. The existing 1.5e-4 configuration uses micro-batch 4, so using it against the micro-batch-1 control would confound LR and batching. Either create a matched micro-batch-1 higher-LR config or rerun both filtered LR arms at micro-batch 4 after preflight. Do not silently use the existing configs as a clean LR contrast.
+4. Keep 2e-4 conditional or preregister it explicitly as an exploratory arm. A full raw/filtered x three-LR design requires a raw 1.5e-4 arm too; it is unnecessary for the immediate filtered-LR question.
+
+Estimate the filtering effect within an LR and prompt; estimate the LR effect within a data view and prompt; estimate the prompt effect on identical weights. Compare prompt benefits across raw/filtered models to inspect interaction. Crossing inference prompts is cheap relative to retraining. Training with prompt v2 is a different intervention and would require additional training arms. Freeze the experiment roster and evaluation policy before viewing new outcomes. Fix scorer/prompt range-policy conflicts before interpreting the prompt experiment; a run can finish before its scores are ready.
+
+### Q5 relabel: audited transformation, not blanket replacement
+
+The existing `reports/q5_uncertain_proposals/proposals.jsonl` contains 78 train-only proposals and is not an approved training view. Q5 is a heuristic flag for unsupported arguments, not proof that every record is unanswerable.
+
+For each proposal, inspect note, table and question, including units and alternate measurement notation, and assign one of these decisions:
+
+- Required weight/height genuinely missing and no supplied BMI answers the question: accept an uncertainty target. Preserve supported facts and name the missing field; remove the unsupported call.
+- A documented BMI already answers the question: preserve a grounded answer where appropriate; do not claim BMI is unavailable. Handle these as a separate annotation category rather than automatically marking uncertain.
+- Measurements are present but the extractor missed them or the original arguments are wrong: reject the uncertain proposal; quarantine or separately correct the tool target with verified conversions.
+- Conflicting measurements, ambiguous timepoints or unresolved wording: keep quarantined pending adjudication.
+
+An accepted missing-height example should become:
+
+```json
+{
+  "answer_type": "uncertain",
+  "answer": "Weight is documented as 80 kg, but height is not provided, so BMI cannot be calculated from the supplied information.",
+  "tool_calls": []
+}
+```
+
+The actual row must retain its original ID, note, table and question exactly; the example above shows only changed fields. Use only values present in that row. Record original row hash, accepted decision, reviewer/method, evidence spans, missing fields, replacement fields, rationale and rubric version. Automated suggestions can speed preparation, but the current parser alone should not approve its own proposed labels. Resolve ambiguous cases before training, not while the GPU job runs. No validation/test relabeling is permitted.
+
+Implementation sequence for a later relabel change:
+
+1. Add reviewed decisions to a separate immutable decision file; preserve the original proposal packet.
+2. Build `data/processed/q5_relabel_v1/train.jsonl` from the 1,922 filtered records plus accepted transformed Q5 rows, in canonical ID order. Never overwrite `data/train.jsonl`.
+3. Emit a manifest with canonical train hash, decision-file hash, transformation implementation hash, changed IDs/fields, excluded IDs, count and class mix. Unaccepted candidates remain excluded. With k accepted proposals the view has 1,922+k rows; if all 78 are accepted, 2,000 rows with 422 tool and 378 uncertain records.
+4. Extend `training_data.audit_train_view` with a specific transformation-aware branch. It currently permits only exact unchanged raw/filtered selections. Verify byte-equivalent unchanged inputs and exact approved target replacements; do not disable the existing guard.
+5. Register a distinct formatting output and train configuration, regenerate native messages, verify zero tool calls for relabeled uncertainty targets, and audit assistant loss masks. Reject duplicate IDs, source drift, unauthorized edits and unreviewed rows.
+6. Compare filtered versus relabeled at one fixed LR, prompt, batching and seed. Two epochs on 2,000 versus 1,922 examples changes optimizer exposure. Report the natural policy comparison and, if attributing gains to annotation rather than extra exposure, add an explicitly defined matched-update/token-budget control. Keep the validation Q5 subset unchanged and monitor grounded tool success and over-refusal as well as abstention.
+
+This is an implementation specification, not a claim that relabeling has been activated. No proposal was approved, no canonical label was changed, no new view was registered and no GPU experiment was launched in this turn.
+
+## W2-AUDIT-004 — independent review of supplied scorer v2.1
+
+Date: 2026-09-30. Status: diagnostic use only; not released for automatic semantic checkpoint selection. See `docs/SCORER_V2_1_AUDIT.md` for evidence and the revised experiment gates. This entry supersedes earlier assumptions that completing agreement alone establishes scorer validity.
+
+- Reconciled all seven saved validation runs: 250 unique canonical IDs each and matching aggregate pass counts. No new model generation or training.
+- Core `clinqa.scorer_v2` is absent; the supplied scripts fail to import. The separate `scoring_v2.py` is an older implementation. New tests were found in Downloads/tests but cannot run against the missing core. The old 83-test result does not validate this scorer.
+- Supplied validation report admits v2.1 changes derived from test holdout1. Preserve and disclose that contamination; no further test-driven decisions. This audit reads report provenance but no raw test records, trajectories or adjudication packets.
+- Found incomplete answer contracts, a missing-input reference bound introduced into val_085, a base clause-scope false failure in val_001, and a shared scorer/rater policy that excuses an erroneous optional multiplier in val_075. Full-answer pass rates are therefore not validated.
+- Development agreement is 120/120 on a tuned set with only seven negative labels and no selected raw1e4 epoch-one examples. It is not independent generalization evidence.
+- Filtered epoch two versus raw1e4 epoch one: provisional macro difference +0.37 pp; paired stratified bootstrap 95% interval approximately [-3.15, +3.86] pp. No new winner.
+- Next order: E0 reproducibility and measurement repair; E1 fixed-weight prompt comparison; E2 filtered 1e-4 control and separate batch preflights; E3 bounded higher-LR probe; E4 audited Q5 and explanation ablations. Keep test sealed and defer RL/base-model sweep.
+- User-authorized cleanup removes only generated caches/Finder metadata, with a removal manifest. Preserve scorer v1, bounded v2, candidate v2.1 artifacts, data, checkpoints and reasoning history. README now identifies each scorer and current routing.
 
 ## W2-PLAN-003 — ordered one-factor queue; E1 prompt ablation prepared
 

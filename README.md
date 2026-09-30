@@ -11,15 +11,33 @@ plus one structured table. The model has to:
 The assignment text is in [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md) (moved there word for word from the original
 `requirements.txt`).
 
+## Current scorer review and navigation
+
+The supplied v2.1 results are **diagnostic only**, pending evaluation repair. Start with [the audit and next experiments](docs/SCORER_V2_1_AUDIT.md), then [the maintained journal](docs/EXPERIMENT_JOURNAL.md).
+
+- **Historical v1:** `src/clinqa/metrics.py`; original run evidence in `outputs/`. Retained for reproducibility.
+- **Bounded-contract v2:** `src/clinqa/scoring_v2.py`, `scripts/rescore_validation_v2.py`, [design](docs/SCORER_V2.md), `reports/scorer_v2_validation/`.
+- **Candidate v2.1:** `scripts/score_v2.py` and `reports/scorer_v2/`. Its core `src/clinqa/scorer_v2.py` is installed and hash-matched; 16 tests pass and 1,750 validation scores reproduce. Known false-pass defects still block semantic checkpoint selection.
+- **Command routing:** `make score-v2` runs the bounded-contract scorer. `make prompt-ablation` and `make w2-round` only generate, and run the legacy scorer on the pod. `make w2-score` (CPU) runs candidate v2.1 through the guarded `scripts/score_v21_val.py` wrapper, then bounded v2, then the legacy paired comparisons and rollout diffs (D-047). Legacy model-selection commands still do not implement semantic release gates.
+- **Project history:** [decisions](docs/DECISIONS.md), [data findings](docs/FINDINGS.md), [repository design review](docs/REPOSITORY_DESIGN_REVIEW.md). These document the reasoning and are preserved.
+
 ## Status
 
-Current development policy: **validation only; repair measurement before selecting another model**.
-The first-wave runs are complete. The new bounded scorer and unresolved-review workflow are described in
-[Scorer v2](docs/SCORER_V2.md); the maintained observations, parameters and proposed next runs are in
-[Experiment journal](docs/EXPERIMENT_JOURNAL.md). Run `make score-v2 OUT=reports/scorer_v2_new_review`
-to score saved validation predictions into a new directory. Do not use the legacy `select`/`freeze`
-commands to announce a v2 winner before adjudication. The higher-LR/batch configurations and Q5
-relabel proposals are prepared, not trained or promoted.
+Current development policy: **validation only; declare no winner until the scorer is repaired** (D-038, D-049).
+Wave one is complete. The frozen rule selected raw_lr1e4 step125. Its single test evaluation scored 84.72% legacy grounded macro vs 45.28% for base; see [Experiment journal](docs/EXPERIMENT_JOURNAL.md) section 3 and the Q5 regression noted there.
+
+Wave two is **prepared, not run** (journal W2-PLAN-006, DECISIONS D-041 to D-051). One pod round covers two experiments:
+- the v1/v2 prompt ablation on four fixed wave-one checkpoints plus base;
+- a Q5-filtered LR ladder: 1e-4, then 1.5e-4, then 2e-4.
+
+Both use training micro-batch 4 with accumulation 4 and generation batch 4. The fallback is micro-batch 2 with accumulation 8 on OOM.
+
+```bash
+make w2-round            # on the pod, after make setup and hf auth login; CROSS=1 adds prompt v2 on the ladder
+make w2-score            # locally on CPU, after pulling outputs: v2.1 + bounded v2 + legacy compare + rollout diffs
+```
+
+Do not use the legacy `select`/`freeze` commands to announce a winner. Q5 relabel proposals, the pre-call sentence experiment, the mb1 control and generation batch 8 are deferred (D-048).
 
 | Phase | Scope | Status |
 |---|---|---|
@@ -28,9 +46,10 @@ relabel proposals are prepared, not trained or promoted.
 | 3 | Legacy scorer, rollout state machine, evaluation/compare/select | historical v1; retained for reproducibility |
 | 4 | QLoRA training script + smoke test | first-wave GPU runs completed |
 | 5 | Base + three QLoRA runs and their downloaded artifacts | reviewed; see experiment journal |
-| 6 | Validation-only contract scorer v2 and wave-two configurations | implemented; semantic adjudication and new GPU runs pending |
+| 6 | Validation-only contract scorer v2 and wave-two configurations | implemented; semantic adjudication pending |
+| 7 | Wave-two round: prompt ablation + filtered LR ladder at mb4/bs4 | prepared, not run |
 
-Plan: [docs/PLAN.md](docs/PLAN.md). Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) (revision 3: D-018 onward).
+Plan: [docs/PLAN.md](docs/PLAN.md). Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) (revision 4: D-037 onward covers the wave-one outcome and wave two).
 Target: one 24GB NVIDIA GPU, Qwen3-4B-Instruct-2507 QLoRA SFT. RL is not required; see PLAN section 11.
 
 ## Quickstart
@@ -148,8 +167,7 @@ watch -n 5 nvidia-smi
 uv run --frozen tensorboard --logdir outputs --host 0.0.0.0 --port 6006   # optional
 ```
 
-Each run is about 242-250 optimizer steps; estimate its runtime as `sec_per_step` x steps after the first few
-log lines. No measured runtime is recorded here yet.
+Each run is about 242-250 optimizer steps. Wave one measured about 2,520-2,621 s per run at micro-batch 1 on an RTX 4090, with a peak of 7.81 GiB.
 
 **Interrupted run.** Start a pod on the same volume, then:
 
@@ -256,4 +274,4 @@ docs/                   assignment, plan, findings, decisions, data card
 - The raw view keeps all 2,000 train rows; the optional Q5-filtered view keeps 1,922 heuristic-selected rows and includes review/provenance files. val/test stay unchanged.
 - Seeds: 42 everywhere (`configs/*.yaml`); training uses deterministic kernels where torch allows; decoding is greedy.
 - Every training and eval run records git commit/dirty state, package versions, hardware, data/prompt/template hashes and runtime.
-- No model results exist yet; nothing in this repository reports a measured model score until the GPU run is done.
+- Measured wave-one results are recorded in the experiment journal. Wave-two entries are plans until their outputs exist; no planned result is reported as measured.

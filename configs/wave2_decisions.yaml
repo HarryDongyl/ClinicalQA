@@ -1,44 +1,67 @@
-# Planning registry, not an input to clinqa.train or clinqa.evaluate. See EXPERIMENT_JOURNAL W2-PLAN-003.
-status: proposed_not_run
+# Planning registry, not an input to clinqa.train or clinqa.evaluate.
+# See EXPERIMENT_JOURNAL W2-PLAN-006 and DECISIONS D-037 to D-051 (revision 4).
+status: prepared_not_run
 decision_split: val
-test_permitted_for_decisions: false
-scorer:
-  implementation: src/clinqa/scoring_v2.py
-  command: .venv/bin/python scripts/rescore_validation_v2.py
-  automatic_selection_permitted: false
-  gate: complete_required_adjudication_and_freeze_rubric
-  next: calibrated_semantic_judge_for_review_items  # design only; backend and calibration sample not chosen
-# One factor per step, in this order; each step inherits the previous step's decision.
-queue:
-  - id: E1
-    factor: inference_system_prompt
-    status: prepared_not_run
-    command: make prompt-ablation
-    arms: {v1: configs/eval_w2_prompt_v1.yaml, v2: configs/eval_w2_prompt_v2.yaml}
-    weights: [base, checkpoints/raw_lr1e4/checkpoint-125, checkpoints/q5filtered_lr5e5/checkpoint-121]
-    primary_arm: base  # adapters were trained with v1, so v2 is an input shift for them
-    determinism_reference: [base, raw_lr1e4_step000125, q5filtered_lr5e5_step000121]
-  - id: E2a
-    factor: generation_batch_size
-    status: configs_exist_not_run
-    reference: 2
-    arms: [configs/eval_w2_bs4.yaml, configs/eval_w2_bs8.yaml]
-  - id: E2b
-    factor: training_micro_batch
-    status: configs_exist_not_run
-    arms: [configs/train/w2_filtered_lr1e4_mb1.yaml, configs/train/w2_filtered_lr1e4_mb4.yaml]
-  - id: E3
-    factor: learning_rate
-    status: configs_exist_not_run
-    arms: [configs/train/w2_filtered_lr1p5e4_mb4.yaml, configs/train/w2_filtered_lr2e4_mb4.yaml]
-    conditional: lr2e4_only_if_lr1p5e4_stable_and_not_worse
-  - id: E4
-    factor: q5_training_labels
-    status: blocked_on_annotation_audit
-  - id: E5
-    factor: pre_call_sentence_in_sft_targets
-    status: not_designed_in_code
-prompt_v2_in_training: separate_labeled_experiment_not_in_E1_to_E3
+test_permitted_for_decisions: false          # D-038: test consumed once in wave one
+winner_permitted_this_round: false           # D-049
+scorers:                                     # D-040: reported side by side; none selects
+  legacy_v1: {implementation: src/clinqa/metrics.py, role: historical_and_paired_bootstrap}
+  bounded_v2: {implementation: src/clinqa/scoring_v2.py, command: scripts/rescore_validation_v2.py}
+  candidate_v21:
+    implementation: src/clinqa/scorer_v2.py
+    command: scripts/score_v21_val.py         # guarded: refuses test labels and existing outputs
+    role: diagnostic_only
+    known_defects: [false_pass_negative_probes, numeric_membership_check_text, no_coverage_gate, canonical_range_injection_val_085]
+    test_derived_fixes_disclosed: true
+  next: deterministic_checks_plus_fixed_rubric_semantic_judge  # calibrate once on val, freeze, then automatic
+scoring_location: cpu_after_pod_stopped      # D-047: make w2-score
+round:                                       # D-041: one bundled pod round (user decision)
+  command: make w2-round
+  runner: scripts/run_w2_round.sh
+  batch_setup:                               # D-042 (user decision; overrides W2-AUDIT-004 advice)
+    train: {micro_batch: 4, grad_accum: 4, effective_batch: 16}
+    oom_fallback: {micro_batch: 2, grad_accum: 8, marker: outputs/w2_mb4_oom.txt, applies_to: all_rungs}
+    generation_batch_size: 4
+    confounds: [micro_batch_vs_wave_one_mb1, generation_batch_4_vs_wave_one_2]
+  budgets_and_decoding: unchanged_from_wave_one   # D-046
+  experiments:
+    - id: E1
+      factor: inference_system_prompt
+      arms: {v1: configs/eval_w2_prompt_v1.yaml, v2: configs/eval_w2_prompt_v2.yaml}
+      weights: [base, raw_lr1e4/checkpoint-125, raw_lr5e5/checkpoint-125, q5filtered_lr5e5/checkpoint-121]
+      primary_arm: base                      # adapters were trained with v1
+      labels: w2p_{v1,v2}_<run>
+      drift_reference: [base, raw_lr1e4_step000125, raw_lr5e5_step000125, q5filtered_lr5e5_step000121]  # D-043
+      decision_blocked_on: scorer_range_policy_val_085
+    - id: LR
+      factor: learning_rate_on_q5_filtered_view   # D-039, D-045
+      prompt: v1
+      arms:
+        - configs/train/w2_filtered_lr1e4_mb4.yaml
+        - configs/train/w2_filtered_lr1p5e4_mb4.yaml
+        - configs/train/w2_filtered_lr2e4_mb4.yaml
+      fallback_arms: configs/train/w2_filtered_lr{1e4,1p5e4,2e4}_mb2.yaml
+      checkpoints: [121, 242]                 # epoch two reported separately
+      skip_lr2e4_only_if: lr1p5e4_numerically_unstable   # scripts/w2_epochs.py stable
+      references_same_code_state: [w2p_v1_raw_lr1e4, w2p_v1_q5filtered_lr5e5]
+    - id: CROSS
+      factor: prompt_v2_on_ladder
+      optional: true                          # D-050: CROSS=1 make w2-round
+deferred:                                    # D-048
+  E2b_mb1_control: configs/train/w2_filtered_lr1e4_mb1.yaml
+  generation_batch_8: configs/eval_w2_bs8.yaml
+  E4_q5_relabel: blocked_on_annotation_audit
+  E5_pre_call_sentence_in_sft_targets: not_designed_in_code
+  prompt_v2_in_training: separate_labeled_experiment
+  seed_repeat: not_scheduled
+  qwen3_8b: not_scheduled
+cost:                                        # D-051; planning estimates, not measured
+  rate_usd_per_hour: 0.74
+  spent_before_round_usd: 2.97
+  estimate_usd: [3.0, 3.4]
+  cross_extra_usd: 0.75
+  round_ceiling_usd: 5.0
+  cut_order: [cross, lr2e4, stop_after_current_job]
 q5_relabel:
   status: train_only_proposal_requires_annotation_audit
   proposals: reports/q5_uncertain_proposals/

@@ -1,0 +1,57 @@
+{
+  "date": "2026-09-30",
+  "scope": "generated caches and Finder metadata only; .git and .venv excluded",
+  "removed": [
+    {
+      "path": ".pytest_cache",
+      "bytes": 19359,
+      "reason": "regenerable cache"
+    },
+    {
+      "path": ".ruff_cache",
+      "bytes": 1120,
+      "reason": "regenerable cache"
+    },
+    {
+      "path": ".DS_Store",
+      "bytes": 10244,
+      "reason": "Finder metadata"
+    },
+    {
+      "path": "checkpoints/.DS_Store",
+      "bytes": 6148,
+      "reason": "Finder metadata"
+    },
+    {
+      "path": "checkpoints/gpu_smoke/.DS_Store",
+      "bytes": 10244,
+      "reason": "Finder metadata"
+    },
+    {
+      "path": "tests/__pycache__",
+      "bytes": 300906,
+      "reason": "regenerable cache"
+    },
+    {
+      "path": "scripts/.DS_Store",
+      "bytes": 6148,
+      "reason": "Finder metadata"
+    },
+    {
+      "path": "reports/.DS_Store",
+      "bytes": 6148,
+      "reason": "Finder metadata"
+    },
+    {
+      "path": "src/clinqa/__pycache__",
+      "bytes": 369069,
+      "reason": "regenerable cache"
+    },
+    {
+      "path": "src/clinqa/analysis/__pycache__",
+      "bytes": 176696,
+      "reason": "regenerable cache"
+    }
+  ],
+  "bytes_removed": 906082
+}

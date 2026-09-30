@@ -1,0 +1,8 @@
+# OOM fallback for w2_filtered_lr1p5e4_mb4 (DECISIONS D-042): micro_batch 2 x grad_accum 8, still effective batch 16.
+# Used only if the mb4 run hits CUDA OOM; scripts/run_w2_round.sh then switches the whole ladder to mb2.
+extends: configs/train/w2_filtered_lr1e4_mb2.yaml
+run_id: w2_filtered_lr1p5e4_mb2
+training:
+  learning_rate: 1.5e-4
+checkpoint_dir: checkpoints/w2_filtered_lr1p5e4_mb2
+output_dir: outputs/w2_filtered_lr1p5e4_mb2

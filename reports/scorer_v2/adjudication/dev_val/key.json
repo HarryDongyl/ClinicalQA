@@ -1,0 +1,722 @@
+{
+ "item_000": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_075",
+  "v1": false,
+  "v2": true
+ },
+ "item_001": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_050",
+  "v1": true,
+  "v2": true
+ },
+ "item_002": {
+  "run": "base",
+  "id": "val_242",
+  "v1": true,
+  "v2": true
+ },
+ "item_003": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_211",
+  "v1": true,
+  "v2": true
+ },
+ "item_004": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_069",
+  "v1": false,
+  "v2": true
+ },
+ "item_005": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_091",
+  "v1": true,
+  "v2": true
+ },
+ "item_006": {
+  "run": "base",
+  "id": "val_229",
+  "v1": true,
+  "v2": true
+ },
+ "item_007": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_138",
+  "v1": true,
+  "v2": true
+ },
+ "item_008": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_135",
+  "v1": false,
+  "v2": true
+ },
+ "item_009": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_114",
+  "v1": false,
+  "v2": true
+ },
+ "item_010": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_247",
+  "v1": true,
+  "v2": true
+ },
+ "item_011": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_113",
+  "v1": true,
+  "v2": true
+ },
+ "item_012": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_149",
+  "v1": true,
+  "v2": true
+ },
+ "item_013": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_197",
+  "v1": true,
+  "v2": true
+ },
+ "item_014": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_246",
+  "v1": true,
+  "v2": false
+ },
+ "item_015": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_105",
+  "v1": false,
+  "v2": false
+ },
+ "item_016": {
+  "run": "base",
+  "id": "val_019",
+  "v1": false,
+  "v2": true
+ },
+ "item_017": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_204",
+  "v1": false,
+  "v2": false
+ },
+ "item_018": {
+  "run": "base",
+  "id": "val_237",
+  "v1": false,
+  "v2": false
+ },
+ "item_019": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_053",
+  "v1": true,
+  "v2": true
+ },
+ "item_020": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_210",
+  "v1": true,
+  "v2": false
+ },
+ "item_021": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_153",
+  "v1": true,
+  "v2": true
+ },
+ "item_022": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_188",
+  "v1": true,
+  "v2": true
+ },
+ "item_023": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_003",
+  "v1": true,
+  "v2": false
+ },
+ "item_024": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_244",
+  "v1": true,
+  "v2": true
+ },
+ "item_025": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_124",
+  "v1": false,
+  "v2": true
+ },
+ "item_026": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_195",
+  "v1": true,
+  "v2": true
+ },
+ "item_027": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_147",
+  "v1": true,
+  "v2": true
+ },
+ "item_028": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_042",
+  "v1": true,
+  "v2": true
+ },
+ "item_029": {
+  "run": "base",
+  "id": "val_059",
+  "v1": false,
+  "v2": true
+ },
+ "item_030": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_202",
+  "v1": false,
+  "v2": false
+ },
+ "item_031": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_186",
+  "v1": false,
+  "v2": true
+ },
+ "item_032": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_181",
+  "v1": false,
+  "v2": false
+ },
+ "item_033": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_028",
+  "v1": false,
+  "v2": true
+ },
+ "item_034": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_033",
+  "v1": true,
+  "v2": false
+ },
+ "item_035": {
+  "run": "base",
+  "id": "val_231",
+  "v1": false,
+  "v2": true
+ },
+ "item_036": {
+  "run": "base",
+  "id": "val_014",
+  "v1": true,
+  "v2": true
+ },
+ "item_037": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_099",
+  "v1": true,
+  "v2": true
+ },
+ "item_038": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_112",
+  "v1": true,
+  "v2": true
+ },
+ "item_039": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_248",
+  "v1": true,
+  "v2": true
+ },
+ "item_040": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_129",
+  "v1": true,
+  "v2": true
+ },
+ "item_041": {
+  "run": "base",
+  "id": "val_068",
+  "v1": false,
+  "v2": true
+ },
+ "item_042": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_137",
+  "v1": true,
+  "v2": true
+ },
+ "item_043": {
+  "run": "base",
+  "id": "val_089",
+  "v1": true,
+  "v2": false
+ },
+ "item_044": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_096",
+  "v1": false,
+  "v2": true
+ },
+ "item_045": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_151",
+  "v1": false,
+  "v2": true
+ },
+ "item_046": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_161",
+  "v1": true,
+  "v2": true
+ },
+ "item_047": {
+  "run": "base",
+  "id": "val_133",
+  "v1": false,
+  "v2": true
+ },
+ "item_048": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_064",
+  "v1": true,
+  "v2": true
+ },
+ "item_049": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_158",
+  "v1": true,
+  "v2": true
+ },
+ "item_050": {
+  "run": "base",
+  "id": "val_071",
+  "v1": false,
+  "v2": true
+ },
+ "item_051": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_178",
+  "v1": true,
+  "v2": true
+ },
+ "item_052": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_077",
+  "v1": false,
+  "v2": true
+ },
+ "item_053": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_081",
+  "v1": false,
+  "v2": true
+ },
+ "item_054": {
+  "run": "base",
+  "id": "val_185",
+  "v1": false,
+  "v2": true
+ },
+ "item_055": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_001",
+  "v1": false,
+  "v2": false
+ },
+ "item_056": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_049",
+  "v1": true,
+  "v2": true
+ },
+ "item_057": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_234",
+  "v1": true,
+  "v2": true
+ },
+ "item_058": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_062",
+  "v1": false,
+  "v2": true
+ },
+ "item_059": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_157",
+  "v1": false,
+  "v2": true
+ },
+ "item_060": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_194",
+  "v1": false,
+  "v2": true
+ },
+ "item_061": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_057",
+  "v1": true,
+  "v2": true
+ },
+ "item_062": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_090",
+  "v1": true,
+  "v2": true
+ },
+ "item_063": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_104",
+  "v1": true,
+  "v2": false
+ },
+ "item_064": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_086",
+  "v1": true,
+  "v2": true
+ },
+ "item_065": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_036",
+  "v1": true,
+  "v2": true
+ },
+ "item_066": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_100",
+  "v1": true,
+  "v2": true
+ },
+ "item_067": {
+  "run": "base",
+  "id": "val_146",
+  "v1": true,
+  "v2": true
+ },
+ "item_068": {
+  "run": "base",
+  "id": "val_205",
+  "v1": true,
+  "v2": true
+ },
+ "item_069": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_165",
+  "v1": true,
+  "v2": true
+ },
+ "item_070": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_142",
+  "v1": true,
+  "v2": true
+ },
+ "item_071": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_117",
+  "v1": false,
+  "v2": true
+ },
+ "item_072": {
+  "run": "base",
+  "id": "val_110",
+  "v1": false,
+  "v2": false
+ },
+ "item_073": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_226",
+  "v1": true,
+  "v2": true
+ },
+ "item_074": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_170",
+  "v1": true,
+  "v2": true
+ },
+ "item_075": {
+  "run": "base",
+  "id": "val_126",
+  "v1": false,
+  "v2": true
+ },
+ "item_076": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_184",
+  "v1": true,
+  "v2": true
+ },
+ "item_077": {
+  "run": "base",
+  "id": "val_010",
+  "v1": false,
+  "v2": true
+ },
+ "item_078": {
+  "run": "base",
+  "id": "val_134",
+  "v1": false,
+  "v2": true
+ },
+ "item_079": {
+  "run": "base",
+  "id": "val_235",
+  "v1": false,
+  "v2": false
+ },
+ "item_080": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_016",
+  "v1": true,
+  "v2": true
+ },
+ "item_081": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_249",
+  "v1": true,
+  "v2": true
+ },
+ "item_082": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_217",
+  "v1": true,
+  "v2": false
+ },
+ "item_083": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_167",
+  "v1": true,
+  "v2": false
+ },
+ "item_084": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_243",
+  "v1": true,
+  "v2": true
+ },
+ "item_085": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_060",
+  "v1": true,
+  "v2": true
+ },
+ "item_086": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_092",
+  "v1": true,
+  "v2": true
+ },
+ "item_087": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_212",
+  "v1": true,
+  "v2": true
+ },
+ "item_088": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_227",
+  "v1": true,
+  "v2": true
+ },
+ "item_089": {
+  "run": "base",
+  "id": "val_192",
+  "v1": false,
+  "v2": true
+ },
+ "item_090": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_206",
+  "v1": true,
+  "v2": true
+ },
+ "item_091": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_008",
+  "v1": true,
+  "v2": true
+ },
+ "item_092": {
+  "run": "base",
+  "id": "val_140",
+  "v1": true,
+  "v2": true
+ },
+ "item_093": {
+  "run": "base",
+  "id": "val_041",
+  "v1": false,
+  "v2": true
+ },
+ "item_094": {
+  "run": "base",
+  "id": "val_122",
+  "v1": false,
+  "v2": true
+ },
+ "item_095": {
+  "run": "base",
+  "id": "val_023",
+  "v1": false,
+  "v2": true
+ },
+ "item_096": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_132",
+  "v1": true,
+  "v2": true
+ },
+ "item_097": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_054",
+  "v1": true,
+  "v2": true
+ },
+ "item_098": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_052",
+  "v1": false,
+  "v2": true
+ },
+ "item_099": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_131",
+  "v1": true,
+  "v2": true
+ },
+ "item_100": {
+  "run": "base",
+  "id": "val_230",
+  "v1": false,
+  "v2": true
+ },
+ "item_101": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_196",
+  "v1": true,
+  "v2": true
+ },
+ "item_102": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_027",
+  "v1": true,
+  "v2": true
+ },
+ "item_103": {
+  "run": "base",
+  "id": "val_108",
+  "v1": false,
+  "v2": true
+ },
+ "item_104": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_074",
+  "v1": true,
+  "v2": true
+ },
+ "item_105": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_223",
+  "v1": true,
+  "v2": true
+ },
+ "item_106": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_176",
+  "v1": true,
+  "v2": true
+ },
+ "item_107": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_199",
+  "v1": true,
+  "v2": true
+ },
+ "item_108": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_078",
+  "v1": true,
+  "v2": true
+ },
+ "item_109": {
+  "run": "base",
+  "id": "val_183",
+  "v1": false,
+  "v2": true
+ },
+ "item_110": {
+  "run": "base",
+  "id": "val_198",
+  "v1": false,
+  "v2": true
+ },
+ "item_111": {
+  "run": "base",
+  "id": "val_084",
+  "v1": false,
+  "v2": true
+ },
+ "item_112": {
+  "run": "q5filtered_lr5e5_step000121",
+  "id": "val_245",
+  "v1": false,
+  "v2": true
+ },
+ "item_113": {
+  "run": "q5filtered_lr5e5_step000242",
+  "id": "val_065",
+  "v1": false,
+  "v2": true
+ },
+ "item_114": {
+  "run": "raw_lr5e5_step000250",
+  "id": "val_118",
+  "v1": false,
+  "v2": true
+ },
+ "item_115": {
+  "run": "raw_lr1e4_step000250",
+  "id": "val_024",
+  "v1": true,
+  "v2": false
+ },
+ "item_116": {
+  "run": "base",
+  "id": "val_022",
+  "v1": true,
+  "v2": true
+ },
+ "item_117": {
+  "run": "base",
+  "id": "val_080",
+  "v1": false,
+  "v2": true
+ },
+ "item_118": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_005",
+  "v1": false,
+  "v2": true
+ },
+ "item_119": {
+  "run": "raw_lr5e5_step000125",
+  "id": "val_175",
+  "v1": true,
+  "v2": true
+ }
+}

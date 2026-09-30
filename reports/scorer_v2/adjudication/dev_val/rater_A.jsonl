@@ -1,0 +1,120 @@
+{"item": "item_000", "label": "correct", "confidence": "high", "reason": "Bilirubin correctly identified as most abnormal; wrong 'times ULN' figure unrequested."}
+{"item": "item_001", "label": "correct", "confidence": "high", "reason": "Calcium exceeds ULN by 0.7; correctly links to symptoms."}
+{"item": "item_002", "label": "correct", "confidence": "high", "reason": "TG exceeds ULN by 335.5, factor ~3.24; both correct."}
+{"item": "item_003", "label": "correct", "confidence": "high", "reason": "Correctly states empagliflozin dose not documented."}
+{"item": "item_004", "label": "correct", "confidence": "high", "reason": "Creatinine correctly identified as most elevated at 4.0x ULN."}
+{"item": "item_005", "label": "correct", "confidence": "high", "reason": "Ferritin 1.5 below LLN; other iron studies correctly within range."}
+{"item": "item_006", "label": "correct", "confidence": "high", "reason": "Hematocrit 3.4 points below LLN, arithmetic correct."}
+{"item": "item_007", "label": "correct", "confidence": "high", "reason": "Correctly extracts Child-Pugh class A."}
+{"item": "item_008", "label": "correct", "confidence": "high", "reason": "No weight/height in note; model correctly declines BMI calc despite fabricated reference."}
+{"item": "item_009", "label": "correct", "confidence": "high", "reason": "Hematocrit correctly identified as largest % deviation (~29.2%) below LLN."}
+{"item": "item_010", "label": "correct", "confidence": "high", "reason": "TSH 13.8 correctly stated above range."}
+{"item": "item_011", "label": "correct", "confidence": "high", "reason": "HR 134 exceeds 100 by 34; clinically tied to levothyroxine correctly."}
+{"item": "item_012", "label": "correct", "confidence": "high", "reason": "INR 1.9 correctly stated above range."}
+{"item": "item_013", "label": "correct", "confidence": "high", "reason": "Correctly extracts MRI IAC with gadolinium."}
+{"item": "item_014", "label": "correct", "confidence": "high", "reason": "Correctly extracts MMSE score 24/30."}
+{"item": "item_015", "label": "correct", "confidence": "medium", "reason": "BMI 32.2 vs correct ~32.0 from slight height rounding; within tolerance, same category."}
+{"item": "item_016", "label": "correct", "confidence": "high", "reason": "INR 3.8 correctly stated above range."}
+{"item": "item_017", "label": "correct", "confidence": "high", "reason": "BMI 39.3 correctly exceeds 30 threshold."}
+{"item": "item_018", "label": "incorrect", "confidence": "high", "reason": "Empty final answer 'None' after invalid null-argument tool call; schema_error."}
+{"item": "item_019", "label": "correct", "confidence": "high", "reason": "WBC 12.7 correctly stated elevated above range."}
+{"item": "item_020", "label": "correct", "confidence": "high", "reason": "Correct lb/in conversion and BMI 38.7, matches reference within tolerance."}
+{"item": "item_021", "label": "correct", "confidence": "high", "reason": "Correctly extracts MRI IAC with gadolinium."}
+{"item": "item_022", "label": "correct", "confidence": "high", "reason": "Transferrin sat 12.4% correctly below range."}
+{"item": "item_023", "label": "correct", "confidence": "high", "reason": "Correctly extracts 2/3 recall."}
+{"item": "item_024", "label": "correct", "confidence": "high", "reason": "Albumin 2.8 correctly below range."}
+{"item": "item_025", "label": "incorrect", "confidence": "high", "reason": "Misidentifies LDL as closest to threshold; correct answer is triglycerides (3.4 away)."}
+{"item": "item_026", "label": "correct", "confidence": "high", "reason": "D-dimer correctly stated elevated above range."}
+{"item": "item_027", "label": "correct", "confidence": "high", "reason": "Temp exceeds threshold by 2.8F, correctly classified high-grade."}
+{"item": "item_028", "label": "correct", "confidence": "high", "reason": "Total protein correctly identified 0.2 below LLN."}
+{"item": "item_029", "label": "correct", "confidence": "high", "reason": "HbA1c 5.1% correctly within normal range."}
+{"item": "item_030", "label": "incorrect", "confidence": "high", "reason": "Wrong analyte: LDL (exceeds by 119.3) is most elevated, not triglycerides (102.4)."}
+{"item": "item_031", "label": "correct", "confidence": "high", "reason": "Total bilirubin correctly identified at 5.8x ULN."}
+{"item": "item_032", "label": "incorrect", "confidence": "high", "reason": "Mislabels normal creatinine (0.8) as elevated; fails to flag missing allergy info."}
+{"item": "item_033", "label": "correct", "confidence": "high", "reason": "TIBC correctly identified as only abnormal, exceeds by 60.1."}
+{"item": "item_034", "label": "correct", "confidence": "high", "reason": "lb/in conversion and BMI 19.4 correct within tolerance."}
+{"item": "item_035", "label": "correct", "confidence": "high", "reason": "aPTT exceeds by 19.6s, correctly deemed clinically significant."}
+{"item": "item_036", "label": "correct", "confidence": "high", "reason": "BMI 17.7 correctly calculated from documented weight/height."}
+{"item": "item_037", "label": "correct", "confidence": "high", "reason": "No height documented; correctly declines to calculate BMI."}
+{"item": "item_038", "label": "correct", "confidence": "high", "reason": "BMI 26.4 correctly calculated and grounded."}
+{"item": "item_039", "label": "correct", "confidence": "high", "reason": "Bilirubin exceeds by 3.6, 4-fold ULN, both correct."}
+{"item": "item_040", "label": "correct", "confidence": "high", "reason": "Correctly notes no timestamp available to correlate D-dimer with symptom onset."}
+{"item": "item_041", "label": "correct", "confidence": "high", "reason": "Fasting glucose 248.2 correctly extracted."}
+{"item": "item_042", "label": "correct", "confidence": "high", "reason": "BMI 28.0 correctly calculated from documented values."}
+{"item": "item_043", "label": "correct", "confidence": "high", "reason": "ALT 3.26x and bilirubin 4.83x ULN both correct, correct comparison."}
+{"item": "item_044", "label": "correct", "confidence": "high", "reason": "No weight/height in note; correctly declines despite fabricated reference tool call."}
+{"item": "item_045", "label": "correct", "confidence": "high", "reason": "Free T3 exceeds by 1.6 (~36%), correctly sole abnormal value."}
+{"item": "item_046", "label": "correct", "confidence": "high", "reason": "Correctly states allergy status not documented before heparin."}
+{"item": "item_047", "label": "correct", "confidence": "high", "reason": "Creatinine 1.6 correctly stated elevated."}
+{"item": "item_048", "label": "correct", "confidence": "high", "reason": "D-dimer exceeds by 867.2, 2.73x threshold, both correct."}
+{"item": "item_049", "label": "correct", "confidence": "high", "reason": "BMI 24.5 correctly calculated from documented values."}
+{"item": "item_050", "label": "correct", "confidence": "high", "reason": "Correct creatinine unit conversion to 70.74 umol/L, correctly contrasted with low eGFR."}
+{"item": "item_051", "label": "correct", "confidence": "high", "reason": "PT exceeds by 9.6s, correctly attributed to hepatic synthetic dysfunction."}
+{"item": "item_052", "label": "correct", "confidence": "high", "reason": "No weight/height in note; correctly declines despite fabricated reference tool call."}
+{"item": "item_053", "label": "correct", "confidence": "high", "reason": "Bilirubin exceeds by 4.4, correctly most abnormal value."}
+{"item": "item_054", "label": "correct", "confidence": "high", "reason": "Serum iron 8.8 below LLN; transferrin sat correctly within range."}
+{"item": "item_055", "label": "incorrect", "confidence": "high", "reason": "Incorrectly claims creatinine (1.2, within 0.7-1.3) exceeds range."}
+{"item": "item_056", "label": "correct", "confidence": "high", "reason": "Transferrin sat correctly identified 6.8 points below LLN."}
+{"item": "item_057", "label": "correct", "confidence": "high", "reason": "Weight not obtained; correctly declines BMI calc."}
+{"item": "item_058", "label": "correct", "confidence": "high", "reason": "HR 99 correctly within normal range, correct arithmetic."}
+{"item": "item_059", "label": "correct", "confidence": "high", "reason": "Triglycerides correctly identified as most elevated by deviation."}
+{"item": "item_060", "label": "correct", "confidence": "high", "reason": "BUN 42.4 correctly identified most abnormal, exceeds ULN 20 by 22.4; verified."}
+{"item": "item_061", "label": "correct", "confidence": "high", "reason": "Transferrin sat 15.4% vs LLN 20% = 4.6 points below; arithmetic correct."}
+{"item": "item_062", "label": "correct", "confidence": "high", "reason": "Creatinine 4.1 correctly stated above 0.7-1.3 range."}
+{"item": "item_063", "label": "correct", "confidence": "high", "reason": "BMI 21.0 from 64.5kg/175.1cm grounded in documented weight/height, correctly computed."}
+{"item": "item_064", "label": "correct", "confidence": "high", "reason": "BMI 40.5 from 100.4kg (221.3lb)/157.5cm correctly grounded and computed."}
+{"item": "item_065", "label": "correct", "confidence": "high", "reason": "Height not documented; model correctly declines to compute BMI, states missing."}
+{"item": "item_066", "label": "correct", "confidence": "high", "reason": "Allergies not documented; model correctly states allergy status cannot be assessed."}
+{"item": "item_067", "label": "correct", "confidence": "high", "reason": "Weight not obtained; model correctly declines BMI calc, states missing."}
+{"item": "item_068", "label": "correct", "confidence": "high", "reason": "No allergy section in note; model correctly states no documented allergies present."}
+{"item": "item_069", "label": "correct", "confidence": "high", "reason": "183.4 mg/dL cholesterol correctly converted to 4.75 mmol/L, within desirable range."}
+{"item": "item_070", "label": "correct", "confidence": "high", "reason": "No height documented for BMI/malnutrition; model correctly declines."}
+{"item": "item_071", "label": "correct", "confidence": "medium", "reason": "TIBC exceeds by 103.2 correct, ferritin below LLN correctly identified; unrequested wrong deviation doesn't disqualify."}
+{"item": "item_072", "label": "incorrect", "confidence": "high", "reason": "Never flags note's 'Allergies: Not documented', the central missing info for ACE-inhibitor safety question."}
+{"item": "item_073", "label": "correct", "confidence": "high", "reason": "BMI 29.2 from documented 100.2kg/185.2cm, grounded and correctly computed."}
+{"item": "item_074", "label": "correct", "confidence": "high", "reason": "Antibiotic allergy not documented; model correctly states missing."}
+{"item": "item_075", "label": "correct", "confidence": "high", "reason": "aPTT 38.7 correctly stated above 25-35 range."}
+{"item": "item_076", "label": "correct", "confidence": "high", "reason": "No allergy section for acetaminophen safety question; model correctly notes missing."}
+{"item": "item_077", "label": "correct", "confidence": "high", "reason": "Free T3 6.1 correctly stated above 2.0-4.4 range."}
+{"item": "item_078", "label": "correct", "confidence": "high", "reason": "No weight/height documented in note; reference's 81.7kg/187.1cm is fabricated. Model correctly declines."}
+{"item": "item_079", "label": "correct", "confidence": "high", "reason": "Transferrin sat 47.8 is 2.2 below ULN 50; all iron studies correctly identified as within range."}
+{"item": "item_080", "label": "correct", "confidence": "high", "reason": "Weight not documented; model correctly states BMI/dosing assessment cannot be completed."}
+{"item": "item_081", "label": "correct", "confidence": "high", "reason": "Cholesterol 255.2 exceeds 200 by 55.2; other lipids correctly identified within range."}
+{"item": "item_082", "label": "correct", "confidence": "high", "reason": "Duplicate PPI (pantoprazole/omeprazole) correctly identified; omeprazole correctly identified as discontinued."}
+{"item": "item_083", "label": "correct", "confidence": "high", "reason": "137-100=37 bpm above threshold, correct; clinical significance statement reasonable."}
+{"item": "item_084", "label": "correct", "confidence": "high", "reason": "TSH 9.0 correctly stated above 0.27-4.20 range."}
+{"item": "item_085", "label": "correct", "confidence": "high", "reason": "280.4 mg/dL cholesterol correctly converted to 7.26 mmol/L, above desirable threshold."}
+{"item": "item_086", "label": "correct", "confidence": "high", "reason": "BUN 40.9-20=20.9 correct; BUN/Cr ratio 40.9/0.8=51.1 correct, elevated ratio noted."}
+{"item": "item_087", "label": "correct", "confidence": "high", "reason": "No lab timestamp documented; model correctly states acute vs chronic cannot be determined."}
+{"item": "item_088", "label": "correct", "confidence": "high", "reason": "D-dimer exceeds by 1246.4 (~3.5x) and aPTT exceeds by 27.4 (~1.78x); both verified correct."}
+{"item": "item_089", "label": "correct", "confidence": "high", "reason": "No weight/height documented; reference's 79.5kg/174.5cm is fabricated. Model correctly declines."}
+{"item": "item_090", "label": "correct", "confidence": "high", "reason": "TSH 2.7 correctly stated within 0.27-4.20 range."}
+{"item": "item_091", "label": "correct", "confidence": "high", "reason": "Creatinine 2.5 mg/dL correctly converted to 221.05 \u00b5mol/L (2.5*88.42)."}
+{"item": "item_092", "label": "correct", "confidence": "high", "reason": "BMI 19.1 from 56.7kg/172.3cm correctly computed and grounded in question-provided values."}
+{"item": "item_093", "label": "correct", "confidence": "high", "reason": "No weight/height documented in note; reference's 61.5kg/192.2cm is fabricated. Model correctly declines."}
+{"item": "item_094", "label": "correct", "confidence": "high", "reason": "Potassium 5.7 correctly stated above 3.5-5.0 range."}
+{"item": "item_095", "label": "correct", "confidence": "high", "reason": "Phosphorus 7.0 correctly stated above 2.5-4.5 range."}
+{"item": "item_096", "label": "correct", "confidence": "high", "reason": "SpO2 88, 95-88=7 points below threshold; correct and clinically significant."}
+{"item": "item_097", "label": "correct", "confidence": "medium", "reason": "Absolute vs relative deviation genuinely ambiguous (same units); triglycerides' larger absolute excess (138.3 vs 108.4) is a defensible choice."}
+{"item": "item_098", "label": "correct", "confidence": "high", "reason": "63.1in->160.2cm (true 160.27) within tolerance; BMI 39.4 close to true ~39.3, grounded."}
+{"item": "item_099", "label": "correct", "confidence": "high", "reason": "SpO2 91, 95-91=4 points below threshold; correct and clinically significant given PE history."}
+{"item": "item_100", "label": "correct", "confidence": "high", "reason": "AST 143.3/40=3.58x correct; albumin (3.5-2.3)/3.5=34% correct; comparison correct."}
+{"item": "item_101", "label": "correct", "confidence": "high", "reason": "Uric acid 8.6 correctly stated above 3.5-7.2 range."}
+{"item": "item_102", "label": "correct", "confidence": "high", "reason": "Rosuvastatin dose explicitly 'not confirmed'; model correctly states missing."}
+{"item": "item_103", "label": "correct", "confidence": "high", "reason": "Free T3 6.1 correctly stated above 2.0-4.4 range."}
+{"item": "item_104", "label": "correct", "confidence": "high", "reason": "Weight not documented; model correctly declines BMI calc for OSA risk assessment."}
+{"item": "item_105", "label": "correct", "confidence": "high", "reason": "BUN 47.5 correctly stated above 7-20 range."}
+{"item": "item_106", "label": "correct", "confidence": "high", "reason": "Allergies not documented; model correctly states contrast safety cannot be confirmed."}
+{"item": "item_107", "label": "correct", "confidence": "high", "reason": "Potassium 5.6 correctly stated above 3.5-5.0 range."}
+{"item": "item_108", "label": "correct", "confidence": "high", "reason": "BMI 16.5 from 54.1kg/181.1cm grounded and correctly computed."}
+{"item": "item_109", "label": "correct", "confidence": "high", "reason": "eGFR 30.4 correctly stated below >60 normal threshold."}
+{"item": "item_110", "label": "correct", "confidence": "high", "reason": "Murphy's sign correctly identified as positive per exam text."}
+{"item": "item_111", "label": "correct", "confidence": "high", "reason": "Ferritin 259.4 ng/mL correctly extracted."}
+{"item": "item_112", "label": "correct", "confidence": "high", "reason": "No weight/height documented in note; reference's 102.8kg/172.2cm is fabricated. Model correctly declines."}
+{"item": "item_113", "label": "correct", "confidence": "high", "reason": "aPTT 41.8-35=6.8 correct; correctly identified as only abnormal coag value."}
+{"item": "item_114", "label": "correct", "confidence": "high", "reason": "Cholesterol 200-198.4=1.6 correct; all lipids correctly within range."}
+{"item": "item_115", "label": "correct", "confidence": "high", "reason": "Hgb 12.0-10.8=1.2 correct; correctly identified as only/most abnormal value."}
+{"item": "item_116", "label": "correct", "confidence": "high", "reason": "aPTT 54.5-35=19.5 (55.7% above) correctly computed."}
+{"item": "item_117", "label": "correct", "confidence": "high", "reason": "BMI 80.4/(1.534)^2=34.2 correctly computed, above 30 threshold."}
+{"item": "item_118", "label": "correct", "confidence": "high", "reason": "eGFR 60-49.4=10.6 correct; correctly identified as CKD Stage 3a."}
+{"item": "item_119", "label": "correct", "confidence": "high", "reason": "BMI 49.3 from 119.3kg/155.5cm (documented directly) correctly computed."}

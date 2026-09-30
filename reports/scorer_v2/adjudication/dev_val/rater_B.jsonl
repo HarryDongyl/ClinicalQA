@@ -1,0 +1,120 @@
+{"item": "item_000", "label": "correct", "confidence": "medium", "reason": "Bilirubin/ULN diff 6.4 correct; model's extra factor (5.3x, should be 6.3x) unrequested."}
+{"item": "item_001", "label": "correct", "confidence": "high", "reason": "Calcium 11.2 exceeds ULN 10.5 by 0.7; clinical correlation reasonable."}
+{"item": "item_002", "label": "correct", "confidence": "high", "reason": "Triglycerides 485.5 exceed ULN150 by 335.5, factor ~3.24x; matches."}
+{"item": "item_003", "label": "correct", "confidence": "high", "reason": "Empagliflozin dose not documented; correctly states missing, no fabrication."}
+{"item": "item_004", "label": "correct", "confidence": "high", "reason": "Creatinine 5.2/ULN1.3=4.0x correctly identified as most elevated vs phosphorus 1.57x."}
+{"item": "item_005", "label": "correct", "confidence": "high", "reason": "Ferritin 10.5 below LLN12 by 1.5; other iron studies correctly noted as normal."}
+{"item": "item_006", "label": "correct", "confidence": "high", "reason": "Hematocrit 32.6 below LLN36 by 3.4 percentage points; correct."}
+{"item": "item_007", "label": "correct", "confidence": "high", "reason": "Child-Pugh class A correctly extracted from note."}
+{"item": "item_008", "label": "correct", "confidence": "high", "reason": "No weight/height documented; correctly declined BMI calc instead of inventing values."}
+{"item": "item_009", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_010", "label": "correct", "confidence": "high", "reason": "TSH 13.8 correctly extracted as above range 0.27-4.20."}
+{"item": "item_011", "label": "correct", "confidence": "high", "reason": "HR 134 exceeds 100 threshold by 34 bpm; significance statement reasonable."}
+{"item": "item_012", "label": "correct", "confidence": "high", "reason": "INR 1.9 correctly identified as above normal range 0.8-1.1."}
+{"item": "item_013", "label": "correct", "confidence": "high", "reason": "MRI internal auditory canals with gadolinium correctly extracted."}
+{"item": "item_014", "label": "correct", "confidence": "high", "reason": "MMSE 24/30 correctly extracted."}
+{"item": "item_015", "label": "incorrect", "confidence": "medium", "reason": "Height 71.0in mis-converted to 179.8cm (true 180.34cm); resulting BMI 32.2 vs correct 32.0, exceeds tolerance."}
+{"item": "item_016", "label": "correct", "confidence": "high", "reason": "INR 3.8 correctly identified as above range 0.8-1.1."}
+{"item": "item_017", "label": "correct", "confidence": "high", "reason": "BMI 39.3 already documented in note; correctly restated vs 30 threshold."}
+{"item": "item_018", "label": "incorrect", "confidence": "high", "reason": "Model final_answer is null/missing (schema_error) after invented null height; missing answer is incorrect."}
+{"item": "item_019", "label": "correct", "confidence": "high", "reason": "WBC 12.7 correctly identified as above range 4.5-11.0."}
+{"item": "item_020", "label": "correct", "confidence": "high", "reason": "BMI computed from weight 105.6kg/height ~165cm; conversion and result within tolerance."}
+{"item": "item_021", "label": "correct", "confidence": "high", "reason": "MRI internal auditory canals w/ gadolinium correctly extracted."}
+{"item": "item_022", "label": "correct", "confidence": "high", "reason": "Transferrin saturation 12.4% correctly identified as below range 20-50%."}
+{"item": "item_023", "label": "correct", "confidence": "high", "reason": "Recall of 2/3 objects at 5 minutes correctly extracted."}
+{"item": "item_024", "label": "correct", "confidence": "high", "reason": "Albumin 2.8 correctly identified as below range 3.5-5.5."}
+{"item": "item_025", "label": "incorrect", "confidence": "high", "reason": "Closest lipid to threshold is triglycerides (3.4 below), not LDL (15.7 below) as model stated; wrong answer to requested part."}
+{"item": "item_026", "label": "correct", "confidence": "high", "reason": "D-dimer 2086.6 correctly identified as above range <500."}
+{"item": "item_027", "label": "correct", "confidence": "high", "reason": "Temp 103.2 exceeds 100.4 by 2.8F; correctly classified high-grade fever."}
+{"item": "item_028", "label": "correct", "confidence": "high", "reason": "Total protein 5.8 below LLN 6.0 by 0.2; correctly identified as only abnormal value."}
+{"item": "item_029", "label": "correct", "confidence": "high", "reason": "HbA1c 5.1% correctly identified as within normal range <5.7%."}
+{"item": "item_030", "label": "incorrect", "confidence": "high", "reason": "LDL (119.3 excess, ~219% of ULN) exceeds triglycerides (102.4 excess, ~168%) by both absolute and relative measures; model picked triglycerides incorrectly."}
+{"item": "item_031", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_032", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_033", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_034", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_035", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_036", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_037", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_038", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_039", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_040", "label": "correct", "confidence": "high", "reason": "No lab timestamp documented to correlate D-dimer trend; correctly states missing info."}
+{"item": "item_041", "label": "correct", "confidence": "high", "reason": "Fasting glucose 248.2 correctly extracted."}
+{"item": "item_042", "label": "correct", "confidence": "high", "reason": "BMI computed 94.9kg/184.2cm ~28.0; within tolerance."}
+{"item": "item_043", "label": "correct", "confidence": "high", "reason": "ALT/ULN and bilirubin/ULN ratios computed correctly for comparison."}
+{"item": "item_044", "label": "correct", "confidence": "high", "reason": "No weight/height in note; correctly declined BMI tool call rather than inventing values."}
+{"item": "item_045", "label": "correct", "confidence": "high", "reason": "Free T3 6.0 exceeds ULN4.4 by 1.6 (~36%); correctly identified as only abnormal value."}
+{"item": "item_046", "label": "correct", "confidence": "high", "reason": "Allergy status not documented; correctly states missing without fabrication."}
+{"item": "item_047", "label": "correct", "confidence": "high", "reason": "Creatinine correctly identified as above reference range."}
+{"item": "item_048", "label": "correct", "confidence": "high", "reason": "D-dimer 1367.2/ULN500 = factor 2.73; matches reference calculation."}
+{"item": "item_049", "label": "correct", "confidence": "high", "reason": "BMI computed from weight 80.1kg/height 180.9cm ~24.5; within tolerance."}
+{"item": "item_050", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_051", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_052", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_053", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_054", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_055", "label": "incorrect", "confidence": "high", "reason": "Model claims creatinine 1.2 (range 0.7-1.3) 'exceeds' its range, but 1.2 is within range; wrong answer to explicitly requested second abnormal value."}
+{"item": "item_056", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_057", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_058", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_059", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_060", "label": "correct", "confidence": "medium", "reason": "Single most-abnormal value (BUN) correctly identified; unrequested wrong side-claim re: creatinine doesn't affect requested answer."}
+{"item": "item_061", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_062", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_063", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_064", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_065", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_066", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_067", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_068", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_069", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_070", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_071", "label": "correct", "confidence": "medium", "reason": "TIBC excess and ferritin identification correct; unrequested extra magnitude for ferritin slightly off but not requested."}
+{"item": "item_072", "label": "correct", "confidence": "medium", "reason": "Missing-GFR reasoning is a defensible, non-fabricated 'missing info' framing distinct from reference's allergy framing."}
+{"item": "item_073", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_074", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_075", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_076", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_077", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_078", "label": "correct", "confidence": "high", "reason": "No weight/height documented; correctly declined BMI tool call."}
+{"item": "item_079", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_080", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_081", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_082", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_083", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_084", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_085", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_086", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_087", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_088", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_089", "label": "correct", "confidence": "high", "reason": "No weight/height documented; correctly declined BMI tool call."}
+{"item": "item_090", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_091", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_092", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_093", "label": "correct", "confidence": "high", "reason": "No weight/height documented; correctly declined BMI tool call."}
+{"item": "item_094", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_095", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_096", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_097", "label": "correct", "confidence": "medium", "reason": "Most-elevated lipid pick (absolute mg/dL excess) is a defensible alternative to reference's relative/ratio-based pick."}
+{"item": "item_098", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_099", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_100", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_101", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_102", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_103", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_104", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_105", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_106", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_107", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_108", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_109", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_110", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_111", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_112", "label": "correct", "confidence": "high", "reason": "No weight/height documented; correctly declined BMI tool call."}
+{"item": "item_113", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_114", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_115", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_116", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_117", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_118", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}
+{"item": "item_119", "label": "correct", "confidence": "high", "reason": "Verified against note/table; value, direction, and computation match."}

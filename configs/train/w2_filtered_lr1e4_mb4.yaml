@@ -1,4 +1,5 @@
-# Proposed batching control: retain effective batch 16 on one GPU.
+# Wave-two batch setup (DECISIONS D-042): micro_batch 4 x grad_accum 4 = effective batch 16, as in wave one.
+# Filtered view at LR 1e-4 (D-039). First rung of the LR ladder (D-045).
 extends: configs/train/w2_filtered_lr1e4_mb1.yaml
 run_id: w2_filtered_lr1e4_mb4
 training:
