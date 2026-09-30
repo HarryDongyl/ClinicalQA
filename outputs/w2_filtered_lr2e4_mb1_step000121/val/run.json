@@ -1,0 +1,131 @@
+{
+  "label": "w2_filtered_lr2e4_mb1_step000121",
+  "run": "w2_filtered_lr2e4_mb1",
+  "split": "val",
+  "adapter": "/workspace/Clinical/checkpoints/w2_filtered_lr2e4_mb1/checkpoint-121",
+  "adapter_sha256": "bdf00ca94a348ffdf7e76916814637534230e74caeb67e4b3b1bec4fc9323cb3",
+  "protocol": {
+    "model": {
+      "name": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+      "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "quantization": "nf4",
+      "attn": "sdpa",
+      "compute_dtype": "auto"
+    },
+    "budget": {
+      "max_calls": 1,
+      "max_assistant_turns": 2,
+      "max_new_tokens": 256,
+      "max_total_new_tokens": 512
+    },
+    "batch_size": 4,
+    "format_config": {
+      "data_config": "configs/data.yaml",
+      "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+      "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "system_prompt": "configs/prompts/system_v1.txt",
+      "max_length": 2048,
+      "output_dir": "data/sft",
+      "train_views": {
+        "raw": "data/processed/raw/train.jsonl",
+        "q5_filtered": "data/processed/q5_filtered/train.jsonl"
+      },
+      "eval_splits": [
+        "val",
+        "test"
+      ],
+      "length_report": "reports/token_lengths.json"
+    },
+    "prompt_sha256": "2ec29d12ad630dc2124398869705bbc6390f91ec6424e819e2d8a62af31754ee",
+    "analysis_config_sha256": "93231f3522d63566651af7b15bb1267eaacb1d71fe3233760a09d6efb32280b4",
+    "source_sha256": {
+      "src/clinqa/__init__.py": "aa76b3cba071262c5254393c28a309a754664d39fda9eb8117df0cf49136addd",
+      "src/clinqa/analysis/__init__.py": "0b0f5797e6350c89c782ed3dbcc441500a18f9b73fbb8bcd9e8b8de05e18cc62",
+      "src/clinqa/analysis/checks.py": "9c99df883eb35cc76306765951d554d61936e0e717a30412bf98c93090a5d6f4",
+      "src/clinqa/analysis/common.py": "eedb85c1e51f3d241951b0b32c2a9c6bfcb3fdb359029e42efab3370e27c8b45",
+      "src/clinqa/analysis/features.py": "f649930e6acc87b0fa5ff14baa727ddcd0deaaba881f52e235d3f604f402b9e4",
+      "src/clinqa/analysis/report.py": "3be70a5d519d1bff9e4a9eac7c41d025ee15c2288d2984b15b3d324c9002363f",
+      "src/clinqa/analysis/stats.py": "da697b05a955c8252efaa5c219b484958cec25cab64e75d889ef10f48d7ac7fc",
+      "src/clinqa/analyze.py": "40277449c067662d0e2c6039497a1ae4dd1a5f7c7e1d296120d7166f8d16569f",
+      "src/clinqa/audit_masks.py": "1f958b9254f4c30114d2bbec4d6408e1c3b0e1ebe1b958b5ea31f0f5749e0c89",
+      "src/clinqa/checkpoints.py": "5850cde0277cd5c76418367bfca330dda973d7883fb0c636c0a7edd2ed611c4b",
+      "src/clinqa/config.py": "e9bac186b75de3392ead77c594cfe47c341db773d62abaafc12b6a4bc4d75c80",
+      "src/clinqa/data_io.py": "9722f7f07a71225c6c01cee0da1266a430070e2a28ae05c2710e6361942b9283",
+      "src/clinqa/data_views.py": "b6d1e0610ce9d569050ffdfd0b3461e58ab0fc05d78af9824643a52231a69cb4",
+      "src/clinqa/evaluate.py": "6c5a42d9be5498c4499c0d5b7c93e0458883582ffc38be7eb52ac8d0e4560622",
+      "src/clinqa/formatting.py": "2eac593a241aecc85c9ea2dc527241b546f714f9a7f7cf04b056110e5ab7a1b1",
+      "src/clinqa/infer.py": "0241add6465bca7b1c00dc6c308ce33d005ef6c605294c990d709181c507849f",
+      "src/clinqa/metrics.py": "f3be6bca1438c9162ae815480a233ad43438b7efc5000f6db1e89cfccc0a4477",
+      "src/clinqa/modeling.py": "c88747f89a47ed1d9a5d2d9436cb837fdb110c2f07b74dc4d2a53c6b15580f13",
+      "src/clinqa/parsing.py": "38762a7c27640f207b11f2eeee2027b8979cdd689e24b5e7a9e11009155591be",
+      "src/clinqa/preflight.py": "690ffaa3146828bbaf1212a08425b0a1ab2f900d405f5cd42b75abf62b582ff8",
+      "src/clinqa/run_info.py": "889d39416edd75bf7ea873cb905317fe5f8ba2d69b81755b9ce096a75106dcb8",
+      "src/clinqa/schemas.py": "fd198f5c43874b51c0dfa223d4559fb6ea74c4460dc73a13751cd98951e0d6c1",
+      "src/clinqa/scorer_v2.py": "b15db3d0b12a4a798e4114e9b1b9573733debbb3362ae9492a4cd00f804a48f3",
+      "src/clinqa/scoring_v2.py": "278a51e662da4570d8a42013c319a035b4f47555ac54de0e1495a9fa4ac0ad8a",
+      "src/clinqa/seed.py": "052298443dfbc7a88f1ab055ef1f670672154714fb28d3bdb7eb18fc8cb7d4b3",
+      "src/clinqa/smoke.py": "2fca5618be1dabe9bec7cd9b47600939a64ecf51bf3ec59ca37b47961429af6c",
+      "src/clinqa/tools.py": "cac236dcc2eef4abc7fe8141ce2f06521d2b3e619681b8ae2e5e22bcb0a13f7d",
+      "src/clinqa/train.py": "5b3642d6f50bc14e2f4e52fb7f5167e124089eae8d266539f97db20b76d267c0",
+      "src/clinqa/training_data.py": "ad070f064992779248bb748634f31e3d5b180d92ed9966c9bbbb9b312fe02f53",
+      "src/clinqa/validation.py": "7a1db1cf8534958da44a490e836801c76f8937f4cfb4a6aecf4cfcaa47451e8a"
+    }
+  },
+  "train_manifest": "/workspace/Clinical/outputs/w2_filtered_lr2e4_mb1/manifest.json",
+  "model": {
+    "name": "Qwen/Qwen3-4B-Instruct-2507",
+    "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+    "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+    "quantization": "nf4",
+    "attn": "sdpa",
+    "compute_dtype": "auto"
+  },
+  "model_load": {
+    "device": "cuda",
+    "quantization": "nf4",
+    "dtype": "bfloat16"
+  },
+  "seed": 42,
+  "split_sha256": "33562f1ee02c360ef4f7dae6cc35eba06b99b9f60696a28bb2e0e9a5c4ac33f8",
+  "tool_schemas_sha256": "9eb098dbc315bd9cdcc9b24b4c78255d27b2634212dc387e82bab7ea97bf198d",
+  "budget": {
+    "max_calls": 1,
+    "max_assistant_turns": 2,
+    "max_new_tokens": 256,
+    "max_total_new_tokens": 512
+  },
+  "batch_size": 4,
+  "n": 250,
+  "limit": null,
+  "system_prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+  "chat_template_sha256": "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326",
+  "git": {
+    "commit": "c03023c52a2c16a04a047de405e07c61815b3b52",
+    "dirty": true
+  },
+  "packages": {
+    "torch": "2.14.0",
+    "transformers": "5.17.0",
+    "peft": "0.21.0",
+    "accelerate": "1.15.0",
+    "bitsandbytes": "0.50.2",
+    "numpy": "2.4.6"
+  },
+  "hardware": {
+    "platform": "Linux-6.8.0-134-generic-x86_64-with-glibc2.39",
+    "python": "3.11.13",
+    "cuda": true,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_memory_gb": 23.5,
+    "cuda_version": "13.0",
+    "bf16": true
+  },
+  "runtime_s": {
+    "model_load": 13.5,
+    "generate": 824.4
+  },
+  "peak_vram_gb": 4.24
+}
