@@ -1,0 +1,11 @@
+{"step": 1, "epoch": 0.008316008316008316, "loss": 1.9150173664093018, "grad_norm": 4.051141262054443, "learning_rate": 0.0, "sec_per_step": 15.705, "peak_vram_gb": 16.61}
+{"step": 5, "epoch": 0.04158004158004158, "loss": 1.480228304862976, "grad_norm": 3.6497550010681152, "learning_rate": 5e-05, "sec_per_step": 14.004, "peak_vram_gb": 17.24}
+{"step": 10, "epoch": 0.08316008316008316, "loss": 0.8577824592590332, "grad_norm": 0.8475738167762756, "learning_rate": 9.999549389283606e-05, "sec_per_step": 13.471, "peak_vram_gb": 17.24}
+{"step": 15, "epoch": 0.12474012474012475, "loss": 0.5871010780334472, "grad_norm": 0.6573081612586975, "learning_rate": 9.983786540671051e-05, "sec_per_step": 13.761, "peak_vram_gb": 17.29}
+{"step": 20, "epoch": 0.16632016632016633, "loss": 0.5816512107849121, "grad_norm": 0.6002765893936157, "learning_rate": 9.945574310466159e-05, "sec_per_step": 13.63, "peak_vram_gb": 17.75}
+{"step": 25, "epoch": 0.2079002079002079, "loss": 0.479219913482666, "grad_norm": 0.5565772652626038, "learning_rate": 9.885084825009086e-05, "sec_per_step": 13.475, "peak_vram_gb": 17.75}
+{"step": 30, "epoch": 0.2494802494802495, "loss": 0.46478838920593263, "grad_norm": 0.5620319247245789, "learning_rate": 9.802590558156862e-05, "sec_per_step": 13.492, "peak_vram_gb": 17.75}
+{"step": 35, "epoch": 0.2910602910602911, "loss": 0.48804669380187987, "grad_norm": 0.6003804206848145, "learning_rate": 9.698463103929542e-05, "sec_per_step": 13.815, "peak_vram_gb": 17.75}
+{"step": 40, "epoch": 0.33264033264033266, "loss": 0.40818119049072266, "grad_norm": 0.6076040267944336, "learning_rate": 9.573171502671273e-05, "sec_per_step": 13.53, "peak_vram_gb": 17.75}
+{"step": 45, "epoch": 0.37422037422037424, "loss": 0.4052129745483398, "grad_norm": 0.760381281375885, "learning_rate": 9.42728012826605e-05, "sec_per_step": 13.553, "peak_vram_gb": 17.75}
+{"step": 50, "epoch": 0.4158004158004158, "loss": 0.43822107315063474, "grad_norm": 0.6135969758033752, "learning_rate": 9.261446145925167e-05, "sec_per_step": 13.414, "peak_vram_gb": 17.75}
