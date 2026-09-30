@@ -36,7 +36,7 @@ help:
 	@echo "test         unit tests"
 	@echo "score-v2     validation-only contract scoring into a new report directory; no automatic selection"
 	@echo "prompt-ablation  W2-E1 generation only: system v1 vs v2 on fixed wave-one weights (val, GPU, batch 4)"
-	@echo "w2-round     RunPod: whole wave-two round (E1 + filtered LR ladder at mb4) [CROSS=1 adds prompt v2]"
+	@echo "w2-round     RunPod: whole wave-two round (E1 + filtered LR ladder at mb1) [CROSS=1 adds prompt v2; MB=mb4]"
 	@echo "w2-epochs    RUN=w2_run PROMPT=v1|v2  evaluate both epoch checkpoints on val, no selection (GPU)"
 	@echo "w2-stable    RUN=w2_run  exit 1 on non-finite loss/grad_norm or unfinished training"
 	@echo "score-v21    LABELS='...' OUT=dir  candidate scorer v2.1 on val labels (diagnostic, CPU)"
@@ -77,7 +77,7 @@ prompt-ablation:
 	    --label w2p_$${arm}_$$r || exit 1; done; done
 
 w2-round:
-	CROSS=$(CROSS) bash scripts/run_w2_round.sh
+	CROSS=$(CROSS) MB=$(MB) bash scripts/run_w2_round.sh
 
 PROMPT ?= v1
 w2-epochs:

@@ -1,7 +1,7 @@
 """Wave-two epoch-checkpoint validation without the legacy selector (DECISIONS D-045, D-049).
 
-    uv run python scripts/w2_epochs.py generate --run w2_filtered_lr1e4_mb4 --prompt v1
-    uv run python scripts/w2_epochs.py stable --run w2_filtered_lr1p5e4_mb4
+    uv run python scripts/w2_epochs.py generate --run w2_filtered_lr1e4_mb1 --prompt v1
+    uv run python scripts/w2_epochs.py stable --run w2_filtered_lr1p5e4_mb1
 
 generate  evaluates every epoch-end checkpoint in outputs/<run>/manifest.json on val with
           configs/eval_w2_prompt_<prompt>.yaml. Labels: <run>_step<N> (v1) or w2p_<prompt>_<run>_step<N>.

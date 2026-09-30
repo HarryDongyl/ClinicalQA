@@ -2,7 +2,8 @@
 # Wave-two round on one 24 GB RunPod GPU (EXPERIMENT_JOURNAL W2-PLAN-006; DECISIONS D-041 to D-051). Validation only.
 #   0. preflight + GPU smoke (the smoke report is not committed, so a fresh pod re-runs it)
 #   1. W2-E1: prompt v1/v2 on fixed wave-one weights (8 generations, batch 4)            D-043, D-044
-#   2. filtered view, mb4/ga4: LR 1e-4 -> 1.5e-4 -> 2e-4, both epoch checkpoints, prompt v1  D-042, D-045
+#   2. filtered view, mb1/ga16: LR 1e-4 -> 1.5e-4 -> 2e-4, both epoch checkpoints, prompt v1  D-045, D-052
+#      (MB=mb4 selects the original mb4/ga4 setup with its mb2 OOM fallback, D-042)
 #   3. optional (CROSS=1): prompt v2 on the new epoch checkpoints                         D-050
 # The pod generates and runs the legacy scorer only; scorer v2.1 runs later on CPU (make w2-score, D-047).
 # Results are committed and pushed after every step, so an interruption loses at most one step; re-running
@@ -53,10 +54,10 @@ for arm in v1 v2; do
   push "E1 prompt $arm"
 done
 
-# 2. LR ladder at micro_batch 4. If the first mb4 run hits CUDA OOM, the whole ladder switches to the
-# documented mb2/ga8 fallback (same effective batch 16) so the rungs stay comparable (D-042).
-MB=mb4
-test -f outputs/w2_mb4_oom.txt && MB=mb2
+# 2. LR ladder at micro_batch 1, the wave-one setup (D-052: mb4 measured slower, ~13.9 vs 10.0 s/step).
+# With MB=mb4, a CUDA OOM in the first run switches the whole ladder to the mb2/ga8 fallback (D-042).
+MB=${MB:-mb1}
+test "$MB" = mb4 && test -f outputs/w2_mb4_oom.txt && MB=mb2
 train() {
   local run=$1
   if test -f "outputs/$run/manifest.json"; then echo "Training already completed: $run"; return 0; fi

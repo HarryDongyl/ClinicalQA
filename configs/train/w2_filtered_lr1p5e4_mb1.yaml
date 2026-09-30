@@ -1,0 +1,8 @@
+# LR ladder rung 2 at micro_batch 1 x grad_accum 16 (DECISIONS D-045, D-052); all other settings match
+# w2_filtered_lr1e4_mb1, which matches wave one apart from view and LR.
+extends: configs/train/w2_filtered_lr1e4_mb1.yaml
+run_id: w2_filtered_lr1p5e4_mb1
+training:
+  learning_rate: 1.5e-4
+checkpoint_dir: checkpoints/w2_filtered_lr1p5e4_mb1
+output_dir: outputs/w2_filtered_lr1p5e4_mb1

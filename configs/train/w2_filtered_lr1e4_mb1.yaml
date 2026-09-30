@@ -1,5 +1,5 @@
-# Matched mb1/ga16 control. Not run in the wave-two round (DECISIONS D-042, D-048); kept as the parent of
-# the mb4/mb2 configs so that only micro_batch/grad_accum differ from it.
+# LR ladder rung 1 at micro_batch 1 x grad_accum 16, the wave-one batch setup (DECISIONS D-045, D-052).
+# Also the parent of the mb4/mb2 configs so that only micro_batch/grad_accum differ from it.
 extends: configs/train/base.yaml
 run_id: w2_filtered_lr1e4_mb1
 train_view: q5_filtered

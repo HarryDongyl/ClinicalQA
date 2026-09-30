@@ -1,6 +1,6 @@
 # Planning registry, not an input to clinqa.train or clinqa.evaluate.
-# See EXPERIMENT_JOURNAL W2-PLAN-006 and DECISIONS D-037 to D-051 (revision 4).
-status: prepared_not_run
+# See EXPERIMENT_JOURNAL W2-PLAN-006, W2-RUN-007 and DECISIONS D-037 to D-052 (revision 4).
+status: in_progress                          # W2-RUN-007: E1 generated; ladder at mb1
 decision_split: val
 test_permitted_for_decisions: false          # D-038: test consumed once in wave one
 winner_permitted_this_round: false           # D-049
@@ -18,11 +18,12 @@ scoring_location: cpu_after_pod_stopped      # D-047: make w2-score
 round:                                       # D-041: one bundled pod round (user decision)
   command: make w2-round
   runner: scripts/run_w2_round.sh
-  batch_setup:                               # D-042 (user decision; overrides W2-AUDIT-004 advice)
-    train: {micro_batch: 4, grad_accum: 4, effective_batch: 16}
-    oom_fallback: {micro_batch: 2, grad_accum: 8, marker: outputs/w2_mb4_oom.txt, applies_to: all_rungs}
+  batch_setup:                               # D-052 supersedes the training half of D-042 (user decision)
+    train: {micro_batch: 1, grad_accum: 16, effective_batch: 16}
+    superseded_train: {micro_batch: 4, grad_accum: 4, reason: slower_13.9_vs_10.0_s_per_step, opt_in: MB=mb4}
+    oom_fallback: {applies_to: MB=mb4_only, micro_batch: 2, grad_accum: 8, marker: outputs/w2_mb4_oom.txt}
     generation_batch_size: 4
-    confounds: [micro_batch_vs_wave_one_mb1, generation_batch_4_vs_wave_one_2]
+    confounds: [generation_batch_4_vs_wave_one_2]
   budgets_and_decoding: unchanged_from_wave_one   # D-046
   experiments:
     - id: E1
@@ -37,10 +38,10 @@ round:                                       # D-041: one bundled pod round (use
       factor: learning_rate_on_q5_filtered_view   # D-039, D-045
       prompt: v1
       arms:
-        - configs/train/w2_filtered_lr1e4_mb4.yaml
-        - configs/train/w2_filtered_lr1p5e4_mb4.yaml
-        - configs/train/w2_filtered_lr2e4_mb4.yaml
-      fallback_arms: configs/train/w2_filtered_lr{1e4,1p5e4,2e4}_mb2.yaml
+        - configs/train/w2_filtered_lr1e4_mb1.yaml
+        - configs/train/w2_filtered_lr1p5e4_mb1.yaml
+        - configs/train/w2_filtered_lr2e4_mb1.yaml
+      superseded_arms: configs/train/w2_filtered_lr{1e4,1p5e4,2e4}_{mb4,mb2}.yaml
       checkpoints: [121, 242]                 # epoch two reported separately
       skip_lr2e4_only_if: lr1p5e4_numerically_unstable   # scripts/w2_epochs.py stable
       references_same_code_state: [w2p_v1_raw_lr1e4, w2p_v1_q5filtered_lr5e5]
@@ -48,7 +49,6 @@ round:                                       # D-041: one bundled pod round (use
       factor: prompt_v2_on_ladder
       optional: true                          # D-050: CROSS=1 make w2-round
 deferred:                                    # D-048
-  E2b_mb1_control: configs/train/w2_filtered_lr1e4_mb1.yaml
   generation_batch_8: configs/eval_w2_bs8.yaml
   E4_q5_relabel: blocked_on_annotation_audit
   E5_pre_call_sentence_in_sft_targets: not_designed_in_code

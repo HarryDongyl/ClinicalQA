@@ -1,6 +1,23 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-09-30. Latest entry: W2-PLAN-006.
+Maintained record. Last updated: 2026-09-30. Latest entry: W2-RUN-007.
+
+## W2-RUN-007 — round in progress: E1 generated; ladder switched from mb4 to mb1
+
+Date: 2026-09-30. Pod: RTX 4090 Secure, $0.74/hr, billing from 02:34 UTC. Status: E1 generation finished and pushed (pod commits 0d665c7 preflight, 4193cce E1 v1, 0a82adb E1 v2); E1 scores are not read yet (D-047). The ladder restarted at mb1 (D-052). Only runtimes are recorded here.
+
+**E1 generation runtimes at batch 4 (measured, `run.json` `runtime_s.generate`).**
+
+| Weights | v1 (s) | v2 (s) | Wave one, v1, batch 2 (s) |
+|---|---|---|---|
+| base | 578.8 | 607.4 | 398.3 |
+| raw_lr1e4 step125 | 782.5 | 790.3 | 581.5 |
+| raw_lr5e5 step125 | 764.7 | 770.8 | — |
+| q5filtered_lr5e5 step121 | 752.9 | 755.6 | 565.4 |
+
+Batch 4 generation was about 35–45% slower than batch 2, not faster. Base produced about the same work in both: 21,762 vs 21,913 new tokens, and 232 vs 231 `answer` stops. Throughput fell from about 55 to about 38 tokens/s. During decoding the GPU sat at 26–40% utilisation while the Python process used about 100% of one core (AMD EPYC 7542 host). *Interpretation:* greedy NF4 decoding here is limited by per-step host overhead, and larger left-padded batches add padding steps. Batch 4 was kept for the whole round so that E1 arms and ladder generations stay matched.
+
+**mb4 training (measured, then aborted).** `w2_filtered_lr1e4_mb4` ran at 13.6–15.3 s/step over its first 13 of 242 steps. Wave-one mb1 ran at 10.0 s/step (`outputs/raw_lr1e4/train_log.jsonl`). The run logged repeated `CUDACachingAllocator` OOM-retry warnings for 3.66–3.79 GB allocations with 0.46–1.79 GB free of 25.25 GB. Those allocation sizes match the fp32 logits for 4 × ~1,500 tokens × the 151,936-token vocabulary. The process did not crash, so the mb2 fallback in D-042 did not trigger. The user stopped the run early; its partial checkpoints are not evaluated, and no mb4 result exists. The projection used for the switch (not measured) was about 56 min per run at mb4 vs about 43 min at mb1. The ladder now runs at mb1 (D-052).
 
 ## W2-PLAN-006 — bundled round: prompt ablation and filtered LR ladder in the new batch setup
 

@@ -1,6 +1,6 @@
 # Decisions — revision 4
 
-Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-051). Revision 3 was dated 2026-09-28. [PLAN.md](PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
+Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-052). Revision 3 was dated 2026-09-28. [PLAN.md](PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
 ## Current decisions (original IDs retained)
 
 - D-001: NVIDIA CUDA, Transformers + TRL + PEFT; single 24GB GPU target confirmed by the user.
@@ -118,7 +118,7 @@ These supersede earlier entries where they conflict. Superseded: D-014 (the repo
   - E4 Q5 relabel: the 78 train-only proposals need the annotation audit in W2-INSTALL-005.
   - E5 pre-call sentence: it needs a separate data transformation, because training targets have empty call content, so a prompt line alone is not expected to produce reasoning.
   - Prompt v2 inside training.
-  - The mb1 control.
+  - The mb1 control (superseded by D-052: the ladder itself now runs at mb1).
   - Generation batch 8.
   - Seed-43 repeat.
   - Qwen3-8B.
@@ -132,6 +132,11 @@ These supersede earlier entries where they conflict. Superseded: D-014 (the repo
   - *If the ceiling is approaching:* drop CROSS first, then 2e-4, then stop after the current job. Outputs are pushed after every stage.
   - Before the pod is terminated, adapters are uploaded to private HF and `git push` must succeed. The pod is created only after the user approves the price.
 
+- D-052: **The LR ladder trains at micro-batch 1 with accumulation 16 (user decision, mid-round).** This supersedes the training half of D-042; generation batch 4 is unchanged.
+  - *Reason:* measured in W2-RUN-007. mb4 ran at about 13.9 s/step vs 10.0 s/step for wave-one mb1, with repeated allocator OOM-retry stalls on ~3.7 GB logit allocations. At mb4 the round was projected to reach the $5 ceiling (D-051).
+  - *Consequence:* the ladder configs are `configs/train/w2_filtered_{lr1e4,lr1p5e4,lr2e4}_mb1.yaml`. Filtered 1e-4 at mb1 now matches wave one in batch setup, so the micro-batch confound of D-042 no longer applies to training. The generation-batch confound (batch 4 vs wave-one batch 2) still applies, and ladder generations stay matched to the E1 v1 references. `MB=mb4 make w2-round` keeps the old path. The aborted mb4 partial run is not a result.
+  - E1 was not re-run. Its outputs were generated before this change, and their protocol hash is unchanged, because only the runner and configs changed.
+
 ## Still to measure
 
 Measured in wave one: GPU, driver and bf16 support; the pinned training stack; tokenizer lengths; mb1 throughput and memory; baseline and SFT results under the legacy scorer.
@@ -139,7 +144,6 @@ Measured in wave one: GPU, driver and bf16 support; the pinned training stack; t
 Still unknown, and not replaced by predicted or fabricated results:
 - the inference prompt v1 vs v2 effect (E1);
 - the filtered view at 1e-4 and above;
-- mb4 memory and throughput;
 - the generation drift from batch 4;
 - scorer validity (v2.1 repairs, semantic-judge calibration);
 - manual adjudication of the Q5 train review packet and relabel proposals;

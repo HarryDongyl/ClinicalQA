@@ -25,6 +25,9 @@ runs:
   raw_lr5e5: {adapter: checkpoints/raw_lr5e5/checkpoint-125}
   q5filtered_lr5e5: {adapter: checkpoints/q5filtered_lr5e5/checkpoint-121}
   # Wave-two LR ladder: the adapter is always the epoch checkpoint passed with --adapter (scripts/w2_epochs.py).
+  w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/final}  # ladder default (D-052)
+  w2_filtered_lr1p5e4_mb1: {adapter: checkpoints/w2_filtered_lr1p5e4_mb1/final}  # ladder default (D-052)
+  w2_filtered_lr2e4_mb1: {adapter: checkpoints/w2_filtered_lr2e4_mb1/final}  # ladder default (D-052)
   w2_filtered_lr1e4_mb4: {adapter: checkpoints/w2_filtered_lr1e4_mb4/final}
   w2_filtered_lr1p5e4_mb4: {adapter: checkpoints/w2_filtered_lr1p5e4_mb4/final}
   w2_filtered_lr2e4_mb4: {adapter: checkpoints/w2_filtered_lr2e4_mb4/final}

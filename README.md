@@ -26,18 +26,18 @@ The supplied v2.1 results are **diagnostic only**, pending evaluation repair. St
 Current development policy: **validation only; declare no winner until the scorer is repaired** (D-038, D-049).
 Wave one is complete. The frozen rule selected raw_lr1e4 step125. Its single test evaluation scored 84.72% legacy grounded macro vs 45.28% for base; see [Experiment journal](docs/EXPERIMENT_JOURNAL.md) section 3 and the Q5 regression noted there.
 
-Wave two is **prepared, not run** (journal W2-PLAN-006, DECISIONS D-041 to D-051). One pod round covers two experiments:
+Wave two is **in progress** (journal W2-PLAN-006 and W2-RUN-007, DECISIONS D-041 to D-052). One pod round covers two experiments:
 - the v1/v2 prompt ablation on four fixed wave-one checkpoints plus base;
 - a Q5-filtered LR ladder: 1e-4, then 1.5e-4, then 2e-4.
 
-Both use training micro-batch 4 with accumulation 4 and generation batch 4. The fallback is micro-batch 2 with accumulation 8 on OOM.
+Generation uses batch 4 throughout. The ladder trains at micro-batch 1 with accumulation 16, as in wave one (D-052). Micro-batch 4 was measured slower and is kept only as `MB=mb4`.
 
 ```bash
-make w2-round            # on the pod, after make setup and hf auth login; CROSS=1 adds prompt v2 on the ladder
+make w2-round            # on the pod, after make setup and hf auth login; CROSS=1 adds prompt v2 on the ladder; resumes
 make w2-score            # locally on CPU, after pulling outputs: v2.1 + bounded v2 + legacy compare + rollout diffs
 ```
 
-Do not use the legacy `select`/`freeze` commands to announce a winner. Q5 relabel proposals, the pre-call sentence experiment, the mb1 control and generation batch 8 are deferred (D-048).
+Do not use the legacy `select`/`freeze` commands to announce a winner. Q5 relabel proposals, the pre-call sentence experiment and generation batch 8 are deferred (D-048).
 
 | Phase | Scope | Status |
 |---|---|---|
@@ -47,7 +47,7 @@ Do not use the legacy `select`/`freeze` commands to announce a winner. Q5 relabe
 | 4 | QLoRA training script + smoke test | first-wave GPU runs completed |
 | 5 | Base + three QLoRA runs and their downloaded artifacts | reviewed; see experiment journal |
 | 6 | Validation-only contract scorer v2 and wave-two configurations | implemented; semantic adjudication pending |
-| 7 | Wave-two round: prompt ablation + filtered LR ladder at mb4/bs4 | prepared, not run |
+| 7 | Wave-two round: prompt ablation + filtered LR ladder at mb1, generation bs4 | E1 generated; ladder running |
 
 Plan: [docs/PLAN.md](docs/PLAN.md). Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) (revision 4: D-037 onward covers the wave-one outcome and wave two).
 Target: one 24GB NVIDIA GPU, Qwen3-4B-Instruct-2507 QLoRA SFT. RL is not required; see PLAN section 11.
