@@ -46,9 +46,10 @@ class Budget:
 
 
 class _State:
-    def __init__(self, record: dict[str, Any], system_prompt: str, tokenizer: Any) -> None:
+    def __init__(self, record: dict[str, Any], system_prompt: str, tokenizer: Any,
+                 demos: list[dict[str, Any]] | None = None) -> None:
         self.id = record["id"]
-        self.messages = prompt_messages(record, system_prompt)
+        self.messages = prompt_messages(record, system_prompt, demos)
         self.prompt = render(tokenizer, self.messages, add_generation_prompt=True)
         self.turns: list[dict[str, Any]] = []
         self.calls_made = 0
@@ -96,9 +97,11 @@ def _step(state: _State, out: GenOutput, budget: Budget, latency_s: float) -> No
 
 
 def rollout(records: list[dict[str, Any]], generator: Generator, tokenizer: Any, system_prompt: str,
-            budget: Budget | None = None, batch_size: int = 16) -> list[dict[str, Any]]:
+            budget: Budget | None = None, batch_size: int = 16,
+            demos: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    """`demos`: fixed few-shot messages placed before every question (inference-only, D-078)."""
     budget = budget or Budget()
-    states = [_State(r, system_prompt, tokenizer) for r in records]
+    states = [_State(r, system_prompt, tokenizer, demos) for r in records]
     while True:
         active = [s for s in states if not s.done]
         if not active:
@@ -116,6 +119,7 @@ def rollout(records: list[dict[str, Any]], generator: Generator, tokenizer: Any,
             for s, out in zip(batch, outs):
                 _step(s, out, budget, per_example)
     return [{"id": s.id, "prompt": s.prompt, "prompt_sha256": hashlib.sha256(s.prompt.encode()).hexdigest(),
+             "prompt_tokens": len(tokenizer(s.prompt, add_special_tokens=False)["input_ids"]),
              "turns": s.turns, "final_answer": s.final_answer, "stop_reason": s.stop_reason,
              "n_calls": s.calls_made, "n_new_tokens": s.tokens} for s in states]
 

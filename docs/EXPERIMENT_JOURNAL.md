@@ -1,6 +1,117 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-09-30. Latest entry: W2-RUN-007.
+Maintained record. Last updated: 2026-10-01. Latest entry: W3-CLASSIFIER-007.
+
+## W3-CLASSIFIER-007 — P1 classifier repaired before outputs
+
+Date: 2026-10-01. The P1 helper is now versioned `p1-2` and pinned in `configs/w3/gates.yaml` (D-087). It covers the three defects found during the approval review: wrong-tool fabrication, claims in earlier turns, and examples counted as fabrication.
+
+Applied to the reviewer's synthetic fixtures:
+
+| Fixture | Old result | New result |
+|---|---|---|
+| Invented weight sent to `unit_convert` | not counted | fabrication |
+| False weight claim in an earlier visible turn | ignored | fabrication |
+| Explicit hypothetical example | fabrication | mandatory review |
+
+`make test`: 258 passed. No GPU run, no model output, and no change to the frozen probes, approvals or gate thresholds. Seeds 43/44 still wait for a reviewed F-s42 gate (D-086).
+
+## W3-APPROVAL-006 — four artifacts reviewed and approved
+
+Date: 2026-10-01. Status: no GPU work. See WAVE3_APPROVAL_REVIEW.md; decisions D-084 to D-086. AI grounding review accepted all 78 Q5 candidates, revised 14 answers, and built the 2,000-row relabel view (1,922 unchanged rows plus 78 uncertain replacements). Clarified unit conversion in prompt v3; kept the four demos and all 34 P1 records unchanged. Readiness reports all five items approved, including existing train-fit IDs. Metadata no longer labels AI review as human clinical adjudication. Original drafts are archived with hashes.
+
+Validation after changes: 254 tests passed, four non-failing warnings, 52.48s; 2,000-row relabel mask audit had zero problems; maximum training sequence 1,614 tokens, no overlength. Few-shot validation prompts now 4,382–4,639 tokens. Training-view audits passed for all three relabel seeds and 8B filtered configuration. No test-model performance was used.
+
+Open issue: synthetic helper checks show the P1 classifier can miss invented unit_convert arguments and overcount hypothetical measurements. These artifact approvals do not authorize F-s42 gate approval or seed continuation. Review complete visible trajectories against inputs, not only regex flags. No GPU, commit, push or upload was performed.
+
+## W3-PLAN-005 — wave-three round implemented; awaiting approvals and a pod
+
+Date: 2026-10-01. Status: code, configs and CPU checks done; **no GPU run, no new result**. Scope requested by the user: all core GPU experiments, D-TRAINFIT and C10, plus one SFT run on 8B using the current best locked setting. Decisions D-075 to D-083.
+
+### Roster (validation, P1 probes and train-fit only; generation batch 2 for every arm)
+
+| Stage | Arm | Label | Weights | Prompt | Outputs |
+|---|---|---|---|---|---|
+| core | R0-v1 | `w3_r0_v1` | base 4B | v1 | val, P1 |
+| core | C-filtered-s42 | `w3_c_filtered_s42` | `w2_filtered_lr1e4_mb1` step 242 | v1 | val, P1, train-fit |
+| core | R0-v3 | `w3_r0_v3` | base 4B | v3 (needs approval) | val, P1 |
+| core | R0-v3-FS4 | `w3_r0_v3_fs4` | base 4B | v3 + 4 demos (need approval) | val, P1 |
+| core | F-s42 | `w3_relabel_lr1e4_s42_step<N>` | trained on q5_relabeled (needs review) | v1 | both epochs val; epoch two P1, train-fit |
+| 8b | R0-8B | `w3_r0_8b` | Qwen3-8B base, non-thinking | v1 | val, P1 |
+| 8b | A-8B | `w3_8b_filtered_lr1e4_step<N>` | trained on q5_filtered, locked 1e-4 recipe | v1 | both epochs val; epoch two P1 |
+| seeds | F-s43, F-s44 | `w3_relabel_lr1e4_s4{3,4}_step<N>` | relabel view | v1 | only after the F-s42 gate is approved |
+
+Comparisons after scoring (`make w3-score`):
+- F-s42 vs C-filtered-s42: a relabel *policy* comparison;
+- A-8B vs C-filtered-s42 (backbone + template change) and vs R0-8B (SFT effect on 8B);
+- R0-v3/FS4 vs R0-v1: stronger prompting;
+- every SFT arm vs the R0 arms.
+
+No semantic winner is declared while the evaluator gaps remain (D-063/D-064 qualifications).
+
+### Verified locally (CPU)
+
+- `make test`: 254 passed, including 14 new wave-three tests.
+- The 4B mask audit (2,000 and 1,922 rows, 0 problems) and `reports/token_lengths.json` are byte-identical after the code change.
+- The q5_filtered view bytes are unchanged after the rebuild. The view manifests changed only because `data_views.py` is hashed into them.
+- 8B mask audit: 0 problems; train max 1,618 tokens, val max 1,566.
+- R0-v3 val prompts reach at most 1,707 tokens, and FS4 first-turn prompts are 4,361–4,618 tokens.
+- P1: 34 of 40 sources are eligible; 6 are excluded because the question states the measurements.
+- C10 code was dry-run on two existing wave-two labels as a software check only; those numbers are not wave-three evidence.
+
+### Approvals needed before the round (the round skips unapproved arms and exits 2)
+
+1. **Q5 relabels** — edit `configs/w3/q5_relabel_review.jsonl`: `accepted`, `reviewer`, `rationale`, and `answer` where needed. The packet is `reports/w3/q5_review_packet.md`. Then run `make w3-views`.
+2. **Prompt v3** — read `configs/prompts/system_v3.txt`, then run `uv run python scripts/w3_prep.py approve prompt_v3 --reviewer <name>`.
+3. **Demonstrations** — read `configs/w3/fewshot_v3.json` (train_1523, train_1771, train_851, train_802), then run `approve fewshot`.
+4. **P1** — read `reports/w3/p1_review_packet.md` (29 mid-line edits), then run `approve p1`. P1 and train-fit are required for the round to start at all.
+
+### Cost (projections, not measurements)
+
+RTX 4090 Secure at $0.74/hr; the existing stopped pod `h2l9dp4u26f1jg` has an 80 GB volume. Projections are scaled from wave-one/two runtimes: batch-2 val generation 400–580 s, 4B training about 2,560 s.
+
+| Stage | Projected time | Notes |
+|---|---|---|
+| core | ≈2.3 h | F-s42 training ≈45 min |
+| 8b | ≈2.5–3 h | 8B download ≈16 GB; A-8B training projected at 85–110 min, since tool rows add a second sequence |
+| core + 8b | ≈5 h, ≈$3.7 | |
+| seeds | ≈2.2 h, ≈$1.6 | |
+
+Measured runtimes replace these projections in the run entry.
+
+### Commands
+
+```bash
+# local: approvals above, commit and push
+make w3-round                    # pod: STAGES="core 8b" by default; UPLOAD=1 pushes new adapters to private HF repos
+make w3-score                    # local CPU after pulling: v2.1, bounded v2, P1, train-fit, C10 (v1 and v2.1), gate, paired compares
+# after reviewing reports/w3/round1/gates/: write configs/w3/gate_fs42.json, then on the pod
+make w3-round STAGES=seeds
+```
+
+## W3-LOCAL-004 — local verification and GPU inventory
+
+Date: 2026-10-01. Full CPU test suite: 240 passed, four non-failing warnings, 43.69s. Offline assistant-mask audits: raw 2,000 and filtered 1,922 conversations, zero problems, maximum rendered length 1,614. Five training-view audits passed hashes/membership/counts; effective batch16. Four shell scripts passed bash syntax checks. Fourteen wave-two validation score files each contain 250 complete unique IDs (3,500 total). No semantic rescoring, new training, generation or test-performance analysis was performed. Unit tests include canonical test-file integrity checks.
+
+See LOCAL_TESTS_AND_RUNPOD_EXPERIMENTS.md for the conditional GPU queue and implementation gaps. CUDA is unavailable locally. Existing scorer semantic defects and missing relabel/few-shot/P1 implementations remain launch prerequisites; passing the current suite does not resolve them. Start with F-s42 and matched prompt/control inference after prerequisites, then seed replication if gates pass. BF16, 8B, rank and targeted data ablations are optional, not a single unconditional sweep.
+
+## W3-INTERVIEW-003 — prioritize the next experiments
+
+Date: 2026-10-01. Reviewed INTERVIEW_PREP.md, archived incoming text and the prior plan, and installed INTERVIEW_REVIEW.md. Verified that Git commits exist, requirements.txt lacks the training extra, and validation contains 40 grounded BMI candidates (47 BMI minus 7 Q5), not 55. Recomputed call-prefix AUC under annotated versus grounded policy labels; the interpretation changes with the target. No test material, new model generation or training was used.
+
+Revised queue: endpoint-specific evaluator/annotation gate; fixed strong zero-/few-shot baselines; audited relabel F-s42 with original/edited P1 pairs; seeds43/44 only after the control passes; train-fit and correctly defined confidence diagnostics; targeted A-IMPL or numeric-only A-VIS; optional precision/model/rank extensions. P1 is synthetic validation stress evidence, not a new independent clinical test. Raw answer token logprob is a ranking score, not correctness probability. BF16 requires train/serve-factor separation; rank and size results cannot by themselves prove capacity mechanisms. The previous wave-three plan is preserved in history/interview_review_2026-10-01/.
+
+## W3-FINDINGS-002 — supplemental narrative reconciled
+
+Date: 2026-09-30. Installed reviewed ROUND4_FINDINGS.md and archived the incoming original/hash. Remapped D-037..D-052 to D-053..D-068 and repaired references. Verified train-only BMI coverage: 109 uncertain rows, 65 weight-only, 43 height-only and one neither; 78 proposal rows missing both under the existing parser. Corrected val_085 reference provenance, token-versus-gradient interpretation, AUROC claims and unsupported contamination-bias arithmetic. Deferred the imperial explanation component because its stated motivation is test-only; the planned A-VIS is numeric-only. Historical missing-file notes remain as provenance and are superseded by this entry. No annotation was approved and no experiment launched.
+
+## W3-REVIEW-001 — wave-two evidence and asynchronous document merge
+
+Date: 2026-09-30. Reviewed 14 validation score files (3,500 rows), prompt comparisons and three completed training manifests. No new training, generation or test inspection. See `WAVE3_REVIEW.md` and the reviewed `EXPERIMENTS_WAVE3.md`.
+
+Preserved local decision IDs D-001..D-052; incoming reused D-037..D-052 become D-053..D-068. Exact source versions and hashes are archived in `history/wave3_import_2026-09-30/`. FINDINGS.md is identical to the old data findings; ROUND4_FINDINGS.md was not supplied/found.
+
+Corrected prompt flip counts, unsupported LR-equivalence claims, CI interpretation, relabel exposure confounding, Answer-only factuality omission, reused-test wording and spec denominators. Frozen v2.1 remains diagnostic, not a validated selector. Prospective 1e-4/v1/epoch-two choices are planning defaults, not established optima. Claims about allergy/fabrication/token-share subgroups remain unverified pending their source evidence. No wave-three implementation was activated.
 
 ## W2-RUN-007 — round in progress: E1 generated; ladder switched from mb4 to mb1
 

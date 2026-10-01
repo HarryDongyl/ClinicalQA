@@ -33,7 +33,8 @@ def run(cfg: dict[str, Any], n_rollout: int = 4, resume: str | None = None) -> d
     checks: dict[str, Any] = {}
     checks["finite_loss"] = bool(losses) and all(math.isfinite(x) for x in losses)
     checks["overfit"] = bool(losses) and losses[-1] < 0.5 * losses[0]
-    checks["all_examples_supervised"] = all(any(lab != -100 for lab in e["labels"]) for e in res["examples"])
+    checks["all_examples_supervised"] = all(any(lab != -100 for seg in e["segments"] for lab in seg["labels"])
+                                         for e in res["examples"])
 
     trained = per_type_loss(res["model"], res["examples"], res["collator"])["all"]
     del res["model"]

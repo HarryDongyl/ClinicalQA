@@ -1,0 +1,13 @@
+# Wave-three 4B formatting (DECISIONS D-075, D-076). Same tokenizer/template/system prompt as format_core;
+# adds the reviewed q5_relabeled train view. Written to its own directory so wave-one/two artefacts stay intact.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+system_prompt: configs/prompts/system_v1.txt
+max_length: 2048
+output_dir: data/sft_w3
+train_views:
+  q5_filtered: data/processed/q5_filtered/train.jsonl
+  q5_relabeled: data/processed/q5_relabeled/train.jsonl
+eval_splits: [val]
+length_report: reports/w3/token_lengths.json

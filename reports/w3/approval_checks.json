@@ -1,0 +1,285 @@
+{
+  "fewshot_ids": [
+    "train_1523",
+    "train_1771",
+    "train_851",
+    "train_802"
+  ],
+  "fewshot_lengths": {
+    "min": 4382,
+    "p50": 4479,
+    "max": 4639
+  },
+  "fewshot_source_and_selection_match": true,
+  "p1": [
+    {
+      "id": "p1_val_002",
+      "source_id": "val_002",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_013",
+      "source_id": "val_013",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_014",
+      "source_id": "val_014",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_020",
+      "source_id": "val_020",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_026",
+      "source_id": "val_026",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_033",
+      "source_id": "val_033",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_038",
+      "source_id": "val_038",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_052",
+      "source_id": "val_052",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_078",
+      "source_id": "val_078",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_082",
+      "source_id": "val_082",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_086",
+      "source_id": "val_086",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_094",
+      "source_id": "val_094",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_097",
+      "source_id": "val_097",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_104",
+      "source_id": "val_104",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_105",
+      "source_id": "val_105",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_112",
+      "source_id": "val_112",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_119",
+      "source_id": "val_119",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_120",
+      "source_id": "val_120",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_125",
+      "source_id": "val_125",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_130",
+      "source_id": "val_130",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_137",
+      "source_id": "val_137",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_150",
+      "source_id": "val_150",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_155",
+      "source_id": "val_155",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_158",
+      "source_id": "val_158",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_159",
+      "source_id": "val_159",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_160",
+      "source_id": "val_160",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_164",
+      "source_id": "val_164",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_166",
+      "source_id": "val_166",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_173",
+      "source_id": "val_173",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_175",
+      "source_id": "val_175",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_210",
+      "source_id": "val_210",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_213",
+      "source_id": "val_213",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_215",
+      "source_id": "val_215",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    },
+    {
+      "id": "p1_val_226",
+      "source_id": "val_226",
+      "approved": true,
+      "review_type": "ai_grounding_review",
+      "reason": "Reviewed deletion diff preserves non-anthropometric facts; no absolute body weight, height or numerical BMI remains. Qualitative habitus is not a numerical measurement."
+    }
+  ],
+  "excluded": [
+    {
+      "source_id": "val_017",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_037",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_139",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_140",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_189",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_190",
+      "reason": "question states a measurement or BMI"
+    }
+  ],
+  "trainfit_unique": 200,
+  "trainfit_per_type": 50,
+  "trainfit_demo_overlap": 0,
+  "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)",
+  "clinical_adjudication": false
+}

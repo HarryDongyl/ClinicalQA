@@ -18,6 +18,13 @@ the conversation up to the turn with a generation prompt, then including the tur
 and must align exactly with token boundaries. The generation prompt
 `<|im_start|>assistant\\n` is masked; the assistant content and its `<|im_end|>` are
 supervised; everything else is -100.
+
+Templates that render an earlier assistant turn differently once a later turn exists
+(Qwen3-8B with enable_thinking=False adds an empty think block only to the turn being
+generated) cannot supervise every turn inside one sequence. With `segmented_turns: true`
+in the format config, `encode_segments` supervises such a turn in its own sequence,
+rendered exactly as at inference (D-077). Without it the old single-sequence contract
+is enforced, so the 4B rendering and labels are unchanged.
 """
 
 from __future__ import annotations
@@ -71,10 +78,15 @@ def user_content(record: dict[str, Any]) -> str:
             f"## Question\n{record['question'].strip()}")
 
 
-def prompt_messages(record: dict[str, Any], system_prompt: str) -> list[dict[str, Any]]:
-    """Exactly what the model sees at inference time before its first turn."""
-    return [{"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_content(record)}]
+def prompt_messages(record: dict[str, Any], system_prompt: str,
+                    demos: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    """Exactly what the model sees at inference time before its first turn.
+
+    `demos` are fixed few-shot turns inserted between the system prompt and the question
+    (inference-only baselines, D-078); training never passes them.
+    """
+    return ([{"role": "system", "content": system_prompt}] + list(demos or [])
+            + [{"role": "user", "content": user_content(record)}])
 
 
 def assistant_call_message(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
@@ -118,8 +130,15 @@ def sidecar(record: dict[str, Any]) -> dict[str, Any]:
 
 
 def render(tokenizer: Any, messages: list[dict[str, Any]], add_generation_prompt: bool = False) -> str:
+    # Template switches (e.g. enable_thinking) are attached to the tokenizer by load_tokenizer,
+    # so training, formatting and inference cannot render with different settings.
     return tokenizer.apply_chat_template(messages, tools=TOOL_SCHEMAS, tokenize=False,
-                                         add_generation_prompt=add_generation_prompt)
+                                         add_generation_prompt=add_generation_prompt,
+                                         **template_kwargs(tokenizer))
+
+
+def template_kwargs(tokenizer: Any) -> dict[str, Any]:
+    return dict(getattr(tokenizer, "clinqa_template_kwargs", None) or {})
 
 
 @dataclass
@@ -134,21 +153,29 @@ class Encoded:
         return sum(1 for x in self.labels if x != IGNORE_INDEX)
 
 
+def _turn_span(tokenizer: Any, messages: list[dict[str, Any]], i: int) -> tuple[str, tuple[int, int]]:
+    """(render up to and including assistant turn i, its character span after the generation prompt)."""
+    prefix = render(tokenizer, messages[:i], add_generation_prompt=True)
+    upto = render(tokenizer, messages[: i + 1])
+    if not upto.startswith(prefix):
+        raise FormattingError(f"turn {i}: generation prompt is not a prefix of the rendered turn")
+    end = upto.rfind(END_OF_TURN)
+    if end < len(prefix):
+        raise FormattingError(f"turn {i}: assistant turn does not end with {END_OF_TURN}")
+    span = (len(prefix), end + len(END_OF_TURN))
+    if span[1] - span[0] <= len(END_OF_TURN):
+        raise FormattingError(f"turn {i}: empty assistant turn")
+    return upto, span
+
+
 def assistant_char_spans(tokenizer: Any, messages: list[dict[str, Any]], full: str) -> list[tuple[int, int]]:
     spans = []
     for i, m in enumerate(messages):
         if m["role"] != "assistant":
             continue
-        prefix = render(tokenizer, messages[:i], add_generation_prompt=True)
-        upto = render(tokenizer, messages[: i + 1])
-        if not (upto.startswith(prefix) and full.startswith(upto)):
+        upto, span = _turn_span(tokenizer, messages, i)
+        if not full.startswith(upto):
             raise FormattingError(f"turn {i}: incremental render is not a prefix of the full conversation")
-        end = upto.rfind(END_OF_TURN)
-        if end < len(prefix):
-            raise FormattingError(f"turn {i}: assistant turn does not end with {END_OF_TURN}")
-        span = (len(prefix), end + len(END_OF_TURN))
-        if span[1] - span[0] <= len(END_OF_TURN):
-            raise FormattingError(f"turn {i}: empty assistant turn")
         spans.append(span)
     return spans
 
@@ -157,6 +184,35 @@ def encode(tokenizer: Any, messages: list[dict[str, Any]], max_length: int | Non
     """Tokenize a full conversation and label only assistant spans. Never truncates."""
     text = render(tokenizer, messages)
     spans = assistant_char_spans(tokenizer, messages, text)
+    return _label(tokenizer, text, spans, max_length)
+
+
+def encode_segments(tokenizer: Any, messages: list[dict[str, Any]], max_length: int | None = None,
+                    segmented: bool = False) -> list[Encoded]:
+    """Encode a conversation as one sequence, or as one sequence per non-prefix-stable turn.
+
+    An assistant turn whose incremental render is a prefix of the full conversation is
+    supervised inside the full sequence. A turn that renders differently once later turns
+    exist (and so differently from what the model saw when generating it) gets its own
+    sequence ending at that turn, rendered exactly as at inference. Every assistant turn is
+    supervised exactly once. With segmented=False this is `encode` (one sequence or an error).
+    """
+    if not segmented:
+        return [encode(tokenizer, messages, max_length)]
+    text = render(tokenizer, messages)
+    in_full, separate = [], []
+    for i, m in enumerate(messages):
+        if m["role"] != "assistant":
+            continue
+        upto, span = _turn_span(tokenizer, messages, i)
+        (in_full if text.startswith(upto) else separate).append((upto, span))
+    out = [_label(tokenizer, upto, [span], max_length) for upto, span in separate]
+    if in_full:
+        out.append(_label(tokenizer, text, [span for _, span in in_full], max_length))
+    return out
+
+
+def _label(tokenizer: Any, text: str, spans: list[tuple[int, int]], max_length: int | None) -> Encoded:
     enc = tokenizer(text, add_special_tokens=False, return_offsets_mapping=True)
     ids, offsets = enc["input_ids"], enc["offset_mapping"]
     labels = [IGNORE_INDEX] * len(ids)
@@ -176,7 +232,9 @@ def encode(tokenizer: Any, messages: list[dict[str, Any]], max_length: int | Non
 def load_tokenizer(cfg: dict[str, Any]) -> Any:
     from transformers import AutoTokenizer
 
-    return AutoTokenizer.from_pretrained(cfg["tokenizer"], revision=cfg["tokenizer_revision"])
+    tok = AutoTokenizer.from_pretrained(cfg["tokenizer"], revision=cfg["tokenizer_revision"])
+    tok.clinqa_template_kwargs = dict(cfg.get("chat_template_kwargs") or {})
+    return tok
 
 
 def template_sha256(tokenizer: Any) -> str:
@@ -193,12 +251,12 @@ def _percentiles(values: list[int]) -> dict[str, int]:
 
 
 def format_split(records: list[dict[str, Any]], system_prompt: str, tokenizer: Any, max_length: int,
-                 full: bool = True) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+                 full: bool = True, segmented: bool = False) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows, lengths, overlength = [], defaultdict(list), []
     for r in records:
         msgs = build_conversation(r, system_prompt) if full else prompt_messages(r, system_prompt)
         if full:
-            n = len(encode(tokenizer, msgs).input_ids)
+            n = max(len(e.input_ids) for e in encode_segments(tokenizer, msgs, segmented=segmented))
         else:
             n = len(tokenizer(render(tokenizer, msgs, add_generation_prompt=True), add_special_tokens=False)["input_ids"])
         lengths[r["answer_type"]].append(n)
@@ -234,16 +292,20 @@ def main(argv: list[str] | None = None) -> int:
         "system_prompt_sha256": hashlib.sha256(system_prompt.encode("utf-8")).hexdigest(),
         "max_length": cfg["max_length"], "splits": {},
     }
+    if template_kwargs(tokenizer) or cfg.get("segmented_turns"):  # absent for the 4B contract, as before
+        report.update(chat_template_kwargs=template_kwargs(tokenizer), segmented_turns=bool(cfg.get("segmented_turns")))
     for variant, path in cfg["train_views"].items():
         records = read_jsonl(resolve(path))
-        rows, stats = format_split(records, system_prompt, tokenizer, cfg["max_length"])
+        rows, stats = format_split(records, system_prompt, tokenizer, cfg["max_length"],
+                                   segmented=bool(cfg.get("segmented_turns")))
         _write_jsonl(out / variant / "train.jsonl", rows)
         _write_jsonl(out / variant / "train.sidecar.jsonl", [sidecar(r) for r in records])
         report["splits"][f"{variant}/train"] = stats
     for split in cfg["eval_splits"]:
         records = load_split(split, cfg["data_config"])
         # Test is measured prompt-only: its targets are never rendered into training artefacts.
-        rows, stats = format_split(records, system_prompt, tokenizer, cfg["max_length"], full=split != "test")
+        rows, stats = format_split(records, system_prompt, tokenizer, cfg["max_length"], full=split != "test",
+                                   segmented=bool(cfg.get("segmented_turns")))
         _write_jsonl(out / "eval" / f"{split}.jsonl", rows)
         _write_jsonl(out / "eval" / f"{split}.sidecar.jsonl", [sidecar(r) for r in records])
         report["splits"][split] = stats

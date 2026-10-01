@@ -1,0 +1,11 @@
+# Inference-only R0-v3 / R0-v3-FS4 baselines (D-078): the 4B template with the frozen v3 system prompt.
+# Nothing is trained with this prompt; train_views is empty.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+system_prompt: configs/prompts/system_v3.txt
+max_length: 2048
+output_dir: data/sft_w3_v3
+train_views: {}
+eval_splits: [val]
+length_report: reports/w3/token_lengths_v3.json

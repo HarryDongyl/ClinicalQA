@@ -1,0 +1,14 @@
+# A-8B: one Qwen3-8B QLoRA run on the locked filtered recipe (D-082): q5_filtered (1,922), LR 1e-4, 2 epochs,
+# mb1/ga16, seed 42, NF4, r16/alpha32/0.05 on the same seven projections. Compared with the 4B control
+# (w2_filtered_lr1e4_mb1 step242, regenerated at batch 2) and the 8B zero-shot comparator R0-8B.
+extends: configs/train/w2_filtered_lr1e4_mb1.yaml
+run_id: w3_8b_filtered_lr1e4
+format_config: configs/format_w3_8b.yaml
+model:
+  name: Qwen/Qwen3-8B
+  revision: b968826d9c46dd6066d109eabc6255188de91218
+  tokenizer: Qwen/Qwen3-8B
+  tokenizer_revision: b968826d9c46dd6066d109eabc6255188de91218
+  chat_template_kwargs: {enable_thinking: false}
+checkpoint_dir: checkpoints/w3_8b_filtered_lr1e4
+output_dir: outputs/w3_8b_filtered_lr1e4

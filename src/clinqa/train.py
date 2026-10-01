@@ -22,7 +22,7 @@ from typing import Any
 
 from clinqa.config import load_run_config, load_yaml, resolve
 from clinqa.data_io import load_split, read_jsonl
-from clinqa.formatting import IGNORE_INDEX, build_conversation, encode, template_sha256
+from clinqa.formatting import IGNORE_INDEX, build_conversation, encode_segments, template_kwargs, template_sha256
 from clinqa.modeling import compute_dtype, device_kind, load_base_model, load_tokenizer
 from clinqa.run_info import adapter_sha256, data_hashes, git_state, hardware, package_versions, sha256_text
 from clinqa.schemas import tool_schemas_sha256
@@ -46,16 +46,29 @@ def stratified_head(records: list[dict[str, Any]], n: int | None) -> list[dict[s
     return out
 
 
-def encode_records(records: list[dict[str, Any]], tok: Any, system: str, max_length: int) -> list[dict[str, Any]]:
+def encode_records(records: list[dict[str, Any]], tok: Any, system: str, max_length: int,
+                   segmented: bool = False) -> list[dict[str, Any]]:
+    """One item per record. An item holds one sequence, or one per turn for segmented templates (D-077)."""
     out = []
     for r in records:
-        enc = encode(tok, build_conversation(r, system), max_length=max_length)
-        out.append({"id": r["id"], "answer_type": r["answer_type"], "input_ids": enc.input_ids, "labels": enc.labels})
+        segs = encode_segments(tok, build_conversation(r, system), max_length=max_length, segmented=segmented)
+        out.append({"id": r["id"], "answer_type": r["answer_type"],
+                    "segments": [{"input_ids": e.input_ids, "labels": e.labels} for e in segs]})
     return out
 
 
+def n_input_tokens(examples: list[dict[str, Any]]) -> int:
+    return sum(len(seg["input_ids"]) for e in examples for seg in e["segments"])
+
+
 class Collator:
-    """Right-pad input_ids/labels; padding is masked from attention and loss."""
+    """Right-pad input_ids/labels; padding is masked from attention and loss.
+
+    Every segment of every item in the micro-batch becomes one row. The Trainer normalises the
+    loss by the supervised-token count of the whole accumulated batch, so a record split into
+    segments contributes exactly its assistant tokens, as in one sequence; optimizer steps are
+    still counted per record.
+    """
 
     def __init__(self, pad_id: int) -> None:
         self.pad_id = pad_id
@@ -63,6 +76,7 @@ class Collator:
     def __call__(self, batch: list[dict[str, Any]]) -> dict[str, Any]:
         import torch
 
+        batch = [seg for b in batch for seg in b["segments"]]
         n = max(len(b["input_ids"]) for b in batch)
         ids = [b["input_ids"] + [self.pad_id] * (n - len(b["input_ids"])) for b in batch]
         labels = [b["labels"] + [IGNORE_INDEX] * (n - len(b["labels"])) for b in batch]
@@ -85,14 +99,15 @@ def per_type_loss(model: Any, examples: list[dict[str, Any]], collator: Collator
     amp = torch.autocast("cuda", dtype=amp_dtype) if torch.cuda.is_available() else nullcontext()
     with torch.no_grad(), amp:
         for ex in examples:
-            batch = {k: v.to(model.device) for k, v in collator([ex]).items()}
-            logits = model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]).logits
-            shift_logits, shift_labels = logits[0, :-1].float(), batch["labels"][0, 1:]
-            keep = shift_labels != IGNORE_INDEX
-            loss = torch.nn.functional.cross_entropy(shift_logits[keep], shift_labels[keep], reduction="sum")
-            for key in (ex["answer_type"], "all"):
-                sums[key] += loss.item()
-                counts[key] += int(keep.sum())
+            for seg in ex["segments"]:
+                batch = {k: v.to(model.device) for k, v in collator([{"segments": [seg]}]).items()}
+                logits = model(input_ids=batch["input_ids"], attention_mask=batch["attention_mask"]).logits
+                shift_logits, shift_labels = logits[0, :-1].float(), batch["labels"][0, 1:]
+                keep = shift_labels != IGNORE_INDEX
+                loss = torch.nn.functional.cross_entropy(shift_logits[keep], shift_labels[keep], reduction="sum")
+                for key in (ex["answer_type"], "all"):
+                    sums[key] += loss.item()
+                    counts[key] += int(keep.sum())
     if was_training:
         model.train()
     return {k: sums[k] / counts[k] for k in sorted(sums)}
@@ -168,9 +183,15 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
     else:
         records = stratified_head(records, cfg.get("max_examples"))
     system = resolve(fmt["system_prompt"]).read_text(encoding="utf-8").strip()
+    for key in ("tokenizer", "tokenizer_revision"):
+        if fmt.get(key) != cfg["model"].get(key):
+            raise ValueError(f"format config {key} {fmt.get(key)!r} differs from the model's {cfg['model'].get(key)!r}")
+    if dict(fmt.get("chat_template_kwargs") or {}) != dict(cfg["model"].get("chat_template_kwargs") or {}):
+        raise ValueError("chat_template_kwargs differ between the format config and the model config")
+    segmented = bool(fmt.get("segmented_turns"))
     tok = load_tokenizer(cfg["model"])
-    train_examples = encode_records(records, tok, system, fmt["max_length"])
-    val_examples = (encode_records(load_split("val", fmt["data_config"]), tok, system, fmt["max_length"])
+    train_examples = encode_records(records, tok, system, fmt["max_length"], segmented)
+    val_examples = (encode_records(load_split("val", fmt["data_config"]), tok, system, fmt["max_length"], segmented)
                     if cfg.get("val_loss") else None)
 
     out_dir, ckpt_dir = resolve(cfg["output_dir"]), resolve(cfg["checkpoint_dir"])
@@ -181,6 +202,7 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
 
     contract = {"config": cfg, "data_policy": data_policy, "packages": package_versions(),
                 "system_prompt_sha256": sha256_text(system), "chat_template_sha256": template_sha256(tok),
+                "chat_template_kwargs": template_kwargs(tok), "segmented_turns": segmented,
                 "tool_schemas_sha256": tool_schemas_sha256(),
                 "source_hashes": {str(p.relative_to(PROJECT_ROOT)): sha256_file(p)
                                   for p in sorted((PROJECT_ROOT / "src/clinqa").rglob("*.py"))}}
@@ -241,7 +263,7 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
     trainer.save_model(str(ckpt_dir / "final"))
     tok.save_pretrained(str(ckpt_dir / "final"))
 
-    n_tokens = sum(len(e["input_ids"]) for e in train_examples) * tr["epochs"]
+    n_tokens = n_input_tokens(train_examples) * tr["epochs"]
     manifest = {
         "run_id": cfg["run_id"], "config": cfg, "git": git_state(), "packages": package_versions(),
         "hardware": hardware(), "precision": "bf16" if bf16 else ("fp16" if fp16 else "fp32"), "quantized_4bit": quantized,
@@ -249,6 +271,10 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
         "data": data_hashes(cfg["train_view"]), "n_train_examples": len(train_examples),
         "train_ids_sha256": sha256_text("\n".join(e["id"] for e in train_examples)),
         "system_prompt_sha256": sha256_text(system), "chat_template_sha256": template_sha256(tok),
+        "chat_template_kwargs": template_kwargs(tok), "segmented_turns": segmented,
+        "n_sequences": sum(len(e["segments"]) for e in train_examples),
+        "supervised_tokens": sum(sum(x != IGNORE_INDEX for x in seg["labels"])
+                                 for e in train_examples for seg in e["segments"]),
         "tool_schemas_sha256": tool_schemas_sha256(), "model_load": getattr(model, "clinqa_load_info", None),
         "final_adapter_sha256": adapter_sha256(ckpt_dir / "final"),
         "trainable_params": trainable, "total_params": total,

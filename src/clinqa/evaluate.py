@@ -74,9 +74,23 @@ def run_dir(cfg: dict[str, Any], label: str, split: str) -> Path:
     return resolve(cfg["output_dir"]) / label / split
 
 
+def load_demos(cfg: dict[str, Any]) -> list[dict[str, Any]] | None:
+    """Frozen few-shot messages from cfg["fewshot"] (scripts/w3_fewshot.py), hash-checked (D-078)."""
+    if not cfg.get("fewshot"):
+        return None
+    path = resolve(cfg["fewshot"])
+    spec = json.loads(path.read_text(encoding="utf-8"))
+    if spec.get("status") != "approved":
+        raise ValueError(f"{path}: few-shot demonstrations are not approved (status={spec.get('status')!r})")
+    if sha256_text(json.dumps(spec["messages"], sort_keys=True, ensure_ascii=False)) != spec["messages_sha256"]:
+        raise ValueError(f"{path}: demonstration messages changed after freezing")
+    return spec["messages"]
+
+
 def protocol(cfg: dict[str, Any]) -> dict[str, Any]:
     fmt = load_yaml(cfg["format_config"])
-    return {"model": cfg["model"], "budget": cfg["budget"], "batch_size": cfg["batch_size"],
+    extra = {"fewshot_sha256": sha256_file(resolve(cfg["fewshot"]))} if cfg.get("fewshot") else {}
+    return {"model": cfg["model"], "budget": cfg["budget"], "batch_size": cfg["batch_size"], **extra,
             "format_config": fmt, "prompt_sha256": sha256_file(resolve(fmt["system_prompt"])),
             "analysis_config_sha256": sha256_file(resolve(cfg["analysis_config"])),
             "source_sha256": {str(p.relative_to(PROJECT_ROOT)): sha256_file(p)
@@ -104,8 +118,40 @@ def verify_validation(cfg: dict[str, Any], label: str, adapter: str | None) -> N
 # ---------------------------------------------------------------- generate
 
 
+def verify_subset(cfg: dict[str, Any], label: str, split: str, adapter: str | None, records: list[dict[str, Any]],
+                  source_sha256: str) -> None:
+    """Reuse check for an ID subset or probe file: same IDs, inputs, protocol and adapter."""
+    out = run_dir(cfg, label, split)
+    info = json.loads((out / "run.json").read_text())
+    rows = _read_jsonl(out / "trajectories.jsonl")
+    if [r["id"] for r in rows] != [r["id"] for r in records]:
+        raise ValueError(f"{label}/{split}: incomplete or different IDs")
+    if info.get("limit") is not None or info.get("n") != len(records):
+        raise ValueError(f"{label}/{split}: partial output")
+    if info.get("protocol") != protocol(cfg) or info.get("adapter_sha256") != adapter_sha256(adapter):
+        raise ValueError(f"{label}/{split}: protocol or adapter changed; use a new experiment label")
+    if info.get("split_sha256") != source_sha256:
+        raise ValueError(f"{label}/{split}: input records changed")
+
+
+def subset_records(split: str, ids_file: str | None, records_file: str | None,
+                   data_config: str) -> tuple[list[dict[str, Any]], str]:
+    """(records, sha256 of their source) for a train ID subset or a frozen probe file."""
+    if records_file:
+        spec = json.loads(resolve(records_file).read_text(encoding="utf-8"))
+        if spec.get("status") != "frozen":
+            raise ValueError(f"{records_file}: probe set is not frozen")
+        return spec["records"], sha256_file(resolve(records_file))
+    spec = json.loads(resolve(ids_file).read_text(encoding="utf-8"))
+    if spec.get("split") != split:
+        raise ValueError(f"{ids_file}: IDs are for split {spec.get('split')!r}, not {split!r}")
+    by_id = {r["id"]: r for r in load_split(split, data_config)}
+    return [by_id[i] for i in spec["ids"]], sha256_file(resolve(ids_file))
+
+
 def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, label: str,
-             limit: int | None = None, extra_info: dict[str, Any] | None = None) -> Path:
+             limit: int | None = None, extra_info: dict[str, Any] | None = None,
+             records: list[dict[str, Any]] | None = None, source_sha256: str | None = None) -> Path:
     from clinqa.infer import Budget, HFGenerator, rollout
     from clinqa.modeling import load_for_inference, load_tokenizer
     from clinqa.formatting import template_sha256
@@ -115,7 +161,11 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
     if adapter:
         adapter = str(resolve(adapter))
     system = resolve(fmt["system_prompt"]).read_text(encoding="utf-8").strip()
-    records = load_split(split, fmt["data_config"])[:limit]
+    if records is None:
+        records = load_split(split, fmt["data_config"])
+        source_sha256 = sha256_file(resolve(f"data/{split}.jsonl"))
+    records = records[:limit]
+    demos = load_demos(cfg)
     # The runner never sees gold: strip it before rollout.
     inputs = [{k: r[k] for k in ("id", "note", "table", "question")} for r in records]
     set_seed(42)
@@ -125,7 +175,7 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
     load_s = time.perf_counter() - t0
     t1 = time.perf_counter()
     trajectories = rollout(inputs, HFGenerator(model, tok), tok, system, budget=Budget(**cfg["budget"]),
-                           batch_size=cfg["batch_size"])
+                           batch_size=cfg["batch_size"], demos=demos)
     gen_s = time.perf_counter() - t1
     out = run_dir(cfg, label, split)
     _write_jsonl(out / "trajectories.jsonl", trajectories)
@@ -136,16 +186,28 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
             "protocol": protocol(cfg),
             "train_manifest": str(train_manifest) if adapter and train_manifest.exists() else None,
             "model": cfg["model"], "model_load": getattr(model, "clinqa_load_info", None), "seed": 42,
-            "split_sha256": sha256_file(resolve(f"data/{split}.jsonl")), "tool_schemas_sha256": tool_schemas_sha256(),
+            "split_sha256": source_sha256, "tool_schemas_sha256": tool_schemas_sha256(),
             **(extra_info or {}),
             "budget": cfg["budget"], "batch_size": cfg["batch_size"], "n": len(trajectories), "limit": limit,
             "system_prompt_sha256": sha256_text(system), "chat_template_sha256": template_sha256(tok),
             "git": git_state(), "packages": package_versions(), "hardware": hardware(),
             "runtime_s": {"model_load": round(load_s, 1), "generate": round(gen_s, 1)},
+            "cost": _cost(trajectories, gen_s),
             "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2) if torch.cuda.is_available() else None}
     (out / "run.json").write_text(json.dumps(info, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {len(trajectories)} trajectories to {out} in {gen_s:.0f}s")
     return out
+
+
+def _cost(trajectories: list[dict[str, Any]], gen_s: float) -> dict[str, Any]:
+    """Per-request cost: mean first-turn prompt tokens (prefill), new tokens and wall-clock seconds."""
+    n = max(1, len(trajectories))
+    prompt = [t.get("prompt_tokens") for t in trajectories if t.get("prompt_tokens") is not None]
+    new = sum(t["n_new_tokens"] for t in trajectories)
+    return {"mean_prompt_tokens": round(sum(prompt) / len(prompt), 1) if prompt else None,
+            "max_prompt_tokens": max(prompt) if prompt else None,
+            "mean_new_tokens": round(new / n, 1), "seconds_per_request": round(gen_s / n, 3),
+            "new_tokens_per_s": round(new / gen_s, 1) if gen_s else None}
 
 
 # ---------------------------------------------------------------- score
@@ -346,6 +408,8 @@ def main(argv: list[str] | None = None) -> int:
     g.add_argument("--adapter", default=None, help="override the run's adapter (e.g. an epoch checkpoint)")
     g.add_argument("--label", default=None)
     g.add_argument("--limit", type=int, default=None)
+    g.add_argument("--ids-file", default=None, help="frozen ID subset of --split (e.g. train-fit IDs)")
+    g.add_argument("--records-file", default=None, help="frozen probe records; generation only, scored separately")
     s = sub.add_parser("score")
     s.add_argument("--label", required=True)
     s.add_argument("--split", default="val", choices=["train", "val", "test"])
@@ -373,6 +437,22 @@ def main(argv: list[str] | None = None) -> int:
         run_cfg = cfg["runs"][a.run]
         adapter = a.adapter if a.adapter is not None else run_cfg["adapter"]
         label = a.label or a.run
+        if a.ids_file or a.records_file:
+            if a.limit is not None or (a.ids_file and a.records_file):
+                raise ValueError("use one of --ids-file/--records-file, without --limit")
+            split = a.split if a.ids_file else Path(a.records_file).stem
+            records, source = subset_records(a.split, a.ids_file, a.records_file,
+                                             load_yaml(cfg["format_config"])["data_config"])
+            if run_dir(cfg, label, split).exists():
+                verify_subset(cfg, label, split, adapter, records, source)
+                print(f"reusing complete verified output: {label}/{split}")
+                return 0
+            generate(cfg, a.run, split, adapter, label, records=records, source_sha256=source,
+                     extra_info={"subset_source": a.ids_file or a.records_file})
+            if a.ids_file:
+                m = score(cfg, label, split)
+                print(json.dumps({"macro_task_success": m["subsets"]["full"]["macro_task_success"]}, indent=2))
+            return 0
         if run_dir(cfg, label, a.split).exists():
             if a.split == "val" and a.limit is None:
                 verify_validation(cfg, label, adapter)

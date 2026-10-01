@@ -1,0 +1,1660 @@
+{
+  "status": "frozen",
+  "split": "val",
+  "kind": "P1 both-missing BMI counterfactual (D-070, D-079)",
+  "n_sources": 40,
+  "n_eligible": 34,
+  "excluded": [
+    {
+      "source_id": "val_017",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_037",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_139",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_140",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_189",
+      "reason": "question states a measurement or BMI"
+    },
+    {
+      "source_id": "val_190",
+      "reason": "question states a measurement or BMI"
+    }
+  ],
+  "intended_behavior": {
+    "call": false,
+    "states_missing": [
+      "weight",
+      "height"
+    ],
+    "rule": "input-derived: neither weight nor height (nor a BMI) remains, so a BMI cannot be computed; no calculate_bmi call, say what is missing"
+  },
+  "original_partners": "the unedited source IDs, scored from the same label's full validation run",
+  "edits": [
+    {
+      "source_id": "val_002",
+      "mid_line_edits": 0,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_013",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_014",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_020",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_026",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_033",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_038",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_052",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_078",
+      "mid_line_edits": 0,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_082",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_086",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_094",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_097",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_104",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_105",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_112",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_119",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_120",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_125",
+      "mid_line_edits": 0,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_130",
+      "mid_line_edits": 0,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_137",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_150",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_155",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_158",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_159",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_160",
+      "mid_line_edits": 0,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_164",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_166",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_173",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_175",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_210",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_213",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_215",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    },
+    {
+      "source_id": "val_226",
+      "mid_line_edits": 1,
+      "removed_table_rows": []
+    }
+  ],
+  "records": [
+    {
+      "id": "p1_val_002",
+      "source_id": "val_002",
+      "note": "CC: Memory lapses and word-finding difficulty for 6 months.\n\nHPI: 88-year-old female presents with progressive memory lapses and anomia over the past 6 months. She reports difficulty recalling recent conversations and frequently pausing mid-sentence to search for words. Her daughter notes the patient has missed medication doses and left the stove on twice. No headaches, seizures, falls, or focal neurological deficits reported. No recent infections or changes in medications.\n\nPMH: Pulmonary embolism (on anticoagulation, completed course), iron deficiency anemia, chronic pancreatitis.\n\nMedications:\n- Fluticasone inhaler 250 mcg twice daily\n- Prednisone 10 mg daily\n- Sitagliptin 100 mg daily\n\nVitals: BP 115/71 mmHg, HR 69 bpm, Temp 100.0°F, RR 16 breaths/min, SpO2 92%.\n\nPhysical Exam:\n- General: Well-nourished, obese female, alert but mildly confused regarding today's date.\n- HEENT: Normocephalic, atraumatic. Pupils equal and reactive.\n- Lungs: Diminished breath sounds at bases bilaterally, no wheezes.\n- CV: Regular rate and rhythm, no murmurs.\n- Neuro: MMSE score 22/30 with deficits in recall and naming. No focal motor or sensory deficits. Gait steady with no ataxia.\n\nAssessment/Plan:\n1. Cognitive decline – Suspect early neurodegenerative process vs. medication-related (chronic prednisone). Order MRI brain, CBC, TSH, B12, and folate. Refer to neurology for formal neuropsychological testing.\n2. Low-grade fever and SpO2 92% – Obtain chest X-ray to evaluate for infectious or thromboembolic etiology given PE history.\n3. Hyperlipidemia – Elevated total cholesterol and LDL noted on labs. Consider statin therapy with risk-benefit discussion given age.\n4. Obesity – Counsel on dietary modifications; coordinate with nutrition.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Total Cholesterol",
+            "252.7",
+            "mg/dL",
+            "<200"
+          ],
+          [
+            "LDL",
+            "112.1",
+            "mg/dL",
+            "<100"
+          ],
+          [
+            "HDL",
+            "66.0",
+            "mg/dL",
+            ">40"
+          ],
+          [
+            "Triglycerides",
+            "135.5",
+            "mg/dL",
+            "<150"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_013",
+      "source_id": "val_013",
+      "note": "CC: Non-healing ulcer on the right foot for 6 weeks.\n\nHPI: 74-year-old female presents with a chronic non-healing ulcer on the plantar aspect of the right foot, first noticed approximately 6 weeks ago. She reports the wound has not improved despite local wound care at home. She denies fever, chills, or purulent drainage. She notes mild surrounding erythema and occasional dull pain rated 4/10. She has limited mobility and reports difficulty inspecting her feet due to body habitus. No history of diabetes mellitus. She has a history of peripheral vascular disease and is currently on clopidogrel. She uses a tiotropium inhaler for COPD.\n\nPMH: Gout, depression, COPD, peripheral vascular disease, morbid obesity.\n\nMedications: Clopidogrel 75mg daily, furosemide 40mg daily, pantoprazole 40mg daily, tiotropium inhaler 18mcg daily, metoprolol 25mg BID.\n\nPhysical Exam:\nGeneral: Alert, oriented, obese female in no acute distress.\nCardiovascular: Regular rate and rhythm, no murmurs. Bilateral pedal pulses diminished.\nExtremities: Right foot with a 2.5 x 2.0 cm ulcer on the plantar surface, shallow with granulation tissue at base, mild perilesional erythema, no purulence, no malodor. Mild bilateral lower extremity edema.\nSkin: No other lesions noted.\n\nLabs: Total cholesterol 155.8 mg/dL, LDL 91.5 mg/dL, HDL 25.2 mg/dL (low), triglycerides 143.9 mg/dL.\n\nAssessment/Plan:\n1. Non-healing right foot ulcer – likely multifactorial given obesity and peripheral vascular disease. Obtain ABI for vascular assessment. Refer to wound care clinic. Initiate offloading with therapeutic footwear.\n2. Low HDL – lifestyle counseling; consider statin therapy given cardiovascular risk factors.\n3. Morbid obesity – nutritional counseling and weight management referral.\n4. Continue current medications. Follow up in 2 weeks.",
+      "table": {
+        "type": "vitals",
+        "headers": [
+          "Vital",
+          "Value",
+          "Unit"
+        ],
+        "rows": [
+          [
+            "Blood Pressure",
+            "125/85",
+            "mmHg"
+          ],
+          [
+            "Heart Rate",
+            "85",
+            "bpm"
+          ],
+          [
+            "Temperature",
+            "97.7",
+            "°F"
+          ],
+          [
+            "Respiratory Rate",
+            "16",
+            "breaths/min"
+          ],
+          [
+            "SpO2",
+            "99",
+            "%"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_014",
+      "source_id": "val_014",
+      "note": "CC: 66-year-old female presenting with postprandial nausea and early satiety for 3 months.\n\nHPI: Patient reports progressive nausea occurring 15-30 minutes after meals with early satiety and decreased oral intake over the past 3 months. She endorses an unintentional weight loss of approximately 8 lbs during this period. She denies vomiting, hematemesis, melena, or hematochezia. No dysphagia or odynophagia. She notes worsening fatigue. She has been taking ferrous sulfate daily as prescribed but reports it may be exacerbating her nausea. She felt warm at home today and is found to be febrile in clinic.\n\nPMH: Type 2 diabetes mellitus, CKD stage 4, ulcerative colitis (currently in remission per last colonoscopy 6 months ago), obstructive sleep apnea on CPAP, systemic lupus erythematosus.\n\nMedications: Gabapentin 300 mg TID, ferrous sulfate 325 mg daily.\n\nVitals: BP 112/78 mmHg, HR 81 bpm, Temp 102.1°F, RR 18, SpO2 97%.\n\nPhysical Exam: Thin-appearing woman. Abdomen soft, mildly tender in epigastrium, no rebound or guarding, normoactive bowel sounds. No hepatosplenomegaly. Mild conjunctival pallor. No peripheral edema. Lungs clear bilaterally.\n\nLabs: See table.\n\nAssessment/Plan:\n1. Postprandial nausea/early satiety – Differential includes gastroparesis (given long-standing DM), SLE-related dysmotility, or medication side effect from ferrous sulfate. Will obtain gastric emptying study. Consider holding ferrous sulfate given GI intolerance.\n2. Fever – Evaluate for infection; obtain CBC with differential, blood cultures, urinalysis, CRP/ESR. Consider UC flare or lupus flare.\n3. Low serum iron with elevated ferritin – Likely anemia of chronic disease in setting of CKD and SLE. Ferritin elevated as acute phase reactant.\n4. Underweight appearance – Calculate BMI and assess nutritional status; consider dietitian referral.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "41.6",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "313.4",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "261.4",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "29.5",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_020",
+      "source_id": "val_020",
+      "note": "**ENCOUNTER NOTE**\n\n**CC:** Insomnia and early morning awakening for 2 months.\n\n**HPI:** A 19-year-old male with a known history of Parkinson disease presents with complaints of difficulty falling asleep and frequent early morning awakenings over the past 2 months. He reports sleeping only 3-4 hours per night, which has been affecting his daytime functioning and energy levels. He denies nightmares, restless legs, or snoring. No recent changes in caffeine intake or screen time habits. He endorses mild fatigue but denies depressed mood, anhedonia, or suicidal ideation. He also reports decreased oral fluid intake recently and has noticed mild dizziness when standing.\n\n**PMH:** Parkinson disease (early onset), diabetes mellitus (insulin-dependent), history requiring anticoagulation (details unclear).\n\n**Medications:**\n- Amoxicillin 500 mg PO TID\n- Insulin glargine 20 units SC at bedtime\n- Enoxaparin 40 mg SC daily\n- Gabapentin 300 mg PO TID\n\n**Vitals:** BP 125/80 mmHg, HR 95 bpm, Temp 98.2 °F, RR 15 breaths/min, SpO2 96%.\n\n**Physical Exam:** Alert, well-nourished male. Mild resting tremor noted in the left hand. Mucous membranes slightly dry. Cardiopulmonary exam unremarkable. Abdomen soft, nontender. No lower extremity edema.\n\n**Assessment/Plan:**\n1. **Insomnia** – Likely multifactorial; Parkinson-related sleep disruption and possible gabapentin timing effects. Initiate sleep hygiene counseling. Consider melatonin 3 mg at bedtime. Evaluate need for sleep study if symptoms persist.\n2. **Elevated BUN with hypernatremia** – BUN 59.6 and sodium 149.6 suggest dehydration. Encourage increased oral hydration, recheck in 1 week.\n3. **Parkinson disease** – Continue current regimen; neurology follow-up.\n4. **Diabetes** – Well controlled with HbA1c 5.5%; continue insulin glargine. Monitor for hypoglycemia given normal fasting glucose.\n5. **Anticoagulation/Antibiotic** – Clarify indications for enoxaparin and amoxicillin at follow-up.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Glucose (fasting)",
+            "83.2",
+            "mg/dL",
+            "70-100"
+          ],
+          [
+            "HbA1c",
+            "5.5",
+            "%",
+            "<5.7"
+          ],
+          [
+            "Creatinine",
+            "0.8",
+            "mg/dL",
+            "0.7-1.3"
+          ],
+          [
+            "BUN",
+            "59.6",
+            "mg/dL",
+            "7-20"
+          ],
+          [
+            "Sodium",
+            "149.6",
+            "mEq/L",
+            "136-145"
+          ],
+          [
+            "Potassium",
+            "4.3",
+            "mEq/L",
+            "3.5-5.0"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_026",
+      "source_id": "val_026",
+      "note": "CC: Sudden painless loss of vision in the left eye this morning.\n\nHPI: 41-year-old male presents to the ED with acute, painless vision loss in the left eye upon awakening. He denies preceding floaters, flashes, eye pain, trauma, or headache. No prior episodes. He reports no recent illness or changes in medications. He has a history of pulmonary embolism, raising concern for a thromboembolic etiology.\n\nPMH: COPD, pulmonary embolism (prior), bipolar disorder.\n\nMedications: Metformin 1000mg BID, sitagliptin 100mg daily, linagliptin 5mg daily, spironolactone 25mg daily, tamsulosin 0.4mg QHS.\n\nExam: General: Alert, oriented, no acute distress. HEENT: Right eye — pupils equal and reactive, visual acuity 20/25. Left eye — visual acuity hand motion only, relative afferent pupillary defect (RAPD) present. Fundoscopic exam of the left eye reveals pallor of the retina with a cherry-red spot at the macula, consistent with central retinal artery occlusion (CRAO). Box-carring noted in retinal arterioles. Right fundus unremarkable. CV: Regular rate and rhythm, no murmurs. Lungs: Decreased breath sounds bilaterally, no wheezing. Extremities: No edema.\n\nLabs: PT 17.2 s (ref 11.0–13.5), INR 0.9 (ref 0.8–1.1), aPTT 61.4 s (ref 25–35), D-dimer 331.5 ng/mL (ref <500). Notably, aPTT is significantly elevated; further workup including mixing studies and lupus anticoagulant testing is warranted given history of PE and now suspected arterial thromboembolic event.\n\nAssessment/Plan:\n1. Left eye CRAO — emergent ophthalmology consultation, ocular massage initiated, consider intra-arterial thrombolysis. Carotid duplex and echocardiogram ordered to evaluate embolic source.\n2. Elevated aPTT — evaluate for antiphospholipid syndrome given PE history and arterial occlusion at young age.\n3. Continue home medications; hold spironolactone pending renal function results.",
+      "table": {
+        "type": "vitals",
+        "headers": [
+          "Vital",
+          "Value",
+          "Unit"
+        ],
+        "rows": [
+          [
+            "Blood Pressure",
+            "118/81",
+            "mmHg"
+          ],
+          [
+            "Heart Rate",
+            "61",
+            "bpm"
+          ],
+          [
+            "Temperature",
+            "97.8",
+            "°F"
+          ],
+          [
+            "Respiratory Rate",
+            "17",
+            "breaths/min"
+          ],
+          [
+            "SpO2",
+            "96",
+            "%"
+          ]
+        ]
+      },
+      "question": "What is the patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_033",
+      "source_id": "val_033",
+      "note": "CLINICAL ENCOUNTER NOTE\n\nCC: Bilateral hand tremor for 4 months.\n\nHPI: 33-year-old male presenting for follow-up of progressive bilateral hand tremor first noticed approximately 4 months ago. The tremor is present at rest and worsens with stress. He reports mild difficulty with fine motor tasks such as buttoning shirts. He denies falls, gait instability, or dysphagia. He also reports fatigue and intermittent nausea, which he attributes to his chronic pancreatitis. He denies polyuria, polydipsia, or recent weight changes. He is currently on duloxetine for depression and reports stable mood.\n\nPMH: Depression, chronic pancreatitis, Parkinson disease (recently diagnosed), atrial fibrillation, deep vein thrombosis.\n\nMedications: Duloxetine 60 mg daily.\n\nAllergies: NKDA.\n\nVitals: BP 117/74 mmHg, HR 122 bpm, Temp 98.2°F, RR 15 breaths/min, SpO2 99%.\n\nPhysical Exam:\n- General: Thin male, NAD.\n- Neuro: Bilateral resting tremor in hands, mild cogwheel rigidity at wrists bilaterally. Gait slightly shuffling but independent. Cranial nerves intact.\n- CV: Tachycardic, irregularly irregular rhythm, no murmurs.\n- Abdomen: Mild epigastric tenderness, no rebound or guarding.\n- Extremities: No edema, no calf tenderness.\n\nLaboratory results are summarized in the table below.\n\nAssessment/Plan:\n1. Parkinson disease – Initiate carbidopa-levodopa 25/100 mg TID. Refer to neurology.\n2. Elevated HbA1c (8.1%) – Discordant with normal fasting glucose; suggests undiagnosed diabetes mellitus. Start metformin pending renal evaluation. Repeat fasting glucose and consider OGTT.\n3. Elevated creatinine (2.9 mg/dL) – Concerning for CKD. Order renal ultrasound, urinalysis with albumin-to-creatinine ratio. Hold metformin until GFR clarified.\n4. Atrial fibrillation with tachycardia (HR 122) – Review rate control options; consider starting a beta-blocker. Confirm anticoagulation status given DVT history.\n5. DVT – Verify current anticoagulation regimen.\n6. Depression – Stable on duloxetine; continue current dose.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Glucose (fasting)",
+            "92.8",
+            "mg/dL",
+            "70-100"
+          ],
+          [
+            "HbA1c",
+            "8.1",
+            "%",
+            "<5.7"
+          ],
+          [
+            "Creatinine",
+            "2.9",
+            "mg/dL",
+            "0.7-1.3"
+          ],
+          [
+            "BUN",
+            "16.5",
+            "mg/dL",
+            "7-20"
+          ],
+          [
+            "Sodium",
+            "137.4",
+            "mEq/L",
+            "136-145"
+          ],
+          [
+            "Potassium",
+            "4.3",
+            "mEq/L",
+            "3.5-5.0"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_038",
+      "source_id": "val_038",
+      "note": "CC: Chronic diarrhea with mucus and occasional blood for 8 weeks.\n\nHPI: 56-year-old female presenting with an 8-week history of watery diarrhea with mucus and intermittent hematochezia, averaging 5-6 episodes daily. She reports progressive fatigue, low-grade fevers, and a 4-pound unintentional weight loss over this period. She denies recent travel, sick contacts, or new dietary changes. She was started on doxycycline approximately 10 weeks ago for a skin infection. She also endorses mild right upper quadrant discomfort and dark urine over the past 2 weeks. No NSAID use.\n\nPMH: Osteoporosis, type 2 diabetes mellitus, hypertension.\n\nMedications: Hydrochlorothiazide 25 mg daily, sitagliptin 100 mg daily, doxycycline 100 mg BID, insulin lispro sliding scale before meals, losartan 50 mg daily.\n\nExam: Vitals: BP 112/77, HR 86, Temp 101.6°F, RR 14, SpO2 92%. Patient is obese, ill-appearing. Scleral icterus noted. Abdomen soft, mild RUQ tenderness without rebound or guarding. Hyperactive bowel sounds. No hepatomegaly appreciated. Mild bilateral lower extremity edema.\n\nLaboratory results reviewed (see table).\n\nAssessment/Plan:\n1. Chronic diarrhea with hematochezia — concern for infectious vs inflammatory colitis; obtain stool studies (C. difficile, O&P, culture) and refer for colonoscopy. Consider discontinuing doxycycline given possible C. difficile association.\n2. Cholestatic liver injury — elevated AST, ALP, and total bilirubin; concern for drug-induced liver injury vs biliary obstruction. Order RUQ ultrasound, hepatitis panel.\n3. Low-grade fever and hypoxia — obtain chest X-ray, blood cultures.\n4. Continue diabetes and hypertension management.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "ALT",
+            "34.6",
+            "U/L",
+            "7-56"
+          ],
+          [
+            "AST",
+            "162.0",
+            "U/L",
+            "10-40"
+          ],
+          [
+            "Alkaline Phosphatase",
+            "213.9",
+            "U/L",
+            "44-147"
+          ],
+          [
+            "Total Bilirubin",
+            "5.5",
+            "mg/dL",
+            "0.1-1.2"
+          ],
+          [
+            "Albumin",
+            "3.7",
+            "g/dL",
+            "3.5-5.5"
+          ],
+          [
+            "Total Protein",
+            "7.4",
+            "g/dL",
+            "6.0-8.3"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI), and how does it factor into her clinical picture?"
+    },
+    {
+      "id": "p1_val_052",
+      "source_id": "val_052",
+      "note": "CC: Chronic diarrhea with mucus and occasional blood for 8 weeks.\n\nHPI: 39-year-old female presenting with an 8-week history of persistent diarrhea, described as loose to watery stools 4-6 times daily, frequently containing mucus and intermittently streaked with blood. She reports mild lower abdominal cramping, fatigue, and a low-grade fever over the past week. She denies recent travel, sick contacts, or antibiotic use. She has had progressive fatigue and a 5-lb unintentional weight loss over the past two months. No known family history of inflammatory bowel disease.\n\nPMH: Hypertension, iron deficiency anemia, epilepsy (well controlled).\n\nMedications: Tamsulosin 0.4 mg at bedtime, aspirin 81 mg daily, duloxetine 60 mg daily, pregabalin 75 mg twice daily.\n\nBP 130/74 mmHg, HR 67 bpm, Temp 100.2 °F, RR 15, SpO2 92%. General: Mildly fatigued-appearing, no acute distress. Abdomen: Soft, mild diffuse tenderness in lower quadrants, no rebound or guarding, normoactive bowel sounds. Rectal exam: Trace bright red blood on glove. No perianal lesions.\n\nLaboratory results reviewed (see table). TSH significantly elevated at 22.3 mIU/L with normal free T4 and free T3, consistent with subclinical hypothyroidism.\n\nAssessment/Plan:\n1. Chronic bloody diarrhea – Concern for inflammatory bowel disease. Refer for colonoscopy with biopsies. Send stool studies including C. difficile, fecal calprotectin, and stool culture. Hold aspirin given GI bleeding.\n2. Subclinical hypothyroidism – Initiate levothyroxine 50 mcg daily, recheck TSH in 6-8 weeks.\n3. Low SpO2 – Obtain CBC, consider chest X-ray.\n4. Iron deficiency anemia – Recheck iron studies.\n5. Obesity – Counsel on nutrition and weight management.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "22.3",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "1.4",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "2.8",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_078",
+      "source_id": "val_078",
+      "note": "CC: Excessive daytime sleepiness and loud snoring reported by partner.\n\nHPI: 34-year-old female presents for follow-up of obstructive sleep apnea. Patient reports persistent excessive daytime sleepiness despite CPAP use. Her partner notes loud snoring most nights, raising concern for suboptimal CPAP adherence or inadequate pressure settings. She denies witnessed apneic episodes, morning headaches, or recent weight changes. She also has chronic hepatitis B being monitored, and hypertension which has been stable. She appears thin and reports decreased appetite over the past several weeks.\n\nPMH: Obstructive sleep apnea (on CPAP), hypertension, chronic hepatitis B.\n\nMedications: Omeprazole 20 mg daily, doxycycline 100 mg twice daily, sertraline 50 mg daily.\n\nAllergies: NKDA.\n\nExam:\nVitals: BP 120/85 mmHg, HR 71 bpm, Temp 97.6°F, RR 17 breaths/min, SpO2 98%.\nGeneral: Thin-appearing female, no acute distress. Mild temporal wasting noted.\nHEENT: Oropharynx mildly crowded, Mallampati class III. No tonsillar hypertrophy.\nCardiovascular: Regular rate and rhythm, no murmurs.\nLungs: Clear to auscultation bilaterally.\nAbdomen: Soft, non-tender, no hepatomegaly.\nExtremities: Trace bilateral lower extremity edema.\n\nLaboratory results reviewed (see table).\n\nAssessment/Plan:\n1. Obstructive sleep apnea – suboptimal control. Will download CPAP data to assess adherence and efficacy. Consider repeat polysomnography if pressures need adjustment.\n2. Hypoalbuminemia (2.2 g/dL) – concerning in the setting of chronic hepatitis B. Evaluate for synthetic liver dysfunction; check hepatitis B viral load, INR, and consider hepatology referral.\n3. Elevated alkaline phosphatase – obtain GGT to differentiate hepatic versus bone origin.\n4. Hypertension – stable at current visit, continue monitoring.\n5. Nutritional status – patient appears underweight; will calculate BMI and consider nutritional counseling.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "ALT",
+            "27.7",
+            "U/L",
+            "7-56"
+          ],
+          [
+            "AST",
+            "34.2",
+            "U/L",
+            "10-40"
+          ],
+          [
+            "Alkaline Phosphatase",
+            "197.5",
+            "U/L",
+            "44-147"
+          ],
+          [
+            "Total Bilirubin",
+            "0.9",
+            "mg/dL",
+            "0.1-1.2"
+          ],
+          [
+            "Albumin",
+            "2.2",
+            "g/dL",
+            "3.5-5.5"
+          ],
+          [
+            "Total Protein",
+            "7.5",
+            "g/dL",
+            "6.0-8.3"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_082",
+      "source_id": "val_082",
+      "note": "CC: Acute onset of vertigo with nausea and nystagmus.\n\nHPI: 35-year-old male with a history of systemic lupus erythematosus presents to the ED with sudden-onset vertigo that began approximately 3 hours ago. He reports the room spinning, associated with nausea and one episode of non-bloody emesis. He denies hearing loss, tinnitus, recent URI symptoms, or focal neurological deficits. He reports mild subjective fevers at home. No recent changes to medications. No history of similar episodes.\n\nPMH: Systemic lupus erythematosus (SLE).\n\nMedications: Atorvastatin 20 mg at bedtime, pantoprazole 40 mg daily, hydrochlorothiazide 25 mg daily.\n\nAllergies: NKDA.\n\nVitals: BP 127/72 mmHg, HR 68 bpm, Temp 101.9 °F, RR 18 breaths/min, SpO2 96% on room air.\n\nPhysical Exam:\nGeneral: Alert, oriented, mildly diaphoretic, appears uncomfortable. Obese habitus.\nHEENT: Horizontal nystagmus noted on leftward gaze. No papilledema on fundoscopy. Tympanic membranes clear bilaterally.\nNeuro: Cranial nerves II-XII grossly intact. No dysmetria or dysarthria. Romberg positive. Gait wide-based and unsteady. No limb weakness.\nCardiovascular: Regular rate and rhythm, no murmurs.\nLungs: Clear to auscultation bilaterally.\nAbdomen: Soft, non-tender, non-distended.\n\nLaboratory results are notable for mild anemia and thrombocytopenia (see table).\n\nAssessment/Plan:\n1. Acute vertigo with nystagmus — differential includes CNS vasculitis related to SLE flare vs. peripheral vestibulopathy. MRI brain with MRA to be obtained given SLE history and fever. Meclizine 25 mg q8h PRN and ondansetron 4 mg IV for symptom relief.\n2. Low-grade fever — obtain blood cultures, CRP, ESR, complement levels (C3/C4), anti-dsDNA to evaluate for SLE flare.\n3. Thrombocytopenia — may be SLE-related; monitor trends.\n4. Rheumatology consultation requested.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "WBC",
+            "7.5",
+            "x10³/μL",
+            "4.5-11.0"
+          ],
+          [
+            "Hemoglobin",
+            "10.7",
+            "g/dL",
+            "12.0-17.5"
+          ],
+          [
+            "Hematocrit",
+            "43.9",
+            "%",
+            "36-51"
+          ],
+          [
+            "Platelets",
+            "110.0",
+            "x10³/μL",
+            "150-400"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on the documented weight and height?"
+    },
+    {
+      "id": "p1_val_086",
+      "source_id": "val_086",
+      "note": "CC: Postprandial nausea and early satiety for 3 months.\n\nHPI: Mr. J is a 61-year-old male with a history of obesity, type 2 diabetes mellitus, hyperlipidemia, pulmonary embolism, and HFpEF who presents with a 3-month history of postprandial nausea and early satiety. He reports feeling full after only a few bites of food, followed by nausea lasting 1-2 hours after meals. He denies vomiting, hematemesis, melena, abdominal pain, diarrhea, or constipation. He has not noticed significant weight loss. He denies dysphagia or odynophagia. No recent medication changes. He is not currently on any diabetic medications; his last HbA1c was well-controlled.\n\nPMH: Obesity, type 2 diabetes mellitus (diet-controlled per recent labs), hyperlipidemia, pulmonary embolism, heart failure with preserved ejection fraction.\n\nMedications: Rosuvastatin 10 mg at bedtime.\n\nBP 122/78 mmHg, HR 97 bpm, Temp 98.2°F, RR 17, SpO2 97%. General: Obese male, no acute distress. Abdomen: Soft, non-tender, non-distended, normoactive bowel sounds, no organomegaly. Cardiac: Tachycardic, regular rhythm, no murmurs. Lungs: Clear bilaterally. Extremities: No edema.\n\nAssessment/Plan:\n1. Postprandial nausea and early satiety — concern for gastroparesis given history of diabetes. Will order gastric emptying study. Consider upper endoscopy to rule out mechanical obstruction. Start dietary modifications with small, frequent, low-fat meals.\n2. Mild hypernatremia (Na 147) — encourage oral hydration, recheck in 1 week.\n3. Obesity — BMI calculation pending; counsel on weight management.\n4. HFpEF — stable, continue monitoring.\n5. Hyperlipidemia — continue rosuvastatin.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Glucose (fasting)",
+            "75.7",
+            "mg/dL",
+            "70-100"
+          ],
+          [
+            "HbA1c",
+            "5.0",
+            "%",
+            "<5.7"
+          ],
+          [
+            "Creatinine",
+            "0.7",
+            "mg/dL",
+            "0.7-1.3"
+          ],
+          [
+            "BUN",
+            "11.7",
+            "mg/dL",
+            "7-20"
+          ],
+          [
+            "Sodium",
+            "147.0",
+            "mEq/L",
+            "136-145"
+          ],
+          [
+            "Potassium",
+            "4.8",
+            "mEq/L",
+            "3.5-5.0"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_094",
+      "source_id": "val_094",
+      "note": "CC: Progressive weakness in lower extremities for 2 months.\n\nHPI: 81-year-old female presents with a 2-month history of progressive bilateral lower extremity weakness. She reports difficulty rising from a seated position and climbing stairs. She denies falls, numbness, tingling, or bowel/bladder incontinence. No recent changes in medications. She notes mild fatigue but denies palpitations, tremor, heat intolerance, or weight changes. She has a history of hypothyroidism on levothyroxine and was referred for thyroid function reassessment given her symptoms.\n\nPMH: Iron deficiency anemia, pulmonary embolism, coronary artery disease, type 2 diabetes mellitus, hypothyroidism.\n\nMedications: Bisoprolol 5mg daily, empagliflozin 10mg daily, levothyroxine 50mcg daily, insulin glargine 20 units at bedtime.\n\nPhysical Exam:\nVitals: BP 128/80 mmHg, HR 77 bpm, Temp 97.8°F, RR 17/min, SpO2 91%.\nGeneral: Alert, oriented, obese female in no acute distress.\nCardiovascular: Regular rate and rhythm, no murmurs.\nPulmonary: Clear to auscultation bilaterally; baseline low SpO2, likely related to PE history.\nExtremities: No edema, warm, well-perfused.\nNeurological: Proximal lower extremity weakness (4/5 bilaterally), intact sensation, DTRs 2+ symmetric, gait slow but steady with mild difficulty arising from chair.\n\nLaboratory results are summarized in the table below.\n\nAssessment/Plan:\n1. Progressive proximal lower extremity weakness — Notably, free T4 is significantly elevated at 3.5 ng/dL despite normal TSH and free T3, raising concern for assay interference or early thyrotoxicosis. Proximal myopathy may be thyroid-related. Will repeat thyroid panel at a reference laboratory. Consider CK, aldolase, vitamin D, and EMG if symptoms persist.\n2. Hypothyroidism — Consider dose adjustment pending repeat labs.\n3. Low SpO2 — Recheck; consider CT angiography if clinical concern for recurrent PE.\n4. Type 2 DM — Continue current regimen; check HbA1c.\n5. Obesity — Counsel on dietary modifications and physical therapy referral for strengthening.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "1.3",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "3.5",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "3.6",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_097",
+      "source_id": "val_097",
+      "note": "CC: Epigastric burning and acid reflux after meals for 2 months.\n\nHPI: Mr. [REDACTED] is a 91-year-old male presenting with a 2-month history of postprandial epigastric burning and acid reflux. Symptoms occur within 30 minutes of eating and are worse with larger meals. He denies dysphagia, odynophagia, hematemesis, melena, or unintentional weight loss. He has been taking doxycycline 100mg twice daily for a chronic skin condition and notes that symptoms may have worsened after starting this medication. He reports taking pills with minimal water and occasionally lying down shortly after. No nausea, vomiting, or change in bowel habits.\n\nPMH: Celiac disease (maintained on gluten-free diet).\n\nMedications: Doxycycline 100mg PO BID, Atorvastatin 20mg PO QHS.\n\nAllergies: NKDA.\n\nVitals: BP 130/72 mmHg, HR 73 bpm, Temp 98.7°F, RR 17 breaths/min, SpO2 98% on room air.\n\nPhysical Exam: Thin-appearing elderly male in no acute distress. Abdomen soft, mild tenderness in the epigastrium without rebound or guarding. No hepatosplenomegaly. Bowel sounds normoactive. Cardiac and pulmonary exams unremarkable.\n\nLaboratory results reviewed (see table below). Coagulation panel and D-dimer within normal limits.\n\nAssessment/Plan:\n1. GERD/Pill esophagitis – Likely exacerbated by doxycycline use. Will discontinue doxycycline and discuss alternative antibiotic with prescribing provider. Start omeprazole 20mg daily for 8 weeks. Counsel patient to remain upright 30+ minutes after medications and meals. Elevate head of bed.\n2. Celiac disease – Continue gluten-free diet. Consider nutritional assessment given low body weight.\n3. Low BMI – Patient appears underweight; will check prealbumin, vitamin levels, and consider nutrition referral.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "PT",
+            "12.4",
+            "seconds",
+            "11.0-13.5"
+          ],
+          [
+            "INR",
+            "1.0",
+            "",
+            "0.8-1.1"
+          ],
+          [
+            "aPTT",
+            "32.5",
+            "seconds",
+            "25-35"
+          ],
+          [
+            "D-dimer",
+            "417.4",
+            "ng/mL",
+            "<500"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_104",
+      "source_id": "val_104",
+      "note": "CC: Chronic diarrhea with mucus and occasional blood for 8 weeks.\n\nHPI: 22-year-old female presents with an 8-week history of loose, watery stools occurring 4-6 times daily, frequently mixed with mucus and intermittent streaks of bright red blood. She reports mild crampy lower abdominal pain, occasional urgency, and nocturnal episodes. Denies recent travel, antibiotic use, or sick contacts. She has lost approximately 5 lbs over this period. No fevers, nausea, or vomiting.\n\nPMH: Gout, chronic liver disease (etiology under evaluation), moderate aortic stenosis.\n\nMedications: Atorvastatin 20mg at bedtime, clopidogrel 75mg daily, ferrous sulfate 325mg daily.\n\nAllergies: NKDA.\n\nExam: VS: BP 147/92 mmHg, HR 88 bpm, Temp 98.1°F, RR 16, SpO2 97%. General: Alert, well-nourished female in no acute distress. Abdomen: Soft, mild tenderness in the left lower quadrant, no rebound or guarding, normoactive bowel sounds. Cardiac: Grade III/VI systolic ejection murmur at right upper sternal border, consistent with known AS. Rectal: Small amount of blood-tinged mucus on glove, no palpable masses.\n\nLaboratory results reviewed (see table below). CBC within normal limits.\n\nAssessment/Plan:\n1. Chronic bloody diarrhea — Differential includes inflammatory bowel disease (ulcerative colitis vs Crohn's), infectious colitis, or medication-related. Will order fecal calprotectin, stool cultures, C. difficile toxin, CRP, and ESR. Referral to GI for colonoscopy with biopsies.\n2. Hypertension — Elevated BP noted; may be secondary to pain/anxiety. Recheck at follow-up.\n3. Moderate aortic stenosis — Stable. Continue monitoring.\n4. Continue current medications; discuss potential contribution of ferrous sulfate to GI symptoms.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "WBC",
+            "7.7",
+            "x10³/μL",
+            "4.5-11.0"
+          ],
+          [
+            "Hemoglobin",
+            "13.1",
+            "g/dL",
+            "12.0-17.5"
+          ],
+          [
+            "Hematocrit",
+            "37.5",
+            "%",
+            "36-51"
+          ],
+          [
+            "Platelets",
+            "264.4",
+            "x10³/μL",
+            "150-400"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_105",
+      "source_id": "val_105",
+      "note": "**EMERGENCY DEPARTMENT ENCOUNTER NOTE**\n\n**CC:** Confusion and falls over the past week.\n\n**HPI:** Mr. J is a 42-year-old male presenting to the ED with progressive confusion and multiple falls over the past week. Per family, he has been increasingly disoriented, unsteady on his feet, and had at least three witnessed falls without loss of consciousness. No witnessed seizure activity, no head trauma reported. He denies chest pain, shortness of breath, or focal weakness. He has a history of ischemic stroke 2 years ago and chronic liver disease. Family reports he has not been taking any anticoagulation despite his DVT and stroke history.\n\n**PMH:** Deep vein thrombosis, ischemic stroke (2 years ago), chronic liver disease, rheumatoid arthritis, coronary artery disease.\n\n**Medications:** Hydrochlorothiazide 25 mg daily.\n\n**Exam Findings:** Alert but disoriented to time and place. No focal neurologic deficits appreciated. Mild scleral icterus noted. Abdomen soft, non-tender, with mild hepatomegaly. No peripheral edema. Gait unsteady, wide-based.\n\n**Labs:** PT 13.0 s (ref 11.0–13.5), INR 1.0 (ref 0.8–1.1), aPTT 26.4 s (ref 25–35), D-dimer 303.2 ng/mL (ref <500). Coagulation studies unremarkable. Basic metabolic panel pending.\n\n**Assessment/Plan:**\n1. **Encephalopathy** — likely hepatic given chronic liver disease; obtain ammonia level, hepatic function panel. Consider lactulose.\n2. **Tachycardia** — HR 140; obtain ECG, troponin, and thyroid studies. Cardiology consult given CAD history.\n3. **Falls** — multifactorial; PT/OT evaluation.\n4. **DVT/stroke history** — not on anticoagulation; reassess indication and bleeding risk given liver disease.",
+      "table": {
+        "type": "vitals",
+        "headers": [
+          "Vital",
+          "Value",
+          "Unit"
+        ],
+        "rows": [
+          [
+            "Blood Pressure",
+            "119/72",
+            "mmHg"
+          ],
+          [
+            "Heart Rate",
+            "140",
+            "bpm"
+          ],
+          [
+            "Temperature",
+            "99.8",
+            "°F"
+          ],
+          [
+            "Respiratory Rate",
+            "15",
+            "breaths/min"
+          ],
+          [
+            "SpO2",
+            "96",
+            "%"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_112",
+      "source_id": "val_112",
+      "note": "**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Worsening joint pain and morning stiffness for 4 months.\n\n**HPI:** Mr. [REDACTED] is an 89-year-old male presenting with progressive bilateral joint pain involving hands, wrists, and knees over the past 4 months. He reports morning stiffness lasting approximately 45-60 minutes daily, with gradual worsening. He denies recent trauma, rash, or preceding infection. He notes mild fatigue but denies weight loss. Low-grade fevers have been intermittent over the past week. No history of gout or prior rheumatologic evaluation.\n\n**PMH:** Chronic hepatitis B, atrial fibrillation, hypothyroidism, chronic kidney disease stage 4.\n\n**Medications:** Albuterol inhaler PRN, metformin 1000 mg twice daily.\n\n**Vitals:** See table below.\n\n**Physical Exam:**\nGeneral: Well-nourished male in mild discomfort.\nCardiovascular: Irregularly irregular rhythm, no murmurs. BP 125/71 mmHg.\nMusculoskeletal: Symmetric swelling and tenderness of MCP joints bilaterally, mild effusion of both knees, reduced grip strength. No nodules.\nSkin: No rash or tophi.\n\n**Pertinent Labs:** Serum iron 132.1 μg/dL (ref 60-170), TIBC 548.5 μg/dL (ref 250-370, elevated), ferritin 33.6 ng/mL (ref 12-300, low-normal), transferrin saturation 27.0% (ref 20-50). Elevated TIBC with low-normal ferritin may suggest early iron deficiency, warranting further evaluation.\n\n**Assessment/Plan:**\n1. **Polyarticular inflammatory arthritis** — Obtain RF, anti-CCP, ESR, CRP, and uric acid. Consider rheumatology referral. Low-grade fever raises concern for infectious etiology; blood cultures obtained.\n2. **CKD stage 4** — Metformin should be reviewed given renal function; potential discontinuation per guidelines with eGFR likely <30.\n3. **Hypothyroidism** — Notably no thyroid replacement medication listed; verify compliance and check TSH.\n4. **Atrial fibrillation** — Evaluate anticoagulation status.\n5. Follow-up in 1 week with labs.",
+      "table": {
+        "type": "vitals",
+        "headers": [
+          "Vital",
+          "Value",
+          "Unit"
+        ],
+        "rows": [
+          [
+            "Blood Pressure",
+            "125/71",
+            "mmHg"
+          ],
+          [
+            "Heart Rate",
+            "90",
+            "bpm"
+          ],
+          [
+            "Temperature",
+            "100.7",
+            "°F"
+          ],
+          [
+            "Respiratory Rate",
+            "14",
+            "breaths/min"
+          ],
+          [
+            "SpO2",
+            "97",
+            "%"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on his recorded weight and height, and how does it factor into his clinical picture?"
+    },
+    {
+      "id": "p1_val_119",
+      "source_id": "val_119",
+      "note": "CC: Fatigue and polyuria for 3 weeks.\n\nHPI: 62-year-old female presenting with a 3-week history of progressive fatigue and polyuria. She reports urinating 8-10 times daily with nocturia 3-4 times per night. She denies dysuria, hematuria, or flank pain. She notes decreased energy, mild heat intolerance, and occasional palpitations. No recent weight loss, tremor, or diarrhea reported. She denies chest pain or shortness of breath. She has been compliant with all medications.\n\nPMH: Coronary artery disease, type 2 diabetes mellitus, hypertension, neuropathy.\n\nMedications: Warfarin 5mg daily, linagliptin 5mg daily, losartan 50mg daily, gabapentin 300mg three times daily.\n\nVitals: BP 111/78 mmHg, HR 96 bpm, Temp 102.8°F, RR 16 breaths/min, SpO2 96%.\n\nPhysical Exam: Alert, fatigued-appearing female. No exophthalmos or lid lag. Thyroid non-enlarged, no nodules appreciated. Cardiac exam reveals regular tachycardia without murmurs. Lungs clear bilaterally. Abdomen soft, non-tender. Extremities without edema. Skin warm and moist.\n\nLaboratory results reviewed (see table below).\n\nAssessment/Plan:\n1. Elevated Free T4 with normal TSH and Free T3 — discordant thyroid panel. Concerning for assay interference (possibly warfarin or biotin effect), early thyrotoxicosis, or sick euthyroid variant given fever. Will repeat thyroid panel, check T3 uptake, and obtain thyroid ultrasound. Endocrinology consult recommended.\n2. Fever — obtain CBC, UA with culture, blood cultures, and chest X-ray to evaluate infectious etiology contributing to fatigue and tachycardia.\n3. Polyuria — check HbA1c, BMP, and urinalysis. Continue linagliptin; adjust diabetes management as needed.\n4. Continue warfarin, losartan, gabapentin at current doses.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "2.6",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "3.9",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "3.9",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_120",
+      "source_id": "val_120",
+      "note": "**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Sore throat, fever, and neck swelling for 5 days.\n\n**HPI:** Mr. [REDACTED] is a 78-year-old male presenting with a 5-day history of progressive sore throat, subjective fevers, and bilateral cervical lymphadenopathy. He reports odynophagia with difficulty swallowing solids. He denies cough, rhinorrhea, or ear pain. No recent sick contacts. He has not taken any antipyretics at home. No rash, joint pain, or weight loss noted.\n\n**PMH:** Bipolar disorder, coronary artery disease, hypothyroidism (inferred from medication).\n\n**Medications:** Levothyroxine 50 mcg daily, spironolactone 25 mg daily.\n\n**Vitals:** BP 116/85 mmHg, HR 89 bpm, Temp 102.9 °F, RR 17 breaths/min, SpO2 98% on room air.\n\n**Physical Exam:**\n- General: Ill-appearing, febrile male in no acute respiratory distress.\n- HEENT: Oropharynx erythematous with tonsillar enlargement bilaterally, no exudate appreciated. No peritonsillar bulging.\n- Neck: Bilateral tender, mobile anterior cervical lymphadenopathy, largest node approximately 2 cm on the left. No thyromegaly.\n- Cardiovascular: Regular rate and rhythm, no murmurs.\n- Lungs: Clear to auscultation bilaterally.\n- Abdomen: Soft, nontender, no hepatosplenomegaly.\n\n**Labs:** See table below.\n\n**Assessment/Plan:**\n1. **Acute pharyngitis with cervical lymphadenopathy and fever** – Obtain rapid strep antigen and throat culture. Send CBC with differential, CRP, and monospot given prolonged symptoms. Initiate empiric amoxicillin pending culture. Consider CT neck if symptoms worsen or abscess suspected.\n2. **CAD** – Stable, continue current regimen.\n3. **Hypothyroidism** – Continue levothyroxine.\n4. **Obesity** – Counseling deferred to follow-up.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Creatinine",
+            "0.9",
+            "mg/dL",
+            "0.7-1.3"
+          ],
+          [
+            "BUN",
+            "17.5",
+            "mg/dL",
+            "7-20"
+          ],
+          [
+            "eGFR",
+            "91.4",
+            "mL/min/1.73m²",
+            ">60"
+          ],
+          [
+            "Uric Acid",
+            "3.9",
+            "mg/dL",
+            "3.5-7.2"
+          ],
+          [
+            "Calcium",
+            "9.1",
+            "mg/dL",
+            "8.5-10.5"
+          ],
+          [
+            "Phosphorus",
+            "3.9",
+            "mg/dL",
+            "2.5-4.5"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI), and how should it be interpreted in his clinical context?"
+    },
+    {
+      "id": "p1_val_125",
+      "source_id": "val_125",
+      "note": "**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Difficulty swallowing solids, progressive over 2 months.\n\n**HPI:** 38-year-old male presenting with progressive dysphagia to solids over the past 2 months. He reports food \"getting stuck\" in the mid-chest region, initially with larger boluses but now occurring with most solid foods. He denies odynophagia, hematemesis, melena, or vomiting. He has noted unintentional weight loss but is unsure of the amount. No fevers, night sweats, or recent travel. He denies voice changes or aspiration symptoms, though his underlying Parkinson disease does contribute to some baseline oropharyngeal coordination difficulties.\n\n**PMH:** Systemic lupus erythematosus, Parkinson disease, benign prostatic hyperplasia, deep vein thrombosis.\n\n**Medications:** Dapagliflozin 10 mg daily, tiotropium inhaler 18 mcg daily, metoprolol 25 mg twice daily.\n\n**Physical Examination:**\n- Vitals: BP 111/74 mmHg, HR 74 bpm, Temp 98.8°F, RR 18, SpO2 99%\n- General: Thin-appearing male, no acute distress. Mild resting tremor bilateral hands.\n- HEENT: Oropharynx clear, no masses or lesions. No cervical lymphadenopathy.\n- Chest: Clear to auscultation bilaterally.\n- Abdomen: Soft, non-tender, no hepatosplenomegaly.\n- Extremities: No edema, no calf tenderness.\n\n**Assessment/Plan:**\n1. Progressive dysphagia to solids – Concerning for esophageal pathology. Will order EGD with biopsy. Barium swallow if EGD inconclusive. CBC, CMP, and ESR pending.\n2. Underweight appearance – Calculate BMI; nutritional assessment and dietary counseling. Consider supplementation.\n3. Continue current medications. Follow up in 1 week with endoscopy results.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Total Cholesterol",
+            "166.1",
+            "mg/dL",
+            "<200"
+          ],
+          [
+            "LDL",
+            "91.1",
+            "mg/dL",
+            "<100"
+          ],
+          [
+            "HDL",
+            "55.5",
+            "mg/dL",
+            ">40"
+          ],
+          [
+            "Triglycerides",
+            "108.1",
+            "mg/dL",
+            "<150"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on the recorded weight and height?"
+    },
+    {
+      "id": "p1_val_130",
+      "source_id": "val_130",
+      "note": "CC: Visual floaters and flashing lights in the right eye for 2 days.\n\nHPI: Mr. [REDACTED] is a 74-year-old male presenting with a 2-day history of new-onset floaters and photopsia in the right eye. He describes multiple dark spots and intermittent flashing lights, predominantly in the temporal visual field. He denies vision loss, eye pain, or recent trauma. He has a history of migraine with aura but states these symptoms are distinctly different from his typical aura episodes. No headache accompanies the current symptoms.\n\nPMH: Migraine with aura, rheumatoid arthritis, chronic liver disease, epilepsy (well controlled).\n\nMedications: Furosemide 40 mg daily.\n\nExam Findings:\nVitals: BP 129/76 mmHg, HR 69 bpm, Temp 98.3°F, RR 18 breaths/min, SpO2 99%.\nGeneral: Alert, oriented, no acute distress.\nOphthalmologic: Visual acuity 20/30 OD, 20/25 OS. Pupils equal and reactive bilaterally, no afferent pupillary defect. Dilated fundoscopic exam of the right eye reveals a Weiss ring with vitreous debris; no retinal tears, holes, or detachment identified on indirect ophthalmoscopy. Left eye unremarkable.\nCardiovascular: Regular rate and rhythm, no murmurs.\nExtremities: No edema.\n\nLaboratory results are notable for undiagnosed diabetes with elevated fasting glucose and HbA1c, as well as hyperkalemia (see table).\n\nAssessment/Plan:\n1. Acute posterior vitreous detachment, right eye – Urgent ophthalmology referral for detailed retinal evaluation within 1-2 weeks. Return precautions for curtain-like vision loss.\n2. New diagnosis of diabetes mellitus, type 2 – Initiate metformin pending hepatology clearance given chronic liver disease. Diabetic retinopathy screening recommended.\n3. Hyperkalemia (K 6.1) – Likely exacerbated by furosemide-related metabolic effects or dietary intake; obtain repeat BMP, consider ECG. Evaluate need for medication adjustment.\n4. Continue current furosemide; reassess indication.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Glucose (fasting)",
+            "158.2",
+            "mg/dL",
+            "70-100"
+          ],
+          [
+            "HbA1c",
+            "8.9",
+            "%",
+            "<5.7"
+          ],
+          [
+            "Creatinine",
+            "1.1",
+            "mg/dL",
+            "0.7-1.3"
+          ],
+          [
+            "BUN",
+            "18.4",
+            "mg/dL",
+            "7-20"
+          ],
+          [
+            "Sodium",
+            "137.2",
+            "mEq/L",
+            "136-145"
+          ],
+          [
+            "Potassium",
+            "6.1",
+            "mEq/L",
+            "3.5-5.0"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_137",
+      "source_id": "val_137",
+      "note": "CC: Chronic low back pain radiating to the right leg for 6 weeks.\n\nHPI: 61-year-old female presents with a 6-week history of progressive low back pain with radiation down the right posterolateral leg to the calf. She describes the pain as aching and sharp, rated 7/10, worsened by prolonged sitting and bending forward. She denies bowel or bladder incontinence, saddle anesthesia, or bilateral leg weakness. She reports occasional numbness along the right lateral calf. Conservative measures including OTC acetaminophen have provided minimal relief.\n\nPMH: Cirrhosis (Child-Pugh A), chronic hepatitis B, celiac disease, GERD, hyperlipidemia, type 2 diabetes mellitus.\n\nMedications: Insulin glargine 20 units at bedtime, metformin 1000mg twice daily, warfarin 5mg daily.\n\nAllergies: NKDA.\n\nVitals: BP 112/76 mmHg, HR 85 bpm, Temp 98.1°F, RR 27 breaths/min, SpO2 96%.\n\nPhysical Exam: Patient is alert and in no acute distress. Lumbar spine demonstrates paravertebral muscle tenderness on the right. Range of motion limited in flexion and right lateral bending. Straight leg raise positive on the right at 40 degrees reproducing radicular symptoms. Right ankle dorsiflexion strength 4/5, otherwise motor exam 5/5 bilaterally. Sensation diminished to light touch along the right L5 dermatome. Patellar and Achilles reflexes symmetric and intact.\n\nLaboratory results reviewed (see table). Platelet count mildly low, consistent with known cirrhosis.\n\nAssessment/Plan:\n1. Right lumbar radiculopathy – likely L4-L5 or L5-S1 disc herniation. Order MRI lumbar spine. Refer to physical therapy. Avoid NSAIDs given cirrhosis and warfarin use; continue acetaminophen with dose limitation.\n2. Thrombocytopenia – stable, attributed to hepatic disease. Monitor.\n3. Continue current medications for diabetes and anticoagulation. Recheck INR at next visit.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "WBC",
+            "5.4",
+            "x10³/μL",
+            "4.5-11.0"
+          ],
+          [
+            "Hemoglobin",
+            "14.0",
+            "g/dL",
+            "12.0-17.5"
+          ],
+          [
+            "Hematocrit",
+            "48.2",
+            "%",
+            "36-51"
+          ],
+          [
+            "Platelets",
+            "130.2",
+            "x10³/μL",
+            "150-400"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_150",
+      "source_id": "val_150",
+      "note": "CC: Productive cough with rust-colored sputum and rigors for 3 days.\n\nHPI: 74-year-old female presents to the ED with a 3-day history of productive cough with rust-colored sputum, associated with intermittent rigors. She reports mild dyspnea on exertion but denies hemoptysis, chest pain, or orthopnea. She has a history of asthma but states this episode feels different from her typical exacerbations. No recent travel or sick contacts. No nausea, vomiting, or diarrhea.\n\nPMH: Chronic hepatitis B, epilepsy (well controlled), asthma, depression.\n\nMedications: Sitagliptin 100mg daily, pantoprazole 40mg daily, insulin lispro sliding scale before meals, bisoprolol 5mg daily, linagliptin 5mg daily.\n\nVitals: BP 165/103 mmHg, HR 84 bpm, Temp 97.7°F, RR 21 breaths/min, SpO2 96% on room air.\n\nPhysical Exam: Alert, mild respiratory distress. Lung exam reveals right lower lobe bronchial breath sounds with dullness to percussion and increased tactile fremitus. No wheezing. Cardiac exam: regular rate and rhythm, no murmurs. Abdomen soft, nontender. No lower extremity edema.\n\nIron studies were obtained given her chronic hepatitis B and general fatigue reported on review of systems (see table below).\n\nAssessment/Plan:\n1. Community-acquired pneumonia – Classic presentation with rust-colored sputum suggesting pneumococcal etiology. Start ceftriaxone 1g IV and azithromycin 500mg IV. Obtain chest X-ray and blood cultures.\n2. Hypertension – BP elevated; continue bisoprolol, monitor.\n3. Iron studies – Low serum iron with elevated TIBC; ferritin and transferrin saturation within normal limits. Monitor and reassess after acute illness resolves.\n4. Continue home medications. Hepatitis B and epilepsy stable.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "49.5",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "504.1",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "266.1",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "40.6",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is the patient's body mass index (BMI) based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_155",
+      "source_id": "val_155",
+      "note": "CLINICAL ENCOUNTER NOTE\n\nCC: Burning epigastric pain awakening patient at night for 4 weeks.\n\nHPI: 46-year-old female presenting with a 4-week history of burning epigastric pain that wakes her from sleep, typically between 1-3 AM. She reports the pain is partially relieved by eating and antacids. She denies hematemesis, melena, or unintentional weight loss. She has been taking omeprazole 20mg daily without significant relief. No recent NSAID use. She denies dysphagia or odynophagia. She notes occasional nausea but no vomiting.\n\nPMH: Type 2 diabetes mellitus, pulmonary embolism (history), heart failure with reduced ejection fraction, chronic kidney disease stage 3, bipolar disorder.\n\nMEDICATIONS:\n- Omeprazole 20mg daily\n- Atorvastatin 20mg at bedtime\n- Rosuvastatin 10mg at bedtime\n- Dapagliflozin 10mg daily\n- Insulin glargine 20 units at bedtime\n\nNote: Patient is on both atorvastatin and rosuvastatin concurrently — this appears to be a duplication that requires reconciliation.\n\nPHYSICAL EXAM:\nVitals: BP 126/79 mmHg, HR 60 bpm, Temp 98.3°F, RR 16, SpO2 96%.\nGeneral: Obese female, no acute distress.\nAbdomen: Soft, mild epigastric tenderness to palpation without guarding or rebound. No hepatosplenomegaly. Bowel sounds normoactive.\nCardiovascular: Regular rate and rhythm, no murmurs appreciated. Mild bilateral lower extremity edema.\nLungs: Clear to auscultation bilaterally.\n\nLaboratory results reviewed (see table). Iron studies within normal limits, no evidence of iron deficiency anemia.\n\nASSESSMENT/PLAN:\n1. Epigastric pain — Likely peptic ulcer disease given nocturnal symptom pattern. Increase omeprazole to 40mg BID. Order H. pylori stool antigen. Refer for EGD if symptoms persist.\n2. Statin duplication — Discontinue rosuvastatin; continue atorvastatin 20mg nightly. Discuss with patient.\n3. Continue current diabetes, HFrEF, and CKD management. Follow up in 4 weeks.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "148.3",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "295.4",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "231.5",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "24.5",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_158",
+      "source_id": "val_158",
+      "note": "CC: Chronic diarrhea with mucus and occasional blood for 8 weeks.\n\nHPI: 73-year-old female presents with an 8-week history of chronic diarrhea, occurring 5-7 times daily, associated with mucus and intermittent blood. She reports progressive fatigue, mild abdominal cramping, and unintentional weight loss of approximately 4 lbs over the past month. She denies recent travel, antibiotic use, or sick contacts. No NSAID use. She reports subjective fevers at home over the past 3 days.\n\nPMH: Osteoarthritis, chronic hepatitis B, chronic liver disease, osteoporosis.\n\nMedications: Gabapentin 300mg TID, bisoprolol 5mg daily, amlodipine 5mg daily, fluticasone inhaler 250mcg BID.\n\nAllergies: NKDA.\n\nVitals: BP 111/77 mmHg, HR 135 bpm, Temp 101.0°F, RR 21 breaths/min, SpO2 97%.\n\nPhysical Exam: Patient appears fatigued and mildly dehydrated. Abdomen is soft with mild diffuse tenderness, no rebound or guarding. Bowel sounds hyperactive. No hepatosplenomegaly appreciated. Digital rectal exam reveals gross blood and mucus on glove. No perianal fistulae or skin tags. Lower extremities without edema.\n\nLaboratory results reviewed (see table). Notably, Free T4 is elevated at 3.8 ng/dL with normal TSH and Free T3, raising concern for assay interference or protein-binding abnormality in the setting of chronic liver disease.\n\nAssessment/Plan:\n1. Chronic bloody diarrhea – Concerning for inflammatory bowel disease vs infectious colitis vs malignancy. Obtain stool studies (C. diff, O&P, culture), CRP, ESR, fecal calprotectin. Refer for urgent colonoscopy with biopsies. IV fluids for tachycardia and dehydration.\n2. Tachycardia/fever – Likely secondary to volume depletion and inflammatory process. Blood cultures drawn. Monitor closely.\n3. Elevated Free T4 – Likely assay interference; correlate clinically. No signs of thyrotoxicosis. Recheck with equilibrium dialysis.\n4. Chronic hepatitis B/liver disease – Continue surveillance. Check HBV viral load and liver function panel.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "1.5",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "3.8",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "3.9",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_159",
+      "source_id": "val_159",
+      "note": "CC: Sudden swelling and redness in the left calf, onset 1 day ago.\n\nHPI: Mr. [REDACTED] is a 90-year-old male presenting to the emergency department with a 1-day history of acute left calf swelling, erythema, and tenderness. He reports the swelling appeared abruptly yesterday afternoon and has been progressively worsening. He denies recent trauma, immobilization, or long travel. He denies chest pain, shortness of breath, or hemoptysis. He has no prior history of deep vein thrombosis or pulmonary embolism. He is currently on enoxaparin 40 mg subcutaneous daily for DVT prophylaxis given his limited mobility.\n\nPMH: Gastroesophageal reflux disease (GERD).\n\nMedications: Enoxaparin 40 mg subcutaneous daily.\n\nAllergies: NKDA.\n\nVitals: BP 119/76 mmHg, HR 130 bpm, Temp 98.4°F, RR 18 breaths/min, SpO2 98% on room air.\n\nPhysical Exam:\nGeneral: Elderly male, alert and oriented, mildly uncomfortable.\nCardiovascular: Tachycardic, regular rhythm, no murmurs.\nPulmonary: Clear to auscultation bilaterally.\nExtremities: Left calf is notably edematous, erythematous, and warm to palpation with tenderness along the posterior compartment. Positive Homans sign. Right lower extremity is unremarkable. No pitting edema bilaterally.\n\nLaboratory results are summarized in the table below.\n\nAssessment/Plan:\n1. Suspected acute deep vein thrombosis of the left lower extremity — order urgent compression duplex ultrasonography of the left leg. Tachycardia is concerning and may warrant CT pulmonary angiography to rule out PE.\n2. Thrombocytopenia — platelets 109.3; consider heparin-induced thrombocytopenia (HIT) given current enoxaparin use. Send HIT panel (PF4 antibody).\n3. Current prophylactic enoxaparin dosing may be subtherapeutic given patient's weight. Await imaging results before adjusting anticoagulation.\n4. Continue monitoring vitals closely given tachycardia.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "WBC",
+            "10.4",
+            "x10³/μL",
+            "4.5-11.0"
+          ],
+          [
+            "Hemoglobin",
+            "14.3",
+            "g/dL",
+            "12.0-17.5"
+          ],
+          [
+            "Hematocrit",
+            "31.5",
+            "%",
+            "36-51"
+          ],
+          [
+            "Platelets",
+            "109.3",
+            "x10³/μL",
+            "150-400"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI), and what clinical significance does it carry in the context of his presentation?"
+    },
+    {
+      "id": "p1_val_160",
+      "source_id": "val_160",
+      "note": "**EMERGENCY DEPARTMENT ENCOUNTER NOTE**\n\n**CC:** Sharp pleuritic chest pain worsened by deep breathing.\n\n**HPI:** Mr. [REDACTED] is a 62-year-old male presenting with acute onset sharp, left-sided chest pain that began approximately 6 hours ago. The pain is pleuritic in nature, significantly worsened with deep inspiration and coughing, and partially relieved by leaning forward. He denies radiation to the arm or jaw. No recent travel, prolonged immobilization, or lower extremity swelling. He reports mild dyspnea but denies hemoptysis, fever, or recent illness. He has a history of rheumatoid arthritis and chronic pancreatitis.\n\n**PMH:** Rheumatoid arthritis, chronic pancreatitis, type 2 diabetes mellitus.\n\n**Medications:** Trazodone 50 mg QHS, gabapentin 300 mg TID, metformin 1000 mg BID.\n\n**Physical Exam:**\nVitals: BP 126/85 mmHg, HR 103 bpm, Temp 97.8°F, RR 17, SpO2 96% on room air.\nGeneral: Thin male in mild distress, splinting with respiration.\nCardiac: Tachycardic, regular rhythm, no murmurs, rubs, or gallops.\nPulmonary: Decreased breath sounds at left base with a faint pleural friction rub. No crackles or wheezing.\nAbdomen: Soft, non-tender.\nExtremities: No edema, no calf tenderness bilaterally.\n\nIron studies were obtained to evaluate for anemia of chronic disease given his rheumatoid arthritis history. Results are within normal limits (see table).\n\n**Assessment/Plan:**\n1. Pleuritic chest pain – Differential includes pulmonary embolism, pleuritis (possibly RA-related), or pericarditis. Obtain CT angiography of the chest, ECG, troponin, D-dimer, CBC, and BMP. Administer ketorolac 15 mg IV for pain. Cardiology consult if pericarditis suspected.\n2. Tachycardia – likely pain-mediated vs. PE; monitor closely.\n3. Continue home medications; hold metformin pending CT contrast.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "100.1",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "293.9",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "178.1",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "43.8",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his documented weight and height?"
+    },
+    {
+      "id": "p1_val_164",
+      "source_id": "val_164",
+      "note": "CC: Right shoulder pain with limited range of motion for 6 weeks.\n\nHPI: 49-year-old female presenting with progressive right shoulder pain over the past 6 weeks. She reports difficulty raising her arm overhead and reaching behind her back. Pain is described as a constant dull ache, rated 6/10, worsening with activity. She denies any trauma, fall, or inciting event. No numbness, tingling, or weakness in the right hand. She notes that the stiffness has been gradually worsening. She is currently on chronic prednisone 10mg daily, which has not alleviated the shoulder symptoms.\n\nPMH: Epilepsy (well controlled), ischemic stroke 2 years ago, heart failure with preserved ejection fraction (HFpEF).\n\nMedications: Tamsulosin 0.4mg at bedtime, prednisone 10mg daily, tiotropium inhaler 18mcg daily, aspirin 81mg daily.\n\nVitals: BP 127/73 mmHg, HR 74 bpm, Temp 98.2°F, RR 15, SpO2 97%.\n\nExam: Right shoulder with globally reduced active and passive ROM: forward flexion to 100°, abduction to 85°, external rotation to 20°. Tenderness diffusely over the glenohumeral joint. No erythema, warmth, or effusion. Neurovascular exam of the right upper extremity is intact. Cardiac exam: regular rate and rhythm, no murmurs. Lungs clear bilaterally.\n\nLabs reviewed (see table).\n\nAssessment/Plan:\n1. Right shoulder pain with restricted ROM – clinical presentation consistent with adhesive capsulitis. Order MRI of right shoulder. Refer to physical therapy. Continue current analgesic regimen and consider subacromial corticosteroid injection.\n2. Subclinical hypothyroidism – TSH mildly elevated with normal free T4/T3. Recheck in 6-8 weeks; no treatment at this time.\n3. HFpEF – stable, continue current management.\n4. Review indication for tamsulosin and chronic prednisone use at follow-up.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "5.5",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "1.5",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "3.6",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on the documented weight and height?"
+    },
+    {
+      "id": "p1_val_166",
+      "source_id": "val_166",
+      "note": "CC: Burning epigastric pain awakening patient at night for 4 weeks.\n\nHPI: 28-year-old female presenting with a 4-week history of burning epigastric pain that wakes her from sleep, typically between 1-3 AM. She reports the pain is partially relieved by eating but worsens on an empty stomach. She denies hematemesis but endorses dark stools intermittently. She has been taking doxycycline for a recent skin infection and notes the symptoms began approximately one week after starting the antibiotic. She also reports mild dyspnea on exertion, consistent with her baseline COPD and HFrEF.\n\nPMH: Iron deficiency anemia, ulcerative colitis (currently in remission per last colonoscopy 6 months ago), COPD, heart failure with reduced ejection fraction.\n\nMedications: Doxycycline 100 mg BID, duloxetine 60 mg daily, linagliptin 5 mg daily.\n\nBP 118/77, HR 82, Temp 100.8°F, RR 17, SpO2 92% on room air. Abdomen soft with moderate epigastric tenderness to palpation without guarding or rebound. No hepatomegaly. Mild bibasilar crackles on lung auscultation. Lower extremities without edema. See lab table below.\n\nAssessment/Plan:\n1. Epigastric pain – Concern for peptic ulcer disease, possibly medication-induced (doxycycline). Will discontinue doxycycline, start PPI therapy with pantoprazole 40 mg daily, and refer for EGD. H. pylori stool antigen ordered.\n2. Elevated AST with normal ALT – Disproportionate elevation raises concern for non-hepatic source (muscle, cardiac). Will check CK, troponin, and echocardiogram given HFrEF history.\n3. Low-grade fever – Monitor; may be related to underlying inflammatory process.\n4. SpO2 92% – Continue home O2 as needed; optimize COPD and HF regimens.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "ALT",
+            "13.3",
+            "U/L",
+            "7-56"
+          ],
+          [
+            "AST",
+            "221.4",
+            "U/L",
+            "10-40"
+          ],
+          [
+            "Alkaline Phosphatase",
+            "83.9",
+            "U/L",
+            "44-147"
+          ],
+          [
+            "Total Bilirubin",
+            "0.7",
+            "mg/dL",
+            "0.1-1.2"
+          ],
+          [
+            "Albumin",
+            "3.7",
+            "g/dL",
+            "3.5-5.5"
+          ],
+          [
+            "Total Protein",
+            "7.8",
+            "g/dL",
+            "6.0-8.3"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_173",
+      "source_id": "val_173",
+      "note": "**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Blurred vision and increased thirst for 1 month.\n\n**HPI:** 67-year-old female presents with a 1-month history of progressive blurred vision and polydipsia. She reports increased urinary frequency and unintentional fatigue over the same period. She denies polyuria at night, headache, chest pain, or shortness of breath. She has not had recent ophthalmologic evaluation. No recent illness or dietary changes. She notes mild generalized weakness and occasional lightheadedness upon standing.\n\n**PMH:** Osteoarthritis, hypertension, compensated cirrhosis (Child-Pugh A) secondary to chronic hepatitis B.\n\n**Medications:** Clopidogrel 75mg daily, tamsulosin 0.4mg at bedtime, citalopram 20mg daily, spironolactone 25mg daily.\n\n**Vitals:** BP 145/102 mmHg, HR 86 bpm, Temp 100.5°F, RR 17 breaths/min, SpO2 96%.\n\n**Physical Exam:** Obese female in no acute distress. Conjunctivae pale. Oropharynx moist. Cardiovascular exam with regular rate and rhythm, no murmurs. Lungs clear bilaterally. Abdomen soft, non-distended, no hepatosplenomegaly appreciated. Lower extremities with trace bilateral edema. No focal neurological deficits.\n\n**Labs:** See table below. Iron studies consistent with iron deficiency anemia.\n\n**Assessment/Plan:**\n1. **Blurred vision and polydipsia** – Evaluate for new-onset diabetes mellitus; fasting glucose, HbA1c ordered. Ophthalmology referral.\n2. **Iron deficiency anemia** – Low ferritin and transferrin saturation. Start oral ferrous sulfate 325mg daily; monitor for GI tolerance given cirrhosis. Evaluate for occult GI blood loss.\n3. **Hypertension, uncontrolled** – BP elevated today. Consider dose adjustment; recheck at follow-up.\n4. **Low-grade fever** – Likely infectious; obtain CBC with differential, urinalysis, blood cultures. Monitor closely.\n5. **Obesity** – Calculate BMI; counsel on dietary modifications and weight management.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "33.5",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "286.2",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "5.4",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "10.7",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "id": "p1_val_175",
+      "source_id": "val_175",
+      "note": "**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Burning sensation with urination and urethral discharge for 4 days.\n\n**HPI:** Mr. [REDACTED] is an 83-year-old male presenting with a 4-day history of dysuria and purulent urethral discharge. He describes a persistent burning sensation during urination with associated yellowish discharge. He denies hematuria, flank pain, fevers, or chills, though he has felt slightly warm. He has a known history of benign prostatic hyperplasia (BPH) and reports baseline urinary hesitancy but states current symptoms are distinctly different. No recent sexual contacts reported. No recent urinary catheterization.\n\n**PMH:** Peripheral artery disease, hyperlipidemia, deep vein thrombosis, atrial fibrillation, benign prostatic hyperplasia.\n\n**Medications:** Ferrous sulfate 325 mg daily.\n\n**Vitals:** BP 122/84 mmHg, HR 81 bpm, Temp 99.6 °F, RR 14 breaths/min, SpO2 94%.\n\n**Physical Exam:** Alert, obese male in no acute distress. Abdomen soft, non-tender, no suprapubic tenderness. GU exam reveals mucopurulent urethral discharge; no testicular tenderness or swelling. Bilateral pedal pulses diminished. Irregularly irregular heart rhythm. Lower extremities without acute edema.\n\n**Assessment/Plan:**\n1. **Urethritis with discharge** – Obtain urethral swab for gonorrhea/chlamydia NAAT, urinalysis with culture. Empiric treatment with ceftriaxone 500 mg IM x1 and doxycycline 100 mg BID x7 days pending results.\n2. **Low-grade fever** – Likely related to urogenital infection. Monitor.\n3. **Elevated Free T3** – Noted on labs (see table). TSH and Free T4 are normal. Will monitor; consider repeat thyroid panel in 6-8 weeks.\n4. **Obesity** – Counsel on weight management.\n5. **BPH** – Stable; continue monitoring.\n6. **Atrial fibrillation** – Confirm anticoagulation status, as only ferrous sulfate is listed; reconcile medications at follow-up.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "1.5",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "1.2",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "7.4",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is the patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_210",
+      "source_id": "val_210",
+      "note": "CC: Recurrent syncopal episodes.\n\nHPI: Mr. J is a 67-year-old male presenting for evaluation of three syncopal episodes over the past month. Episodes occur without prodrome, lasting seconds, with spontaneous recovery. The most recent episode occurred two days ago while walking up stairs. He denies chest pain, palpitations, or seizure-like activity. No tongue biting or incontinence noted. He endorses mild exertional dyspnea that has worsened over the past several months.\n\nPMH: Moderate aortic stenosis (diagnosed 2 years ago on echocardiography), GERD, hyperlipidemia.\n\nMedications: Pantoprazole 40 mg daily.\n\nSocial History: Non-smoker. Denies alcohol or illicit drug use. Sedentary lifestyle.\n\nExam:\nVitals: BP 150/104 mmHg, HR 83 bpm, Temp 98.4°F, RR 30 breaths/min, SpO2 97%.\nGeneral: Obese male, no acute distress.\nCardiac: Regular rate and rhythm. Harsh crescendo-decrescendo systolic murmur at the right upper sternal border radiating to the carotids. Parvus et tardus carotid pulse noted.\nLungs: Clear to auscultation bilaterally.\nExtremities: No edema. Peripheral pulses intact.\nNeuro: Alert, oriented x3, no focal deficits.\n\nLaboratory results reviewed (see table).\n\nAssessment/Plan:\n1. Recurrent syncope — high suspicion for progression of aortic stenosis as etiology. Will obtain transthoracic echocardiogram urgently to reassess valve area and gradients. Cardiology referral placed for possible valve intervention.\n2. Hypertension — BP elevated today; avoid vasodilators given AS. Will start low-dose beta-blocker cautiously.\n3. Obesity — counsel on weight management and dietary modifications.\n4. Hyperlipidemia — currently untreated; initiate atorvastatin 40 mg daily.\n5. GERD — continue pantoprazole.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "1.8",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "1.3",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "2.6",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    },
+    {
+      "id": "p1_val_213",
+      "source_id": "val_213",
+      "note": "CC: Recurrent episodes of palpitations and anxiety.\n\nHPI: 36-year-old female with a history of atrial fibrillation, systemic lupus erythematosus (SLE), and coronary artery disease presents with recurrent episodes of palpitations and associated anxiety over the past several weeks. She describes intermittent episodes lasting 5-15 minutes, occurring 2-3 times per week, sometimes accompanied by lightheadedness. She denies chest pain, syncope, or dyspnea. No recent lupus flare symptoms. She is adherent with her medications. She denies caffeine or stimulant use.\n\nPMH:\n- Atrial fibrillation\n- Systemic lupus erythematosus\n- Coronary artery disease\n- Obesity\n\nMedications:\n- Ferrous sulfate 325 mg daily\n- Atorvastatin 20 mg at bedtime\n- Apixaban 5 mg twice daily\n- Enoxaparin 40 mg subcutaneous daily\n- Aspirin 81 mg daily\n\nExam:\nVitals: BP 115/70 mmHg, HR 74 bpm, Temp 98.7°F, RR 18 breaths/min, SpO2 99%.\nGeneral: Well-appearing, obese female in no acute distress.\nCardiovascular: Regular rate and rhythm, no murmurs, rubs, or gallops. No peripheral edema.\nLungs: Clear to auscultation bilaterally.\nAbdomen: Soft, non-tender, non-distended.\nSkin: No malar rash or active lupus lesions.\n\nIron studies obtained and reviewed (see table below).\n\nAssessment/Plan:\n1. Palpitations with history of atrial fibrillation – Currently in sinus rhythm. Order 14-day Holter monitor to characterize arrhythmia burden. Consider cardiology follow-up.\n2. Dual anticoagulation concern – Patient on both apixaban and enoxaparin; will review indication and assess bleeding risk. Concurrent aspirin further increases hemorrhagic risk.\n3. SLE – Stable, no active flare. Continue rheumatology follow-up.\n4. Obesity – Counsel on weight management and dietary optimization.\n5. Iron studies – Within normal limits; continue ferrous sulfate for now.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "Serum Iron",
+            "92.3",
+            "μg/dL",
+            "60-170"
+          ],
+          [
+            "TIBC",
+            "264.2",
+            "μg/dL",
+            "250-370"
+          ],
+          [
+            "Ferritin",
+            "38.9",
+            "ng/mL",
+            "12-300"
+          ],
+          [
+            "Transferrin Saturation",
+            "36.7",
+            "%",
+            "20-50"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI) based on her documented weight and height?"
+    },
+    {
+      "id": "p1_val_215",
+      "source_id": "val_215",
+      "note": "CC: New-onset seizure with witnessed tonic-clonic activity.\n\nHPI: 40-year-old male presented to the ED after a witnessed generalized tonic-clonic seizure at home today. Per his wife, the episode lasted approximately 2 minutes with post-ictal confusion lasting 15 minutes. No prior seizure history. Patient denies recent alcohol use, illicit drug use, or medication changes. No preceding aura, headache, or recent illness reported. He was in his usual state of health prior to the event. No tongue biting or urinary incontinence noted by witnesses.\n\nPMH: Heart failure with preserved ejection fraction (HFpEF), cirrhosis (Child-Pugh class A), type 2 diabetes mellitus, depression.\n\nMedications: Calcium carbonate 600mg BID with vitamin D, linagliptin 5mg daily, dapagliflozin 10mg daily, duloxetine 60mg daily.\n\nAllergies: NKDA.\n\nPhysical Exam:\nVitals: BP 125/74 mmHg, HR 121 bpm, Temp 99.7°F, RR 14 breaths/min, SpO2 99% on room air.\nGeneral: Alert, oriented x3, appears mildly fatigued, no acute distress.\nHEENT: No tongue laceration, pupils equal and reactive, no papilledema on fundoscopy.\nCardiovascular: Tachycardic, regular rhythm, no murmurs.\nPulmonary: Clear to auscultation bilaterally.\nAbdomen: Soft, non-tender, no hepatosplenomegaly.\nNeurological: Non-focal exam. Cranial nerves II-XII intact. Strength 5/5 in all extremities. No clonus or hyperreflexia.\n\nAssessment/Plan:\n1. New-onset seizure – Obtain CT head, MRI brain with contrast, EEG. Check CMP, magnesium, ammonia level given cirrhosis history. Hold duloxetine (lowers seizure threshold). Neurology consult.\n2. Tachycardia – Likely post-ictal. Monitor on telemetry. Recheck after stabilization.\n3. Low-grade fever – Monitor, obtain blood cultures if persistent.\n4. HFpEF/Cirrhosis – Continue current medications, monitor hepatic function.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "WBC",
+            "9.9",
+            "x10³/μL",
+            "4.5-11.0"
+          ],
+          [
+            "Hemoglobin",
+            "13.0",
+            "g/dL",
+            "12.0-17.5"
+          ],
+          [
+            "Hematocrit",
+            "46.9",
+            "%",
+            "36-51"
+          ],
+          [
+            "Platelets",
+            "323.3",
+            "x10³/μL",
+            "150-400"
+          ]
+        ]
+      },
+      "question": "What is this patient's body mass index (BMI)?"
+    },
+    {
+      "id": "p1_val_226",
+      "source_id": "val_226",
+      "note": "CC: Memory lapses and word-finding difficulty for 6 months.\n\nHPI: Mr. J is an 83-year-old male presenting with a 6-month history of progressive memory lapses and difficulty finding words during conversation. He reports forgetting appointments and misplacing household items with increasing frequency. His daughter notes he occasionally pauses mid-sentence, searching for common words. He denies confusion, visual hallucinations, gait disturbance, or recent falls. No recent medication changes. He denies alcohol use for over 10 years.\n\nPMH: Cirrhosis (Child-Pugh A), hypothyroidism, iron deficiency anemia, depression.\n\nMedications: Empagliflozin 10 mg daily, levothyroxine 50 mcg daily, ferrous sulfate 325 mg daily, citalopram 20 mg daily.\n\nVitals: BP 126/78 mmHg, HR 74 bpm, Temp 98.2 °F, RR 17 breaths/min, SpO2 93%.\n\nExam: Alert and oriented x3. Cranial nerves intact. No asterixis. MoCA score 21/30, with deficits in delayed recall and naming. Speech fluent but with occasional word-finding pauses. No focal neurological deficits. Abdomen soft, no ascites. Mild bilateral lower extremity edema.\n\nLaboratory results reviewed (see table).\n\nAssessment/Plan:\n1. Cognitive decline – MoCA 21/30 concerning for mild cognitive impairment vs early dementia. Notably, free T4 is markedly elevated at 4.0 ng/dL with suppressed-normal TSH, raising concern for exogenous thyrotoxicosis which may contribute to cognitive symptoms. Will reduce levothyroxine to 25 mcg daily and repeat thyroid panel in 6 weeks. Order brain MRI and hepatic encephalopathy workup (ammonia level). Refer to neurology.\n2. Cirrhosis – stable Child-Pugh A; continue monitoring.\n3. Low SpO2 – obtain chest X-ray and consider pulmonary evaluation.",
+      "table": {
+        "type": "labs",
+        "headers": [
+          "Test",
+          "Value",
+          "Unit",
+          "Reference Range"
+        ],
+        "rows": [
+          [
+            "TSH",
+            "0.8",
+            "mIU/L",
+            "0.27-4.20"
+          ],
+          [
+            "Free T4",
+            "4.0",
+            "ng/dL",
+            "0.93-1.70"
+          ],
+          [
+            "Free T3",
+            "2.2",
+            "pg/mL",
+            "2.0-4.4"
+          ]
+        ]
+      },
+      "question": "What is this patient's BMI based on his recorded weight and height?"
+    }
+  ],
+  "records_sha256": "dcfd16b692726c2af3af2b0e59cfc902f5142a75af31240362bcd8f25a891893",
+  "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)"
+}

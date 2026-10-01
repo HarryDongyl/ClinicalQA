@@ -1,0 +1,15 @@
+# 8B GPU smoke before A-8B (D-077): segmented tool rows overfit, reload and both tools roll out end to end.
+extends: configs/train/w3_8b_filtered_lr1e4.yaml
+run_id: w3_8b_smoke
+example_ids: [train_000, train_004, train_003, train_046, train_006, train_015]
+training:
+  learning_rate: 5.0e-4
+  epochs: 10
+  grad_accum: 1
+  scheduler: constant
+  warmup_ratio: 0.0
+  logging_steps: 1
+  save_steps: 50
+val_loss: false
+checkpoint_dir: checkpoints/w3_8b_smoke
+output_dir: outputs/w3_8b_smoke

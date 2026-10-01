@@ -1,0 +1,85 @@
+{
+  "status": "approved",
+  "split": "train",
+  "selection_rule": "per answer type in TYPES order: records in the q5_filtered train view with no quality flag of any severity; tool_call restricted to calculate_bmi with metric-only input measurements and none in the question; pick the median rendered-length record (D-078)",
+  "ids": [
+    "train_1523",
+    "train_1771",
+    "train_851",
+    "train_802"
+  ],
+  "order": [
+    "extractive",
+    "numeric_reasoning",
+    "tool_call",
+    "uncertain"
+  ],
+  "messages": [
+    {
+      "role": "user",
+      "content": "## Encounter note\n**Chief Complaint:** Sudden swelling and redness in the left calf, onset 1 day ago.\n\n**History of Present Illness:** A 36-year-old female presents to the ED with a 1-day history of acute onset left calf swelling, erythema, and tenderness. She reports the swelling began yesterday morning and has progressively worsened. She denies recent trauma, surgery, or prolonged immobilization. She denies chest pain, shortness of breath, or hemoptysis. She notes mild warmth over the affected area. She is currently taking metformin for an unclear indication (no documented diabetes) and sertraline for anxiety. Her BMI is 39.3 kg/m², consistent with Class III obesity, which is a known risk factor for venous thromboembolism.\n\n**Past Medical History:** Anxiety disorder, iron deficiency anemia, gout.\n\n**Medications:** Metformin 1000 mg twice daily, sertraline 50 mg daily.\n\n**Physical Examination:**\n- Vitals: BP 129/70 mmHg, HR 82 bpm, Temp 97.6 °F, RR 18 breaths/min, SpO2 96%.\n- General: Alert, oriented, mildly anxious, obese habitus.\n- Left lower extremity: Notable erythema and edema of the left calf. Positive Homans' sign with pain on dorsiflexion. Circumference of left calf is approximately 3 cm greater than the right. Warmth appreciated. No open wounds or skin breakdown.\n- Right lower extremity: No edema, erythema, or tenderness.\n- Cardiopulmonary: Regular rate and rhythm, lungs clear bilaterally.\n\nLaboratory results were obtained and are notable for findings consistent with iron deficiency anemia despite a normal serum iron level (see table below).\n\n**Assessment and Plan:**\n1. **Left calf swelling/erythema:** High clinical suspicion for deep vein thrombosis given obesity, acute unilateral leg swelling, and exam findings. Duplex ultrasound of the left lower extremity ordered. If positive, initiate anticoagulation therapy.\n2. **Iron deficiency anemia:** Ferritin critically low at 6.0 ng/mL with low transferrin saturation at 11.3%. Will initiate IV iron infusion and refer to hematology.\n3. **Gout:** Stable, no acute flare. Continue monitoring.\n4. **Metformin use:** Will clarify indication; no diagnosis of diabetes in chart. Consider discontinuation if not indicated.\n\n## Table (labs)\n| Test | Value | Unit | Reference Range |\n|---|---|---|---|\n| Serum Iron | 117.9 | μg/dL | 60-170 |\n| TIBC | 352.9 | μg/dL | 250-370 |\n| Ferritin | 6.0 | ng/mL | 12-300 |\n| Transferrin Saturation | 11.3 | % | 20-50 |\n\n## Question\nWhat is the patient's ferritin level and is it within the normal reference range?"
+    },
+    {
+      "role": "assistant",
+      "content": "The patient's ferritin level is 6.0 ng/mL, which is below the normal reference range of 12-300 ng/mL."
+    },
+    {
+      "role": "user",
+      "content": "## Encounter note\n**CLINICAL ENCOUNTER NOTE**\n\n**CC:** Bilateral leg swelling and nocturnal dyspnea for 3 weeks.\n\n**HPI:** Mr. J is a 28-year-old male presenting with progressive bilateral lower extremity edema and paroxysmal nocturnal dyspnea over the past 3 weeks. He reports waking 2-3 times per night with shortness of breath, relieved by sitting upright. He denies chest pain, palpitations, or hemoptysis. He notes his shoes have become tight and his ankles appear visibly swollen by end of day. He uses ibuprofen frequently for chronic back pain, often taking it multiple times daily.\n\n**PMH:** Bipolar disorder, COPD, GERD, chronic kidney disease stage 4, benign prostatic hyperplasia.\n\n**Medications:** Gabapentin 300mg TID, hydrochlorothiazide 25mg daily, ibuprofen 400mg TID PRN, apixaban 5mg BID.\n\n**Vitals:** BP 124/76 mmHg, HR 63 bpm, Temp 100.7°F, RR 18 breaths/min, SpO2 97%. Weight: 93.3 kg, Height: 177.5 cm (BMI 29.6).\n\n**Physical Exam:** Alert, mildly uncomfortable. Lungs with bibasilar crackles. Heart regular rate and rhythm, no murmurs. Abdomen soft, nontender. Bilateral 2+ pitting edema to mid-shins. No JVD appreciated.\n\n**Labs:** See table below. Lipid panel within acceptable limits.\n\n**Assessment/Plan:**\n1. **Bilateral lower extremity edema with PND** — Likely multifactorial: CKD stage 4 with possible fluid overload exacerbated by chronic NSAID use. Ibuprofen should be discontinued given CKD and fluid retention risk. Will obtain BMP, BNP, urinalysis, and renal ultrasound. Consider switching to acetaminophen for analgesia.\n2. **Low-grade fever** — Temperature 100.7°F; will obtain CBC, blood cultures, and UA to evaluate for infectious etiology.\n3. **CKD Stage 4** — Nephrology follow-up recommended. Reassess hydrochlorothiazide efficacy given advanced CKD; may need loop diuretic instead.\n4. **Apixaban** — Verify indication and renal dosing appropriateness given CKD stage 4.\n\n## Table (labs)\n| Test | Value | Unit | Reference Range |\n|---|---|---|---|\n| Total Cholesterol | 174.3 | mg/dL | <200 |\n| LDL | 95.2 | mg/dL | <100 |\n| HDL | 62.1 | mg/dL | >40 |\n| Triglycerides | 71.8 | mg/dL | <150 |\n\n## Question\nHow close is the patient's LDL cholesterol to exceeding the upper limit of the reference range, and is any lipid value currently outside its normal range?"
+    },
+    {
+      "role": "assistant",
+      "content": "The patient's LDL is 95.2 mg/dL with a reference threshold of <100 mg/dL, placing it only 4.8 mg/dL below the upper limit — close but still within range. All four lipid values (Total Cholesterol 174.3, LDL 95.2, HDL 62.1, Triglycerides 71.8) are currently within their respective normal reference ranges."
+    },
+    {
+      "role": "user",
+      "content": "## Encounter note\nCC: Numbness and tingling in both feet for 2 months.\n\nHPI: 74-year-old female presents with progressive bilateral numbness and tingling in both feet over the past 2 months. She describes the sensation as starting at the toes and extending to the mid-foot, worse at night. She denies any recent falls, trauma, or weakness. No bowel or bladder dysfunction. She notes occasional difficulty with balance when walking. She has been on sitagliptin for glucose management but reports inconsistent monitoring of blood sugars at home.\n\nPMH: Moderate aortic stenosis, rheumatoid arthritis, depression, ulcerative colitis, asthma.\n\nMedications: Sitagliptin 100mg daily, aspirin 81mg daily, omeprazole 20mg daily, tamsulosin 0.4mg at bedtime.\n\nVitals: BP 159/96 mmHg, HR 90 bpm, Temp 98.2°F, RR 21 breaths/min, SpO2 97%. Weight 93.4 kg, Height 191.3 cm.\n\nPhysical Exam: Alert and oriented. Cardiac exam reveals a systolic crescendo-decrescendo murmur at the right upper sternal border. Lungs clear bilaterally. Abdomen soft, non-tender. Neurological exam: decreased sensation to light touch and pinprick bilateral feet in a stocking distribution. Vibratory sense diminished at bilateral great toes. Ankle reflexes absent bilaterally. Motor strength 5/5 in all extremities. Gait mildly unsteady.\n\nLabs reviewed (see table). Notably, aPTT is elevated at 47.3 seconds; PT and INR within normal limits. D-dimer normal.\n\nAssessment/Plan:\n1. Bilateral peripheral neuropathy – likely diabetic or metabolic etiology. Order HbA1c, B12, folate, TSH, and comprehensive metabolic panel. Refer for nerve conduction studies/EMG.\n2. Elevated aPTT – will evaluate with mixing study; consider lupus anticoagulant or factor deficiency workup given rheumatoid arthritis history.\n3. Hypertension – BP elevated today. Consider initiating antihypertensive therapy; recheck at follow-up.\n4. Continue current medications. Follow up in 2 weeks.\n\n## Table (labs)\n| Test | Value | Unit | Reference Range |\n|---|---|---|---|\n| PT | 11.9 | seconds | 11.0-13.5 |\n| INR | 1.1 | (no unit) | 0.8-1.1 |\n| aPTT | 47.3 | seconds | 25-35 |\n| D-dimer | 171.5 | ng/mL | <500 |\n\n## Question\nWhat is this patient's BMI based on her recorded weight and height?"
+    },
+    {
+      "role": "assistant",
+      "content": "",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "calculate_bmi",
+            "arguments": {
+              "weight_kg": 93.4,
+              "height_cm": 191.3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "{\"result\": 25.5}"
+    },
+    {
+      "role": "assistant",
+      "content": "Using the patient's weight of 93.4 kg and height of 191.3 cm, her BMI is 25.5 kg/m², which places her in the overweight category (BMI 25.0–29.9). This is relevant in the context of her possible diabetic neuropathy, as overweight status is a risk factor for insulin resistance and type 2 diabetes."
+    },
+    {
+      "role": "user",
+      "content": "## Encounter note\nCLINICAL ENCOUNTER NOTE\n\nCC: Worsening joint pain and morning stiffness for 4 months.\n\nHPI: Mr. [REDACTED] is a 63-year-old male presenting with progressive polyarticular joint pain and morning stiffness lasting approximately 45-60 minutes daily over the past 4 months. He reports involvement of bilateral hands, wrists, and knees. Symptoms have been gradually worsening and are partially relieved with activity. He denies recent fevers, rashes, or trauma. He also endorses fatigue, weight gain, and cold intolerance over a similar timeframe. No recent medication changes.\n\nPMH: Atrial fibrillation, bipolar disorder, chronic pancreatitis.\n\nMEDICATIONS:\n- Furosemide 40 mg daily\n- Sitagliptin 100 mg daily\n- Atorvastatin 20 mg at bedtime\n\nVITALS:\nBP 127/72 mmHg | HR 72 bpm | Temp 97.6 °F | RR 14 | SpO2 97%\n\nPHYSICAL EXAM:\nGeneral: Obese male (BMI 45.3 kg/m², weight 114.1 kg, height 158.6 cm), appearing fatigued. Skin: Dry, cool to touch. No rash. HEENT: Mild periorbital puffiness noted. Cardiovascular: Irregularly irregular rhythm, no murmurs. Extremities: Mild bilateral hand and wrist swelling without erythema. Decreased grip strength bilaterally. Bilateral knee crepitus without effusion. Delayed relaxation of deep tendon reflexes at ankles.\n\nLABORATORY RESULTS: See table below.\n\nASSESSMENT/PLAN:\n1. Joint pain and morning stiffness – Differential includes hypothyroid arthropathy given markedly abnormal thyroid panel, versus inflammatory arthritis. Will obtain RF, anti-CCP, ESR, CRP, and uric acid. The discordant thyroid results (elevated TSH with elevated free T4) raise concern for assay interference or central dysfunction; will repeat thyroid panel and consider endocrinology referral.\n2. Thyroid dysfunction – Start workup as above. Hold on levothyroxine initiation pending repeat labs and clarification.\n3. Continue current medications. Follow up in 2-3 weeks.\n\n## Table (labs)\n| Test | Value | Unit | Reference Range |\n|---|---|---|---|\n| TSH | 13.7 | mIU/L | 0.27-4.20 |\n| Free T4 | 3.3 | ng/dL | 0.93-1.70 |\n| Free T3 | 2.2 | pg/mL | 2.0-4.4 |\n\n## Question\nWhen were the thyroid function tests (TSH, Free T4, Free T3) collected, and can we determine whether these results reflect the patient's thyroid status at the time of this clinical encounter?"
+    },
+    {
+      "role": "assistant",
+      "content": "The thyroid function test results are documented in the note (TSH 13.7 mIU/L, Free T4 3.3 ng/dL, Free T3 2.2 pg/mL); however, no collection date or time is recorded for these labs. Without a timestamp, it is not possible to confirm whether these results were drawn at this visit, prior to it, or how temporally relevant they are to the current clinical presentation."
+    }
+  ],
+  "messages_sha256": "00e759ba48582bcf0770e54bb5a3f52a750b13daf0e003bc540b18d70e27bca2",
+  "system_prompt": "configs/prompts/system_v3.txt",
+  "system_prompt_sha256": "d43f4a32c8f2135a2f6b092a38ae47145b3338edaaf941c5b94073bd1bbcbcd5",
+  "val_first_turn_prompt_tokens": {
+    "min": 4382,
+    "p50": 4479,
+    "max": 4639
+  },
+  "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+  "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "self_check": "tool demo result recomputed by the executor and equal to gold (formatting.target_messages)",
+  "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)",
+  "review_type": "ai_grounding_review",
+  "review_notes": "All four targets reviewed against source inputs; tool result recomputed; no source record or demonstration message changed. Token lengths remeasured after the prompt clarification."
+}

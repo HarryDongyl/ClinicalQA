@@ -1,0 +1,25 @@
+# Wave-three 4B generation, prompt v1 (EXPERIMENTS_WAVE3; D-076). Validation, P1 probes and train-fit IDs.
+# R0-v1 (base), the filtered control C-filtered-s42 and the relabel seeds share this exact protocol.
+format_config: configs/format_core.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
+  w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242}  # C-filtered-s42, epoch two
+  w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}  # epoch checkpoint via --adapter
+  w3_relabel_lr1e4_s43: {adapter: checkpoints/w3_relabel_lr1e4_s43/final}
+  w3_relabel_lr1e4_s44: {adapter: checkpoints/w3_relabel_lr1e4_s44/final}

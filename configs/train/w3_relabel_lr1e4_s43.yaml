@@ -1,0 +1,6 @@
+# F-s43: seed replication of F-s42, unchanged otherwise; runs only after the F-s42 gate is approved (D-081).
+extends: configs/train/w3_relabel_lr1e4_s42.yaml
+run_id: w3_relabel_lr1e4_s43
+seed: 43
+checkpoint_dir: checkpoints/w3_relabel_lr1e4_s43
+output_dir: outputs/w3_relabel_lr1e4_s43

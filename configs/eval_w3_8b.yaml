@@ -1,0 +1,22 @@
+# R0-8B (zero-shot) and A-8B, Qwen3-8B in non-thinking mode with its own template (D-077, D-082), prompt v1.
+format_config: configs/format_w3_8b.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-8B
+  revision: b968826d9c46dd6066d109eabc6255188de91218
+  tokenizer: Qwen/Qwen3-8B
+  tokenizer_revision: b968826d9c46dd6066d109eabc6255188de91218
+  chat_template_kwargs: {enable_thinking: false}
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
+  w3_8b_filtered_lr1e4: {adapter: checkpoints/w3_8b_filtered_lr1e4/final}  # epoch checkpoint via --adapter

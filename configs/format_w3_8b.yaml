@@ -1,0 +1,15 @@
+# Qwen3-8B, its own pinned chat template in non-thinking mode (D-077). The generation prompt ends with an
+# empty <think></think> block that the template drops from earlier assistant turns, so tool rows are trained
+# as two sequences, each rendered exactly as at inference (segmented_turns, formatting.encode_segments).
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-8B
+tokenizer_revision: b968826d9c46dd6066d109eabc6255188de91218
+chat_template_kwargs: {enable_thinking: false}
+segmented_turns: true
+system_prompt: configs/prompts/system_v1.txt
+max_length: 2048
+output_dir: data/sft_w3_8b
+train_views:
+  q5_filtered: data/processed/q5_filtered/train.jsonl
+eval_splits: [val]
+length_report: reports/w3/token_lengths_8b.json

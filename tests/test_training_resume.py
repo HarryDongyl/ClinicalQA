@@ -22,8 +22,8 @@ def test_real_trainer_resume_preserves_optimizer_state_and_refuses_config_drift(
             (Path(path) / "tokenizer_config.json").write_text('{}')
 
     records = [{"id": f"train_{i}"} for i in range(4)]
-    examples = [{"id": r["id"], "answer_type": "extractive", "input_ids": [1, 2, 3, 4],
-                 "labels": [-100, -100, 3, 4]} for r in records]
+    examples = [{"id": r["id"], "answer_type": "extractive",
+                 "segments": [{"input_ids": [1, 2, 3, 4], "labels": [-100, -100, 3, 4]}]} for r in records]
     prompt = tmp_path / "system.txt"
     prompt.write_text("fixture")
     monkeypatch.setattr(module, "load_yaml", lambda _: {"system_prompt": str(prompt), "max_length": 8})

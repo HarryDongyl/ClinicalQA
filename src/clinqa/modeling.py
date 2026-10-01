@@ -1,9 +1,10 @@
 """Model/tokenizer loading shared by training and inference (D-020, D-022, D-023).
 
-The tokenizer and chat template always come from the configured template model
-(Qwen3-4B-Instruct-2507); Qwen3 sizes share one vocabulary, so the 0.6B smoke model
-is loaded with the same tokenizer. On CUDA the base model is 4-bit NF4 (QLoRA); on
-CPU/MPS it is loaded unquantized for smoke tests only.
+The tokenizer and chat template come from the configured template model: Qwen3-4B-Instruct-2507
+for the 4B runs and the 0.6B smoke model (Qwen3 sizes share one vocabulary), and Qwen3-8B's own
+template for the wave-three 8B arms (D-077). `chat_template_kwargs` from the model config (e.g.
+enable_thinking: false) are attached to the tokenizer and applied by every render. On CUDA the
+base model is 4-bit NF4 (QLoRA); on CPU/MPS it is loaded unquantized for smoke tests only.
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ def load_tokenizer(model_cfg: dict[str, Any], padding_side: str = "right") -> An
 
     tok = AutoTokenizer.from_pretrained(model_cfg["tokenizer"], revision=model_cfg["tokenizer_revision"])
     tok.padding_side = padding_side
+    tok.clinqa_template_kwargs = dict(model_cfg.get("chat_template_kwargs") or {})
     if tok.pad_token is None:
         tok.pad_token = "<|endoftext|>"
     return tok

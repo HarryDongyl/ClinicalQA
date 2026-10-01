@@ -1,0 +1,10 @@
+{
+  "configs/w3/q5_relabel_review.jsonl": "e7de8506f064595205417f99ff013026281ce5a3f47095d5403eb8bd8ee01404",
+  "configs/w3/fewshot_v3.json": "d7bf1f0292c5348741af73b79435e562971ab0ab94f2042a8a072e7a4674123c",
+  "configs/w3/p1_probes.json": "cf0190138d513bcd2238563586653ee8c8c4515e1f027f58b642a612311a92f7",
+  "configs/prompts/system_v3.txt": "843aa6a5ac33c71c2382dbba5bb3857260aa9f29050fa255b9be9f0e1f229a39",
+  "reports/w3/q5_review_packet.md": "8ed5c770ffc8e97831c1d14ecd199b0b4c69f46be863927aa2b3b9e93c84dfe2",
+  "reports/w3/p1_review_packet.md": "1ecd45de11d87878b0bd6f8240a1f7107413c16a45d8a8fff5db8406ef1dafbf",
+  "src/clinqa/data_views.py": "375f2f784ef0ba791ac7d406c6b3c3fc6cde422b23a11b73667219b4e9dea8c1",
+  "src/clinqa/training_data.py": "c8947ec953d8d7828bb34115468cb00e54a1e63bbf526f7fc3dbe0eda69f13fe"
+}

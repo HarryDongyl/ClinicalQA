@@ -1,0 +1,35 @@
+{
+  "tokenizer": "Qwen/Qwen3-8B",
+  "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "n_records": 1922,
+  "problems": [],
+  "segments_by_type": {
+    "extractive:1": 800,
+    "numeric_reasoning:1": 400,
+    "tool_call:2": 422,
+    "uncertain:1": 300
+  },
+  "max_sequence_tokens": 1618,
+  "max_length": 2048,
+  "supervised_tokens": 142600,
+  "generation_prompt_ends_with_empty_think": true,
+  "token_ids_8b_vs_4b": {
+    "<tool_call>": [
+      151657,
+      151657
+    ],
+    "<|im_end|>": [
+      151645,
+      151645
+    ],
+    "<|endoftext|>": [
+      151643,
+      151643
+    ]
+  },
+  "call_prefix_is_single_token": true,
+  "passed": true
+}

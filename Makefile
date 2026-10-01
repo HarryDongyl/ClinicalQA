@@ -11,7 +11,7 @@ EVAL_CONFIG ?= configs/eval_core.yaml
 
 .PHONY: help setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
         compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation \
-        w2-round w2-epochs w2-stable score-v21 w2-score
+        w2-round w2-epochs w2-stable score-v21 w2-score w3-prep w3-views w3-check w3-round w3-score c10
 
 help:
 	@echo "setup        install the locked environment incl. the train extra (uv sync --frozen --extra train)"
@@ -41,6 +41,12 @@ help:
 	@echo "w2-stable    RUN=w2_run  exit 1 on non-finite loss/grad_norm or unfinished training"
 	@echo "score-v21    LABELS='...' OUT=dir  candidate scorer v2.1 on val labels (diagnostic, CPU)"
 	@echo "w2-score     local CPU: v2.1 + bounded v2 + legacy paired comparisons + rollout diffs for wave two"
+	@echo "w3-prep      local CPU: Q5 review sheet, draft few-shot demos, train-fit IDs, draft P1 probes, 8B mask audit"
+	@echo "w3-views     build the q5_relabeled view from the completed review (configs/w3/q5_relabel_review.jsonl)"
+	@echo "w3-check     readiness of the wave-three approvals (prompt v3, demos, P1, train-fit, relabel review)"
+	@echo "w3-round     RunPod: wave three [STAGES='core 8b' default; 'seeds' after the F-s42 gate; UPLOAD=1]"
+	@echo "w3-score     local CPU: v2.1 + bounded v2 + P1 + train-fit + C10 + F-s42 gate + paired comparisons"
+	@echo "c10          LABELS='...' OUT=dir  C10 confidence diagnostics on validation labels (CPU)"
 
 setup:
 	$(UV) sync --frozen --extra train
@@ -160,3 +166,51 @@ final-eval:
 
 clean:
 	rm -rf data/processed/*/train.jsonl data/sft outputs/smoke .pytest_cache
+
+# ---------------------------------------------------------------- wave three (EXPERIMENTS_WAVE3, D-075 to D-083)
+# Drafts need a person: review configs/w3/q5_relabel_review.jsonl, then
+#   uv run python scripts/w3_prep.py approve prompt_v3|fewshot|p1 --reviewer <name>
+W3_PREP := uv run --frozen python scripts/w3_prep.py
+w3-prep: views
+	@test -f configs/w3/q5_relabel_review.jsonl || $(W3_PREP) relabel-template
+	@test -f configs/w3/fewshot_v3.json || $(W3_PREP) fewshot
+	@test -f configs/w3/trainfit_ids.json || $(W3_PREP) trainfit
+	@test -f configs/w3/p1_probes.json || $(W3_PREP) p1
+	$(W3_PREP) audit-8b
+	$(W3_PREP) check
+
+w3-views: views
+	$(W3_PREP) check --require relabel
+	$(PY) python -m clinqa.data_views --variant q5_relabeled
+	$(PY) python -m clinqa.formatting --config configs/format_w3.yaml
+
+w3-check:
+	$(W3_PREP) check
+
+w3-round:
+	STAGES="$(or $(STAGES),core 8b)" UPLOAD=$(UPLOAD) bash scripts/run_w3_round.sh
+
+# Wave-three scoring on CPU after pulling the pod outputs. Report directories are never overwritten (OUT=...).
+W3_OUT = $(or $(OUT),reports/w3/round1)
+W3_VAL = $(sort $(patsubst outputs/%/val/scored.jsonl,%,$(wildcard outputs/w3_*/val/scored.jsonl)))
+W3_P1 = $(sort $(patsubst outputs/%/p1_probes/run.json,%,$(wildcard outputs/w3_*/p1_probes/run.json)))
+W3_FIT = $(sort $(patsubst outputs/%/train/scored.jsonl,%,$(wildcard outputs/w3_*/train/scored.jsonl)))
+W3_FS42 = $(patsubst outputs/%/p1_probes/run.json,%,$(wildcard outputs/w3_relabel_lr1e4_s42_step*/p1_probes/run.json))
+w3-score:
+	@test -n "$(W3_VAL)" || (echo "no wave-three validation outputs found"; exit 1)
+	$(PY) python scripts/score_v21_val.py --out $(W3_OUT)/v21 --labels $(W3_VAL)
+	$(PY) python scripts/rescore_validation_v2.py --out $(W3_OUT)/bounded_v2 --labels $(W3_VAL)
+	$(if $(W3_P1),$(PY) python scripts/w3_analyze.py p1 --labels $(W3_P1) --out $(W3_OUT)/p1,)
+	$(if $(W3_FIT),$(PY) python scripts/w3_analyze.py trainfit --labels $(W3_FIT) --out $(W3_OUT)/trainfit,)
+	$(PY) python scripts/w3_analyze.py c10 --labels $(W3_VAL) --out $(W3_OUT)/c10_v1
+	$(PY) python scripts/w3_analyze.py c10 --labels $(W3_VAL) --out $(W3_OUT)/c10_v21 --v21 $(W3_OUT)/v21
+	$(if $(W3_FS42),$(PY) python scripts/w3_analyze.py gate --candidate $(W3_FS42) --out $(W3_OUT)/gates,)
+	@for ref in w3_c_filtered_s42 w3_r0_v1 w3_r0_8b; do for l in $(W3_VAL); do \
+	  test "$$l" != "$$ref" && test -f outputs/$$ref/val/scored.jsonl || continue; \
+	  $(PY) python -m clinqa.evaluate --config configs/eval_w3_v1.yaml compare --a $$ref --b $$l --split val >/dev/null \
+	  || exit 1; done; done
+	@echo "Reports in $(W3_OUT); legacy paired comparisons in outputs/compare_w3_*_val_full.{md,json}. No winner is declared."
+
+c10:
+	@test -n "$(LABELS)" && test -n "$(OUT)" || (echo "usage: make c10 LABELS='a b' OUT=reports/new_dir [V21=dir]"; exit 1)
+	$(PY) python scripts/w3_analyze.py c10 --labels $(LABELS) --out $(OUT) $(if $(V21),--v21 $(V21),)

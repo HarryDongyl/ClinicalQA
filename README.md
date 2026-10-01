@@ -21,6 +21,30 @@ The supplied v2.1 results are **diagnostic only**, pending evaluation repair. St
 - **Command routing:** `make score-v2` runs the bounded-contract scorer. `make prompt-ablation` and `make w2-round` only generate, and run the legacy scorer on the pod. `make w2-score` (CPU) runs candidate v2.1 through the guarded `scripts/score_v21_val.py` wrapper, then bounded v2, then the legacy paired comparisons and rollout diffs (D-047). Legacy model-selection commands still do not implement semantic release gates.
 - **Project history:** [decisions](docs/DECISIONS.md), [data findings](docs/FINDINGS.md), [repository design review](docs/REPOSITORY_DESIGN_REVIEW.md). These document the reasoning and are preserved.
 
+## Latest wave-three planning review
+
+[Reviewed experiment plan](docs/EXPERIMENTS_WAVE3.md) and [evidence/merge review](docs/WAVE3_REVIEW.md) supersede stale planning assumptions, not historical results. Imported decision IDs are D-053..D-068; planning updates are D-069..D-074.
+
+**Wave three is implemented but not run** (journal W3-PLAN-005, DECISIONS D-075..D-083). The round covers:
+- R0-v1 / R0-v3 / R0-v3-FS4 prompted baselines;
+- the regenerated filtered control;
+- F-s42 on the reviewed Q5 relabel view;
+- P1 both-missing probes;
+- D-TRAINFIT;
+- C10;
+- Qwen3-8B zero-shot plus one 8B SFT run on the locked filtered recipe;
+- seeds 43/44 after the F-s42 gate.
+
+All generation runs at batch 2. Human approvals come first: the Q5 relabel review, prompt v3, the demonstrations and the P1 probes.
+
+```bash
+make w3-prep             # local: review sheets, drafts, frozen train-fit IDs, 8B mask audit (done once)
+make w3-check            # which approvals are still missing
+make w3-views            # after the Q5 review: build and audit q5_relabeled
+make w3-round            # on the pod (STAGES="core 8b"; later STAGES=seeds)
+make w3-score            # locally on CPU after pulling outputs
+```
+
 ## Status
 
 Current development policy: **validation only; declare no winner until the scorer is repaired** (D-038, D-049).

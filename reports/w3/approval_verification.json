@@ -1,0 +1,31 @@
+{
+  "pytest": {
+    "passed": 254,
+    "warnings": 4,
+    "seconds": 52.48
+  },
+  "mask_records": 2000,
+  "mask_problems": 0,
+  "max_training_tokens": 1614,
+  "approvals": {
+    "prompt_v3": {
+      "path": "configs/prompts/system_v3.txt",
+      "sha256": "60db35d8bae9bb1e895fb41205784ba9479351ede953e303989a4f28d48c9fc7",
+      "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)"
+    },
+    "fewshot": {
+      "path": "configs/w3/fewshot_v3.json",
+      "sha256": "4fcfb6bdb062713893a71fe09617e116a59f8d1adea91297b54b0e0e61b71f3f",
+      "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)"
+    },
+    "p1": {
+      "path": "configs/w3/p1_probes.json",
+      "sha256": "6b38c658734eca1a04bd2b965976d1b1d4cab7c960479c120441b49377289aa6",
+      "reviewer": "Codex AI grounding reviewer (not human clinical adjudication)"
+    }
+  },
+  "accepted_q5": 78,
+  "revised_answers": 14,
+  "gpu_run": false,
+  "clinical_adjudication": false
+}

@@ -1,0 +1,13 @@
+# F-s42: wave-three control recipe on the reviewed Q5 relabel view (EXPERIMENTS_WAVE3 section 4; D-075, D-076).
+# Identical to w2_filtered_lr1e4_mb1 except the training view: 1,922 unchanged rows + k accepted relabels.
+# The count is enforced by the view audit (1,922 + accepted reviews), so it is not pinned here.
+extends: configs/train/base.yaml
+run_id: w3_relabel_lr1e4_s42
+format_config: configs/format_w3.yaml
+train_view: q5_relabeled
+training:
+  learning_rate: 1.0e-4
+  micro_batch: 1
+  grad_accum: 16
+checkpoint_dir: checkpoints/w3_relabel_lr1e4_s42
+output_dir: outputs/w3_relabel_lr1e4_s42

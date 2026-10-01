@@ -1,0 +1,23 @@
+# R0-v3-FS4: R0-v3 plus four approved train demonstrations, one per type (configs/w3/fewshot_v3.json, D-078).
+# First-turn prompts are about 4.4-4.6k tokens (measured with the 4B tokenizer); generation has no prompt cap
+# and the 2,048 formatting cap applies to training conversations only. Batch 2 like every other arm.
+format_config: configs/format_w3_v3.yaml
+fewshot: configs/w3/fewshot_v3.json
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}

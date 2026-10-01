@@ -1,0 +1,151 @@
+{
+  "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+  "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "chat_template_sha256": "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326",
+  "tool_schemas_sha256": "9eb098dbc315bd9cdcc9b24b4c78255d27b2634212dc387e82bab7ea97bf198d",
+  "system_prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+  "max_length": 2048,
+  "splits": {
+    "q5_filtered/train": {
+      "measured": "full_conversation",
+      "by_answer_type": {
+        "all": {
+          "n": 1922,
+          "p50": 1374,
+          "p95": 1477,
+          "p99": 1520,
+          "max": 1614
+        },
+        "extractive": {
+          "n": 800,
+          "p50": 1341,
+          "p95": 1429,
+          "p99": 1475,
+          "max": 1491
+        },
+        "numeric_reasoning": {
+          "n": 400,
+          "p50": 1402,
+          "p95": 1497,
+          "p99": 1529,
+          "max": 1544
+        },
+        "tool_call": {
+          "n": 422,
+          "p50": 1410,
+          "p95": 1496,
+          "p99": 1552,
+          "max": 1614
+        },
+        "uncertain": {
+          "n": 300,
+          "p50": 1358,
+          "p95": 1467,
+          "p99": 1524,
+          "max": 1544
+        }
+      },
+      "answer_type_counts": {
+        "extractive": 800,
+        "numeric_reasoning": 400,
+        "tool_call": 422,
+        "uncertain": 300
+      },
+      "overlength_ids": []
+    },
+    "q5_relabeled/train": {
+      "measured": "full_conversation",
+      "by_answer_type": {
+        "all": {
+          "n": 2000,
+          "p50": 1371,
+          "p95": 1476,
+          "p99": 1520,
+          "max": 1614
+        },
+        "extractive": {
+          "n": 800,
+          "p50": 1341,
+          "p95": 1429,
+          "p99": 1475,
+          "max": 1491
+        },
+        "numeric_reasoning": {
+          "n": 400,
+          "p50": 1402,
+          "p95": 1497,
+          "p99": 1529,
+          "max": 1544
+        },
+        "tool_call": {
+          "n": 422,
+          "p50": 1410,
+          "p95": 1496,
+          "p99": 1552,
+          "max": 1614
+        },
+        "uncertain": {
+          "n": 378,
+          "p50": 1341,
+          "p95": 1455,
+          "p99": 1520,
+          "max": 1544
+        }
+      },
+      "answer_type_counts": {
+        "extractive": 800,
+        "numeric_reasoning": 400,
+        "tool_call": 422,
+        "uncertain": 378
+      },
+      "overlength_ids": []
+    },
+    "val": {
+      "measured": "full_conversation",
+      "by_answer_type": {
+        "all": {
+          "n": 250,
+          "p50": 1372,
+          "p95": 1464,
+          "p99": 1505,
+          "max": 1562
+        },
+        "extractive": {
+          "n": 100,
+          "p50": 1343,
+          "p95": 1444,
+          "p99": 1478,
+          "max": 1487
+        },
+        "numeric_reasoning": {
+          "n": 50,
+          "p50": 1390,
+          "p95": 1478,
+          "p99": 1562,
+          "max": 1562
+        },
+        "tool_call": {
+          "n": 62,
+          "p50": 1409,
+          "p95": 1489,
+          "p99": 1505,
+          "max": 1515
+        },
+        "uncertain": {
+          "n": 38,
+          "p50": 1360,
+          "p95": 1427,
+          "p99": 1454,
+          "max": 1454
+        }
+      },
+      "answer_type_counts": {
+        "extractive": 100,
+        "numeric_reasoning": 50,
+        "tool_call": 62,
+        "uncertain": 38
+      },
+      "overlength_ids": []
+    }
+  }
+}

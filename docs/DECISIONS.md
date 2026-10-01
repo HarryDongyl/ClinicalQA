@@ -1,4 +1,4 @@
-# Decisions — revision 4
+# Decisions — merged wave-three review
 
 Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-052). Revision 3 was dated 2026-09-28. [PLAN.md](PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
 ## Current decisions (original IDs retained)
@@ -137,14 +137,161 @@ These supersede earlier entries where they conflict. Superseded: D-014 (the repo
   - *Consequence:* the ladder configs are `configs/train/w2_filtered_{lr1e4,lr1p5e4,lr2e4}_mb1.yaml`. Filtered 1e-4 at mb1 now matches wave one in batch setup, so the micro-batch confound of D-042 no longer applies to training. The generation-batch confound (batch 4 vs wave-one batch 2) still applies, and ladder generations stay matched to the E1 v1 references. `MB=mb4 make w2-round` keeps the old path. The aborted mb4 partial run is not a result.
   - E1 was not re-run. Its outputs were generated before this change, and their protocol hash is unchanged, because only the runner and configs changed.
 
-## Still to measure
+## Status after wave two
 
-Measured in wave one: GPU, driver and bf16 support; the pinned training stack; tokenizer lengths; mb1 throughput and memory; baseline and SFT results under the legacy scorer.
+Measured: three filtered LR runs at micro-batch 1, both epoch outputs, and eight fixed-weight prompt evaluations. These are recorded in `reports/w2_round/`. Wave-three code, relabel audit, seed variance, stronger prompted baseline and probes remain unimplemented/unmeasured. Scorer validity remains unresolved.
 
-Still unknown, and not replaced by predicted or fabricated results:
-- the inference prompt v1 vs v2 effect (E1);
-- the filtered view at 1e-4 and above;
-- the generation drift from batch 4;
-- scorer validity (v2.1 repairs, semantic-judge calibration);
-- manual adjudication of the Q5 train review packet and relabel proposals;
-- seed variance.
+## Wave-three proposals (merged 2026-09-30; implementation not activated)
+
+A four-layer review: loss/optimisation, input/output representation, data, evaluation. It is based on wave-1 and wave-2 results, rescored with scorer v2.1. The supplied narrative is now in [ROUND4_FINDINGS.md](ROUND4_FINDINGS.md), with review corrections; independently verified evidence is in [WAVE3_REVIEW.md](WAVE3_REVIEW.md); the run list is in [EXPERIMENTS_WAVE3.md](EXPERIMENTS_WAVE3.md). These are imported proposals. The review qualifications below take precedence; they do not silently supersede historical evaluation safeguards. No code has been changed for them yet.
+
+**Layer 1: loss and optimisation**
+
+- D-053: The loss stays the token-mean cross-entropy over supervised assistant tokens, normalised by `num_items_in_batch` across gradient accumulation (HF Trainer default). There is no per-type, per-example or per-segment weighting. This means per-type gradient share follows supervised tokens, not example counts (extractive about 16%, numeric 23%, uncertain 20%, tool 41%, of which the call turn is about 10%). The failures that remain are numeric reasoning and missing-information coverage, neither of which is a gradient-share problem. No verified evidence supports up-weighting call tokens for tool SFT.
+- D-054: The hyperparameters are locked:
+  - QLoRA r16/α32, all linear projections;
+  - lr 1e-4, cosine schedule, 3% warmup;
+  - 2 epochs, effective batch 16 (micro-batch 1 × accumulation 16).
+
+  Wave-2 lr 1e-4/1.5e-4/2e-4 differed by ≤0.03 macro, within noise. The final configuration runs 3 seeds. The mb4 run was stopped on purpose and is not part of the final configuration.
+
+**Layer 2: input/output representation**
+
+- D-055: `system_v1` is used for both training and inference. `system_v2_reference` (v1 plus one line: "use only supplied reference ranges") is rejected:
+  - Changing it at inference only flipped 0–2 items per type in paired comparisons, all CIs include 0, and it did not improve numeric.
+  - It contradicts 36 train gold answers that correctly use standard ranges when the input gives none (Q11).
+
+  Wave-2 `w2p_*` is reported as an inference-time prompt-robustness check, not a prompt improvement.
+- D-056: R0 is reported twice, both inference-only:
+  - R0-v1: the same prompt as SFT, for parity;
+  - R0-v3: a strong prompt (at most one call, convert imperial units inside the arguments with the factors given, the call turn contains only the call, name the missing field, brief clinical context), as the prompt-engineering ceiling.
+- D-057: Representation parity is verified and unchanged:
+  - one `render()` path for training and inference;
+  - fixed order note → Markdown table → question;
+  - identical `TOOL_SCHEMAS` in every sample;
+  - answer_type only in sidecars;
+  - the call turn's `</tool_call><|im_end|>` is supervised and tool responses are masked;
+  - no `<think>`.
+
+  The call turn stays empty in the core configuration.
+- D-058: Ablation R-VIS ("visible reasoning"), one run on the control seed:
+  - numeric targets become `Working:` (lines rendered from the input-derived scorer-v2.1 key, added only when every check agrees with gold) followed by `Answer:` (gold, unchanged);
+  - imperial tool call turns get one conversion line using "≈" and the gold metric values;
+  - scoring reads only `Answer:`;
+  - `call_logprob` moves to the actual `<tool_call>` position.
+
+**Layer 3: data**
+
+- D-059: The 78 train Q5 records (no weight and no height, yet gold calls BMI) are relabelled as uncertain with a two-part answer: what is documented, and what is missing. This supersedes exclusion (D-012/D-019 Q5 view) for the final configuration. Reasons:
+  - After filtering, only 1 train example covers "both measurements missing".
+  - Filtered models at lr ≥ 1e-4 fabricate the values in text on Q5 val items (17/42 evaluations, versus 1/28 at lr 5e-5).
+  - Raw models fabricate them inside the call instead (6–7/7).
+
+  Acceptance: Q5 fabrication (call or text) ≤1/7, and the no-call rate on grounded tool items no worse than the control.
+- D-060: Numeric data is unchanged: no upsampling and no gold edits. Gold picks relative deviation in 13/15 ambiguous "most abnormal" items; only 5 of those have matching units. The weakness is reasoning, which R-VIS addresses.
+- D-061: Allergy shortcut. Allergy questions that mention allergy are 36/36 correct; implicit ones are 8/18, and train has 51 explicit versus 5 implicit. The core configuration is unchanged and a slice metric is added. Ablation R-IMPL, one run on the control seed: 25 of the 51 explicit questions are rewritten into implicit form, with gold unchanged and the total count unchanged.
+- D-062: Q11 is kept. When the input gives no range, the task requires the standard range; this is not label noise.
+- D-068: A consolidated `reports/DATA_QUALITY.md` covers:
+  - splits and statistics;
+  - Q5;
+  - coverage gaps and shortcuts;
+  - "most abnormal" scale;
+  - Q11;
+  - other flags (Q6, Q7, Q13, Q14, Q16, Q17), each kept with its handling;
+  - leakage.
+
+**Layer 4: evaluation**
+
+- D-063: Model selection. This supersedes PLAN section 6 and the `eval_core.yaml` selection rule.
+  - Metric: v2.1 four-type macro on the full val set.
+  - Hard gates: Q5 fabrication ≤1/7; grounded no-call rate not above the control; zero parse errors.
+  - Configurations are compared by mean ± sd over 3 seeds, with ep2 fixed in advance (no epoch picking).
+  - Ablation vs control: same-seed paired bootstrap; a CI that includes 0 means no difference.
+  - v1 is reported in parallel but does not decide.
+- D-064: Scorer v2.1 is frozen (sha256 `b15db3d0…`, `reports/scorer_v2/scorer_v2.1.sha256`) as the primary scorer. v1 is always reported as the spec-literal simple implementation. The LLM-parser plus deterministic-verifier scorer (v3) is deferred to next steps.
+- D-065: Test protocol:
+  - full 400 records, final configuration (3 seeds) plus R0-v1 and R0-v3 only;
+  - ablations on val only;
+  - v1 and v2.1 both reported;
+  - disclosed: this is the second model evaluation on test, and test outputs were used to validate the scorer (v2.1 rules were adjusted on 120 test items; estimated bias ≈0.7pp);
+  - the model list is frozen in `configs/final_eval.yaml` and committed before running.
+- D-066: Counterfactual probes P1–P5, about 40 pairs derived from val and scored with input-derived keys, diagnostic only:
+  - P1: remove a measurement;
+  - P2: add a measurement;
+  - P3: switch metric to imperial;
+  - P4: change a value;
+  - P5: remove the word "allergy" from the question.
+
+  They run on the control seeds, R-IMPL and R0.
+- D-067: Reporting:
+  - the five assignment metrics under their spec names and spec denominators (tool selection over all grounded tool records; tool arguments over calls, strict and outcome), v1 and v2.1 side by side;
+  - a diagnostics table: tool end-to-end, Q5 abstention and fabrication (call and text), over-call, over-refusal, self-correction, slices, probes;
+  - Wilson CIs, seed sd, paired bootstrap.
+
+
+### Review qualifications governing D-053 through D-068
+
+- IDs are stable: incoming D-037..D-052 map to D-053..D-068 respectively. Existing D-001..D-052 and their historical meaning remain intact. Exact incoming wording is preserved in `history/wave3_import_2026-09-30/`; imported proposals above are subject to this section.
+- **D-053**: retain unweighted CE as a control. Supervised-token share is not measured gradient influence; do not claim the residual errors are proven unrelated to weighting. Verify loss normalization with the installed Trainer and PEFT wrapper before treating it as established.
+- **D-054**: 1e-4 is a conservative control choice, not evidence that all LRs are equivalent. The v2.1 epoch-two paired 2e-4 minus 1e-4 macro difference is +2.72 pp, unadjusted bootstrap interval about [+0.35, +5.53] pp. This is exploratory, single-seed and scorer-dependent; see the review. Lock epoch two prospectively without claiming it is the empirical optimum.
+- **D-055/D-062**: retain v1 as the incumbent, not a proven prompt winner. The claim of only 0-2 flips per type is false for base. Missing-range policy is a task-contract choice; the gold's use of an external range alone does not prove that it is required. Evaluate this policy explicitly and distinguish general reference knowledge from patient evidence.
+- **D-056**: call R0-v3 a stronger prompted baseline, not a ceiling. Its gains do not isolate the SFT effect; R0-v1 remains the parity comparator.
+- **D-058**: A-VIS bundles numeric explanations and call-turn conversion text, so any gain is a bundled representation effect unless separate arms are added. Gold agreement cannot certify input-derived keys. Score the final answer for completeness AND all visible text/tool arguments for correctness; never hide erroneous Working text. Moving call_logprob changes its interpretation to a prefix-conditioned diagnostic.
+- **D-059**: 78 accepted relabels and a 2,000-row view are conditional on per-record annotation audit. Filtering versus relabeling changes sample count, class mix and steps (242 versus 250 at two epochs); report a policy comparison, not an isolated label effect.
+- **D-060/D-061**: claimed ambiguous-numeric/allergy counts and fabrication ratios need an exact run roster, record IDs, rule version and evidence. Repeated outputs on seven Q5 questions are not 42 independent patients. Suggested mechanisms remain hypotheses; preserve contextual meaning when rewriting questions.
+- **D-063/D-064**: v2.1 stays a frozen diagnostic, not a validated automatic selector. Its verified false passes and range-policy problems are not fixed by freezing. No semantic winner is approved without evaluating those failure modes. A CI containing zero means insufficient evidence of a difference, not equivalence. Mean +/- SD across three seeds is descriptive and does not remove question-level uncertainty.
+- **D-065**: any further test evaluation is reused-test exploratory evaluation. The proposed 0.7 pp contamination-bias estimate is unsubstantiated and must not be presented as a correction or bound. Freeze a prospective run list but preserve original final-test artifacts; no test-driven development.
+- **D-066**: counterfactual edits must update or remove all relevant mentions and derived facts across note, table and question. Numeric results must be recomputed. Generate and inspect probes before model outputs. Include A-VIS in the probe roster if drawing conclusions about its numerical behavior.
+- **D-067**: the assignment defines tool selection over tool_call examples; report full annotated and grounded-subset denominators separately. Conditional argument accuracy must be paired with call coverage/end-to-end success. Strict tolerance is a project policy, not a spec-prescribed universal +/-0.05. Define noninferiority margins and the zero-event/small-n limitations before applying gates.
+- Code prerequisites are still proposals. The final-eval path currently assumes per-run selected checkpoints; fixed epoch/seed manifests and multi-seed baselines require deliberate validation changes, not bypassing provenance checks. Existing test contamination disclosures remain applicable.
+
+### Supplemental finding qualification
+
+ROUND4_FINDINGS is now available with reviewed corrections. D-058's imperial conversion-line component is deferred: the supplied rationale explicitly uses test-only failures, and exploratory ablations are still development. A-VIS in the reviewed plan is numeric-only. The training coverage counts support D-059 as a hypothesis, but do not replace annotation review. AUROC, token share and the leakage-bias arithmetic must not be interpreted as perfect policy behavior, gradient influence or a validated bias correction.
+
+## Interview-review planning update (2026-10-01)
+
+These proposals refine D-053..D-068 without reusing their IDs. EXPERIMENTS_WAVE3.md is the current queue; no new code or GPU run is activated by this update.
+
+- D-069: Prioritize audited relabeling and strong fixed zero-/few-shot baselines before precision, rank or model-size sweeps. Seed replication follows the first control's gate.
+- D-070: P1-expanded starts from 40 grounded validation BMI cases, with original answerable partners, audited edits and source-clustered reporting. Natural Q5 remains separate; synthetic point gates are not population safety guarantees.
+- D-071: Answer-token confidence supports ranking diagnostics only unless an independently assessed probability mapping is built. Call-prefix calibration must identify the event/label policy and distinguish eventual tool use.
+- D-072: BF16 training and serving are distinct factors. Compare a common serving precision or complete the train-by-serve crossing. Measured memory preflight precedes fit claims.
+- D-073: Train-fit is a diagnostic, not an automatic rank trigger. Model-size comparisons require their own base comparator and template audit and do not isolate capacity.
+- D-074: Preserve known scorer defects, test-consumption disclosures and existing Git history in interview explanations. No clean-test or estimated 0.7 pp contamination-bias claim is supported. The imported narrative is subject to INTERVIEW_REVIEW.md.
+
+## Wave-three implementation (2026-10-01)
+
+Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. Nothing below is a measured result; the GPU round has not run. Journal: W3-PLAN-005.
+
+- D-075: **Q5 relabel view.** `q5_relabeled` = the 1,922 unchanged filtered rows + the Q5 candidates a reviewer accepts in `configs/w3/q5_relabel_review.jsonl`, relabelled `uncertain` with the reviewed answer and no tool call. IDs, notes, tables and questions are unchanged; rejected candidates stay excluded. All 78 rows must be decided (accepted true/false and reviewer) before the view builds. The training audit is transformation-aware: it rebuilds the expected view from canonical train + the review, checks the review hash recorded at build time, and enforces 1,922 + k rows. The proposal file is preserved unmodified. F-s42 vs C-filtered-s42 is a policy comparison (count, class mix and steps change), not an isolated label effect.
+- D-076: **Wave-three generation protocol.** Every matched arm generates at batch 2 under one code state with new labels (`w3_*`); wave-two batch-4 outputs are not reused as controls. The control C-filtered-s42 is `w2_filtered_lr1e4_mb1` checkpoint-242 (adapter hash `8758304b…`, checked against its manifest), regenerated. Epoch two is the prospective primary endpoint; epoch one is diagnostic. Each `run.json` now records mean/max first-turn prompt tokens, new tokens per request and seconds per request.
+- D-077: **Qwen3-8B template.** Model and tokenizer `Qwen/Qwen3-8B` @ `b968826d9c46dd6066d109eabc6255188de91218`, `enable_thinking: false`, passed through `chat_template_kwargs` that `load_tokenizer` attaches to the tokenizer so every render (formatting, training, inference) uses it. The 8B generation prompt ends with an empty `<think>\n\n</think>\n\n` block that the template omits from earlier assistant turns. A tool row therefore cannot supervise its call turn inside the full conversation without a train/inference mismatch. With `segmented_turns: true`, that turn becomes its own sequence ending at the call, rendered exactly as at inference; the final answer is supervised in the full sequence. Every assistant turn is supervised once; the think block is masked. Loss normalisation is unchanged: token-mean over the accumulated batch, and optimizer steps are still counted per record. The 4B single-sequence contract is untouched; the 4B mask audit and token-length report are byte-identical after the change. Local audit (`reports/w3/mask_audit_8b.json`): 1,922 rows, 0 problems, 422 tool rows as 2 sequences, max 1,618 tokens. `<tool_call>`, `<|im_end|>` and `<|endoftext|>` keep the same IDs as in 4B; the call prefix is one token. An 8B GPU smoke (`configs/train/w3_8b_smoke.yaml`) must pass before A-8B.
+- D-078: **Prompted baselines.** R0-v1 (parity prompt), R0-v3 (one stronger prompt, `configs/prompts/system_v3.txt`) and R0-v3-FS4 are inference only. v3 is drafted from the task requirements and train evidence, not tuned on validation outputs, and the user must approve it before use. FS4 uses four train demonstrations, one per type in a fixed order, under a fixed rule: q5_filtered rows with no quality flag; the tool demo is calculate_bmi with metric-only inputs; each pick is the median-length record. The tool demo is executor-checked against gold. Approval is recorded separately; generation refuses unapproved demos. Measured first-turn prompts with the 4B tokenizer are 4,361–4,618 tokens. Generation has no prompt cap, and the 2,048 cap applies to training conversations only.
+- D-079: **P1 probes.** From the 40 grounded validation BMI sources, edits remove every weight/height/BMI mention: whole lines, mid-line clauses, and table rows. Six sources are excluded because the question itself states the measurements. 34 probes are drafted (`configs/w3/p1_probes.json`). Automatic checks run on every probe: no parser measurement, no BMI value, no plausible-range unit value outside weight-change phrases, and the gold BMI arguments would now be flagged by Q5. 29 probes needed mid-line edits and are listed for human review. The set is frozen (`approve p1`) before any probe output exists. Original partners are scored from the same label's full validation run. Intended behaviour: no call, and say what is missing.
+- D-080: **D-TRAINFIT.** 200 train IDs (50 per type, `random.Random(42)`), drawn from rows unchanged in both views and excluding the demonstrations, are frozen in `configs/w3/trainfit_ids.json`. They are generated on C-filtered-s42 and on F-s42 epoch two. This is a diagnostic only, not generalisation evidence.
+- D-081: **F-s42 gate, frozen before outputs** (`configs/w3/gates.yaml`, sha256 recorded in each gate report):
+  - zero parse or schema failures;
+  - P1 fabrication k/n ≤ 0.05. With n = 34 this allows at most one case; the Wilson CI is reported;
+  - no new unsupported calls on the 7 natural Q5 items versus the control;
+  - no new valid-call failures on the P1 original partners.
+
+  `scripts/w3_analyze.py gate` writes a suggested decision only. Seeds 43/44 run (`STAGES=seeds`) after a person records `configs/w3/gate_fs42.json` with `approved: true, decision: pass`. A failed screen triggers review, not a moved threshold.
+- D-082: **A-8B, one run.** The locked filtered recipe on q5_filtered (1,922 rows): LR 1e-4, two epochs, mb1/ga16, seed 42, NF4, r16/α32/0.05 on the same seven projections. It is compared with C-filtered-s42 (same data and recipe on 4B) and with R0-8B (zero-shot 8B). It deliberately does not use the relabel view, so it does not depend on the annotation review and changes only the backbone and its template versus C-filtered-s42. Disclosure: on the wave-two filtered ladder, 2e-4 scored higher than 1e-4 under diagnostic v2.1 (+2.72 pp, 95% CI [+0.35, +5.53], unadjusted, post-inspection, single seed); 1e-4 remains the conservative locked choice and no winner is declared. A single 8B run does not isolate capacity: post-training and template also differ (D-073).
+- D-083: **C10 as implemented** (`scripts/w3_analyze.py c10`, CPU, validation only).
+  - C10a uses the mean log-prob of the final-answer tokens, excluding the end-of-turn token, as a correctness ranking score: AUROC, risk–coverage and per-type values, under legacy v1 and diagnostic v2.1 correctness. Truncated and misaligned turns are excluded and counted. No ECE is computed.
+  - C10b uses the first-token `<tool_call>` probability against two labels: the annotated policy (gold `tool_call`) and the input-grounded policy (`tool_call` and not Q5). It reports AUROC, Brier, binned counts, executed- and attempted-call confusion matrices, and a greedy token-identity check. Near-ties under 1e-3 are reported separately. This is labelled a prefix-event diagnostic, not eventual tool use.
+
+
+## Wave-three artifact approvals (2026-10-01)
+
+- D-084: Following the user's delegated review request, Codex completed an AI input-grounding review of the 78 train-only Q5 candidates. Accept all 78; revise 11 compound-question targets and three weight-change targets, retain 64 draft targets. The derived relabel view has 2,000 rows with 378 uncertain and 422 tool rows; original inputs and canonical data stay unchanged. AI review is not human clinical adjudication; metadata now records that distinction. See WAVE3_APPROVAL_REVIEW.md and the per-row evidence.
+- D-085: Approve v3 after clarifying deterministic unit conversion in argument preparation under the one-call budget. Keep the four fixed few-shot messages unchanged and remeasure their validation prompt lengths: 4,382–4,639 tokens. Approve/freeze the unchanged 34 P1 probes and retain six documented exclusions. Supersedes the draft/needs-user-review status of these artifacts in D-078/D-079 under the user's current delegated review request.
+- D-086: Artifact approvals do not approve the F-s42 quality gate or seed continuation. Local synthetic classifier checks expose wrong-tool fabrication omissions and hypothetical-number false positives; full-visible-response coverage also requires review. Inspect every P1/natural-Q5 response or repair/version the classifier before gate approval; never move the threshold after outputs. No model winner, GPU outcome or human clinical review is claimed.
+- D-087: **P1 classifier repaired and versioned (`p1-2`) before any wave-three output exists.** The three helper defects from D-086 are fixed:
+  - any tool attempt that passes an ungrounded body measurement is now call fabrication; this covers `unit_convert` as well as `calculate_bmi`, and schema/parse errors count too;
+  - every visible assistant turn is checked, not only the final answer;
+  - weight/height/BMI values present in the input (e.g. a documented weight change) are not counted;
+  - sentences with explicit example, conditional or threshold wording go to mandatory review instead of the fabrication count. Words that also occur in asserted claims ("indicates", "category") do not trigger this.
+
+  Any tool call on a probe is also reported, as is "intended behaviour" (no call, no asserted value, says what is missing). `configs/w3/gates.yaml` pins `p1_classifier: p1-2`, and the gate refuses a mismatched script. The thresholds are unchanged. This does not replace D-086's required review: every one of the 34 probe responses and the 7 natural-Q5 responses is still inspected, and the gate report lists the cases needing review first. Regression tests reproduce the reviewer's synthetic fixtures (`reports/w3/gate_review_caveats.json`).

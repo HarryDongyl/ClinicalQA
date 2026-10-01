@@ -1,0 +1,111 @@
+{
+  "a": "w2p_v1_q5filtered_lr5e5",
+  "b": "w2_filtered_lr1e4_mb1_step000242",
+  "split": "val",
+  "subset": "full",
+  "n": 250,
+  "by_type": {
+    "extractive": {
+      "n": 100,
+      "a": 99,
+      "b": 100,
+      "diff": 0.01,
+      "ci95": [
+        0.0,
+        0.03
+      ],
+      "fixed": [
+        "val_068"
+      ],
+      "broken": [],
+      "both_wrong": []
+    },
+    "numeric_reasoning": {
+      "n": 50,
+      "a": 23,
+      "b": 25,
+      "diff": 0.04,
+      "ci95": [
+        -0.04,
+        0.12
+      ],
+      "fixed": [
+        "val_091",
+        "val_124",
+        "val_242"
+      ],
+      "broken": [
+        "val_085"
+      ],
+      "both_wrong": [
+        "val_001",
+        "val_005",
+        "val_028",
+        "val_047",
+        "val_054",
+        "val_062",
+        "val_065",
+        "val_069",
+        "val_075",
+        "val_080",
+        "val_081",
+        "val_114",
+        "val_117",
+        "val_118",
+        "val_151",
+        "val_157",
+        "val_185",
+        "val_186",
+        "val_194",
+        "val_202",
+        "val_204",
+        "val_230",
+        "val_231",
+        "val_239"
+      ]
+    },
+    "tool_call": {
+      "n": 62,
+      "a": 55,
+      "b": 54,
+      "diff": -0.0161,
+      "ci95": [
+        -0.0484,
+        0.0
+      ],
+      "fixed": [],
+      "broken": [
+        "val_105"
+      ],
+      "both_wrong": [
+        "val_041",
+        "val_077",
+        "val_096",
+        "val_134",
+        "val_135",
+        "val_192",
+        "val_245"
+      ]
+    },
+    "uncertain": {
+      "n": 38,
+      "a": 35,
+      "b": 35,
+      "diff": 0.0,
+      "ci95": [
+        -0.0789,
+        0.0789
+      ],
+      "fixed": [
+        "val_098"
+      ],
+      "broken": [
+        "val_025"
+      ],
+      "both_wrong": [
+        "val_110",
+        "val_181"
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+# R0-v3: base 4B with the frozen v3 prompt, zero-shot, inference only (D-078). Same protocol otherwise.
+format_config: configs/format_w3_v3.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
