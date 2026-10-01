@@ -86,10 +86,12 @@
     ],
     "raw_control_acknowledged": true,
     "policy": "raw_control_unchanged",
+    "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
+    "review_types": [],
     "train_sha256": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
-    "view_manifest_sha256": "00a8f430398edf5e6152b1d9d6d4446554b5d648f1a9af3a449c2951e38ec849"
+    "view_manifest_sha256": "aa3ce94596b899c9981a42133265fca782969962c62495ae4cdd354fac972f74"
   },
   "raw_lr5e5": {
     "view": "raw",
@@ -178,10 +180,12 @@
     ],
     "raw_control_acknowledged": true,
     "policy": "raw_control_unchanged",
+    "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
+    "review_types": [],
     "train_sha256": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
-    "view_manifest_sha256": "00a8f430398edf5e6152b1d9d6d4446554b5d648f1a9af3a449c2951e38ec849"
+    "view_manifest_sha256": "aa3ce94596b899c9981a42133265fca782969962c62495ae4cdd354fac972f74"
   },
   "q5filtered_lr5e5": {
     "view": "q5_filtered",
@@ -270,9 +274,11 @@
     "remaining_q5_ids": [],
     "raw_control_acknowledged": false,
     "policy": "heuristic_Q5_quarantine_no_relabeling",
+    "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
+    "review_types": [],
     "train_sha256": "13ff01abc5269f5c7a1b11129e2532d0bd46cbaf9f04839e4835de238f12d262",
-    "view_manifest_sha256": "e03bd5ec0e0e52fc7ca172d8838456d5a8526ec9ab7912a182b62ddc8cfc71dd"
+    "view_manifest_sha256": "0da53add7f68bb1a549a5f7ef3f808239b9394f65f014745fe086d34bfc79de9"
   }
 }
