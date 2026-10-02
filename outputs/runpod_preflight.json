@@ -1,9 +1,9 @@
 {
-  "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+  "platform": "Linux-6.17.0-14-generic-x86_64-with-glibc2.39",
   "python": "3.11.13",
   "cuda": true,
-  "gpu": "NVIDIA GeForce RTX 4090",
-  "gpu_memory_gb": 23.5,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "gpu_memory_gb": 79.2,
   "cuda_version": "13.0",
   "bf16": true,
   "packages": {
