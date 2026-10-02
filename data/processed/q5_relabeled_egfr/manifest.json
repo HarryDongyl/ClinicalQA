@@ -1,7 +1,7 @@
 {
-  "variant": "q5_relabeled",
+  "variant": "q5_relabeled_egfr",
   "format": "raw_records_not_sft_conversations",
-  "policy": "reviewed_Q5_relabel_to_uncertain_inputs_unchanged",
+  "policy": "reviewed_Q5_relabel_to_uncertain_inputs_unchanged+stretch_a_egfr_template_rows",
   "selection_uses_splits": [
     "train"
   ],
@@ -108,6 +108,62 @@
     "train_1970",
     "train_1973"
   ],
+  "stretch_a_additions": "data/stretch_a/train_additions.jsonl",
+  "stretch_a_additions_sha256": "43065130ad60aa51e3b7bd9e33e2a6a5fb1f41b71ff47651bcc098de5ce4b8de",
+  "stretch_a_ids": [
+    "sa_train_000",
+    "sa_train_001",
+    "sa_train_002",
+    "sa_train_003",
+    "sa_train_004",
+    "sa_train_005",
+    "sa_train_006",
+    "sa_train_007",
+    "sa_train_008",
+    "sa_train_009",
+    "sa_train_010",
+    "sa_train_011",
+    "sa_train_012",
+    "sa_train_013",
+    "sa_train_014",
+    "sa_train_015",
+    "sa_train_016",
+    "sa_train_017",
+    "sa_train_018",
+    "sa_train_019",
+    "sa_train_020",
+    "sa_train_021",
+    "sa_train_022",
+    "sa_train_023",
+    "sa_train_024",
+    "sa_train_025",
+    "sa_train_026",
+    "sa_train_027",
+    "sa_train_028",
+    "sa_train_029",
+    "sa_train_030",
+    "sa_train_031",
+    "sa_train_032",
+    "sa_train_033",
+    "sa_train_034",
+    "sa_train_035",
+    "sa_train_036",
+    "sa_train_037",
+    "sa_train_038",
+    "sa_train_039",
+    "sa_train_040",
+    "sa_train_041",
+    "sa_train_042",
+    "sa_train_043",
+    "sa_train_044",
+    "sa_train_045",
+    "sa_train_046",
+    "sa_train_047",
+    "sa_train_048",
+    "sa_train_049",
+    "sa_train_050",
+    "sa_train_051"
+  ],
   "before": {
     "count": 2000,
     "answer_types": {
@@ -118,16 +174,16 @@
     }
   },
   "after": {
-    "count": 2000,
+    "count": 2052,
     "answer_types": {
       "extractive": 800,
       "numeric_reasoning": 400,
-      "tool_call": 422,
-      "uncertain": 378
+      "tool_call": 462,
+      "uncertain": 390
     }
   },
   "excluded_ids": [],
-  "train_sha256": "c0a8e8db5248e2935027db3b571d1027fb41e2382107fc9520787b4e83282e4e",
+  "train_sha256": "f99793008e00cf5daa52438c83eee3f271a9f5f0bc7de77bab5cef9e58835e63",
   "evaluation": {
     "val": {
       "source": "data/val.jsonl",
