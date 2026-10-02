@@ -1,0 +1,57 @@
+{
+  "tokenizer": "Qwen/Qwen3-4B-Instruct-2507",
+  "tokenizer_revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "chat_template_sha256": "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326",
+  "tool_schemas_sha256": "766600e0388ae478a3545f887ba8f701d9ae9a6913c7c2a57897a3ce3fd5deb6",
+  "system_prompt_sha256": "017bb2eca9239dc081943b72fc4130f2f433d4a1a741ee5325bb076ac2328c48",
+  "max_length": 2048,
+  "splits": {
+    "val": {
+      "measured": "full_conversation",
+      "by_answer_type": {
+        "all": {
+          "n": 250,
+          "p50": 1565,
+          "p95": 1657,
+          "p99": 1698,
+          "max": 1755
+        },
+        "extractive": {
+          "n": 100,
+          "p50": 1536,
+          "p95": 1637,
+          "p99": 1671,
+          "max": 1680
+        },
+        "numeric_reasoning": {
+          "n": 50,
+          "p50": 1583,
+          "p95": 1671,
+          "p99": 1755,
+          "max": 1755
+        },
+        "tool_call": {
+          "n": 62,
+          "p50": 1602,
+          "p95": 1682,
+          "p99": 1698,
+          "max": 1708
+        },
+        "uncertain": {
+          "n": 38,
+          "p50": 1553,
+          "p95": 1620,
+          "p99": 1647,
+          "max": 1647
+        }
+      },
+      "answer_type_counts": {
+        "extractive": 100,
+        "numeric_reasoning": 50,
+        "tool_call": 62,
+        "uncertain": 38
+      },
+      "overlength_ids": []
+    }
+  }
+}
