@@ -100,3 +100,54 @@ Observations:
 - **The durable SFT gains are behavioural:** tool use (base 0.57–0.60 vs 0.87–0.98), uncertainty (base 0.61–0.73 vs 0.84–0.97) and format.
 - **On tool calls, the Q5-filtered runs lead** (0.95–0.98 vs 0.87–0.90). They abstain on the Q5 records where the raw runs invent BMI arguments.
 - **On macro, q5filtered ep2 is highest (0.927) and the wave-1 selection is close behind (0.924).** The difference is within noise (val n = 250). No new checkpoint selection has been made with v2.1.
+
+## 5. Scorer v2.2: numeric contradiction guards (2026-10-02; prototype, not adopted)
+
+**Status.** Not adopted. **v2.1 remains the reported scorer.** v2.2 is kept as a documented prototype for future
+work: the module, tests and `--scorer 2.2` option stay in the repository, and the default is still 2.1. The finding
+below is reported as a known v2.1 limitation.
+
+**Why.** v2.1 checks only what the question asks, and a numeric check passes when any number falls in its band. False
+extra claims therefore pass. `docs/SCORER_V2.md` already counts them as errors "when the checker can establish them",
+but v2.1 implemented this only inside set checks. On the wave-4 validation outputs, F-s42 epoch 2 had three such false
+passes (val_062, val_117, val_194). The section-3 holdouts came from wave-1 models, whose numeric errors sat mostly in
+the asked part, so they could not reveal this.
+
+**What.** `scripts/scorer_v22.py` runs the frozen v2.1 unchanged (sha256 `b15db3d0…`). On numeric answers only,
+it can turn a pass into a fail with two guards:
+
+1. **State guard.** An analyte the answer calls abnormal must be abnormal in that direction in the input. It must be
+   named with an explicit state word in the same clause.
+2. **Amount guard.** "[analyte] … by X" and "X <unit> above/below the limit" must equal |value − bound| for an input
+   bound.
+
+Exclusions, each added after a gold self-check or adjudicated false fire:
+
+- bound-relative prepositions;
+- vitals and blood pressure;
+- division;
+- equation operands;
+- fold amounts;
+- restatements in another unit;
+- "called normal but abnormal", which is left to the set checks.
+
+Frozen: `reports/scorer_v2/scorer_v2.2.sha256`. Scripts: `scripts/score_v2.py --scorer 2.2` and
+`scripts/score_v21_val.py --scorer 2.2`. Tests: `tests/test_scorer_v22.py`.
+
+**Checks.**
+
+| Check | Result |
+|---|---|
+| Gold as prediction (train 400 + val 50 numeric) | guards fire on 0/450 |
+| Adjudicated numeric items, both rater groups agree (dev 45, holdout 1 45, holdout 2 35) | 4 new disagreements, all verified real errors that the rubric did not count, because it did not require unrequested claims to be true: val_062 "by 9 bpm" (true 1); val_117 "by 4.2" (true 5.2); test_367 normal ferritin called low; test_293 normal haemoglobin "1.3 below its lower limit". No confirmed new false fail |
+| Wave-4 family comparison, 9 validation arms | 6 flips, all verified real (C: val_117, val_151; F ep1: val_117; F ep2: val_062, val_117, val_194). No Qwen3.5 arm changed |
+
+**Disclosure.**
+
+- The guards were developed while reading validation outputs and all three adjudicated sets. **No clean holdout
+  exists for v2.2.** Its numbers are diagnostic, as v2.1's were.
+- The agreement figures above measure the new policy against a more lenient reference. They are not a fresh accuracy
+  estimate.
+- The guards are recall-limited: they catch only claims phrased as a state word or a "by X" / "X above/below"
+  amount. Open comparisons and percentages are not checked. The claim-level numeric audit remains the source of
+  numeric conclusions.

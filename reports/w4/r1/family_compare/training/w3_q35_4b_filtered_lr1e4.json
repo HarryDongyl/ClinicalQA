@@ -1,0 +1,59 @@
+{
+  "run": "w3_q35_4b_filtered_lr1e4",
+  "model": "Qwen/Qwen3.5-4B",
+  "train_view": "q5_filtered",
+  "seed": 42,
+  "lr": 0.0001,
+  "n_train_examples": 1922,
+  "n_sequences": 1922,
+  "supervised_tokens": 148448,
+  "optimizer_steps": 242,
+  "trainable_params": 30474240,
+  "lora_targets": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj",
+    "in_proj_qkv",
+    "in_proj_z",
+    "out_proj"
+  ],
+  "final_train_loss": 0.2599,
+  "train_loss_by_epoch": {
+    "1": 0.3501,
+    "2": 0.1914
+  },
+  "first_logged_loss": 0.8888,
+  "last_logged_loss": 0.1832,
+  "grad_norm": {
+    "median": 0.7497,
+    "max": 3.7189
+  },
+  "all_finite": true,
+  "val_loss_by_epoch": {
+    "1": {
+      "all": 0.274,
+      "extractive": 0.0869,
+      "numeric_reasoning": 0.3117,
+      "tool_call": 0.2436,
+      "uncertain": 0.5295
+    },
+    "2": {
+      "all": 0.2663,
+      "extractive": 0.0804,
+      "numeric_reasoning": 0.302,
+      "tool_call": 0.2389,
+      "uncertain": 0.514
+    }
+  },
+  "sec_per_step_median": 11.762,
+  "train_runtime_s": 3798.9,
+  "tokens_per_s": 1544.9,
+  "peak_vram_gb": 11.3,
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "precision": "bf16",
+  "quantized_4bit": true
+}

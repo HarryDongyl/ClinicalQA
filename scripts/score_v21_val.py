@@ -26,6 +26,7 @@ def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--labels", nargs="+", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--scorer", default="2.1", choices=["2.1", "2.2"])
     a = p.parse_args()
     out = Path(a.out)
     if out.exists():
@@ -39,7 +40,7 @@ def main() -> None:
             if not (d / name).exists() or ids(d / name) != expected:
                 raise SystemExit(f"{label}: {name} missing or does not cover the {len(expected)} validation IDs")
     subprocess.run([sys.executable, str(ROOT / "scripts" / "score_v2.py"), "--runs-dir", str(ROOT / "outputs"),
-                    "--split", "val", "--out", str(out), "--labels", *a.labels], cwd=ROOT, check=True)
+                    "--split", "val", "--out", str(out), "--scorer", a.scorer, "--labels", *a.labels], cwd=ROOT, check=True)
 
 
 if __name__ == "__main__":

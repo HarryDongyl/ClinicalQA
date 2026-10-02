@@ -1,0 +1,365 @@
+{
+ "label": "w4_q35_4b_relabel_lr1e4_step000250",
+ "summary": {
+  "calculate_bmi": {
+   "k": 39,
+   "n": 40,
+   "rate": 0.975,
+   "ci95": [
+    0.8712,
+    0.9956
+   ]
+  },
+  "unit_convert": {
+   "k": 15,
+   "n": 15,
+   "rate": 1.0,
+   "ci95": [
+    0.7961,
+    1.0
+   ]
+  },
+  "all": {
+   "k": 54,
+   "n": 55,
+   "rate": 0.9818,
+   "ci95": [
+    0.9039,
+    0.9968
+   ]
+  },
+  "not_applicable_no_executed_call": 0
+ },
+ "rows": [
+  {
+   "id": "val_000",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_002",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_006",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_008",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_013",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_014",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_017",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_020",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_026",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_029",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_033",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_037",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_038",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_052",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_060",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_071",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_078",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_082",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_086",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_094",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_097",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_103",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_104",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_105",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_109",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_112",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_119",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_120",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_125",
+   "tool": "calculate_bmi",
+   "ok": false,
+   "why": "bmi:conflict(underweight vs normal)"
+  },
+  {
+   "id": "val_130",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_137",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_139",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_140",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_141",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_143",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_150",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_155",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_158",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_159",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_160",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_164",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_165",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_166",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_168",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_173",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_175",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_189",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_190",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_201",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_210",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_213",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_215",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_222",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  },
+  {
+   "id": "val_226",
+   "tool": "calculate_bmi",
+   "ok": true,
+   "why": "bmi:ok"
+  },
+  {
+   "id": "val_233",
+   "tool": "unit_convert",
+   "ok": true,
+   "why": "convert:ok"
+  }
+ ]
+}

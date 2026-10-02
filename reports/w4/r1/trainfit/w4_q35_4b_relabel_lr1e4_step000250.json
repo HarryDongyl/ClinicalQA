@@ -1,0 +1,118 @@
+{
+  "label": "w4_q35_4b_relabel_lr1e4_step000250",
+  "by_type": {
+    "extractive": {
+      "k": 48,
+      "n": 50,
+      "rate": 0.96,
+      "ci95": [
+        0.8654,
+        0.989
+      ]
+    },
+    "numeric_reasoning": {
+      "k": 35,
+      "n": 50,
+      "rate": 0.7,
+      "ci95": [
+        0.5625,
+        0.809
+      ]
+    },
+    "tool_call": {
+      "k": 50,
+      "n": 50,
+      "rate": 1.0,
+      "ci95": [
+        0.9286,
+        1.0
+      ]
+    },
+    "uncertain": {
+      "k": 50,
+      "n": 50,
+      "rate": 1.0,
+      "ci95": [
+        0.9286,
+        1.0
+      ]
+    }
+  },
+  "numeric_failures": [
+    {
+      "id": "train_228",
+      "error": "number_mismatch",
+      "answer": "The patient's Free T4 is 2.2 ng/dL, which exceeds the upper limit of normal (1.70 ng/dL) by 0.5 ng/dL. This is the only lab value outside its reference range; TSH (3.9 mIU/L) and Free T3 (2.5 pg/mL) are both within their respective normal ranges. Therefore, Free T4 is the most significantly abnormal"
+    },
+    {
+      "id": "train_390",
+      "error": "number_mismatch",
+      "answer": "The INR is the most significantly abnormal lab value. At 2.3, it exceeds the upper limit of normal (1.1) by 1.2, which is more than double the upper reference limit. The PT is also mildly elevated at 11.9 seconds (upper limit 13.5), but the INR deviation is far more pronounced."
+    },
+    {
+      "id": "train_486",
+      "error": "number_mismatch",
+      "answer": "The patient's BUN of 79.1 mg/dL is approximately 3.96 times the upper limit of normal (20 mg/dL). In the context of hematochezia with a normal creatinine and preserved eGFR, this disproportionately elevated BUN is suggestive of significant upper GI blood reabsorption or a concurrent upper GI source "
+    },
+    {
+      "id": "train_528",
+      "error": "direction_mismatch",
+      "answer": "The patient's total cholesterol of 259.8 mg/dL exceeds the upper limit of normal (<200 mg/dL) by 59.8 mg/dL. Yes, this is the only lipid panel value outside the reference range; LDL (67.7, ref <100), HDL (64.9, ref >40), and triglycerides (116.9, ref <150) are all within their respective normal rang"
+    },
+    {
+      "id": "train_612",
+      "error": "number_mismatch",
+      "answer": "The fasting glucose of 230.8 mg/dL exceeds the upper limit of normal (100 mg/dL) by 130.8 mg/dL, which is 130.8% above the upper limit. The creatinine of 3.5 mg/dL exceeds its upper limit of 1.3 mg/dL by 2.2 mg/dL, which is approximately 169% above the upper limit. Therefore, creatinine exceeds its "
+    },
+    {
+      "id": "train_634",
+      "error": "number_mismatch",
+      "answer": "The TSH of 13.9 mIU/L exceeds the upper limit of normal (4.20 mIU/L) by 9.7 mIU/L. The Free T4 of 3.1 ng/dL exceeds its upper limit of normal (1.70 ng/dL) by 1.4 ng/dL. Both values are significantly above their respective reference ranges."
+    },
+    {
+      "id": "train_820",
+      "error": "number_mismatch",
+      "answer": "Platelets at 368.7 x10\u00b3/\u03bcL are closest to the upper limit of their reference range (400 x10\u00b3/\u03bcL), falling 31.3 x10\u00b3/\u03bcL below the upper limit. All other lab values are well within their respective reference ranges with greater margins."
+    },
+    {
+      "id": "train_821",
+      "error": "direction_mismatch",
+      "answer": "The transferrin saturation is 14.1%, which is 5.9 percentage points below the lower limit of normal (20%). Yes, it is the only iron study outside the normal reference range; serum iron (66.8 \u03bcg/dL), TIBC (272.3 \u03bcg/dL), and ferritin (195.0 ng/mL) are all within their respective reference ranges."
+    },
+    {
+      "id": "train_1050",
+      "error": "direction_mismatch",
+      "answer": "The patient's ferritin is 5.9 ng/mL below the lower limit of normal (12 ng/mL), representing a 49% deficit. Ferritin is the most significantly abnormal iron study, as serum iron is only 15.8 \u03bcg/dL below its lower limit (60 \u03bcg/dL, ~26% deficit), TIBC is 42.2 \u03bcg/dL above its upper limit (~11% above), "
+    },
+    {
+      "id": "train_1052",
+      "error": "number_mismatch",
+      "answer": "BUN is the most significantly elevated lab value. At 64.5 mg/dL with an upper reference limit of 20 mg/dL, it exceeds the upper limit by 44.5 mg/dL, which is more than three times the upper limit of normal. Phosphorus is also markedly elevated at 6.3 mg/dL (upper limit 4.5), exceeding it by 1.8 mg/d"
+    },
+    {
+      "id": "train_1081",
+      "error": "direction_mismatch",
+      "answer": "The patient's LDL of 191.2 mg/dL exceeds the upper limit of normal (<100 mg/dL) by 91.2 mg/dL, which is nearly double the threshold. This is the most significantly abnormal lipid value, as total cholesterol exceeds its reference by only 64.2 mg/dL above the 200 mg/dL threshold."
+    },
+    {
+      "id": "train_1113",
+      "error": "number_mismatch",
+      "answer": "The aPTT is 78.2 seconds, which is 43.2 seconds above the upper limit of normal (35 seconds), representing approximately 1.23 times the upper reference value. The PT is 24.1 seconds, which is 10.6 seconds above the upper limit of normal (13.5 seconds), representing approximately 1.79 times the upper"
+    },
+    {
+      "id": "train_1285",
+      "error": "direction_mismatch",
+      "answer": "The patient's temperature of 100.5 \u00b0F exceeds the fever threshold of 100.4 \u00b0F by 0.1 \u00b0F. This is clinically significant as it warrants further workup for an underlying infectious or inflammatory etiology, particularly given his history of CKD and celiac disease, and should be evaluated with CBC, blo"
+    },
+    {
+      "id": "train_1454",
+      "error": "number_mismatch",
+      "answer": "HDL is the most significantly abnormal lipid value. At 21.3 mg/dL, it is 18.7 mg/dL below the lower acceptable threshold of 40 mg/dL, representing a deviation of approximately 47% below the reference limit. All other lipid values fall within their respective reference ranges."
+    },
+    {
+      "id": "train_1814",
+      "error": "number_mismatch",
+      "answer": "Alkaline phosphatase is the only lab value outside the normal reference range. At 160.4 U/L, it exceeds the upper limit of normal (147 U/L) by 13.4 U/L. All other liver function tests (ALT, AST, bilirubin) and protein studies fall within their respective reference ranges."
+    }
+  ]
+}

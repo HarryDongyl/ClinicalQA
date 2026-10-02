@@ -1,0 +1,177 @@
+{
+  "label": "w4_q35_4b_relabel_lr1e4_step000125",
+  "c10a": {
+    "scorer": "v2.1 (diagnostic)",
+    "n_scored": 250,
+    "availability": {
+      "ok": 250
+    },
+    "auroc": 0.7951,
+    "risk_coverage": [
+      {
+        "coverage": 0.1,
+        "n": 25,
+        "accuracy": 1.0,
+        "risk": 0.0
+      },
+      {
+        "coverage": 0.2,
+        "n": 50,
+        "accuracy": 1.0,
+        "risk": 0.0
+      },
+      {
+        "coverage": 0.3,
+        "n": 75,
+        "accuracy": 1.0,
+        "risk": 0.0
+      },
+      {
+        "coverage": 0.4,
+        "n": 100,
+        "accuracy": 0.99,
+        "risk": 0.01
+      },
+      {
+        "coverage": 0.5,
+        "n": 125,
+        "accuracy": 0.992,
+        "risk": 0.008
+      },
+      {
+        "coverage": 0.6,
+        "n": 150,
+        "accuracy": 0.9933,
+        "risk": 0.0067
+      },
+      {
+        "coverage": 0.7,
+        "n": 175,
+        "accuracy": 0.9886,
+        "risk": 0.0114
+      },
+      {
+        "coverage": 0.8,
+        "n": 200,
+        "accuracy": 0.99,
+        "risk": 0.01
+      },
+      {
+        "coverage": 0.9,
+        "n": 225,
+        "accuracy": 0.9867,
+        "risk": 0.0133
+      },
+      {
+        "coverage": 1.0,
+        "n": 250,
+        "accuracy": 0.976,
+        "risk": 0.024
+      }
+    ],
+    "by_type": {
+      "extractive": {
+        "n": 100,
+        "accuracy": 1.0,
+        "auroc": null,
+        "median_mean_logprob": -0.0247
+      },
+      "numeric_reasoning": {
+        "n": 50,
+        "accuracy": 0.94,
+        "auroc": 0.6879,
+        "median_mean_logprob": -0.116
+      },
+      "tool_call": {
+        "n": 62,
+        "accuracy": 0.9677,
+        "auroc": 0.5917,
+        "median_mean_logprob": -0.163
+      },
+      "uncertain": {
+        "n": 38,
+        "accuracy": 0.9737,
+        "auroc": 0.973,
+        "median_mean_logprob": -0.2032
+      }
+    },
+    "ece": "not computed: raw log-probability is a ranking score, not a probability (D-071)"
+  },
+  "c10b": {
+    "event": "first generated token is <tool_call> (prefix event, not eventual tool use)",
+    "n": 250,
+    "auroc_annotated": 0.9931,
+    "auroc_grounded": 1.0,
+    "brier_annotated": 0.0308,
+    "brier_grounded": 0.003,
+    "ece_annotated": 0.0308,
+    "ece_grounded": 0.0043,
+    "bins": [
+      {
+        "bin": [
+          0.0,
+          0.1
+        ],
+        "n": 194,
+        "mean_p": 0.001,
+        "annotated_call_rate": 0.0361,
+        "grounded_call_rate": 0.0
+      },
+      {
+        "bin": [
+          0.8,
+          0.9
+        ],
+        "n": 1,
+        "mean_p": 0.8655,
+        "annotated_call_rate": 0.0,
+        "grounded_call_rate": 0.0
+      },
+      {
+        "bin": [
+          0.9,
+          1.0
+        ],
+        "n": 55,
+        "mean_p": 0.9996,
+        "annotated_call_rate": 1.0,
+        "grounded_call_rate": 1.0
+      }
+    ],
+    "token_identity": {
+      "consistent": 250
+    },
+    "executed_call_confusion": {
+      "annotated": {
+        "tp": 55,
+        "fp": 1,
+        "fn": 7,
+        "tn": 187
+      },
+      "grounded": {
+        "tp": 55,
+        "fp": 1,
+        "fn": 0,
+        "tn": 194
+      }
+    },
+    "attempted_call_confusion": {
+      "annotated": {
+        "tp": 55,
+        "fp": 1,
+        "fn": 7,
+        "tn": 187
+      },
+      "grounded": {
+        "tp": 55,
+        "fp": 1,
+        "fn": 0,
+        "tn": 194
+      }
+    },
+    "labels": {
+      "annotated": "gold answer_type == tool_call",
+      "grounded": "tool_call and not a heuristic Q5 item (input supports the call)"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{"candidate": "w4_q35_4b_relabel_lr1e4_step000250", "approved": true, "decision": "pass",
+ "stretch_a_backbone": "q3",
+ "reviewer": "Harry", "date": "2026-10-02",
+ "report": "reports/w4/r1/gates/gate_w4_q35_4b_relabel_lr1e4_step000250.json",
+ "rationale": "4 of 5 screen checks pass; the P1-partner failure val_104 is a 0.106 cm imperial-conversion drift (174.9 for 68.9 in) with correct BMI, category and context, not a suppressed call; equal partner totals (33/34). Backbone Qwen3 (F-s42) per D-095: cost at equal performance."}

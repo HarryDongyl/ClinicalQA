@@ -3,6 +3,7 @@
     uv run python scripts/score_v2.py --runs-dir outputs --split val --out reports/scorer_v2/val \
         --labels base raw_lr1e4_step000125 ...
 
+--scorer 2.2 adds the numeric contradiction guards of the unadopted prototype scripts/scorer_v22.py on top of the frozen v2.1 (default 2.1).
 Writes keys.jsonl (answer keys, built without predictions), <label>.scored.jsonl, summary.json and
 summary.md with v1 vs v2 accuracy per answer type (Wilson 95% CI), per-check-kind accuracy and the
 tool / abstention funnels.
@@ -12,10 +13,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from clinqa import scorer_v2 as s2
+from clinqa import scorer_v2
 from clinqa.config import PROJECT_ROOT
 from clinqa.evaluate import wilson
 
@@ -67,7 +69,13 @@ def main() -> None:
     p.add_argument("--split", default="val", choices=["val", "test"])
     p.add_argument("--labels", nargs="+", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--scorer", default="2.1", choices=["2.1", "2.2"])
     a = p.parse_args()
+    if a.scorer == "2.2":  # prototype kept outside src/clinqa so that evaluation protocol hashes do not change
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import scorer_v22 as s2
+    else:
+        s2 = scorer_v2
     records = {r["id"]: r for r in _jsonl(PROJECT_ROOT / "data" / f"{a.split}.jsonl")}
     keys = {i: s2.build_key(r) for i, r in records.items()}
     out = Path(a.out)
@@ -86,7 +94,7 @@ def main() -> None:
                                                    encoding="utf-8")
         summary["runs"][label] = aggregate(scores, v1)
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    L = [f"# Scorer v2 rescore ({a.split})", "", "| run | extr v1→v2 | num v1→v2 | tool v1→v2 | unc v1→v2 | macro v1→v2 |",
+    L = [f"# Scorer v{s2.VERSION} rescore ({a.split})", "", "| run | extr v1→v2 | num v1→v2 | tool v1→v2 | unc v1→v2 | macro v1→v2 |",
          "|---|---|---|---|---|---|"]
     for label, m in summary["runs"].items():
         cells = [f"{m[t]['v1']['rate']:.3f}→**{m[t]['v2']['rate']:.3f}**" for t in TYPES]

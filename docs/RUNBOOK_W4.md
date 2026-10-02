@@ -102,13 +102,17 @@ Results are committed and pushed after each step. When it finishes, the pod can 
 git pull
 OUT=reports/w4/r1
 REF="w3_c_filtered_s42 w3_relabel_lr1e4_s42_step000250 w3_q35_4b_filtered_lr1e4_step000242 w3_r0_q35_4b"
-VAL="w4_q35_4b_relabel_lr1e4_step000121 w4_q35_4b_relabel_lr1e4_step000250 w4_q35_4b_filtered_lr1e4_step000242"
+VAL="w4_q35_4b_relabel_lr1e4_step000125 w4_q35_4b_relabel_lr1e4_step000250 w4_q35_4b_filtered_lr1e4_step000242"
 
+# Run under bash (zsh does not word-split $VAL / $REF). Epoch one of the 2,000-row relabel run is step 125.
+# P1-only labels (w4_q35_4b_filtered_lr1e4_step000121, w4_raw_lr1e4_step000250) have no val output of their own; the
+# partner check reads the same checkpoint's earlier val run (w3_q35_4b_filtered_lr1e4_step000121, raw_lr1e4_step000250).
+# w3_analyze.py p1 does not support that yet; round one used a wrapper that redirects label_dir for these two labels.
 # v2.1, bounded v2, P1, train-fit, training metrics, C10 and clinical context
 uv run python scripts/score_v21_val.py         --out $OUT/v21        --labels $VAL $REF
 uv run python scripts/rescore_validation_v2.py --out $OUT/bounded_v2 --labels $VAL $REF
 uv run python scripts/w3_analyze.py p1 --out $OUT/p1 --labels \
-  w4_q35_4b_relabel_lr1e4_step000121 w4_q35_4b_relabel_lr1e4_step000250 \
+  w4_q35_4b_relabel_lr1e4_step000125 w4_q35_4b_relabel_lr1e4_step000250 \
   w4_q35_4b_filtered_lr1e4_step000121 w4_raw_lr1e4_step000250 $REF
 uv run python scripts/w3_analyze.py trainfit --out $OUT/trainfit --labels \
   w4_q35_4b_relabel_lr1e4_step000250 w3_q35_4b_filtered_lr1e4_step000242 w3_relabel_lr1e4_s42_step000250
@@ -134,12 +138,16 @@ Then:
 ```bash
 cat > configs/w4/gate_q35.json <<'EOF'
 {"candidate": "w4_q35_4b_relabel_lr1e4_step000250", "approved": true, "decision": "pass",
- "reviewer": "<name>", "date": "2026-10-xx", "report": "reports/w4/r1/gates/gate_w4_q35_4b_relabel_lr1e4_step000250.json"}
+ "stretch_a_backbone": "q3",
+ "reviewer": "<name>", "date": "2026-10-xx", "report": "reports/w4/r1/gates/gate_w4_q35_4b_relabel_lr1e4_step000250.json",
+ "rationale": "val_104 partner failure is a 0.106 cm imperial-conversion drift with correct BMI; backbone Qwen3 per D-095"}
 EOF
 git add reports/w4 configs/w4/gate_q35.json && git commit -m "w4: r1 scoring and Q35-relabel gate" && git push
 ```
 
-**Stopping rule (Wave4-Q2).** A failed gate is reported. It is never re-thresholded and never switched to epoch 1. Stretch A then falls back to F (Qwen3).
+**Stopping rule (Wave4-Q2).** A failed gate is reported. It is never re-thresholded and never switched to epoch 1.
+
+**Backbone (D-095).** `stretch_a_backbone: "q3"` makes round 2 and the final model use F (Qwen3) whatever the gate decision. The reason is cost at equal performance: Qwen3.5 sequences are about 11% longer. Without the field, the gate decides: pass → Qwen3.5, fail → F.
 
 **Numeric audit and H2.** This can run in parallel with round 2:
 
@@ -167,7 +175,7 @@ tmux new -s w4r2
 STAGES=r2 UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee outputs/w4_r2.console.log
 ```
 
-The gate decides the backbone: `pass` uses Qwen3.5; `fail` falls back to Qwen3 (F) automatically. It runs:
+The backbone comes from `stretch_a_backbone` in `configs/w4/gate_q35.json` (`q3` per D-095), or from the gate decision if the field is absent. It runs:
 
 1. the three zero-shot arms (A-zs-v1, A-zs-v1e, A-zs-base), each on core val and both eGFR sets;
 2. A-sft training, then evaluation on val, P1 and both eGFR sets.
@@ -176,12 +184,12 @@ The gate decides the backbone: `pass` uses Qwen3.5; `fail` falls back to Qwen3 (
 
 ```bash
 git pull
-F=q35_4b                              # q3 if the gate failed
-SFT=w4_q35_4b_relabel_egfr_lr1e4      # w4_q3_relabel_egfr_lr1e4 if the gate failed
+F=q3                                  # D-095; q35_4b only if stretch_a_backbone is q35_4b
+SFT=w4_q3_relabel_egfr_lr1e4          # w4_q35_4b_relabel_egfr_lr1e4 for the Qwen3.5 backbone
 uv run python scripts/stretch_a_score.py score --out reports/w4/stretch_a --labels \
   w4_sa_zs_v1_$F w4_sa_zs_v1e_$F w4_sa_zs_base_$F ${SFT}_step000257
 uv run python scripts/score_v21_val.py --out reports/w4/r2/v21 --labels w4_sa_zs_v1_$F w4_sa_zs_v1e_$F w4_sa_zs_base_$F \
-  ${SFT}_step000128 ${SFT}_step000257 w4_q35_4b_relabel_lr1e4_step000250
+  ${SFT}_step000128 ${SFT}_step000257 w3_relabel_lr1e4_s42_step000250
 uv run python scripts/w3_analyze.py p1 --out reports/w4/r2/p1 --labels ${SFT}_step000257
 git add reports/w4 && git commit -m "w4: Stretch A scoring" && git push
 ```
@@ -203,14 +211,14 @@ Freeze and commit the list **before** any test output exists:
 ```bash
 Q=w4_q35_4b_relabel_lr1e4; F3=w3_relabel_lr1e4_s42; QF=w3_q35_4b_filtered_lr1e4
 uv run python scripts/w4_test.py freeze \
-  --entry q35_relabel_test configs/eval_w4_q35_4b.yaml $Q  checkpoints/$Q/checkpoint-250 \
   --entry f_relabel_test   configs/eval_w4_v1.yaml     $F3 checkpoints/$F3/checkpoint-250 \
+  --entry q35_relabel_test configs/eval_w4_q35_4b.yaml $Q  checkpoints/$Q/checkpoint-250 \
   --entry q35_filter_test  configs/eval_w4_q35_4b.yaml $QF checkpoints/$QF/checkpoint-242 \
   --entry r0_q35_4b_test   configs/eval_w4_q35_4b.yaml base none
 git add configs/w4/final_test.json && git commit -m "w4: freeze test list" && git push
 ```
 
-`freeze` hashes the adapters, so the checkpoints must be present locally (`hf download`). Alternatively, run `freeze` on the pod and commit there. If the gate failed, replace the first entry with F as the final model.
+`freeze` hashes the adapters, so the checkpoints must be present locally (`hf download`). Alternatively, run `freeze` on the pod and commit there. F (`f_relabel_test`) is the final model (D-095); Q35-relabel is the cross-family comparator. If Stretch A's A-sft passes its criteria without harming core, decide before freezing whether the final model is F or the eGFR adapter, and add that entry.
 
 On the pod:
 

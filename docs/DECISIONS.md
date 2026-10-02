@@ -322,3 +322,39 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   2. `PARALLEL=1` (the default) runs the host-bound zero-shot decoding lane as a second process beside the smoke/training lane on the same GPU. Outputs are unaffected, but those arms' seconds-per-request is measured under contention and must not be compared as a clean cost.
 
   Not changed, to keep the recipe and protocol: generation batch 2, training micro-batch 1 / accumulation 16, NF4, no packing.
+
+
+## Completed wave-three core review (2026-10-02)
+
+- D-090: Treat F-s42 epoch two as the leading missing-input policy candidate, not a verified overall clinical winner. Reviewed P1 numeric fabrication improves 25/34 to 0/34 with intact-partner success unchanged at 33/34; natural Q5 improves 4/7 to 0/7. This is a single-seed training-policy comparison. The fresh gate suggests pass, but this record does not approve the gate or launch seeds.
+- D-091: Do not promote prompt v3: grounded tool-task success regresses from 29/55 to 9/55. FS4 restores 29/55 but leaves conversion coverage weak. Preserve v1 as comparator; any further prompt intervention needs a new frozen identity.
+- D-092: Diagnostic v2.1 numeric 46/50 is not verified numerical accuracy. Three of six apparent C-to-F gains are unreliable under output review. Audit all finalist numeric outputs with a claim-level rubric and an ambiguous/review category before choosing a numerical winner. Preserve existing scorer versions and disclose post-inspection changes; validation cases are not new training targets.
+- D-093: Continue the frozen Qwen3.5 round. Compare its filtered SFT with the filtered 4B control, assess its P1/natural-Q5 behavior, and consider a matched Q35 relabel run only after its results arrive. Do not attribute filtered-versus-relabeled differences to backbone alone. Preserve D-089's A100/kernel/concurrency caveats. Current evidence does not establish a need for RL. Evidence: WAVE3_RESULTS_REVIEW.md and W3-RESULTS-009.
+
+## Wave-four round one and backbone choice (2026-10-02)
+
+- D-094: **Round one results.** Evidence: `reports/w4/r1/` and the walkthrough, stage 16.
+  - H1 holds: Qwen3.5 relabel epoch two P1 fabrication is 0/34, against 29/34 for Qwen3.5 filtered. Intact partners 33/34, natural Q5 7/7, grounded tool 54/55.
+  - P1-RAW (2,000 raw rows, 250 steps, seed 42) is 32/34, which rules out row count and training length as the cause.
+  - Parity regeneration is 250/250 identical.
+  - On the same relabel data the families tie: v2.1 macro +0.25 pp [−2.15, +3.10] for Qwen3.5 over F, with identical safety metrics.
+  - Gate: 4 of 5 checks pass. The P1-partner check fails on val_104, an imperial-conversion drift (174.9 cm for 68.9 in, 0.106 off; BMI, category and context correct). It is recorded as a review case and was not re-thresholded.
+- D-095: **Later experiments use Qwen3-4B-Instruct-2507 (F-s42, `w3_relabel_lr1e4_s42`), not Qwen3.5 (user decision).**
+  - **Reason: cost at equal performance.**
+    - Qwen3.5's XML tool calls and its empty think block make every conversation about 11% longer (p50 1,525 vs 1,375 tokens; max 1,781 vs 1,614).
+    - Measured throughput is lower: 1,793 vs 2,081 tokens/s.
+    - Peak memory is higher: 11.3 vs 7.8 GiB.
+    - Qwen3.5 adds a flash-linear-attention dependency.
+    - The metrics show no material gap (D-094). H2 is unresolved: the scorers disagree, and the audit is pending.
+  - **Caveats, disclosed.**
+    - The speed comparison is confounded by hardware: Qwen3 ran on an RTX 4090, Qwen3.5 on an A100.
+    - The +11% sequence length is the confirmed cause. Kernel efficiency of the linear-attention layers is unprofiled.
+    - The choice deviates from Wave4-Q2, which said a gate pass makes Qwen3.5 the final candidate, and it was made after seeing round-one results. The bias risk is low because it is a cost choice between metric-tied candidates, not selection on a favourable score.
+  - **Consequences.**
+    - Stretch A (round two) uses the Qwen3 path: `w4_q3_relabel_egfr_lr1e4` on top of F-s42. This is recorded as `stretch_a_backbone: q3` in `configs/w4/gate_q35.json`, independently of the gate decision.
+    - The frozen test list makes F-s42 the final model. Q35-relabel stays in it as the cross-family comparator.
+    - Qwen3.5 results remain a reported replication of H1, not the deployed model.
+- D-096: **Scorer v2.1 stays the reported scorer.**
+  - v2.1 does not check false *extra* numeric claims. Example: F-s42 epoch two writes "by 4.2" for a true 5.2 (val_117), calls a normal creatinine elevated (val_194), and writes "by 9 bpm" for a true 1 (val_062).
+  - This is reported as a known limitation (`reports/scorer_v2/VALIDATION.md` §5).
+  - The v2.2 contradiction-guard prototype (`scripts/scorer_v22.py`) is kept as future work and is not adopted. It has no clean holdout, and its guards were tuned on the evaluation sets. Numeric conclusions rest on the claim-level audit.
