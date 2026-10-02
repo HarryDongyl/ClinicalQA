@@ -1,0 +1,9 @@
+# Stretch A A-sft fallback on Qwen3-4B (used only if A-Q35-relabel fails its gate): the F-s42 recipe with three tools,
+# prompt v1e and the q5_relabeled_egfr view (2,052 rows).
+extends: configs/train/w3_relabel_lr1e4_s42.yaml
+run_id: w4_q3_relabel_egfr_lr1e4
+format_config: configs/format_w4_q3_egfr.yaml
+train_view: q5_relabeled_egfr
+expected_train_examples: 2052
+checkpoint_dir: checkpoints/w4_q3_relabel_egfr_lr1e4
+output_dir: outputs/w4_q3_relabel_egfr_lr1e4

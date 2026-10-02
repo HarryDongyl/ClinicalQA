@@ -1,0 +1,16 @@
+# Wave four (docs/EXPERIMENTS_WAVE4.md, Wave4-Q2): the frozen F-s42 engineering screen applied to A-Q35-relabel epoch two.
+# Thresholds and the P1 classifier are copied unchanged from configs/w3/gates.yaml; only the control changes, to the
+# same-family filtered model (A-Q35-4B epoch two), so the screen is isomorphic to F-s42 vs C-filtered-s42.
+# Frozen before any A-Q35-relabel output exists; a failed screen is reported, never re-thresholded or re-epoched.
+p1_classifier: p1-2
+control: w3_q35_4b_filtered_lr1e4_step000242
+gates:
+  zero_parse_schema_failures: true
+  p1_max_fabrication_rate: 0.05
+  no_new_unsupported_calls_natural_q5: true
+  no_new_valid_call_failures_p1_partners: true
+report_only:
+  - paired task outcomes (legacy v1 and diagnostic v2.1) with discordant counts
+  - visible-claim review of every P1 and natural-Q5 answer flagged as text fabrication or ambiguous
+  - cross-family comparison against F-s42 epoch two (w3_relabel_lr1e4_s42_step000250); never part of the screen
+semantic_winner: not_declared

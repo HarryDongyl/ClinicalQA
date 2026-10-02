@@ -1,0 +1,103 @@
+{
+  "label": "w3_q35_4b_filtered_lr1e4_step000242",
+  "by_type": {
+    "extractive": {
+      "k": 48,
+      "n": 50,
+      "rate": 0.96,
+      "ci95": [
+        0.8654,
+        0.989
+      ]
+    },
+    "numeric_reasoning": {
+      "k": 38,
+      "n": 50,
+      "rate": 0.76,
+      "ci95": [
+        0.6259,
+        0.857
+      ]
+    },
+    "tool_call": {
+      "k": 49,
+      "n": 50,
+      "rate": 0.98,
+      "ci95": [
+        0.895,
+        0.9965
+      ]
+    },
+    "uncertain": {
+      "k": 50,
+      "n": 50,
+      "rate": 1.0,
+      "ci95": [
+        0.9286,
+        1.0
+      ]
+    }
+  },
+  "numeric_failures": [
+    {
+      "id": "train_486",
+      "error": "number_mismatch",
+      "answer": "The patient's BUN of 79.1 mg/dL is approximately 3.96 times the upper limit of normal (20 mg/dL). In the context of hematochezia with a normal creatinine and preserved eGFR, this disproportionately elevated BUN is suggestive of significant gastrointestinal blood loss with protein reabsorption, or an"
+    },
+    {
+      "id": "train_528",
+      "error": "direction_mismatch",
+      "answer": "The patient's total cholesterol of 259.8 mg/dL exceeds the upper limit of normal (<200 mg/dL) by 59.8 mg/dL. Yes, this is the only lipid panel value outside the reference range; LDL (67.7, ref <100), HDL (64.9, ref >40), and triglycerides (116.9, ref <150) are all within their respective normal rang"
+    },
+    {
+      "id": "train_612",
+      "error": "number_mismatch",
+      "answer": "The fasting glucose of 230.8 mg/dL exceeds the upper normal limit of 100 mg/dL by 130.8 mg/dL (a 130.8% increase above the upper limit). The creatinine of 3.5 mg/dL exceeds its upper limit of 1.3 mg/dL by 2.2 mg/dL, which is approximately 169% above the upper limit. Therefore, creatinine exceeds its"
+    },
+    {
+      "id": "train_634",
+      "error": "number_mismatch",
+      "answer": "The TSH of 13.9 mIU/L exceeds the upper limit of normal (4.20 mIU/L) by 9.7 mIU/L. The Free T4 of 3.1 ng/dL exceeds its upper limit of normal (1.70 ng/dL) by 1.4 ng/dL. Therefore, the TSH is proportionally more significantly elevated relative to its reference range than the Free T4."
+    },
+    {
+      "id": "train_784",
+      "error": "direction_mismatch",
+      "answer": "The patient's triglycerides are 323.4 mg/dL, which exceeds the upper limit of normal (150 mg/dL) by 173.4 mg/dL \u2014 more than double the threshold. In contrast, total cholesterol (159.4 mg/dL) is 40.6 mg/dL below the upper limit of 200, LDL (82.7 mg/dL) is 17.3 mg/dL below its upper limit of 100, and "
+    },
+    {
+      "id": "train_820",
+      "error": "number_mismatch",
+      "answer": "Platelets at 368.7 x10\u00b3/\u03bcL are closest to the upper limit of their reference range (400 x10\u00b3/\u03bcL), falling 31.3 x10\u00b3/\u03bcL below the upper limit. All other lab values are well within their respective reference ranges with greater distance from their upper limits."
+    },
+    {
+      "id": "train_821",
+      "error": "direction_mismatch",
+      "answer": "The transferrin saturation is 14.1%, which is 5.9 percentage points below the lower limit of normal (20%). Yes, it is the only iron study outside the normal reference range; serum iron (66.8 \u03bcg/dL), TIBC (272.3 \u03bcg/dL), and ferritin (195.0 ng/mL) all fall within their respective reference ranges."
+    },
+    {
+      "id": "train_1050",
+      "error": "number_mismatch",
+      "answer": "The patient's ferritin is 5.9 ng/mL below the lower limit of normal (6.1 vs. 12 ng/mL), representing a 49% deficit. The TIBC is most significantly outside its normal range, at 412.2 \u03bcg/dL versus an upper limit of 370 \u03bcg/dL \u2014 exceeding the upper limit by 42.2 \u03bcg/dL, or approximately 11.4% above the r"
+    },
+    {
+      "id": "train_1081",
+      "error": "direction_mismatch",
+      "answer": "The patient's LDL of 191.2 mg/dL exceeds the upper limit of normal (<100 mg/dL) by 91.2 mg/dL, which is nearly double the threshold. This is the most significantly abnormal lipid value, as total cholesterol exceeds its reference by only 64.2 mg/dL above the 200 mg/dL cutoff, while LDL is 1.91 times "
+    },
+    {
+      "id": "train_1285",
+      "error": "direction_mismatch",
+      "answer": "The patient's temperature of 100.5 \u00b0F exceeds the fever threshold of 100.4 \u00b0F by 0.1 \u00b0F. While this is a low-grade fever, it is clinically significant in this context because it warrants further workup for possible infection, particularly given his chronic kidney disease and diabetes, which increase"
+    },
+    {
+      "id": "train_1454",
+      "error": "number_mismatch",
+      "answer": "HDL is the most significantly abnormal lipid value. At 21.3 mg/dL, it is 18.7 mg/dL below the lower acceptable threshold of 40 mg/dL, representing a deviation of approximately 47% below the reference range. All other lipid values (total cholesterol, LDL, and triglycerides) fall within their respecti"
+    },
+    {
+      "id": "train_1814",
+      "error": "number_mismatch",
+      "answer": "Alkaline phosphatase is the only lab value outside the normal range at 160.4 U/L, exceeding the upper limit of normal (147 U/L) by 13.4 U/L. All other liver function tests and protein values fall within their respective reference ranges."
+    }
+  ]
+}

@@ -22,7 +22,8 @@ from typing import Any
 
 from clinqa.config import load_run_config, load_yaml, resolve
 from clinqa.data_io import load_split, read_jsonl
-from clinqa.formatting import IGNORE_INDEX, build_conversation, encode_segments, template_kwargs, template_sha256
+from clinqa.formatting import (IGNORE_INDEX, active_tools, attach_tools, build_conversation, encode_segments,
+                               template_kwargs, template_sha256)
 from clinqa.modeling import compute_dtype, device_kind, load_base_model, load_tokenizer
 from clinqa.run_info import adapter_sha256, data_hashes, git_state, hardware, package_versions, sha256_text
 from clinqa.schemas import tool_schemas_sha256
@@ -191,7 +192,7 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
     if fmt.get("tool_call_format", "json") != cfg["model"].get("tool_call_format", "json"):
         raise ValueError("tool_call_format differs between the format config and the model config")
     segmented = bool(fmt.get("segmented_turns"))
-    tok = load_tokenizer(cfg["model"])
+    tok = attach_tools(load_tokenizer(cfg["model"]), fmt)
     train_examples = encode_records(records, tok, system, fmt["max_length"], segmented)
     val_examples = (encode_records(load_split("val", fmt["data_config"]), tok, system, fmt["max_length"], segmented)
                     if cfg.get("val_loss") else None)
@@ -205,7 +206,7 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
     contract = {"config": cfg, "data_policy": data_policy, "packages": package_versions(),
                 "system_prompt_sha256": sha256_text(system), "chat_template_sha256": template_sha256(tok),
                 "chat_template_kwargs": template_kwargs(tok), "segmented_turns": segmented,
-                "tool_schemas_sha256": tool_schemas_sha256(),
+                "tool_schemas_sha256": tool_schemas_sha256(active_tools(tok)),
                 "source_hashes": {str(p.relative_to(PROJECT_ROOT)): sha256_file(p)
                                   for p in sorted((PROJECT_ROOT / "src/clinqa").rglob("*.py"))}}
     if checkpoint:
@@ -277,7 +278,7 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
         "n_sequences": sum(len(e["segments"]) for e in train_examples),
         "supervised_tokens": sum(sum(x != IGNORE_INDEX for x in seg["labels"])
                                  for e in train_examples for seg in e["segments"]),
-        "tool_schemas_sha256": tool_schemas_sha256(), "model_load": getattr(model, "clinqa_load_info", None),
+        "tool_schemas_sha256": tool_schemas_sha256(active_tools(tok)), "model_load": getattr(model, "clinqa_load_info", None),
         "final_adapter_sha256": adapter_sha256(ckpt_dir / "final"),
         "trainable_params": trainable, "total_params": total,
         "steps_per_epoch": steps_per_epoch, "optimizer_steps": result.global_step,

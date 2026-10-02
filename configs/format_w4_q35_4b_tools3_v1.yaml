@@ -1,0 +1,14 @@
+# Stretch A, Qwen3.5-4B (primary backbone): three tools (core two + calculate_egfr), prompt v1 (docs/STRETCH_A_PLAN.md section 4).
+# Evaluation formatting only (zero-shot arms); the A-sft training view is in format_w4_q35_4b_egfr.yaml.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3.5-4B
+tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+chat_template_kwargs: {enable_thinking: false}
+tool_call_format: xml
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1.txt
+max_length: 2048
+output_dir: data/sft_w4_q35_4b_tools3_v1
+train_views: {}
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q35_4b_tools3_v1.json

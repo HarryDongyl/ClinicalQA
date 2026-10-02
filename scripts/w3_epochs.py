@@ -5,7 +5,8 @@
 
 generate: both epoch checkpoints on val (labels <run>_step<N>); epoch two only (the prospective primary
 endpoint) also on the frozen P1 probes and, with --trainfit, on the D-TRAINFIT IDs. Epoch one is diagnostic.
-No selection is written.
+--p1-all-epochs also runs P1 on epoch one (wave four, Wave4-Q1: diagnostic only, never used for selection).
+--records-files adds further frozen probe files on epoch two (e.g. Stretch A eGFR sets). No selection is written.
 """
 
 from __future__ import annotations
@@ -50,6 +51,8 @@ def main() -> None:
     g.add_argument("--run", required=True)
     g.add_argument("--config", required=True)
     g.add_argument("--trainfit", action="store_true")
+    g.add_argument("--p1-all-epochs", action="store_true")
+    g.add_argument("--records-files", nargs="*", default=[])
     a = p.parse_args()
     if a.cmd == "ckpt":
         print(checkpoint(a.run, a.epoch)[1])
@@ -58,8 +61,11 @@ def main() -> None:
         step, path = checkpoint(a.run, epoch)
         label = f"{a.run}_step{step:06d}"
         evaluate(a.config, a.run, label, path, "--split", "val")
-        if epoch == 2:
+        if epoch == 2 or a.p1_all_epochs:
             evaluate(a.config, a.run, label, path, "--split", "val", "--records-file", P1)
+        if epoch == 2:
+            for extra in a.records_files:
+                evaluate(a.config, a.run, label, path, "--split", "val", "--records-file", extra)
             if a.trainfit:
                 evaluate(a.config, a.run, label, path, "--split", "train", "--ids-file", TRAINFIT)
 

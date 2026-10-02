@@ -39,7 +39,7 @@ from typing import Any
 
 from clinqa.config import load_yaml, resolve
 from clinqa.data_io import load_split, read_jsonl
-from clinqa.schemas import TOOL_SCHEMAS, tool_response_content, tool_schemas_sha256
+from clinqa.schemas import TOOL_SCHEMAS, tool_response_content, tool_schemas, tool_schemas_sha256
 from clinqa.tools import execute_tool
 
 IGNORE_INDEX = -100
@@ -132,9 +132,23 @@ def sidecar(record: dict[str, Any]) -> dict[str, Any]:
 def render(tokenizer: Any, messages: list[dict[str, Any]], add_generation_prompt: bool = False) -> str:
     # Template switches (e.g. enable_thinking) are attached to the tokenizer by load_tokenizer,
     # so training, formatting and inference cannot render with different settings.
-    return tokenizer.apply_chat_template(messages, tools=TOOL_SCHEMAS, tokenize=False,
+    return tokenizer.apply_chat_template(messages, tools=active_tools(tokenizer), tokenize=False,
                                          add_generation_prompt=add_generation_prompt,
                                          **template_kwargs(tokenizer))
+
+
+def active_tools(tokenizer: Any) -> list[dict[str, Any]]:
+    """Tool schemas offered in every prompt: the format config's `tools` list, attached by attach_tools."""
+    return getattr(tokenizer, "clinqa_tools", None) or TOOL_SCHEMAS
+
+
+def attach_tools(tokenizer: Any, fmt: dict[str, Any]) -> Any:
+    """Bind the format config's tool list to the tokenizer, so formatting, training and inference render alike.
+
+    Absent `tools` means the two core tools (D-024). Stretch A configs list calculate_egfr explicitly.
+    """
+    tokenizer.clinqa_tools = tool_schemas(fmt.get("tools"))
+    return tokenizer
 
 
 def template_kwargs(tokenizer: Any) -> dict[str, Any]:
@@ -235,7 +249,7 @@ def load_tokenizer(cfg: dict[str, Any]) -> Any:
     tok = AutoTokenizer.from_pretrained(cfg["tokenizer"], revision=cfg["tokenizer_revision"])
     tok.clinqa_template_kwargs = dict(cfg.get("chat_template_kwargs") or {})
     tok.clinqa_call_format = cfg.get("tool_call_format", "json")
-    return tok
+    return attach_tools(tok, cfg)
 
 
 def template_sha256(tokenizer: Any) -> str:
@@ -289,7 +303,7 @@ def main(argv: list[str] | None = None) -> int:
     out = resolve(cfg["output_dir"])
     report: dict[str, Any] = {
         "tokenizer": cfg["tokenizer"], "tokenizer_revision": cfg["tokenizer_revision"],
-        "chat_template_sha256": template_sha256(tokenizer), "tool_schemas_sha256": tool_schemas_sha256(),
+        "chat_template_sha256": template_sha256(tokenizer), "tool_schemas_sha256": tool_schemas_sha256(active_tools(tokenizer)),
         "system_prompt_sha256": hashlib.sha256(system_prompt.encode("utf-8")).hexdigest(),
         "max_length": cfg["max_length"], "splits": {},
     }

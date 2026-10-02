@@ -1,0 +1,332 @@
+{
+ "reviewer": "AI review (Claude), delegated by the user on 2026-10-02; not a clinician review",
+ "method": [
+  "arguments re-extracted from the source note/table with independent regexes",
+  "eGFR recomputed with an independent CKD-EPI 2021 implementation (/tmp review script, not the generator)",
+  "KDIGO category and answer text checked",
+  "probe diff checked to be a pure age removal with grammatical repair",
+  "numeric age residue and soft (value-free) age mentions checked",
+  "note text checked for written eGFR/CrCl values (none)",
+  "clinical validity scan: AKI / acute-or-chronic / dialysis / pregnancy / transplant / amputation"
+ ],
+ "scoring_rules_from_review": {
+  "near_cutoff": "accept either neighbouring KDIGO category when the raw eGFR is within 1 of a cut-off",
+  "non_steady_state": "kept; the answer template states \"assuming stable kidney function\"; report as a slice"
+ },
+ "frozen_files": {
+  "val_egfr.jsonl": "1a0e52e6ca86f1421fdc76007e71035fbc887f3a9a9ed253c4587f5146aaf869",
+  "val_egfr_age_probes.jsonl": "88702fbee02604090b1f917e9e7713487de04f26d1961a911f26520e8300b2fe",
+  "train_additions.jsonl": "43065130ad60aa51e3b7bd9e33e2a6a5fb1f41b71ff47651bcc098de5ce4b8de"
+ },
+ "summary": {
+  "approved": 19,
+  "fixed": 0,
+  "dropped": 0,
+  "non_steady_state": 4,
+  "near_cutoff": 1,
+  "soft_age": 3
+ },
+ "items": [
+  {
+   "id": "sa_val_000",
+   "source_id": "val_008",
+   "decision": "approve",
+   "tags": [
+    "non_steady_state:acute_or_chronic"
+   ],
+   "verified": {
+    "age": 58,
+    "sex": "female",
+    "creatinine_mg_dl": 2.5,
+    "egfr_independent_raw": 21.75,
+    "egfr": 22,
+    "kdigo": "G4"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_001",
+   "source_id": "val_009",
+   "decision": "approve",
+   "tags": [
+    "soft_age_mention_no_value"
+   ],
+   "verified": {
+    "age": 70,
+    "sex": "male",
+    "creatinine_mg_dl": 1.2,
+    "egfr_independent_raw": 65.06,
+    "egfr": 65,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_002",
+   "source_id": "val_020",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 19,
+    "sex": "male",
+    "creatinine_mg_dl": 0.8,
+    "egfr_independent_raw": 130.74,
+    "egfr": 131,
+    "kdigo": "G1"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_003",
+   "source_id": "val_025",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 54,
+    "sex": "female",
+    "creatinine_mg_dl": 1.0,
+    "egfr_independent_raw": 66.95,
+    "egfr": 67,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_004",
+   "source_id": "val_033",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 33,
+    "sex": "male",
+    "creatinine_mg_dl": 2.9,
+    "egfr_independent_raw": 28.4,
+    "egfr": 28,
+    "kdigo": "G4"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_005",
+   "source_id": "val_036",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 71,
+    "sex": "male",
+    "creatinine_mg_dl": 1.0,
+    "egfr_independent_raw": 80.47,
+    "egfr": 80,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_006",
+   "source_id": "val_044",
+   "decision": "approve",
+   "tags": [
+    "soft_age_mention_no_value"
+   ],
+   "verified": {
+    "age": 78,
+    "sex": "female",
+    "creatinine_mg_dl": 0.7,
+    "egfr_independent_raw": 88.47,
+    "egfr": 88,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_007",
+   "source_id": "val_059",
+   "decision": "approve",
+   "tags": [
+    "non_steady_state:acute_or_chronic"
+   ],
+   "verified": {
+    "age": 57,
+    "sex": "female",
+    "creatinine_mg_dl": 4.0,
+    "egfr_independent_raw": 12.45,
+    "egfr": 12,
+    "kdigo": "G5"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_008",
+   "source_id": "val_068",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 31,
+    "sex": "female",
+    "creatinine_mg_dl": 2.8,
+    "egfr_independent_raw": 22.45,
+    "egfr": 22,
+    "kdigo": "G4"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_009",
+   "source_id": "val_070",
+   "decision": "approve",
+   "tags": [
+    "non_steady_state:explicit_AKI"
+   ],
+   "verified": {
+    "age": 71,
+    "sex": "male",
+    "creatinine_mg_dl": 2.1,
+    "egfr_independent_raw": 33.03,
+    "egfr": 33,
+    "kdigo": "G3b"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_010",
+   "source_id": "val_086",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 61,
+    "sex": "male",
+    "creatinine_mg_dl": 0.7,
+    "egfr_independent_raw": 104.83,
+    "egfr": 105,
+    "kdigo": "G1"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_011",
+   "source_id": "val_110",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 30,
+    "sex": "female",
+    "creatinine_mg_dl": 3.6,
+    "egfr_independent_raw": 16.71,
+    "egfr": 17,
+    "kdigo": "G4"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_012",
+   "source_id": "val_130",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 74,
+    "sex": "male",
+    "creatinine_mg_dl": 1.1,
+    "egfr_independent_raw": 70.44,
+    "egfr": 70,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_013",
+   "source_id": "val_141",
+   "decision": "approve",
+   "tags": [
+    "soft_age_mention_no_value"
+   ],
+   "verified": {
+    "age": 81,
+    "sex": "female",
+    "creatinine_mg_dl": 0.8,
+    "egfr_independent_raw": 73.98,
+    "egfr": 74,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_014",
+   "source_id": "val_192",
+   "decision": "approve",
+   "tags": [
+    "non_steady_state:acute_or_chronic"
+   ],
+   "verified": {
+    "age": 62,
+    "sex": "female",
+    "creatinine_mg_dl": 3.7,
+    "egfr_independent_raw": 13.25,
+    "egfr": 13,
+    "kdigo": "G5"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_015",
+   "source_id": "val_194",
+   "decision": "approve",
+   "tags": [
+    "near_cutoff:44.91"
+   ],
+   "verified": {
+    "age": 83,
+    "sex": "female",
+    "creatinine_mg_dl": 1.2,
+    "egfr_independent_raw": 44.91,
+    "egfr": 45,
+    "kdigo": "G3a"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_016",
+   "source_id": "val_199",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 37,
+    "sex": "female",
+    "creatinine_mg_dl": 1.0,
+    "egfr_independent_raw": 74.41,
+    "egfr": 74,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_017",
+   "source_id": "val_223",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 85,
+    "sex": "male",
+    "creatinine_mg_dl": 0.9,
+    "egfr_independent_raw": 83.7,
+    "egfr": 84,
+    "kdigo": "G2"
+   },
+   "mechanical_issues": []
+  },
+  {
+   "id": "sa_val_018",
+   "source_id": "val_233",
+   "decision": "approve",
+   "tags": [],
+   "verified": {
+    "age": 43,
+    "sex": "female",
+    "creatinine_mg_dl": 1.2,
+    "egfr_independent_raw": 57.6,
+    "egfr": 58,
+    "kdigo": "G3a"
+   },
+   "mechanical_issues": []
+  }
+ ]
+}

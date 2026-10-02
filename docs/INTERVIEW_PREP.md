@@ -6,6 +6,8 @@ Session started 2026-10-01. This is a grill-me review from the viewpoint of a st
 
 This imported narrative contains hypotheses and stale assertions. [INTERVIEW_REVIEW.md](INTERVIEW_REVIEW.md) governs their interpretation and [EXPERIMENTS_WAVE3.md](EXPERIMENTS_WAVE3.md) is the active planning document. In particular: Git commits exist; P1 has 40 grounded BMI candidates rather than 55; raw token logprob is not a correctness probability; v2.1 is not a validated selector; no clean-test or quantified contamination-bias claim is supported. Statements below that an experiment was "added" express proposals, not implemented code or user-authorized GPU execution. The original is archived unchanged.
 
+> **Update 2026-10-02:** wave-3 results are in section 5, which corrects several claims below (P1 n = 34, v2.1 numeric false positives, latency, calibration). Where section 5 conflicts with sections 0–4, section 5 governs.
+
 ## Summary of this session's decisions
 
 | # | Question | Decision | Evidence type | Section |
@@ -413,3 +415,389 @@ This gives about 55 independent Q5-type items per model, classified as abstain /
 - Test (400) is for confirmation, not selection.
 
 **Reporting rule.** Write deltas as discordant counts: "numeric +4pp = 3 fixed, 1 broken out of 50", not as bare percentages.
+
+---
+
+## 5. Wave-3 results update (2026-10-02)
+
+Sources: [WAVE3_RESULTS_REVIEW_8349.md](WAVE3_RESULTS_REVIEW_8349.md) and `reports/w3/results_2026-10-02/` (`results_overview.json`, `paired_diagnostics.json`, `p1/`, `v21/`, `bounded_v2/`, `c10_*`, `trainfit/`, `training/`).
+
+Scope: validation, P1 and train-fit only; RTX 4090; seed 42 only. No test results. Qwen3.5 was still running.
+
+### 5.1 Corrections to sections 1–4 (stale or overstated claims)
+
+| Earlier claim | Corrected statement | Evidence |
+|---|---|---|
+| P1-expanded has about 55 items | **34 approved probes**, from 40 grounded BMI candidates with 6 documented exclusions (D-085) | `reports/w3/p1_review_packet.md` |
+| Gate "≤5% on P1" | 0/34 has a Wilson upper bound of **10.15%**, so it cannot establish a rate below 5% | `results_overview.json` p1.ci95 |
+| v2.1 is a validated selector | v2.1 is a **diagnostic**: it passes numeric answers that are contradictory or wrong in arithmetic (val_062, val_239, val_054) | W3 review §2 |
+| Few-shot costs 4–5× latency | Prompt tokens are 4,484 vs 1,294 (3.5×), but measured wall time was **not slower** (846 s vs 1,001–1,084 s). No latency advantage for SFT can be claimed from token counts | W3 review §6 |
+| Calibration via token logprob | Raw mean logprob is not a probability of correctness. C10b call-prefix AUROC is 1.0 even though C fabricated on 25 P1 answers: predicting a call prefix is not predicting truthfulness. No ECE was computed | W3 review §5 |
+| "No git commits" | The repository has commits (30 at clone time) | `git log` |
+| Test bias of about 0.7pp | Not a quantified, supported claim. Disclose only that test is not an untouched holdout | INTERVIEW_REVIEW.md |
+
+### 5.2 Layer 3, data: the headline result
+
+| | C-filtered-s42 (1,922 rows) | F-s42 relabel, epoch 2 (2,000 rows) |
+|---|---|---|
+| P1 numeric fabrication (missing measurements) | **25/34** | **0/34** (Wilson upper bound 10.15%) |
+| Actual tool calls on P1 | 0 | 0 |
+| Intact partner, valid call | 33/34 | 33/34 (the same failure, val_105) |
+| Grounded tool tasks | 54/55 (BMI 39/40, conversion 15/15) | 54/55 |
+| Natural val Q5 fabrication | 4/7 | 0/7 |
+
+- **Interpretation.** Filtering removed the wrong targets but did not teach the "both inputs missing" response. Explicit negative examples teach when an answer is unsupported, not just whether to call. The control fabricates **in text, with zero calls**, so a tool-routing metric alone would miss it.
+- **Caveats.**
+  - This is one seed.
+  - C vs F is a policy package, not a pure label change: row count, class mix and 242 vs 250 optimiser steps differ.
+  - P1 items are paired perturbations of val, not an external cohort.
+  - val_135 still makes a qualitative unsupported statement.
+  - The numeric grounding screen is not a general hallucination guarantee.
+- **Interview line.** "Relabelling the 78 input-deficient records as abstentions took missing-measurement fabrication from 25/34 to 0/34 at no cost to intact-input tool success (33/34 both). Filtering alone had moved the hallucination from the tool arguments into the prose."
+
+### 5.3 Layer 2, representation and baselines (Qwen3-4B, val)
+
+| Arm | Grounded tool tasks /55 | P1 fabrication /34 | Intact partner valid call /34 | v2.1 macro (diagnostic) |
+|---|---|---|---|---|
+| R0-v1 (zero-shot) | 29 | 0 | 20 | 73.8% |
+| R0-v3 (strong prompt) | **9** | 0 | **5** | 67.0% |
+| R0-v3-FS4 (strong prompt + 4 shots) | 29 | 2 flagged | — | 77.6% |
+| C-filtered SFT | 54 | 25 | 33 | 91.4% |
+| F relabel SFT, epoch 2 | 54 | 0 | 33 | 96.7% |
+| R0-8B (Qwen3-8B zero-shot) | 46 | **28** | — | 68.8% |
+
+**Findings.**
+
+- **The strong prompt caused a tool-compliance regression.** v3 made no call on 32/40 grounded BMI and 11/15 conversion questions. A longer, stricter prompt is not automatically better. It is a composite change, so no single sentence is isolated as the cause.
+- **Few-shot recovers BMI selection only partly.** BMI selection reached 33/40, but 6 of those calls fail the argument checks, and conversion selection stays at 4/15. Its only tool demonstration is one BMI call, which plausibly explains the uneven coverage (a hypothesis).
+- **"Zero fabrication" alone is misleading.** Base v1 and v3 both score 0/34 on P1 fabrication, but complete only 20/34 and 5/34 intact partners. Always pair missing-input behaviour with useful behaviour on intact inputs.
+- **A larger base model is not sufficient.** R0-8B completes more tool tasks (46) but fabricates on 28/34 P1 probes, and hits the generation budget in 26/250 trajectories. The problem is grounding, not only capacity. No 8B SFT exists, so this is no verdict on 8B capacity.
+- **Decision.** v1 stays the comparator; v3 and FS4 are not promoted. A future prompt experiment must separate "you must call on supported tool tasks" from "you must not invent missing arguments", and demonstrate both tool schemas.
+- **Interview line (SFT vs prompting).** "Prompting does not get there. The best prompted 4B completes 29/55 grounded tool tasks; SFT completes 54/55. A stricter prompt made it worse (9/55). An 8B base model completes more tasks but invents measurements on 28/34 probes."
+
+### 5.4 Layer 4, evaluation: numeric is where the scorer is weakest
+
+- **Headline.** v2.1 numeric is C 40/50 → F 46/50, but **only 3 of the 6 apparent gains are credible**:
+  - credible: val_028 (TIBC), val_114 (haematocrit), val_186 (bilirubin ranking);
+  - ambiguous: val_054 (ambiguous criterion, plus a wrong 194% claim);
+  - false positive: val_062 (self-contradictory);
+  - scorer preference: val_124.
+- **More false positives under v2.1.**
+  - val_239: a false claim about ALT that v2.1 passes;
+  - val_075: the scorer misses a real repair;
+  - val_001, val_085, val_185: range-membership, sign and subtraction errors remain;
+  - val_202: wrong ranking, and 19.3 written for 119.3.
+- **Bounded scorer.** Numeric is C 18 pass / 4 fail / 28 review, F 21 / 2 / 27. That is not a verified ranking either.
+- **Do not say** "92% numeric accuracy" or "96.7% clinical macro accuracy". These are scorer outcomes.
+- **Paired diagnostics** (exploratory, unadjusted, seed 42 only), F epoch 2 vs C:
+  - v2.1 macro +5.28pp, CI [+2.22, +8.67];
+  - v1 macro +3.07pp, CI [+0.25, +6.23].
+
+  Resampling neither fixes scorer bias nor measures seed variance.
+- **Other type-level changes.**
+  - Extractive 100 → 99: val_191 omits a timing detail.
+  - Uncertain 35 → 37 of 38.
+- **Calibration diagnostics (C10).**
+  - Final-answer mean-logprob AUROC is about 0.750 for C and 0.640 for F. The error sets differ, so this is not "calibration got worse".
+  - Call-prefix AUROC is 1.0 for both.
+- **Next measurement.** A claim-level audit of all 50 numeric answers for the finalists, with a frozen rubric: reference range taken from the input, analyte selection, direction, arithmetic, units, ranking criterion, extra false claims, plus an ambiguous/disputed category. Do not feed validation-specific repairs into training labels.
+- **Interview line.** "My own scorer over-credits numeric answers. On inspection only 3 of 6 apparent numeric gains were real. So I report the missing-input result, which is robust, and treat numeric as unresolved pending a claim-level audit."
+
+### 5.5 Layer 1, training (measured)
+
+| | C-filtered | F relabel |
+|---|---|---|
+| Training time | 42.7 min | 43.9 min |
+| Median s/step | 10.21 | 10.13 |
+| Peak allocated | 7.81 GiB | 7.81 GiB |
+| Teacher-forced val loss, epoch 2 | 0.3414 | 0.3470 |
+| Train-fit numeric (v1, 200 train items) | 32/50 | 34/50 |
+
+- No divergence over two epochs.
+- **Val loss is slightly worse for F while behaviour improves.** Teacher-forced loss is unsuitable for checkpoint selection here: the canonical val targets include unsupported Q5 calls, and the objective differs from the behaviour being measured. This is a good interview point.
+- **Train-fit diagnostic (D-TRAINFIT).** Numeric on train under v1 is only 32–34/50, i.e. not near 1.0. But it is scorer-dependent (v1 under-credits numeric), so it **cannot establish a capacity ceiling**. A-R64 stays unjustified until the claim-level audit says whether train numeric errors are real.
+
+### 5.6 Qwen3.5 round (running; D-088, D-089)
+
+- **Arms.** R0-Q35-4B, R0-Q35-9B (zero-shot), and A-Q35-4B SFT on the **filtered** recipe. Comparisons: A-Q35 vs C-filtered (same data), A-Q35 vs R0-Q35 (SFT effect). Do not compare A-Q35 filtered against F relabel, which would confound family with data policy.
+- **Integration facts.**
+  - Hybrid Gated DeltaNet / full attention (3:1).
+  - XML tool-call format.
+  - Empty think block in every assistant turn.
+  - Max length 1,781 tokens.
+  - 30.5M LoRA parameters after adding `in_proj_qkv/in_proj_z/out_proj`. The original seven module names would adapt only the 8 full-attention layers.
+- **Why it is slower (analysis, 2026-10-02).** The vocabulary grows from 151,936 to about 248k. That adds only about 3 points to the lm_head share of per-token compute (about 5% → 8%), plus about 1.6 GB of logit memory. The larger factors:
+  - the linear-attention kernels (torch fallback, later fla);
+  - longer sequences (XML calls plus the think block);
+  - A100 with `PARALLEL=1` contention, which makes timings non-comparable by construction.
+- **Value.** None of the Q3.5 comparisons isolates capacity (D-073). The arm most likely to be informative is "does a different backbone also fabricate under the filtered policy?". Cross-family numeric comparison is blocked by the numeric scorer weakness (§5.4).
+- **Status (2026-10-02).** A-Q35-4B SFT had already started and was close to finishing, so it is completed as frozen. No expansion.
+- **Recommendation.** Finish the frozen arms. Do not expand (no Q3.5 relabel, seeds or 9B SFT) unless A-Q35 filtered shows a qualitatively different missing-input behaviour. Spend GPU on F-s43/44 first.
+
+### 5.7 Updated priority list (as of 2026-10-02)
+
+1. Record the reviewed F-s42 engineering gate, then F-s43/44 with the same recipe; report per-seed P1 and partner outcomes.
+2. Claim-level numeric audit (all 50) for the finalists.
+3. Finish Qwen3.5, then read every P1 and natural-Q5 response.
+4. Only then decide on a bounded numeric intervention or a prompt/tool-demonstration experiment. RL is not required by current evidence.
+5. REPORT.md: lead with the missing-input result and its caveats; report numeric as unresolved.
+
+### 5.8 "C vs F changes row count, class mix and steps, with one seed. How do you know it is the relabel?"
+
+**Conclusion (decided 2026-10-02).** Use the existing wave-1 **raw_lr1e4 step 250** adapter as a label-only control. It has the same 2,000 rows, 250 optimiser steps, lr 1e-4, 2 epochs, mb1×16 and seed 42 as F-s42. The only difference is that its 78 Q5 records carry the wrong call targets instead of abstention targets. It runs on the 34 frozen P1 probes and the 7 natural Q5 items. Inference only, about 15 min; the user has kept the adapter.
+
+**What the three-way comparison answers.**
+
+| Arm | 78 Q5 records | Rows / steps | Isolates |
+|---|---|---|---|
+| raw_lr1e4 (wave 1) | wrong call targets | 2,000 / 250 | effect of keeping wrong labels |
+| C-filtered-s42 | removed | 1,922 / 242 | effect of removing them |
+| F-s42 | relabelled as abstain | 2,000 / 250 | effect of correct negative labels |
+
+raw vs F is the clean "labels only" contrast; C vs F is the policy package.
+
+**Known prior evidence.** raw lr1e-4 fabricated on 6/7 natural Q5 items via a tool call (v2.1 rescoring, wave 1). The expected P1 failure mode for raw is therefore call fabrication, while C's is text fabrication.
+
+**Caveats.**
+
+- raw was trained in the wave-1 code state. Run it with the wave-3 inference protocol and the same `p1-2` classifier, and record and compare the source hashes and inference protocol objects with F before claiming comparability.
+- Still one seed. F-s43/44 remain necessary.
+
+**Interview line.** "To separate the label effect from the extra rows and steps, I compare against a wave-1 run with identical rows, steps and seed in which those 78 records still carry the wrong labels. Only the labels differ."
+
+### 5.9 "Your numeric scorer is unreliable. How will you establish numeric accuracy?"
+
+**Decision (2026-10-02).** A claim-level numeric audit.
+
+| Item | Design |
+|---|---|
+| Scope | All 50 val numeric answers for C-filtered-s42 and F-s42 epoch 2 (100 answers); A-Q35-4B's 50 once available |
+| Rubric (frozen before labelling) | Per answer: reference range taken from the input; analyte selection; direction; arithmetic; units; ranking criterion as asked; extra false claims. Each scored correct / wrong / n.a. Under-specified questions or disputed gold are marked **disputed** instead of being forced into pass/fail |
+| Labelling | Two independent LLM adjudicators, blinded to model identity and scorer output (existing protocol). **The user adjudicates their disagreements** (expected 10–20 items, about 30 min) |
+| Output | Correct / wrong / disputed counts per model; distribution of error types; agreement between the two adjudicators |
+| Leakage control | Audit labels are used for evaluation only: never as training labels and not to tune v2.1. Any later scorer revision uses independent synthetic regression fixtures and is labelled post-inspection |
+
+**Interview line.** "I don't trust a regex scorer on multi-step numeric answers. So I audit every numeric answer claim by claim with a frozen rubric, keep an explicit disputed category, and personally adjudicate the cases the two blinded raters disagree on."
+
+### 5.10 P1 probe results, full table (val, 34 pairs; `reports/w3/results_2026-10-02/p1/summary.md`)
+
+Each pair is one probe input with both weight and height removed (correct behaviour: abstain) and its intact partner (correct behaviour: call the tool).
+
+| Arm | Fabrication | in call | in text | No call + states missing | Intact partner valid call |
+|---|---|---|---|---|---|
+| R0-v1 | 0/34 | 0 | 0 | 34/34 | 20/34 |
+| R0-v3 | 0/34 | 0 | 0 | 34/34 | 5/34 |
+| R0-v3-FS4 | 2/34 | 0 | 2 | 31/34 | 21/34 |
+| C-filtered SFT | **25/34** | 0 | **25** | 14/34 | 33/34 |
+| F relabel SFT, epoch 2 | **0/34** | 0 | 0 | **34/34** | **33/34** |
+| R0-8B | **28/34** | **28** | 6 | 0/34 | 25/34 |
+
+F epoch 1 has no P1 run. Text fabrication flags are regex candidates and were inspected individually in the W3 review.
+
+**Reading.**
+
+- Only F is correct in both columns.
+- Base "zero fabrication" comes from under-calling: it rarely calls even on intact inputs.
+- C hallucinates only in prose (0 calls), so a call-only metric would miss all 25 cases. This confirms the wave-2 observation, now on n = 34 instead of 7.
+- 8B calls eagerly and invents the arguments.
+- F's 0/34 has a Wilson upper bound of 10.15%, from one seed. val_135 shows a qualitative unsupported statement that is outside the numeric screen.
+
+**Interview line.** "On 34 paired probes, only the relabelled SFT model both abstains when measurements are removed (34/34) and still calls the tool when they're present (33/34). The filtered model invents measurements in prose on 25/34 without ever calling a tool, and the 8B base invents them as tool arguments on 28/34. The base models' zero fabrication is because they mostly don't call at all."
+
+### 5.11 Test-set use for wave 3 (decided 2026-10-02)
+
+- **Option B.** One confirmatory test run on a frozen, committed model list (F-s42/43/44, C-filtered-s42, R0-v1), reporting only pre-specified metrics:
+  - natural Q5 fabrication on test (n = 10);
+  - grounded tool-task completion;
+  - the five assignment metrics under v1 and v2.1 (diagnostic).
+- **No test-side probes** (user decision). The confirmation of the core missing-input claim on test therefore rests on the 10 natural Q5 items and is underpowered. Say so.
+- Numeric on test: v1/v2.1 diagnostic scores only; no audited accuracy (the audit is val-only).
+- Disclosure: test was used once in wave 1 and to validate the scorer, and val has been used adaptively. This run is a pre-specified confirmation, not a pristine holdout estimate.
+
+### 5.12 All evaluation dimensions, starting from the assignment (status 2026-10-02)
+
+Values are val, seed 42, F = F-s42 epoch 2, C = C-filtered-s42. Sources: `reports/w3/results_2026-10-02/{v21,p1,c10_*,training}`, the W3 review.
+
+**A. What the assignment says the model must do (Overview)**
+
+| # | Required behaviour | Our measurement | F | C |
+|---|---|---|---|---|
+| A1 | Extract facts from the note or table | extractive accuracy (B1) | 99/100 | 100/100 |
+| A2 | Simple numeric reasoning | numeric accuracy (B2) | 46/50 v2.1 (**unverified**; audit pending) | 40/50 |
+| A3 | Tool use: when to call, valid arguments | B3, B4, C1–C4 | see below | see below |
+| A4 | Calibrated responses: state uncertainty, no hallucination | B5 + D1–D3 + E4 | see below | see below |
+
+**B. Minimum evaluation metrics (assignment section 4), under spec names**
+
+| # | Metric | Implementation | F (v2.1 / v1) | C (v2.1 / v1) | Limitation |
+|---|---|---|---|---|---|
+| B1 | Extractive accuracy | v2.1: input-derived keys; v1: gold-word match | 99 / 98 of 100 | 100 / 99 | v1 under-credits style (about 58/61 base false negatives in wave 1) |
+| B2 | Numeric reasoning accuracy | v2.1 typed tolerance checks; v1 | 46 / 29 of 50 | 40 / 25 | v2.1 false positives (only 3 of 6 apparent gains are credible); v1 false negatives |
+| B3 | Tool selection accuracy | correct tool name / grounded tool records | 55/55 | 55/55 | — |
+| B4 | Tool argument accuracy | strict ±0.05 (v1 rule) / outcome band | 54/55 / 54/55 | 54/55 / 54/55 | strict penalises clinically negligible imperial rounding |
+| B5 | Uncertainty detection rate | abstention phrase + missing field named + no fabricated value | 37/38 | 35/38 | regex-bound; "safe" conclusions need an extra rule |
+
+**C. The four tool-call questions the assignment lists**
+
+| # | Question | Measurement | F | C |
+|---|---|---|---|---|
+| C1 | Did it decide to call (vs answer directly)? | relevance over all 62 tool records, including Q5 = should not call | 62/62 | 62/62 |
+| C2 | Correct tool? | = B3 | 55/55 | 55/55 |
+| C3 | Valid arguments that match the note (including imperial → metric)? | schema-valid + grounded + = B4; parse errors | 54/55; parse errors 0 | 54/55; 0 |
+| C4 | Final answer incorporates the result, with brief clinical context? | result reported in the answer (part of tool E2E: 54/55 for both) | incorporation measured; **clinical context not scored** | same |
+
+**D. Our additions for "no hallucination"**
+
+| # | Dimension | Why it was added | F | C |
+|---|---|---|---|---|
+| D1 | Natural Q5 abstention (gold calls BMI without inputs) | label-noise records; v1 could not see them | 7/7 | 4/7 |
+| D2 | P1 fabrication, in call / in text (34 probes) | n = 7 too small; text fabrication is invisible to call metrics | 0/34 (0 / 0) | 25/34 (0 / 25) |
+| D3 | P1 intact-partner valid call | prevents "zero fabrication by never calling" | 33/34 | 33/34 |
+| D4 | Over-call (calls on non-tool items) | abstention ↔ call trade-off | 0/188 | 1/188 |
+| D5 | Over-refusal (abstains on answerable items) | the same trade-off | 0/150 | 0/150 |
+| D6 | Unsupported clinical commentary | gold commentary may be learned | **not measured** (MiniCheck method documented, §3.2) | — |
+| D7 | Tool-result faithfulness (copy vs recompute) | `result_in_answer` cannot tell them apart | **not measured** (§2.2) | — |
+
+**E. Diagnostics and slices**
+
+| # | Dimension | Status |
+|---|---|---|
+| E1 | Implicit vs explicit allergy question slice | baseline 8/18 vs 36/36 (wave 2); A-IMPL ablation proposed |
+| E2 | Same-unit "most abnormal" questions | v2.1 accepts both scales; covered by the numeric audit |
+| E3 | Imperial vs metric tool records | outcome vs strict argument scores |
+| E4 | Calibration diagnostics (C10) | answer mean-logprob AUROC: F 0.640, C 0.750 (different error sets; not a calibration claim); call-prefix AUROC 1.0 for both; no ECE |
+| E5 | Self-correction rate | v2.1 flags `self_corrected` |
+| E6 | Train-fit (200 train records) | v1 numeric F 34/50, C 32/50; scorer-dependent, no capacity conclusion |
+| E7 | Teacher-forced val loss per type | F 0.3470 vs C 0.3414: worse loss, better behaviour, so unsuitable for selection |
+
+**F. Statistical validity**
+
+| # | Item | Status |
+|---|---|---|
+| F1 | Wilson 95% CI per metric | reported (e.g. 0/34 has an upper bound of 10.15%) |
+| F2 | Paired bootstrap, F vs C | v2.1 +5.28pp [2.22, 8.67]; v1 +3.07pp [0.25, 6.23]; exploratory, unadjusted |
+| F3 | Minimum detectable effect / discordant counts | per-type MDE about 14–23pp on val (§4.3) |
+| F4 | Seed variance | **missing** (only s42); F-s43/44 pending |
+| F5 | Label-only control (raw vs F) | P1-RAW proposed (§5.8) |
+
+**G. Evaluator validity**
+
+| # | Item | Status |
+|---|---|---|
+| G1 | v2.1 vs blind adjudicators | 92.6%, κ 0.72 on a clean holdout (v1: 65.7%) |
+| G2 | Inter-adjudicator agreement | κ 0.92 / 1.00 / 0.93 |
+| G3 | Human check | informal, about 20 items, not recorded |
+| G4 | Numeric claim-level audit | decided, pending (§5.9) |
+
+**H. Cost (assignment: hardware assumptions and runtime)**
+
+| # | Item | F | C | Note |
+|---|---|---|---|---|
+| H1 | Training time | 43.9 min | 42.7 min | RTX 4090 |
+| H2 | Peak VRAM | 7.81 GiB | 7.81 GiB | |
+| H3 | Val generation time (250) | 1,000.9 s | 1,083.6 s | FS4 846 s, so no latency advantage claimed for SFT |
+| H4 | First-turn prompt tokens | 1,294 | 1,294 | FS4 4,484 |
+
+**I. Project-level grading criteria (assignment "Evaluation Criteria"; not model metrics)**
+
+| Weight | Criterion | Main evidence in the repository |
+|---|---|---|
+| 10% | Data formatting | native template, assistant-only masks audited, Markdown tables, the 4 answer types, Q5 relabel |
+| 40% | Fine-tuning setup | QLoRA recipe with measured rationale, locked hyperparameters, provenance, gates |
+| 10% | Evaluation | B + C + D + statistics + validated scorer, with an honest limitations list |
+| 20% | Code quality | tests, pinned dependencies, git history (verify the README matches the current tree) |
+| 20% | Stretch / beyond | scorer research and validation, probes, label-only control, calibration diagnostics, model-family extension (Qwen3.5) |
+
+**Coverage gaps against the assignment**
+
+- C4 "brief clinical context" is not scored (D6).
+- A4 "calibrated" is only behavioural, plus diagnostic AUROC (E4).
+- A2 numeric accuracy is unverified (G4).
+- F4 has no seed variance.
+
+### 5.13 Plan for the four coverage gaps (decided 2026-10-02)
+
+| Gap | Can gold help? | Plan | Compute |
+|---|---|---|---|
+| **C4: "brief clinical context" not scored** | **Yes, as the convention.** In train, gold states a BMI category on 410/410 BMI tool answers (407 match WHO cut-offs) and a status on 89/90 conversion answers; in val, 47/47 (46 match) and 15/15 | **Clinical-context check (CC).** BMI: the category implied by the *executed* result under WHO cut-offs (<18.5, <25, <30, ≥30) must be stated, with no conflicting category. Conversion: the status of the converted analyte must be stated and agree with the input range. The truth comes from the tool result and input, not from gold text (about 1% of gold categories are wrong) | CPU; **done**, results in §5.14 |
+| **A2: numeric unverified** | **Partly.** v2.1 keys record `gold_agrees`: where the input-derived key and gold agree, use it as a high-confidence reference; where they disagree, pre-mark the item disputed. Gold cannot catch extra false claims (e.g. val_239), so the claim-level audit is still needed | Stratify the 50 numeric val items by key-vs-gold agreement and coverage before the audit (§5.9) | CPU; **stratification done** (§5.14); audit pending |
+| **A4: calibration only behavioural** | **No.** Gold has no probabilities | Add **ECE** for the call-prefix probability (C10b: p(first token = `<tool_call>`) is a genuine model probability), next to the existing Brier and bins. Per D-071, answer-token log-prob stays ranking-only (AUROC, risk-coverage): no ECE without an independently assessed probability mapping. Sampling-based self-consistency confidence is a GPU next step | CPU; **done** (§5.14) |
+| **F4: one seed** | **No** | P1-RAW label-only control (about 15 min), then F-s43/44 (each about 44 min training + about 20 min val/P1) | GPU; pending |
+
+### 5.14 Results of the CPU-only gap work (2026-10-02)
+
+All three are post-hoc diagnostics on existing val outputs. No GPU, no test data, no change to the frozen scorer (`src/clinqa/scorer_v2.py`). Tests: `tests/test_gap_diagnostics.py`.
+
+**C4 clinical-context check** (`scripts/clinical_context.py`; output `reports/w3/results_2026-10-02/clinical_context/`).
+
+- Rules were developed on **train gold only**. Rule self-check on train gold: 418/422 (99.1%). Of the 4 failures, 3 are gold errors: BMI 18.7–18.9 called "underweight", which is normal under WHO.
+- Two patterns ("Despite falling within …", "near the upper limit of normal") were added after they appeared in a train gold failure. They were also seen in val outputs, so the final version is post-inspection.
+- Val gold: 52/55. The misses are 1 gold BMI error and 2 conversion phrasings ("seemingly normal", "standard laboratory reference range") that the rule does not parse. These are known rule false negatives.
+
+| Arm | BMI | Conversion | All | No executed call |
+|---|---|---|---|---|
+| R0-v1 | 19/24 | 4/7 | 23/31 | 24 |
+| R0-v3 | 1/8 | 2/4 | 3/12 | 43 |
+| R0-v3-FS4 | 27/32 | 3/4 | 30/36 | 19 |
+| C-filtered | 39/40 | 15/15 | 54/55 | 0 |
+| F relabel, epoch 1 | 39/40 | 15/15 | 54/55 | 0 |
+| F relabel, epoch 2 | 39/40 | 15/15 | 54/55 | 0 |
+| R0-8B | 26/31 | 9/15 | 35/46 | 9 |
+
+- The only SFT failure is val_125: BMI 18.7 called "underweight". The val gold makes the same mistake, so this is plausibly learned from gold; train gold has 3 such cases.
+- Base models fail C4 mainly by not calling at all, and when they do call they omit or misstate the category more often.
+
+**Interview line.** "The assignment asks for brief clinical context. I scored it as 'states the WHO category of the executed BMI, or the correct status of the converted value'. SFT gets 54/55, and its one miss copies a gold labelling error at the 18.5 cut-off."
+
+**A4 calibration: call-prefix ECE added to C10b** (`reports/w3/results_2026-10-02/c10_v21_ece/`; the earlier `c10_v21/` is preserved).
+
+| Arm | C10a AUROC (answer, ranking only) | C10b AUROC (grounded) | Brier | **ECE** |
+|---|---|---|---|---|
+| R0-v1 | 0.585 | 0.964 | 0.098 | 0.104 |
+| R0-v3 | 0.500 | 0.955 | 0.183 | 0.188 |
+| R0-v3-FS4 | 0.670 | 0.987 | 0.074 | 0.074 |
+| C-filtered | 0.750 | 1.000 | 0.0007 | 0.0025 |
+| F epoch 1 | 0.748 | 1.000 | 0.0032 | 0.0047 |
+| F epoch 2 | 0.640 | 1.000 | 0.0004 | 0.0018 |
+| R0-8B | 0.666 | 0.964 | 0.128 | 0.145 |
+
+- SFT makes the call-prefix probability nearly perfectly calibrated on val (ECE about 0.002 vs 0.07–0.19 for base).
+- **But C has ECE 0.0025 and still fabricates on 25/34 P1 probes.** Its fabrication is in prose with no call, so call calibration says nothing about answer truthfulness.
+- Answer-token log-prob stays ranking-only (D-071): no ECE.
+- P1 probe trajectories are not part of C10b.
+
+**Interview line.** "SFT's call decision is well calibrated (ECE 0.002), but that is the wrong quantity for hallucination: the filtered model is just as well calibrated on calls while inventing measurements in text."
+
+**A2 numeric audit preparation** (`scripts/numeric_audit_prep.py`; output `reports/w3/numeric_audit_prep/`).
+
+| Stratum (from input-derived keys, no predictions) | n | v2.1 pass, C | v2.1 pass, F |
+|---|---|---|---|
+| key agrees with gold | 34 | 26 | 31 |
+| key disputes gold | 0 | — | — |
+| open / partial coverage | 16 | 14 | 15 |
+
+- No key–gold disputes remain on val. That is expected, because v2.1 was tuned until val gold passed 150/150.
+- **The known v2.1 false positives are mostly in the "agrees" stratum** (val_239, val_054, val_124, val_075, val_202, val_085, val_185). Their errors are extra false claims or self-contradictions, which a correct key cannot catch. **Gold therefore cannot replace the claim-level audit.** It only prioritises it.
+- The 16 open/partial items, where v2.1 checks less, pass at 88–94% and should be audited first.
+
+**Remaining gap.** F4 (seed variance) needs GPU: P1-RAW, then F-s43/44.
+
+### 5.15 "What else did you do?" and Stretch A (decided 2026-10-02)
+
+- **Stretch A chosen** (third tool `calculate_egfr`); full plan in [STRETCH_A_PLAN.md](STRETCH_A_PLAN.md). Stretch B is not done.
+- **Rationale.** SFT reliably learned the *in-distribution* two-tool policy, including when not to call. Stretch A tests whether that is a transferable tool-use policy. It runs three zero-shot arms (schema only, one-line prompt, base) and one SFT arm with 52 template rows, paired with age-removal probes and a core regression check.
+- **Do not claim** "tool use is fully solved by SFT": the evidence covers 2 tools, one call, templated questions and one seed.
+- **New data finding.** Table eGFR is not derivable from creatinine, age and sex (median |Δ| 26–37 vs CKD-EPI 2021). eGFR examples therefore use only records without a table eGFR.
+
+**Answers kept for "with more time" (user framing, 2026-10-02).**
+
+- **Seeds.** More seeds, to rule out a lucky draw. Note: bnb/QLoRA is not bit-deterministic, so "re-running seed 42" reproduces approximately. Strongest current answer: the effect size (25/34 vs 0/34) and the fact that the filtered failure appears across the 3 wave-2 learning rates on natural Q5.
+- **8B.** The 8B base calls more readily (46/55 grounded tool tasks vs 29 for 4B; 25/34 intact partners vs 20/34), so it fabricates as tool arguments (28/34) where 4B avoids fabrication by not calling. More capability needs explicit negatives. That a larger model helps with many tools is a hypothesis, not a finding.
+- **Numeric false positives under v2.1.** Known cases from targeted review (not an exhaustive rate):
+  - val_062: self-contradiction; "any number in band" matching accepts it;
+  - val_239: an extra false ALT claim; v2.1 checks only the requested items;
+  - val_054: an ambiguous ranking criterion plus an unchecked wrong 194%;
+  - val_124: wording preference ("closest").
+
+  Root causes: permissive number matching, no checking of unrequested claims, and regex parsing that cannot judge whole-answer consistency. With more time: human annotators for claim-level labels, then a calibrated LLM judge or a reward model. A usable reward model needs on the order of a thousand labels, so a small human set plus a calibrated judge comes first.
+- **Scorer vs v1.** On the same 110 clean holdout items, v1 is 65.7% (κ 0.26, 35 false fails) and v2.1 is 92.6% (κ 0.72). The reference is LLM adjudicators, and numeric false positives remain.

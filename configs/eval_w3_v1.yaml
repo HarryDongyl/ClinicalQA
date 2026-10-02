@@ -23,3 +23,6 @@ runs:
   w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}  # epoch checkpoint via --adapter
   w3_relabel_lr1e4_s43: {adapter: checkpoints/w3_relabel_lr1e4_s43/final}
   w3_relabel_lr1e4_s44: {adapter: checkpoints/w3_relabel_lr1e4_s44/final}
+bootstrap:
+  n: 2000
+  seed: 42

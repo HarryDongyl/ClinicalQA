@@ -1,0 +1,27 @@
+# Wave four on Qwen3-4B: P1-RAW (wave-one raw_lr1e4 epoch two on the frozen P1 probes; label-only control for F-s42)
+# and the F test run. Same protocol as eval_w3_v1.yaml (prompt v1, two core tools, batch 2).
+format_config: configs/format_core.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
+  raw_lr1e4: {adapter: checkpoints/raw_lr1e4/checkpoint-250}  # wave one, 2,000 raw rows, 250 steps, seed 42
+  w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242}
+  w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}
+bootstrap:
+  n: 2000
+  seed: 42

@@ -1,0 +1,72 @@
+{
+  "checks": {
+    "finite_loss": true,
+    "overfit": true,
+    "all_examples_supervised": true,
+    "reload_matches": true,
+    "adapter_active": true,
+    "rollout_complete": true,
+    "cuda_nf4": true,
+    "four_types_covered": true,
+    "both_tools_covered": true,
+    "tool_arguments_and_execution": false
+  },
+  "passed": false,
+  "loss": {
+    "first_logged": 0.3067947328090668,
+    "last_logged": 0.08744025230407715,
+    "trained_eval": 0.01375910883558635,
+    "reloaded_eval": 0.013735195670265488,
+    "base_eval": 0.7648340201159136
+  },
+  "rollout": [
+    {
+      "id": "train_000",
+      "error": "correct",
+      "stop": "answer",
+      "final_answer": "The patient's heart rate is 117 bpm."
+    },
+    {
+      "id": "train_003",
+      "error": "correct",
+      "stop": "answer",
+      "final_answer": "The patient's weight is documented at 77.5 kg; however, her height is not recorded in the clinical note. BMI cannot be calculated without height (BMI = weight in kg / height in m\u00b2). Therefore, a full "
+    },
+    {
+      "id": "train_004",
+      "error": "correct",
+      "stop": "answer",
+      "final_answer": "The aPTT of 61.7 seconds exceeds the upper limit of normal (35 seconds) by 26.7 seconds, representing approximately 76% above the upper reference limit. However, the INR of 2.0 is most significantly e"
+    },
+    {
+      "id": "train_006",
+      "error": "wrong_args_imperial",
+      "stop": "answer",
+      "final_answer": "Using the patient's weight of 106.4 kg and height of 186.4 cm, the calculated BMI is 30.6 kg/m\u00b2, placing him in the overweight reference category just below the obesity threshold (\u226530). Despite his re"
+    },
+    {
+      "id": "train_015",
+      "error": "correct",
+      "stop": "answer",
+      "final_answer": "The patient's serum creatinine of 0.7 mg/dL converts to approximately 61.89 \u00b5mol/L. This value falls within the normal reference range and corresponds to an eGFR of 107.2 mL/min/1.73m\u00b2, which is incon"
+    },
+    {
+      "id": "train_046",
+      "error": "correct",
+      "stop": "answer",
+      "final_answer": "Using the patient's weight of 65.9 kg and height of 190.6 cm, the calculated BMI is 18.1 kg/m\u00b2, which classifies him as underweight. In the context of his HFpEF, Parkinson disease, and current present"
+    }
+  ],
+  "manifest": {
+    "runtime_s": {
+      "model_load": 130.9,
+      "train": 627.5,
+      "total": 795.5
+    },
+    "tokens_per_s": 150.4,
+    "peak_vram_gb": 10.83,
+    "trainable_params": 30474240,
+    "precision": "bf16",
+    "quantized_4bit": true
+  }
+}

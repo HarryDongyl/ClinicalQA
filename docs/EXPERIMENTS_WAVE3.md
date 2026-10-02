@@ -82,3 +82,10 @@ Planning assumption pending user preference: core first, approximately 3-5 GPU h
 Implementation prerequisites: versioned evaluator endpoint checks; reviewed relabel builder and transformation audit; probe generator with manifests; prompt/few-shot message builder and length audit; fixed epoch/seed manifests; diagnostics scripts; correct train dependency export; updated report. C10/8B/BF16 names in the interview document do not mean these implementations already exist.
 
 Deliverables: input/config/prompt/view/scorer hashes; per-item paired outcomes; all seed results; natural-Q5 and synthetic-P1 sections with denominators; complete visible-claim failure taxonomy; resource costs; and a report stating what remains unresolved. Preserve original v1/v2 outputs and historical decisions. No benchmark outcome is to be written before the run exists.
+
+
+## Proposed addition (2026-10-02, not implemented)
+
+- **P1-RAW**: run the 34 frozen P1 probes and the 7 natural Q5 items on the existing wave-1 `raw_lr1e4` checkpoint-250 adapter. Use the wave-3 inference protocol and the `p1-2` classifier, inference only. This is a label-only control for F-s42: same rows, steps and seed; only the 78 Q5 labels differ. Run it before F-s43/44. Rationale: INTERVIEW_PREP.md §5.8.
+- **Done 2026-10-02 (CPU only):** clinical-context check (`scripts/clinical_context.py`), call-prefix ECE in `w3_analyze.py c10`, and numeric audit stratification (`scripts/numeric_audit_prep.py`). Results: INTERVIEW_PREP.md §5.14.
+- **Planned 2026-10-02:** Stretch A (`calculate_egfr`), see [STRETCH_A_PLAN.md](STRETCH_A_PLAN.md). Not implemented.

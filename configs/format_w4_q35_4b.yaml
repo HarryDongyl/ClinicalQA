@@ -1,0 +1,15 @@
+# Wave four, Qwen3.5-4B (docs/EXPERIMENTS_WAVE4.md): identical to format_w3_q35_4b (tokenizer, template, XML calls,
+# prompt v1, two core tools) plus the reviewed q5_relabeled view for A-Q35-relabel. Own output directory.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3.5-4B
+tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+chat_template_kwargs: {enable_thinking: false}
+tool_call_format: xml
+system_prompt: configs/prompts/system_v1.txt
+max_length: 2048
+output_dir: data/sft_w4_q35_4b
+train_views:
+  q5_filtered: data/processed/q5_filtered/train.jsonl
+  q5_relabeled: data/processed/q5_relabeled/train.jsonl
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q35_4b.json

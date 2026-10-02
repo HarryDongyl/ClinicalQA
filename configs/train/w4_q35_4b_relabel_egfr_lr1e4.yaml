@@ -1,0 +1,9 @@
+# Stretch A A-sft on the primary backbone (docs/STRETCH_A_PLAN.md section 5): the A-Q35-relabel recipe with three tools,
+# prompt v1e and the q5_relabeled_egfr view (2,000 + 52 calculate_egfr rows). Runs only if A-Q35-relabel passes its gate.
+extends: configs/train/w4_q35_4b_relabel_lr1e4.yaml
+run_id: w4_q35_4b_relabel_egfr_lr1e4
+format_config: configs/format_w4_q35_4b_egfr.yaml
+train_view: q5_relabeled_egfr
+expected_train_examples: 2052
+checkpoint_dir: checkpoints/w4_q35_4b_relabel_egfr_lr1e4
+output_dir: outputs/w4_q35_4b_relabel_egfr_lr1e4

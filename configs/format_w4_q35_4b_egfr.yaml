@@ -1,0 +1,15 @@
+# Stretch A A-sft, Qwen3.5-4B (primary backbone): three tools, prompt v1e, train view q5_relabeled_egfr (2,052 rows = relabel view +
+# 52 frozen calculate_egfr rows; docs/STRETCH_A_PLAN.md section 5).
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3.5-4B
+tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+chat_template_kwargs: {enable_thinking: false}
+tool_call_format: xml
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1e.txt
+max_length: 2048
+output_dir: data/sft_w4_q35_4b_egfr
+train_views:
+  q5_relabeled_egfr: data/processed/q5_relabeled_egfr/train.jsonl
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q35_4b_egfr.json

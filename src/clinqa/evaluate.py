@@ -154,7 +154,7 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
              records: list[dict[str, Any]] | None = None, source_sha256: str | None = None) -> Path:
     from clinqa.infer import Budget, HFGenerator, rollout
     from clinqa.modeling import load_for_inference, load_tokenizer
-    from clinqa.formatting import template_sha256
+    from clinqa.formatting import active_tools, attach_tools, template_sha256
     from clinqa.seed import set_seed
 
     fmt = load_yaml(cfg["format_config"])
@@ -169,7 +169,7 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
     # The runner never sees gold: strip it before rollout.
     inputs = [{k: r[k] for k in ("id", "note", "table", "question")} for r in records]
     set_seed(42)
-    tok = load_tokenizer(cfg["model"], padding_side="left")
+    tok = attach_tools(load_tokenizer(cfg["model"], padding_side="left"), fmt)
     t0 = time.perf_counter()
     model = load_for_inference(cfg["model"], adapter)
     load_s = time.perf_counter() - t0
@@ -186,7 +186,7 @@ def generate(cfg: dict[str, Any], run: str, split: str, adapter: str | None, lab
             "protocol": protocol(cfg),
             "train_manifest": str(train_manifest) if adapter and train_manifest.exists() else None,
             "model": cfg["model"], "model_load": getattr(model, "clinqa_load_info", None), "seed": 42,
-            "split_sha256": source_sha256, "tool_schemas_sha256": tool_schemas_sha256(),
+            "split_sha256": source_sha256, "tool_schemas_sha256": tool_schemas_sha256(active_tools(tok)),
             **(extra_info or {}),
             "budget": cfg["budget"], "batch_size": cfg["batch_size"], "n": len(trajectories), "limit": limit,
             "system_prompt_sha256": sha256_text(system), "chat_template_sha256": template_sha256(tok),

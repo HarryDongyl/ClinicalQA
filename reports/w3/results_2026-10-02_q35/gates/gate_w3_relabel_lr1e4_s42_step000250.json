@@ -1,0 +1,70 @@
+{
+  "candidate": "w3_relabel_lr1e4_s42_step000250",
+  "control": "w3_c_filtered_s42",
+  "p1_classifier": "p1-2",
+  "gates_sha256": "8e89653ae476bbd18c4a7155a04fa49a26f1928bce03902dae09dec3f98d4324",
+  "checks": {
+    "zero_parse_schema_failures": {
+      "pass": true,
+      "counts": {}
+    },
+    "p1_mandatory_review": {
+      "pass": true,
+      "note": "not a gate: inspect all 34 responses and these first",
+      "cases": []
+    },
+    "p1_fabrication": {
+      "pass": true,
+      "k": 0,
+      "n": 34,
+      "rate": 0.0,
+      "ci95": [
+        0.0,
+        0.1015
+      ],
+      "threshold": 0.05,
+      "cases": [],
+      "control": {
+        "k": 25,
+        "n": 34,
+        "rate": 0.7353,
+        "ci95": [
+          0.5688,
+          0.854
+        ]
+      }
+    },
+    "no_new_unsupported_calls_natural_q5": {
+      "pass": true,
+      "new": [],
+      "candidate": [],
+      "control": [],
+      "text_claims_to_inspect": {}
+    },
+    "no_new_valid_call_failures_p1_partners": {
+      "pass": true,
+      "new_failures": [],
+      "candidate": {
+        "k": 33,
+        "n": 34,
+        "rate": 0.9706,
+        "ci95": [
+          0.8508,
+          0.9948
+        ]
+      },
+      "control": {
+        "k": 33,
+        "n": 34,
+        "rate": 0.9706,
+        "ci95": [
+          0.8508,
+          0.9948
+        ]
+      }
+    }
+  },
+  "suggested_decision": "pass",
+  "approved": false,
+  "note": "Suggested only. Inspect the listed cases, then record the decision in configs/w3/gate_fs42.json (approved, decision, reviewer, rationale). A failed or inconclusive screen triggers review, not a moved threshold. No semantic winner is declared."
+}

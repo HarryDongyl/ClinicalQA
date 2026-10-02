@@ -1,0 +1,50 @@
+{"id": "val_001", "stratum": "open_or_partial", "coverage": "partial", "checks": ["set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": false}}
+{"id": "val_005", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_009", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_022", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "pct"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_024", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "yesno"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_028", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["set", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_042", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["set", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_047", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_049", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["set", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_050", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_054", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_057", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_062", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_064", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "status"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_065", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "yesno"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_069", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "ratio"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_075", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_080", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["bmi", "yesno"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_081", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_085", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "value"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": false}}
+{"id": "val_089", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["ratio", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_091", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff", "set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_092", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "value"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_107", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_113", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_114", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "pct"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_117", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_118", "stratum": "open_or_partial", "coverage": "partial", "checks": ["set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_124", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_131", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_132", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_147", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_151", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_157", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_167", "stratum": "open_or_partial", "coverage": "text", "checks": ["text"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_178", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_185", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "status"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": false}}
+{"id": "val_186", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "ratio"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_194", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_202", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": false, "w3_relabel_lr1e4_s42_step000250": false}}
+{"id": "val_204", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["bmi", "yesno"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_227", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_229", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_230", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["ratio", "entity"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_231", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_235", "stratum": "open_or_partial", "coverage": "partial", "checks": ["set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_239", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["entity", "diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_242", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "value"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_248", "stratum": "open_or_partial", "coverage": "partial", "checks": ["diff"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}
+{"id": "val_249", "stratum": "key_agrees_gold", "coverage": "structured", "checks": ["diff", "set"], "v21_verdict_not_for_auditors": {"w3_c_filtered_s42": true, "w3_relabel_lr1e4_s42_step000250": true}}

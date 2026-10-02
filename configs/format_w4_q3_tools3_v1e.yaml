@@ -1,0 +1,12 @@
+# Stretch A, Qwen3-4B (fallback if Q35-relabel fails its gate): three tools (core two + calculate_egfr), prompt v1e (docs/STRETCH_A_PLAN.md section 4).
+# Evaluation formatting only (zero-shot arms); the A-sft training view is in format_w4_q3_egfr.yaml.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1e.txt
+max_length: 2048
+output_dir: data/sft_w4_q3_tools3_v1e
+train_views: {}
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q3_tools3_v1e.json

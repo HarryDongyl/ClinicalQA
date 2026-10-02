@@ -1,0 +1,10 @@
+# A-Q35-relabel (docs/EXPERIMENTS_WAVE4.md, H1/H2): the A-Q35-4B recipe (Qwen3.5-4B text path, LoRA r16/alpha32/0.05 on
+# attention + Gated DeltaNet projections, NF4, LR 1e-4, 2 epochs, mb1/ga16, seed 42) on the reviewed q5_relabeled view.
+# Only the training view differs from w3_q35_4b_filtered_lr1e4. Epoch two is the fixed primary endpoint (Wave4-Q1).
+extends: configs/train/w3_q35_4b_filtered_lr1e4.yaml
+run_id: w4_q35_4b_relabel_lr1e4
+format_config: configs/format_w4_q35_4b.yaml
+train_view: q5_relabeled
+expected_train_examples: 2000
+checkpoint_dir: checkpoints/w4_q35_4b_relabel_lr1e4
+output_dir: outputs/w4_q35_4b_relabel_lr1e4

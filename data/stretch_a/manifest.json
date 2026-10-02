@@ -1,0 +1,28 @@
+{
+ "seed": 42,
+ "formula": "CKD-EPI 2021 race-free, integer half-up",
+ "status": "generated; val items await user review (STRETCH_A_PLAN.md section 6)",
+ "counts": {
+  "train_additions.jsonl": 52,
+  "val_egfr.jsonl": 19,
+  "val_egfr_age_probes.jsonl": 19
+ },
+ "eligible_pool": {
+  "train": 164,
+  "val": 19
+ },
+ "flagged_for_residue": [],
+ "stage_distribution_val": {
+  "G1": 2,
+  "G2": 8,
+  "G3a": 2,
+  "G3b": 1,
+  "G4": 4,
+  "G5": 2
+ },
+ "sha256": {
+  "train_additions.jsonl": "43065130ad60aa51e3b7bd9e33e2a6a5fb1f41b71ff47651bcc098de5ce4b8de",
+  "val_egfr.jsonl": "1a0e52e6ca86f1421fdc76007e71035fbc887f3a9a9ed253c4587f5146aaf869",
+  "val_egfr_age_probes.jsonl": "88702fbee02604090b1f917e9e7713487de04f26d1961a911f26520e8300b2fe"
+ }
+}

@@ -8,7 +8,8 @@ from clinqa.analysis.checks import Context, q5_arg_grounding
 from clinqa.analysis.features import compute_features
 from clinqa.config import load_yaml, resolve
 from clinqa.data_io import load_split, read_jsonl, sha256_file, verify_manifest
-from clinqa.data_views import RELABEL_POLICY, load_relabel_review, relabeled_record
+from clinqa.data_views import (RELABEL_POLICY, STRETCH_A_ADDITIONS, STRETCH_A_POLICY, load_relabel_review,
+                               relabeled_record, stretch_a_additions)
 
 
 def grounding_flags(records: list[dict[str, Any]], analysis_config: str = "configs/analysis.yaml") -> list[Any]:
@@ -26,7 +27,7 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
     """
     canonical = verify_manifest(fmt["data_config"])
     view = cfg["train_view"]
-    if view not in {"raw", "q5_filtered", "q5_relabeled"}:
+    if view not in {"raw", "q5_filtered", "q5_relabeled", "q5_relabeled_egfr"}:
         raise ValueError(f"unsupported training view: {view}")
     path = resolve(fmt["train_views"][view])
     manifest_path = path.parent / "manifest.json"
@@ -47,7 +48,8 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
     flags = grounding_flags(original, analysis_config)
     flagged = {f.id for f in flags}
     relabeled: list[str] = []
-    if view == "q5_relabeled":
+    additions: list[dict[str, Any]] = []
+    if view in ("q5_relabeled", "q5_relabeled_egfr"):
         # Transformation-aware audit: unflagged rows unchanged; accepted Q5 rows keep id and inputs and
         # get exactly the reviewed uncertain target; rejected rows are excluded (D-075).
         review_path = manifest.get("relabel_review", "")
@@ -61,6 +63,13 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
         if manifest.get("relabeled_ids") != relabeled:
             raise ValueError("view relabel list disagrees with the review file")
         expected_count = len(original) - len(flagged) + len(relabeled)
+        if view == "q5_relabeled_egfr":
+            # Stretch A: the frozen template rows follow the relabel view verbatim (hash-checked).
+            if manifest.get("stretch_a_additions_sha256") != sha256_file(resolve(STRETCH_A_ADDITIONS)):
+                raise ValueError("Stretch A additions changed after the view was built; rebuild the view")
+            additions = stretch_a_additions()
+            expected = expected + additions
+            expected_count += len(additions)
     else:
         excluded = flagged if view == "q5_filtered" else set()
         expected = [r for r in original if r["id"] not in excluded]
@@ -72,7 +81,8 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
         raise ValueError("view exclusions disagree with current train-only Q5 check")
     if len(records) != cfg.get("expected_train_examples", expected_count) or len(records) != expected_count:
         raise ValueError("unexpected training count; review data policy before training")
-    remaining = grounding_flags(records, analysis_config)
+    canonical_ids = {r["id"] for r in original}
+    remaining = grounding_flags([r for r in records if r["id"] in canonical_ids], analysis_config)
     if remaining and (view != "raw" or not cfg.get("allow_ungrounded_targets", False)):
         raise ValueError(f"{len({f.id for f in remaining})} Q5 candidates remain: use q5_filtered, "
                          "or explicitly set allow_ungrounded_targets for a disclosed raw control")
@@ -81,7 +91,8 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
         "excluded_ids": [r["id"] for r in original if r["id"] in excluded],
         "remaining_q5_ids": sorted({f.id for f in remaining}),
         "raw_control_acknowledged": bool(cfg.get("allow_ungrounded_targets", False)),
-        "policy": (RELABEL_POLICY if view == "q5_relabeled" else
+        "stretch_a_ids": [r["id"] for r in additions],
+        "policy": (STRETCH_A_POLICY if view == "q5_relabeled_egfr" else RELABEL_POLICY if view == "q5_relabeled" else
                    "heuristic_Q5_quarantine_no_relabeling" if excluded else "raw_control_unchanged"),
         "relabeled_ids": relabeled,
         "clinical_adjudication": bool(manifest.get("clinical_adjudication", False)), "val_test_modified": False,

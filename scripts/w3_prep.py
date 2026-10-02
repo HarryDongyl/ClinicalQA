@@ -321,9 +321,13 @@ def cmd_p1(_: argparse.Namespace) -> None:
 # ---------------------------------------------------------------- 8B template audit
 
 
-def audit_model(format_config: str, out_name: str) -> dict:
-    """Every assistant turn supervised once, with exactly the inference prefix; calls round-trip; stop tokens single."""
-    from clinqa.formatting import IGNORE_INDEX, build_conversation, encode_segments
+def audit_model(format_config: str, out_name: str, view: str | None = None) -> dict:
+    """Every assistant turn supervised once, with exactly the inference prefix; calls round-trip; stop tokens single.
+
+    `view` names a train view of the format config (default: the q5_filtered rows, as in wave three). `out_name`
+    without a directory goes to reports/w3; a relative path (e.g. reports/w4/x.json) is used as given. The empty
+    think block is required only for templates rendered with enable_thinking=False (Qwen3.5, Qwen3-8B)."""
+    from clinqa.formatting import IGNORE_INDEX, active_tools, build_conversation, encode_segments
     from clinqa.schemas import parse_assistant_output
 
     fmt = load_yaml(ROOT / format_config)
@@ -331,7 +335,8 @@ def audit_model(format_config: str, out_name: str) -> dict:
     segmented = bool(fmt.get("segmented_turns"))
     system = (ROOT / fmt["system_prompt"]).read_text(encoding="utf-8").strip()
     problems, n_segments, longest, supervised = [], Counter(), 0, 0
-    for r in filtered_train():
+    records = read_jsonl(ROOT / fmt["train_views"][view]) if view else filtered_train()
+    for r in records:
         msgs = build_conversation(r, system)
         segs = encode_segments(tok, msgs, max_length=fmt["max_length"], segmented=segmented)
         turns = [i for i, m in enumerate(msgs) if m["role"] == "assistant"]
@@ -353,20 +358,22 @@ def audit_model(format_config: str, out_name: str) -> dict:
                 problems.append(r["id"])
         n_segments[(r["answer_type"], len(segs))] += 1
         longest = max(longest, *(len(s.input_ids) for s in segs))
-    gen_prompt = render(tok, prompt_messages(filtered_train()[0], system), add_generation_prompt=True)
+    gen_prompt = render(tok, prompt_messages(records[0], system), add_generation_prompt=True)
     tokens = {t: tok.convert_tokens_to_ids(t) for t in ("<tool_call>", "<|im_end|>", "<|endoftext|>")}
     single = {t: tok(t, add_special_tokens=False)["input_ids"] == [i] for t, i in tokens.items()}
     report = {"format_config": format_config, "tokenizer": fmt["tokenizer"],
               "tokenizer_revision": fmt["tokenizer_revision"], "chat_template_kwargs": fmt.get("chat_template_kwargs"),
               "tool_call_format": tok.clinqa_call_format, "segmented_turns": segmented,
-              "n_records": len(filtered_train()), "problems": sorted(set(problems)),
+              "view": view or "q5_filtered", "tools": [t["function"]["name"] for t in active_tools(tok)],
+              "n_records": len(records), "problems": sorted(set(problems)),
               "segments_by_type": {f"{k[0]}:{k[1]}": v for k, v in sorted(n_segments.items())},
               "max_sequence_tokens": longest, "max_length": fmt["max_length"], "supervised_tokens": supervised,
               "generation_prompt_ends_with_empty_think": gen_prompt.endswith("<think>\n\n</think>\n\n"),
               "token_ids": tokens, "single_token": single, "passed": False}
+    needs_think = (fmt.get("chat_template_kwargs") or {}).get("enable_thinking") is False
     report["passed"] = (not report["problems"] and longest <= fmt["max_length"] and all(single.values())
-                        and report["generation_prompt_ends_with_empty_think"])
-    write_json(REPORTS / out_name, report)
+                        and (report["generation_prompt_ends_with_empty_think"] or not needs_think))
+    write_json(REPORTS / out_name if "/" not in out_name else ROOT / out_name, report)
     print(json.dumps({k: report[k] for k in ("passed", "segments_by_type", "max_sequence_tokens", "problems")}))
     if not report["passed"]:
         raise SystemExit(1)
@@ -378,7 +385,7 @@ def cmd_audit_8b(_: argparse.Namespace) -> None:
 
 
 def cmd_audit(a: argparse.Namespace) -> None:
-    audit_model(a.format, a.out)
+    audit_model(a.format, a.out, a.view)
 
 
 # ---------------------------------------------------------------- approvals and readiness
@@ -458,6 +465,7 @@ def main() -> None:
     au = sub.add_parser("audit")
     au.add_argument("--format", required=True)
     au.add_argument("--out", required=True)
+    au.add_argument("--view", default=None, help="train view of the format config (default: q5_filtered rows)")
     ck = sub.add_parser("check")
     ck.add_argument("--require", nargs="*", choices=("prompt_v3", "fewshot", "p1", "trainfit", "relabel"))
     a = p.parse_args()

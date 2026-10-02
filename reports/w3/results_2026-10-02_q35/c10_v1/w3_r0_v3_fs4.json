@@ -1,0 +1,218 @@
+{
+  "label": "w3_r0_v3_fs4",
+  "c10a": {
+    "scorer": "legacy v1",
+    "n_scored": 248,
+    "availability": {
+      "ok": 248,
+      "no_final_answer:max_tokens": 2
+    },
+    "auroc": 0.5826,
+    "risk_coverage": [
+      {
+        "coverage": 0.1,
+        "n": 25,
+        "accuracy": 0.8,
+        "risk": 0.2
+      },
+      {
+        "coverage": 0.2,
+        "n": 50,
+        "accuracy": 0.78,
+        "risk": 0.22
+      },
+      {
+        "coverage": 0.3,
+        "n": 74,
+        "accuracy": 0.7703,
+        "risk": 0.2297
+      },
+      {
+        "coverage": 0.4,
+        "n": 99,
+        "accuracy": 0.7374,
+        "risk": 0.2626
+      },
+      {
+        "coverage": 0.5,
+        "n": 124,
+        "accuracy": 0.7097,
+        "risk": 0.2903
+      },
+      {
+        "coverage": 0.6,
+        "n": 149,
+        "accuracy": 0.6779,
+        "risk": 0.3221
+      },
+      {
+        "coverage": 0.7,
+        "n": 174,
+        "accuracy": 0.6782,
+        "risk": 0.3218
+      },
+      {
+        "coverage": 0.8,
+        "n": 198,
+        "accuracy": 0.6768,
+        "risk": 0.3232
+      },
+      {
+        "coverage": 0.9,
+        "n": 223,
+        "accuracy": 0.6816,
+        "risk": 0.3184
+      },
+      {
+        "coverage": 1.0,
+        "n": 248,
+        "accuracy": 0.6613,
+        "risk": 0.3387
+      }
+    ],
+    "by_type": {
+      "extractive": {
+        "n": 100,
+        "accuracy": 0.85,
+        "auroc": 0.4973,
+        "median_mean_logprob": -0.0238
+      },
+      "numeric_reasoning": {
+        "n": 50,
+        "accuracy": 0.44,
+        "auroc": 0.5455,
+        "median_mean_logprob": -0.0456
+      },
+      "tool_call": {
+        "n": 61,
+        "accuracy": 0.4754,
+        "auroc": 0.4806,
+        "median_mean_logprob": -0.0912
+      },
+      "uncertain": {
+        "n": 37,
+        "accuracy": 0.7568,
+        "auroc": 0.6111,
+        "median_mean_logprob": -0.1179
+      }
+    },
+    "ece": "not computed: raw log-probability is a ranking score, not a probability (D-071)"
+  },
+  "c10b": {
+    "event": "first generated token is <tool_call> (prefix event, not eventual tool use)",
+    "n": 250,
+    "auroc_annotated": 0.9816,
+    "auroc_grounded": 0.9872,
+    "brier_annotated": 0.1013,
+    "brier_grounded": 0.0735,
+    "ece_annotated": 0.102,
+    "ece_grounded": 0.074,
+    "bins": [
+      {
+        "bin": [
+          0.0,
+          0.1
+        ],
+        "n": 209,
+        "mean_p": 0.0011,
+        "annotated_call_rate": 0.11,
+        "grounded_call_rate": 0.0766
+      },
+      {
+        "bin": [
+          0.2,
+          0.3
+        ],
+        "n": 2,
+        "mean_p": 0.2392,
+        "annotated_call_rate": 0.5,
+        "grounded_call_rate": 0.5
+      },
+      {
+        "bin": [
+          0.3,
+          0.4
+        ],
+        "n": 1,
+        "mean_p": 0.3373,
+        "annotated_call_rate": 1.0,
+        "grounded_call_rate": 1.0
+      },
+      {
+        "bin": [
+          0.4,
+          0.5
+        ],
+        "n": 1,
+        "mean_p": 0.4257,
+        "annotated_call_rate": 1.0,
+        "grounded_call_rate": 1.0
+      },
+      {
+        "bin": [
+          0.7,
+          0.8
+        ],
+        "n": 1,
+        "mean_p": 0.7949,
+        "annotated_call_rate": 1.0,
+        "grounded_call_rate": 1.0
+      },
+      {
+        "bin": [
+          0.8,
+          0.9
+        ],
+        "n": 2,
+        "mean_p": 0.8781,
+        "annotated_call_rate": 1.0,
+        "grounded_call_rate": 1.0
+      },
+      {
+        "bin": [
+          0.9,
+          1.0
+        ],
+        "n": 34,
+        "mean_p": 0.9859,
+        "annotated_call_rate": 0.9706,
+        "grounded_call_rate": 0.9706
+      }
+    ],
+    "token_identity": {
+      "consistent": 250
+    },
+    "executed_call_confusion": {
+      "annotated": {
+        "tp": 37,
+        "fp": 1,
+        "fn": 25,
+        "tn": 187
+      },
+      "grounded": {
+        "tp": 37,
+        "fp": 1,
+        "fn": 18,
+        "tn": 194
+      }
+    },
+    "attempted_call_confusion": {
+      "annotated": {
+        "tp": 37,
+        "fp": 1,
+        "fn": 25,
+        "tn": 187
+      },
+      "grounded": {
+        "tp": 37,
+        "fp": 1,
+        "fn": 18,
+        "tn": 194
+      }
+    },
+    "labels": {
+      "annotated": "gold answer_type == tool_call",
+      "grounded": "tool_call and not a heuristic Q5 item (input supports the call)"
+    }
+  }
+}

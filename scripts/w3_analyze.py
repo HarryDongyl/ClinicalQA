@@ -206,7 +206,10 @@ def cmd_p1(a: argparse.Namespace) -> None:
 
 
 def cmd_gate(a: argparse.Namespace) -> None:
-    g = load_yaml(GATES)
+    gates_path = ROOT / a.gates if a.gates else GATES
+    g = load_yaml(gates_path)
+    if g.get("p1_classifier", P1_CLASSIFIER) != P1_CLASSIFIER:
+        raise SystemExit(f"{gates_path}: pins p1_classifier {g.get('p1_classifier')}, script implements {P1_CLASSIFIER}")
     control = a.control or g["control"]
     out = out_dir(a.out)
     cand_p1, ctrl_p1 = p1_report(a.candidate), p1_report(control)
@@ -242,7 +245,7 @@ def cmd_gate(a: argparse.Namespace) -> None:
     }
     if g.get("p1_classifier") != P1_CLASSIFIER:
         raise SystemExit(f"gates.yaml names classifier {g.get('p1_classifier')!r}, this script is {P1_CLASSIFIER!r}")
-    report = {"candidate": a.candidate, "control": control, "p1_classifier": P1_CLASSIFIER, "gates_sha256": hashlib.sha256(GATES.read_bytes()).hexdigest(),
+    report = {"candidate": a.candidate, "control": control, "p1_classifier": P1_CLASSIFIER, "gates": str(gates_path.relative_to(ROOT)), "gates_sha256": hashlib.sha256(gates_path.read_bytes()).hexdigest(),
               "checks": checks, "suggested_decision": "pass" if all(c["pass"] for c in checks.values()) else "review",
               "approved": False,
               "note": "Suggested only. Inspect the listed cases, then record the decision in configs/w3/gate_fs42.json "
@@ -271,6 +274,19 @@ def auroc(scores: list[float], labels: list[bool]) -> float | None:
             ranks[order[k]] = (i + j) / 2 + 1
         i = j + 1
     return round((sum(r for r, y in zip(ranks, labels) if y) - pos * (pos + 1) / 2) / (pos * neg), 4)
+
+
+def ece(probs: list[float], labels: list[bool], n_bins: int = 10) -> float | None:
+    """Expected calibration error with equal-width bins (top bin includes 1.0); only for genuine model probabilities."""
+    if not probs:
+        return None
+    total = 0.0
+    for b in range(n_bins):
+        lo, hi = b / n_bins, (b + 1) / n_bins
+        idx = [i for i, p in enumerate(probs) if lo <= p < hi or (b == n_bins - 1 and p == 1.0)]
+        if idx:
+            total += len(idx) * abs(sum(probs[i] for i in idx) / len(idx) - sum(labels[i] for i in idx) / len(idx))
+    return round(total / len(probs), 4)
 
 
 def risk_coverage(scores: list[float], correct: list[bool]) -> list[dict]:
@@ -359,7 +375,8 @@ def c10_label(label: str, v21: str | None, gold: dict[str, dict], q5: set[str]) 
     brier = lambda ys: round(sum((p - y) ** 2 for p, y in zip(probs, ys)) / len(probs), 4) if probs else None  # noqa: E731
     c10b = {"event": "first generated token is <tool_call> (prefix event, not eventual tool use)", "n": len(probs),
             "auroc_annotated": auroc(probs, annotated), "auroc_grounded": auroc(probs, grounded),
-            "brier_annotated": brier(annotated), "brier_grounded": brier(grounded), "bins": bins,
+            "brier_annotated": brier(annotated), "brier_grounded": brier(grounded),
+            "ece_annotated": ece(probs, annotated), "ece_grounded": ece(probs, grounded), "bins": bins,
             "token_identity": dict(identity),
             "executed_call_confusion": {"annotated": confusion(executed, annotated),
                                         "grounded": confusion(executed, grounded)},
@@ -376,13 +393,14 @@ def cmd_c10(a: argparse.Namespace) -> None:
     q5 = q5_ids("val", "configs/analysis.yaml")
     lines = ["# C10 confidence diagnostics (validation)", "",
              "| label | C10a n | C10a AUROC | C10b AUROC annotated | C10b AUROC grounded | Brier grounded | "
-             "token identity |", "|---|---|---|---|---|---|---|"]
+             "ECE grounded | token identity |", "|---|---|---|---|---|---|---|---|"]
     for label in a.labels:
         r = c10_label(label, a.v21, gold, q5)
         (out / f"{label}.json").write_text(json.dumps(r, indent=2) + "\n")
         lines.append(f"| {label} | {r['c10a']['n_scored']} | {r['c10a']['auroc']} | {r['c10b']['auroc_annotated']} | "
-                     f"{r['c10b']['auroc_grounded']} | {r['c10b']['brier_grounded']} | {r['c10b']['token_identity']} |")
-    lines += ["", "C10a ranks correctness only; no ECE is computed from raw log-probabilities. C10b Brier/bins describe "
+                     f"{r['c10b']['auroc_grounded']} | {r['c10b']['brier_grounded']} | {r['c10b']['ece_grounded']} | "
+                     f"{r['c10b']['token_identity']} |")
+    lines += ["", "C10a ranks correctness only; no ECE is computed from raw log-probabilities (D-071). C10b Brier/ECE/bins describe "
               "the first-token prefix event under the stated label policy. Checkpoints and seeds on the same questions "
               "are repeated measures, not independent samples."]
     (out / "summary.md").write_text("\n".join(lines) + "\n")
@@ -489,6 +507,7 @@ def main() -> None:
     g = sub.add_parser("gate")
     g.add_argument("--candidate", required=True)
     g.add_argument("--control", default=None)
+    g.add_argument("--gates", default=None, help="frozen gate file (default configs/w3/gates.yaml)")
     g.add_argument("--out", required=True)
     a = p.parse_args()
     {"p1": cmd_p1, "gate": cmd_gate, "c10": cmd_c10, "trainfit": cmd_trainfit, "train": cmd_train}[a.cmd](a)

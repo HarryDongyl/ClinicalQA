@@ -67,14 +67,49 @@ TOOL_SCHEMAS: list[dict[str, Any]] = [
     },
 ]
 
-def tool_schemas_sha256() -> str:
+# Stretch A third tool (docs/STRETCH_A_PLAN.md section 3). Offered to the model only by configs whose `tools` list
+# names it; TOOL_SCHEMAS (the two core tools) stays the default, so core prompts and hashes are unchanged.
+EGFR_SCHEMA: dict[str, Any] = {
+    "type": "function",
+    "function": {
+        "name": "calculate_egfr",
+        "description": "Estimate eGFR (CKD-EPI 2021) from serum creatinine in mg/dL, age in years and sex. "
+                       "Returns an integer in mL/min/1.73m2.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "creatinine_mg_dl": {"type": "number", "description": "Serum creatinine in mg/dL."},
+                "age": {"type": "integer", "description": "Age in years."},
+                "sex": {"type": "string", "enum": ["male", "female"], "description": "Patient sex."},
+            },
+            "required": ["creatinine_mg_dl", "age", "sex"],
+        },
+    },
+}
+ALL_TOOL_SCHEMAS: dict[str, dict[str, Any]] = {s["function"]["name"]: s for s in [*TOOL_SCHEMAS, EGFR_SCHEMA]}
+CORE_TOOLS: tuple[str, ...] = tuple(s["function"]["name"] for s in TOOL_SCHEMAS)
+
+
+def tool_schemas(names: list[str] | tuple[str, ...] | None = None) -> list[dict[str, Any]]:
+    """Schemas offered to the model, in the given order; None means the two core tools (TOOL_SCHEMAS itself)."""
+    if names is None or tuple(names) == CORE_TOOLS:
+        return TOOL_SCHEMAS
+    unknown = [n for n in names if n not in ALL_TOOL_SCHEMAS]
+    if unknown or len(set(names)) != len(names):
+        raise ValueError(f"tool list must name distinct known tools, got {list(names)}")
+    return [ALL_TOOL_SCHEMAS[n] for n in names]
+
+
+def tool_schemas_sha256(schemas: list[dict[str, Any]] | None = None) -> str:
     """Hash of the schemas the chat template renders into every prompt (provenance)."""
     import hashlib
 
-    return hashlib.sha256(json.dumps(TOOL_SCHEMAS, sort_keys=True).encode("utf-8")).hexdigest()
+    return hashlib.sha256(json.dumps(TOOL_SCHEMAS if schemas is None else schemas,
+                                     sort_keys=True).encode("utf-8")).hexdigest()
 
 
-_SCHEMA_BY_NAME = {s["function"]["name"]: s["function"]["parameters"] for s in TOOL_SCHEMAS}
+# Validation and XML typing know every registered tool; which tools a prompt offers is a formatting choice.
+_SCHEMA_BY_NAME = {name: s["function"]["parameters"] for name, s in ALL_TOOL_SCHEMAS.items()}
 
 TOOL_CALL_OPEN = "<tool_call>"
 TOOL_CALL_CLOSE = "</tool_call>"
@@ -89,6 +124,8 @@ def _type_ok(v: Any, spec: str | list[str]) -> bool:
     kinds = spec if isinstance(spec, list) else [spec]
     for kind in kinds:
         if kind == "number" and _is_number(v):
+            return True
+        if kind == "integer" and isinstance(v, int) and not isinstance(v, bool):
             return True
         if kind == "string" and isinstance(v, str):
             return True
@@ -112,6 +149,8 @@ def validate_call(name: Any, arguments: Any) -> list[str]:
         v = arguments[key]
         if not _type_ok(v, spec["type"]):
             errors.append(f"{key}: expected {spec['type']}, got {type(v).__name__}")
+        elif "enum" in spec and v not in spec["enum"]:
+            errors.append(f"{key}: expected one of {spec['enum']}, got {v!r}")
         elif _is_number(v) and not math.isfinite(v):
             errors.append(f"{key}: must be finite")
     return errors
@@ -163,6 +202,8 @@ def _xml_value(name: str, key: str, raw: str) -> Any:
     kinds = spec if isinstance(spec, list) else [spec]
     if "null" in kinds and raw.strip() in ("None", "null"):
         return None
+    if "integer" in kinds and re.fullmatch(r"-?\d+", raw.strip()):
+        return int(raw.strip())
     if "number" in kinds:
         try:
             value = float(raw.strip())

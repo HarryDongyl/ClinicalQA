@@ -1,6 +1,7 @@
 """Deterministic tools the model is trained to call.
 
-Signatures and formulas follow docs/ASSIGNMENT.md exactly. Unit strings are
+Signatures and formulas follow docs/ASSIGNMENT.md exactly. calculate_egfr is the Stretch A third tool
+(docs/STRETCH_A_PLAN.md): it is registered here but only offered to the model by configs that list it. Unit strings are
 normalised (e.g. Greek mu, micro sign and "u" are equivalent; case-insensitive)
 so that harmless spelling variants do not cause spurious tool errors.
 """
@@ -9,6 +10,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 
 # P-001: explicit 2 dp data-compatibility policy; BMI separately uses 1 dp.
@@ -125,16 +127,39 @@ def calculate_bmi(weight_kg: float, height_cm: float) -> float | str:
     return round(w / (h / 100) ** 2, BMI_DECIMALS)
 
 
+_SEX_ALIASES = {"male": "male", "m": "male", "man": "male", "female": "female", "f": "female", "woman": "female"}
+EGFR_AGE_RANGE = (18, 120)
+
+
+def calculate_egfr(creatinine_mg_dl: float, age: int, sex: str) -> int | str:
+    """Race-free CKD-EPI 2021 creatinine equation, rounded half-up to an integer mL/min/1.73m2 (Stretch A)."""
+    cr, years = _as_number(creatinine_mg_dl), _as_number(age)
+    norm = _SEX_ALIASES.get(sex.strip().lower()) if isinstance(sex, str) else None
+    if cr is None or cr <= 0:
+        return f"Error: creatinine_mg_dl must be a positive number, got {creatinine_mg_dl!r}"
+    if years is None or years != int(years) or not EGFR_AGE_RANGE[0] <= years <= EGFR_AGE_RANGE[1]:
+        return f"Error: age must be an integer between {EGFR_AGE_RANGE[0]} and {EGFR_AGE_RANGE[1]}, got {age!r}"
+    if norm is None:
+        return f"Error: sex must be 'male' or 'female', got {sex!r}"
+    female = norm == "female"
+    kappa, alpha = (0.7, -0.241) if female else (0.9, -0.302)
+    ratio = cr / kappa
+    egfr = 142 * min(ratio, 1) ** alpha * max(ratio, 1) ** -1.200 * 0.9938 ** int(years) * (1.012 if female else 1.0)
+    return int(Decimal(str(egfr)).quantize(Decimal("1"), rounding=ROUND_HALF_UP))
+
+
 TOOL_REGISTRY: dict[str, Callable[..., float | str]] = {
     "unit_convert": unit_convert,
     "calculate_bmi": calculate_bmi,
+    "calculate_egfr": calculate_egfr,
 }
 
 _REQUIRED_ARGS = {
     "unit_convert": ("value", "from_unit", "to_unit"),
     "calculate_bmi": ("weight_kg", "height_cm"),
+    "calculate_egfr": ("creatinine_mg_dl", "age", "sex"),
 }
-_OPTIONAL_ARGS = {"unit_convert": ("substance",), "calculate_bmi": ()}
+_OPTIONAL_ARGS = {"unit_convert": ("substance",), "calculate_bmi": (), "calculate_egfr": ()}
 
 
 def execute_tool(name: str, arguments: dict[str, Any]) -> float | str:
