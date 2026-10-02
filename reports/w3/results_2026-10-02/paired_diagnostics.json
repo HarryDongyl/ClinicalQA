@@ -1,0 +1,103 @@
+{
+  "v1": {
+    "difference": 0.030657894736842106,
+    "ci95": [
+      0.0025,
+      0.06225328947368397
+    ],
+    "by_type": {
+      "extractive": {
+        "n": 100,
+        "gains": [],
+        "losses": [
+          "val_191"
+        ],
+        "difference": -0.01
+      },
+      "numeric_reasoning": {
+        "n": 50,
+        "gains": [
+          "val_054",
+          "val_062",
+          "val_075",
+          "val_114",
+          "val_239"
+        ],
+        "losses": [
+          "val_235"
+        ],
+        "difference": 0.08
+      },
+      "tool_call": {
+        "n": 62,
+        "gains": [],
+        "losses": [],
+        "difference": 0.0
+      },
+      "uncertain": {
+        "n": 38,
+        "gains": [
+          "val_025",
+          "val_110"
+        ],
+        "losses": [],
+        "difference": 0.05263157894736842
+      }
+    },
+    "seed": 42,
+    "bootstrap": 10000,
+    "interpretation": "Exploratory, unadjusted, diagnostic scorer outcomes; not clinical semantic accuracy."
+  },
+  "v21": {
+    "difference": 0.05275466893039049,
+    "ci95": [
+      0.022190152801358234,
+      0.0867425721561969
+    ],
+    "by_type": {
+      "extractive": {
+        "n": 100,
+        "gains": [],
+        "losses": [
+          "val_191"
+        ],
+        "difference": -0.01
+      },
+      "numeric_reasoning": {
+        "n": 50,
+        "gains": [
+          "val_028",
+          "val_054",
+          "val_062",
+          "val_114",
+          "val_124",
+          "val_186"
+        ],
+        "losses": [],
+        "difference": 0.12
+      },
+      "tool_call": {
+        "n": 62,
+        "gains": [
+          "val_041",
+          "val_096",
+          "val_245"
+        ],
+        "losses": [],
+        "difference": 0.04838709677419355
+      },
+      "uncertain": {
+        "n": 38,
+        "gains": [
+          "val_025",
+          "val_110"
+        ],
+        "losses": [],
+        "difference": 0.05263157894736842
+      }
+    },
+    "seed": 42,
+    "bootstrap": 10000,
+    "interpretation": "Exploratory, unadjusted, diagnostic scorer outcomes; not clinical semantic accuracy."
+  }
+}

@@ -1,6 +1,20 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-10-01. Latest entry: W3-PLAN-008.
+Maintained record. Last updated: 2026-10-02. Latest entry: W3-RESULTS-009.
+
+## W3-RESULTS-009 — Completed core results and numerical-score audit
+
+Date: 2026-10-02. Status: validation/P1/train-fit review complete; Qwen3.5 outcomes pending. Full evidence: [WAVE3_RESULTS_REVIEW.md](WAVE3_RESULTS_REVIEW.md); fresh CPU reports: `reports/w3/results_2026-10-02/`.
+
+Primary comparison: filtered C-s42 checkpoint 242 versus Q5-relabeled F-s42 checkpoint 250, Qwen3-4B-Instruct-2507, LR 1e-4, two epochs, mb1/ga16, NF4/r16, prompt v1, generation batch 2 on RTX 4090. The training view grows from 1,922 to 2,000 rows; this is a policy comparison, not a pure label effect. Inference protocol objects match.
+
+Observed: after inspecting every C/F P1 and natural-Q5 response, numeric fabrication falls from 25/34 to 0/34 on P1 and from 4/7 to 0/7 on natural Q5. Both arms make zero P1 calls: the main repaired behavior is answer-text fabrication. Intact P1 partner success stays 33/34, and grounded tool-task success stays 54/55. Zero of 34 has a Wilson 95% upper bound of 10.15%; it is not a population guarantee. The engineering gate suggests pass but is not approved by this entry.
+
+Diagnostic v2.1 macro rises 91.41% to 96.69%, with exploratory paired difference +5.28 pp [2.22, 8.67]. Numeric rises 40/50 to 46/50, but inspecting all six apparent gains reveals three unreliable gains (val_054, val_062, val_124). At least three are credible (val_028, val_114, val_186). Additional false positives include val_239. Do not equate diagnostic scores with clinical accuracy or extrapolate a corrected total from this targeted review.
+
+Prompt v3 grounded tool-task success falls from v1's 29/55 to 9/55; FS4 restores 29/55 but does not solve conversion-tool use. R0-8B reaches 46/55 but has 28/34 automatic P1 fabrication flags. No 8B SFT result exists. C10 grounded call-prefix AUROC is 1.0 for both C/F despite C's fabricated text, demonstrating that routing confidence does not measure truthfulness.
+
+Next: retain the running Qwen3.5 protocol; compare filtered data against filtered data, review missing-input behavior, replicate F seeds after recording the existing gate, and audit finalist numeric answers before declaring a numerical winner. Qwen3.5 uses A100 and may run under contention (D-089), so cross-family wall-clock comparisons are not clean. No test outputs, code changes, new GPU jobs or gate approvals in this review. Earlier test-exposure disclosures remain unchanged.
 
 ## W3-PLAN-008 — Qwen3.5 arms added; Qwen3-8B SFT deferred
 

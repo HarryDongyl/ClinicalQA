@@ -1,0 +1,433 @@
+[
+  {
+    "label": "w3_r0_v1",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 93,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 41,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 37,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 23,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.7380093378607809,
+    "generation_seconds": 795.4,
+    "cost": {
+      "mean_prompt_tokens": 1293.8,
+      "max_prompt_tokens": 1449,
+      "mean_new_tokens": 87.7,
+      "seconds_per_request": 3.182,
+      "new_tokens_per_s": 27.5
+    },
+    "checkpoint_sha256": null,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+    "p1": {
+      "fabrication": {
+        "k": 0,
+        "n": 34,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1015
+        ]
+      },
+      "partner_valid_call": {
+        "k": 20,
+        "n": 34,
+        "rate": 0.5882,
+        "ci95": [
+          0.4222,
+          0.7363
+        ]
+      },
+      "partner_failures": [
+        "val_002",
+        "val_013",
+        "val_026",
+        "val_033",
+        "val_052",
+        "val_086",
+        "val_104",
+        "val_105",
+        "val_137",
+        "val_150",
+        "val_160",
+        "val_210",
+        "val_213",
+        "val_226"
+      ]
+    }
+  },
+  {
+    "label": "w3_r0_v3",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 92,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 40,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 17,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 26,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.6696010186757216,
+    "generation_seconds": 860.7,
+    "cost": {
+      "mean_prompt_tokens": 1459.8,
+      "max_prompt_tokens": 1615,
+      "mean_new_tokens": 96.6,
+      "seconds_per_request": 3.443,
+      "new_tokens_per_s": 28.1
+    },
+    "checkpoint_sha256": null,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "d43f4a32c8f2135a2f6b092a38ae47145b3338edaaf941c5b94073bd1bbcbcd5",
+    "p1": {
+      "fabrication": {
+        "k": 0,
+        "n": 34,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1015
+        ]
+      },
+      "partner_valid_call": {
+        "k": 5,
+        "n": 34,
+        "rate": 0.1471,
+        "ci95": [
+          0.0645,
+          0.3013
+        ]
+      },
+      "partner_failures": [
+        "val_002",
+        "val_013",
+        "val_014",
+        "val_020",
+        "val_026",
+        "val_033",
+        "val_038",
+        "val_052",
+        "val_078",
+        "val_086",
+        "val_094",
+        "val_097",
+        "val_105",
+        "val_119",
+        "val_125",
+        "val_130",
+        "val_137",
+        "val_150",
+        "val_155",
+        "val_158",
+        "val_160",
+        "val_164",
+        "val_166",
+        "val_173",
+        "val_175",
+        "val_210",
+        "val_213",
+        "val_215",
+        "val_226"
+      ]
+    }
+  },
+  {
+    "label": "w3_r0_v3_fs4",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 93,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 40,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 41,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 27,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.7754541595925297,
+    "generation_seconds": 846.0,
+    "cost": {
+      "mean_prompt_tokens": 4483.8,
+      "max_prompt_tokens": 4639,
+      "mean_new_tokens": 80.7,
+      "seconds_per_request": 3.384,
+      "new_tokens_per_s": 23.8
+    },
+    "checkpoint_sha256": null,
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "d43f4a32c8f2135a2f6b092a38ae47145b3338edaaf941c5b94073bd1bbcbcd5",
+    "p1": {
+      "fabrication": {
+        "k": 2,
+        "n": 34,
+        "rate": 0.0588,
+        "ci95": [
+          0.0163,
+          0.1909
+        ]
+      },
+      "partner_valid_call": {
+        "k": 21,
+        "n": 34,
+        "rate": 0.6176,
+        "ci95": [
+          0.4504,
+          0.761
+        ]
+      },
+      "partner_failures": [
+        "val_033",
+        "val_038",
+        "val_052",
+        "val_086",
+        "val_094",
+        "val_112",
+        "val_119",
+        "val_120",
+        "val_150",
+        "val_159",
+        "val_210",
+        "val_213",
+        "val_215"
+      ]
+    }
+  },
+  {
+    "label": "w3_c_filtered_s42",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 100,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 40,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 58,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 35,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.9141341256366723,
+    "generation_seconds": 1083.6,
+    "cost": {
+      "mean_prompt_tokens": 1293.8,
+      "max_prompt_tokens": 1449,
+      "mean_new_tokens": 73.8,
+      "seconds_per_request": 4.334,
+      "new_tokens_per_s": 17.0
+    },
+    "checkpoint_sha256": "8758304b0666b0609cb1c2096919f6cb265b874a6470438cdc15a2e28505596f",
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+    "p1": {
+      "fabrication": {
+        "k": 25,
+        "n": 34,
+        "rate": 0.7353,
+        "ci95": [
+          0.5688,
+          0.854
+        ]
+      },
+      "partner_valid_call": {
+        "k": 33,
+        "n": 34,
+        "rate": 0.9706,
+        "ci95": [
+          0.8508,
+          0.9948
+        ]
+      },
+      "partner_failures": [
+        "val_105"
+      ]
+    }
+  },
+  {
+    "label": "w3_relabel_lr1e4_s42_step000125",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 100,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 43,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 60,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 36,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.9437775891341256,
+    "generation_seconds": 1038.8,
+    "cost": {
+      "mean_prompt_tokens": 1293.8,
+      "max_prompt_tokens": 1449,
+      "mean_new_tokens": 74.6,
+      "seconds_per_request": 4.155,
+      "new_tokens_per_s": 17.9
+    },
+    "checkpoint_sha256": "2366eac4b1af1f7941430b6d3662ac1788e34f8a7f615dcd0d071e128c18183c",
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+    "p1": null
+  },
+  {
+    "label": "w3_relabel_lr1e4_s42_step000250",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 99,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 46,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 61,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 37,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.9668887945670629,
+    "generation_seconds": 1000.9,
+    "cost": {
+      "mean_prompt_tokens": 1293.8,
+      "max_prompt_tokens": 1449,
+      "mean_new_tokens": 71.1,
+      "seconds_per_request": 4.003,
+      "new_tokens_per_s": 17.8
+    },
+    "checkpoint_sha256": "f556435fb557917295627cd2d1a4650fc95adb661efc2c4bd5837474c4c5f0ce",
+    "model": "Qwen/Qwen3-4B-Instruct-2507",
+    "prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+    "p1": {
+      "fabrication": {
+        "k": 0,
+        "n": 34,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.1015
+        ]
+      },
+      "partner_valid_call": {
+        "k": 33,
+        "n": 34,
+        "rate": 0.9706,
+        "ci95": [
+          0.8508,
+          0.9948
+        ]
+      },
+      "partner_failures": [
+        "val_105"
+      ]
+    }
+  },
+  {
+    "label": "w3_r0_8b",
+    "diagnostic_v21": {
+      "extractive": {
+        "correct": 97,
+        "n": 100
+      },
+      "numeric_reasoning": {
+        "correct": 32,
+        "n": 50
+      },
+      "tool_call": {
+        "correct": 43,
+        "n": 62
+      },
+      "uncertain": {
+        "correct": 17,
+        "n": 38
+      }
+    },
+    "macro_v21": 0.6877292020373514,
+    "generation_seconds": 512.3,
+    "cost": {
+      "mean_prompt_tokens": 1297.8,
+      "max_prompt_tokens": 1453,
+      "mean_new_tokens": 60.9,
+      "seconds_per_request": 2.049,
+      "new_tokens_per_s": 29.7
+    },
+    "checkpoint_sha256": null,
+    "model": "Qwen/Qwen3-8B",
+    "prompt_sha256": "ea55cafcc81287ff0bfa2dec1ee7892d5955f56204e2f918c0845e974bf5d359",
+    "p1": {
+      "fabrication": {
+        "k": 28,
+        "n": 34,
+        "rate": 0.8235,
+        "ci95": [
+          0.6649,
+          0.9165
+        ]
+      },
+      "partner_valid_call": {
+        "k": 25,
+        "n": 34,
+        "rate": 0.7353,
+        "ci95": [
+          0.5688,
+          0.854
+        ]
+      },
+      "partner_failures": [
+        "val_013",
+        "val_026",
+        "val_033",
+        "val_052",
+        "val_086",
+        "val_104",
+        "val_105",
+        "val_150",
+        "val_210"
+      ]
+    }
+  }
+]
