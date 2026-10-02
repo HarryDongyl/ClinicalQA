@@ -1,6 +1,46 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-10-01. Latest entry: W3-CLASSIFIER-007.
+Maintained record. Last updated: 2026-10-01. Latest entry: W3-PLAN-008.
+
+## W3-PLAN-008 — Qwen3.5 arms added; Qwen3-8B SFT deferred
+
+Date: 2026-10-01. On the user's request, the model-family extension is now Qwen3.5 (D-088), replacing Qwen3-8B. The core stage is running on pod `jxwtmk0t1u7tlu` (RTX 4090 Secure, $0.74/hr, CUDA 13.0 host) under the code state of commit d90febe. The new stage `q35` runs after the core stage finishes and the new code is pulled:
+- mask audits;
+- R0-Q35-4B and R0-Q35-9B (val + P1);
+- the Qwen3.5-4B GPU smoke;
+- A-Q35-4B, both epochs on val and epoch two on P1.
+
+CPU checks:
+- Qwen3.5-4B and -9B mask audits: 1,922 rows, 0 problems, 422/422 calls round-trip, max 1,781 tokens.
+- `make test`: 262 passed.
+- The 4B reports are unchanged.
+
+Measured so far on this pod (batch 2, `run.json`):
+
+| Arm | Split | Generation time |
+|---|---|---|
+| R0-v1 | val | 795 s |
+| R0-v1 | P1 | 47 s |
+| C-filtered-s42 | val | 1,084 s |
+| C-filtered-s42 | P1 | 169 s |
+| C-filtered-s42 | train-fit | 950 s |
+| R0-v3 | val | 861 s |
+| R0-v3 | P1 | 42 s |
+
+This is roughly twice the wave-one batch-2 time, consistent with host-bound decoding (GPU ≈30%, one CPU core busy). Scores are not interpreted until `make w3-score`.
+
+Update 2026-10-02:
+- **Core stage on the pod.** Finished and pushed (fe0df7b). The R0-8B zero-shot comparator also ran before the round was stopped; the 8B smoke and A-8B did not run.
+- **Qwen3.5-4B local check (CPU, bf16).** The text-only load has 0 missing and 0 mismatched parameters (4.21B). The zero-shot generation on train_006 is an XML call that parses to the gold `calculate_bmi` arguments; this verifies the integration only and is not a result.
+- **F-s42 training (measured).**
+  - 2,000 rows, 250 steps, 43.9 min, 10.1 s/step, peak 7.81 GiB.
+  - Epoch-mean train loss 0.521 / 0.266; teacher-forced val loss (all) 0.359 / 0.347.
+  - The 4B filtered control's values are 0.531 / 0.266 and 0.356 / 0.341.
+  - These are training diagnostics, not task results.
+- **Training metrics in `make w3-score`.** `w3_analyze.py train` now writes, per run: train loss by epoch, grad norm, val loss by type, step time, throughput and peak VRAM.
+- **Train-fit for A-Q35-4B.** It now also runs D-TRAINFIT at epoch two.
+
+The q35 projection is about 3–4 h (≈$2.2–3). That covers downloads of ≈9 GB (4B) and ≈19 GB (9B, vision weights included), zero-shot runs with the torch linear-attention fallback, and training of unknown speed; it is not a measurement.
 
 ## W3-CLASSIFIER-007 — P1 classifier repaired before outputs
 

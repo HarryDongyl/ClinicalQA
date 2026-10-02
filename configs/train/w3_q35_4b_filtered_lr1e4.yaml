@@ -1,0 +1,18 @@
+# A-Q35-4B: Qwen3.5-4B (text path; vision tower and MTP head are not loaded) on the locked filtered recipe (D-088):
+# q5_filtered 1,922, LR 1e-4, 2 epochs, mb1/ga16, seed 42, NF4, LoRA r16/alpha32/0.05. Target modules add the
+# Gated DeltaNet projections (in_proj_qkv, in_proj_z, out_proj): with the original seven names only the 8 of 32
+# full-attention layers would be adapted (21.2M vs 30.5M LoRA params; Qwen3-4B: 33.0M).
+extends: configs/train/w2_filtered_lr1e4_mb1.yaml
+run_id: w3_q35_4b_filtered_lr1e4
+format_config: configs/format_w3_q35_4b.yaml
+model:
+  name: Qwen/Qwen3.5-4B
+  revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+  tokenizer: Qwen/Qwen3.5-4B
+  tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+  chat_template_kwargs: {enable_thinking: false}
+  tool_call_format: xml
+lora:
+  target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj, in_proj_qkv, in_proj_z, out_proj]
+checkpoint_dir: checkpoints/w3_q35_4b_filtered_lr1e4
+output_dir: outputs/w3_q35_4b_filtered_lr1e4

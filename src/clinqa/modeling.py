@@ -26,6 +26,7 @@ def load_tokenizer(model_cfg: dict[str, Any], padding_side: str = "right") -> An
     tok = AutoTokenizer.from_pretrained(model_cfg["tokenizer"], revision=model_cfg["tokenizer_revision"])
     tok.padding_side = padding_side
     tok.clinqa_template_kwargs = dict(model_cfg.get("chat_template_kwargs") or {})
+    tok.clinqa_call_format = model_cfg.get("tool_call_format", "json")  # Qwen3.5 emits XML calls (D-088)
     if tok.pad_token is None:
         tok.pad_token = "<|endoftext|>"
     return tok
@@ -51,12 +52,29 @@ def load_base_model(model_cfg: dict[str, Any], for_training: bool) -> Any:
         kwargs["device_map"] = {"": 0}
     else:
         kwargs["dtype"] = torch.float32
-    model = AutoModelForCausalLM.from_pretrained(model_cfg["name"], **kwargs)
+    model, info = AutoModelForCausalLM.from_pretrained(model_cfg["name"], output_loading_info=True, **kwargs)
+    # A checkpoint whose keys do not map onto the model (e.g. a multimodal Qwen3.5 checkpoint loaded text-only)
+    # would otherwise leave layers randomly initialised with only a warning (D-088).
+    if info.get("missing_keys") or info.get("mismatched_keys"):
+        raise ValueError(f"{model_cfg['name']}: weights not loaded for {len(info.get('missing_keys', []))} "
+                         f"parameters, e.g. {sorted(info.get('missing_keys', []))[:5]}; "
+                         f"mismatched {info.get('mismatched_keys', [])[:5]}")
     model.config.use_cache = not for_training
     # What was actually applied (nf4 is requested but only honoured on CUDA).
     model.clinqa_load_info = {"device": kind, "quantization": "nf4" if "quantization_config" in kwargs else "none",
-                              "dtype": str(kwargs["dtype"]).replace("torch.", "")}
+                              "dtype": str(kwargs["dtype"]).replace("torch.", ""),
+                              "ignored_checkpoint_keys": len(info.get("unexpected_keys", [])),
+                              "linear_attention_kernel": _linear_attention_kernel(model)}
     return model
+
+
+def _linear_attention_kernel(model: Any) -> str | None:
+    """Module providing Gated DeltaNet kernels (fla or the transformers torch fallback); None without linear attention."""
+    import sys
+
+    module = sys.modules.get(type(model).__module__)
+    fn = getattr(module, "torch_chunk_gated_delta_rule", None)  # rebound to the fla kernel when fla imports
+    return getattr(fn, "__module__", None) if fn is not None else None
 
 
 def compute_dtype(model_cfg: dict[str, Any]) -> Any:

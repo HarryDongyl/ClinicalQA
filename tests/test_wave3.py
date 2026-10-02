@@ -293,3 +293,85 @@ def test_p1_classifier_routes_examples_and_grounded_values_to_review():
 def test_gates_pin_the_p1_classifier():
     an = _script("w3_analyze")
     assert load_yaml("configs/w3/gates.yaml")["p1_classifier"] == an.P1_CLASSIFIER
+
+
+# ---------------------------------------------------------------- Qwen3.5 (D-088)
+
+
+def test_xml_tool_calls_parse_with_schema_types():
+    from clinqa.schemas import parse_assistant_output
+
+    call = ("<tool_call>\n<function=unit_convert>\n<parameter=value>\n180\n</parameter>\n<parameter=from_unit>\nlb\n"
+            "</parameter>\n<parameter=to_unit>\nkg\n</parameter>\n<parameter=substance>\nNone\n</parameter>\n"
+            "</function>\n</tool_call>")
+    p = parse_assistant_output("Converting first.\n\n" + call, "xml")
+    assert p.status == "valid" and p.content == "Converting first."
+    assert p.calls[0].arguments == {"value": 180, "from_unit": "lb", "to_unit": "kg", "substance": None}
+    assert parse_assistant_output(call, "json").status == "invalid_json"  # formats are not mixed
+    bad = call.replace("<parameter=value>\n180", "<parameter=value>\nabout 180")
+    assert parse_assistant_output(bad, "xml").status == "schema_error"
+    dup = call.replace("<parameter=to_unit>", "<parameter=from_unit>")
+    assert parse_assistant_output(dup, "xml").status == "invalid_json"
+    assert parse_assistant_output("<tool_call>\n<function=calculate_bmi>\n", "xml").status == "unterminated"
+
+
+@pytest.fixture(scope="module")
+def tok_q35():
+    try:
+        return load_tokenizer(load_yaml("configs/format_w3_q35_4b.yaml"))
+    except OSError as e:
+        pytest.skip(f"Qwen3.5 tokenizer unavailable: {e}")
+
+
+def test_q35_single_sequence_and_xml_round_trip(tok_q35, train):
+    from clinqa.schemas import parse_assistant_output
+
+    assert tok_q35.clinqa_call_format == "xml" and tok_q35.clinqa_template_kwargs == {"enable_thinking": False}
+    for i in IDS:
+        msgs = build_conversation(train[i], SYSTEM)
+        enc = encode(tok_q35, msgs)  # strict single-sequence contract holds for Qwen3.5
+        texts = [enc.text[a:b] for a, b in enc.char_spans]
+        assert all(t.endswith("<|im_end|>") and "<think>" not in t for t in texts)
+        if train[i]["answer_type"] == "tool_call":
+            parsed = parse_assistant_output(texts[0].removesuffix("<|im_end|>").strip(), "xml")
+            gold = msgs[2]["tool_calls"][0]["function"]
+            assert parsed.status == "valid" and parsed.calls[0].arguments == gold["arguments"]
+    assert render(tok_q35, msgs[:2], add_generation_prompt=True).endswith("<think>\n\n</think>\n\n")
+
+
+def test_rollout_uses_the_tokenizer_call_format(tok_q35, train):
+    from clinqa.infer import GenOutput, rollout
+
+    xml = ("<tool_call>\n<function=calculate_bmi>\n<parameter=weight_kg>\n106.4\n</parameter>\n<parameter=height_cm>\n"
+           "189.2\n</parameter>\n</function>\n</tool_call>")
+
+    class Gen:
+        def generate(self, prompts, max_new_tokens):
+            return [GenOutput(text=xml if "<tool_response>" not in p else "BMI 29.7.", n_tokens=5, finished=True)
+                    for p in prompts]
+
+    record = {k: train["train_006"][k] for k in ("id", "note", "table", "question")}
+    t = rollout([record], Gen(), tok_q35, SYSTEM)[0]
+    assert t["stop_reason"] == "answer" and t["turns"][0]["results"] == [29.7]
+    assert "<function=calculate_bmi>" in rollout([record], Gen(), tok_q35, SYSTEM)[0]["turns"][0]["raw"]
+
+
+def test_q35_configs_resolve():
+    from clinqa.config import load_run_config
+
+    a = load_run_config("configs/train/w3_q35_4b_filtered_lr1e4.yaml")
+    fmt = load_yaml(a["format_config"])
+    for key in ("tokenizer", "tokenizer_revision", "chat_template_kwargs", "tool_call_format"):
+        assert a["model"][key] == fmt[key]
+    assert (a["train_view"], a["training"]["learning_rate"], a["lora"]["r"], a["seed"]) == ("q5_filtered", 1e-4, 16, 42)
+    assert {"in_proj_qkv", "in_proj_z", "out_proj"} <= set(a["lora"]["target_modules"])
+    for sz in ("4b", "9b"):
+        e = load_yaml(f"configs/eval_w3_q35_{sz}.yaml")
+        assert e["batch_size"] == 2 and e["model"]["tool_call_format"] == "xml"
+
+
+def test_training_summary_reads_completed_runs():
+    an = _script("w3_analyze")
+    r = an.train_summary("w2_filtered_lr1e4_mb1")
+    assert r["optimizer_steps"] == 242 and set(r["train_loss_by_epoch"]) == {1, 2} and r["all_finite"]
+    assert set(r["val_loss_by_epoch"][2]) == {"all", "extractive", "numeric_reasoning", "tool_call", "uncertain"}

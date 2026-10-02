@@ -7,6 +7,7 @@
     uv run python scripts/w3_prep.py approve KIND --reviewer NAME   KIND = prompt_v3 | fewshot | p1
     uv run python scripts/w3_prep.py check [--require KIND ...]     readiness; exit 1 if a required item is missing
     uv run python scripts/w3_prep.py audit-8b           Qwen3-8B mask/stop-token/call-prefix audit -> reports/w3/
+    uv run python scripts/w3_prep.py audit --format configs/format_w3_q35_4b.yaml --out mask_audit_q35_4b.json
 
 Every artifact is built from train records, except P1, which edits the 40 grounded validation BMI records
 (D-070). Builders refuse to overwrite; approval re-runs every automatic check and records the reviewer and
@@ -320,49 +321,64 @@ def cmd_p1(_: argparse.Namespace) -> None:
 # ---------------------------------------------------------------- 8B template audit
 
 
-def cmd_audit_8b(_: argparse.Namespace) -> None:
-    """Every assistant turn supervised once, with exactly the inference prefix; stop/call tokens unchanged."""
+def audit_model(format_config: str, out_name: str) -> dict:
+    """Every assistant turn supervised once, with exactly the inference prefix; calls round-trip; stop tokens single."""
     from clinqa.formatting import IGNORE_INDEX, build_conversation, encode_segments
+    from clinqa.schemas import parse_assistant_output
 
-    fmt = load_yaml(ROOT / "configs" / "format_w3_8b.yaml")
-    tok, tok4 = load_tokenizer(fmt), load_tokenizer(load_yaml(ROOT / "configs" / "format_core.yaml"))
+    fmt = load_yaml(ROOT / format_config)
+    tok = load_tokenizer(fmt)
+    segmented = bool(fmt.get("segmented_turns"))
     system = (ROOT / fmt["system_prompt"]).read_text(encoding="utf-8").strip()
     problems, n_segments, longest, supervised = [], Counter(), 0, 0
     for r in filtered_train():
         msgs = build_conversation(r, system)
-        segs = encode_segments(tok, msgs, max_length=fmt["max_length"], segmented=True)
+        segs = encode_segments(tok, msgs, max_length=fmt["max_length"], segmented=segmented)
         turns = [i for i, m in enumerate(msgs) if m["role"] == "assistant"]
         prefixes = {render(tok, msgs[:i], add_generation_prompt=True) for i in turns}
-        spans = [(s, a) for s in segs for a, _ in s.char_spans]
-        if len(spans) != len(turns) or any(s.text[:a] not in prefixes for s, a in spans):
+        spans = [(s, a, b) for s in segs for a, b in s.char_spans]
+        if len(spans) != len(turns) or any(s.text[:a] not in prefixes for s, a, _ in spans):
             problems.append(r["id"])
         for s in segs:
             text = tok.decode([t for t in s.labels if t != IGNORE_INDEX])
             if "<think>" in text or not text.endswith("<|im_end|>"):
                 problems.append(r["id"])
             supervised += s.n_supervised
+        if r["answer_type"] == "tool_call":  # the supervised call parses back to the gold call
+            s, a, b = next((s, a, b) for s, a, b in spans if "<tool_call>" in s.text[a:b])
+            parsed = parse_assistant_output(s.text[a:b].removesuffix("<|im_end|>").strip(), tok.clinqa_call_format)
+            gold = msgs[2]["tool_calls"][0]["function"]
+            if parsed.status != "valid" or [(c.name, c.arguments) for c in parsed.calls] != [
+                    (gold["name"], gold["arguments"])]:
+                problems.append(r["id"])
         n_segments[(r["answer_type"], len(segs))] += 1
         longest = max(longest, *(len(s.input_ids) for s in segs))
     gen_prompt = render(tok, prompt_messages(filtered_train()[0], system), add_generation_prompt=True)
-    tokens = {t: (tok.convert_tokens_to_ids(t), tok4.convert_tokens_to_ids(t))
-              for t in ("<tool_call>", "<|im_end|>", "<|endoftext|>")}
-    report = {"tokenizer": fmt["tokenizer"], "tokenizer_revision": fmt["tokenizer_revision"],
-              "chat_template_kwargs": fmt["chat_template_kwargs"], "n_records": len(filtered_train()),
-              "problems": sorted(set(problems)), "segments_by_type": {f"{k[0]}:{k[1]}": v for k, v in
-                                                                      sorted(n_segments.items())},
+    tokens = {t: tok.convert_tokens_to_ids(t) for t in ("<tool_call>", "<|im_end|>", "<|endoftext|>")}
+    single = {t: tok(t, add_special_tokens=False)["input_ids"] == [i] for t, i in tokens.items()}
+    report = {"format_config": format_config, "tokenizer": fmt["tokenizer"],
+              "tokenizer_revision": fmt["tokenizer_revision"], "chat_template_kwargs": fmt.get("chat_template_kwargs"),
+              "tool_call_format": tok.clinqa_call_format, "segmented_turns": segmented,
+              "n_records": len(filtered_train()), "problems": sorted(set(problems)),
+              "segments_by_type": {f"{k[0]}:{k[1]}": v for k, v in sorted(n_segments.items())},
               "max_sequence_tokens": longest, "max_length": fmt["max_length"], "supervised_tokens": supervised,
               "generation_prompt_ends_with_empty_think": gen_prompt.endswith("<think>\n\n</think>\n\n"),
-              "token_ids_8b_vs_4b": tokens,
-              "call_prefix_is_single_token": tok("<tool_call>", add_special_tokens=False)["input_ids"]
-              == [tokens["<tool_call>"][0]],
-              "passed": False}
-    report["passed"] = (not report["problems"] and longest <= fmt["max_length"]
-                        and report["generation_prompt_ends_with_empty_think"] and report["call_prefix_is_single_token"]
-                        and all(a == b for a, b in tokens.values()))
-    write_json(REPORTS / "mask_audit_8b.json", report)
+              "token_ids": tokens, "single_token": single, "passed": False}
+    report["passed"] = (not report["problems"] and longest <= fmt["max_length"] and all(single.values())
+                        and report["generation_prompt_ends_with_empty_think"])
+    write_json(REPORTS / out_name, report)
     print(json.dumps({k: report[k] for k in ("passed", "segments_by_type", "max_sequence_tokens", "problems")}))
     if not report["passed"]:
         raise SystemExit(1)
+    return report
+
+
+def cmd_audit_8b(_: argparse.Namespace) -> None:
+    audit_model("configs/format_w3_8b.yaml", "mask_audit_8b.json")
+
+
+def cmd_audit(a: argparse.Namespace) -> None:
+    audit_model(a.format, a.out)
 
 
 # ---------------------------------------------------------------- approvals and readiness
@@ -439,12 +455,15 @@ def main() -> None:
     ap = sub.add_parser("approve")
     ap.add_argument("kind", choices=("prompt_v3", "fewshot", "p1"))
     ap.add_argument("--reviewer", required=True)
+    au = sub.add_parser("audit")
+    au.add_argument("--format", required=True)
+    au.add_argument("--out", required=True)
     ck = sub.add_parser("check")
     ck.add_argument("--require", nargs="*", choices=("prompt_v3", "fewshot", "p1", "trainfit", "relabel"))
     a = p.parse_args()
     REPORTS.mkdir(parents=True, exist_ok=True)
     {"relabel-template": cmd_relabel_template, "fewshot": cmd_fewshot, "trainfit": cmd_trainfit, "p1": cmd_p1,
-     "audit-8b": cmd_audit_8b, "approve": cmd_approve, "check": cmd_check}[a.cmd](a)
+     "audit-8b": cmd_audit_8b, "audit": cmd_audit, "approve": cmd_approve, "check": cmd_check}[a.cmd](a)
 
 
 if __name__ == "__main__":

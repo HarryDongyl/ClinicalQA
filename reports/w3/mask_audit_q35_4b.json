@@ -1,28 +1,28 @@
 {
-  "format_config": "configs/format_w3_8b.yaml",
-  "tokenizer": "Qwen/Qwen3-8B",
-  "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+  "format_config": "configs/format_w3_q35_4b.yaml",
+  "tokenizer": "Qwen/Qwen3.5-4B",
+  "tokenizer_revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
   "chat_template_kwargs": {
     "enable_thinking": false
   },
-  "tool_call_format": "json",
-  "segmented_turns": true,
+  "tool_call_format": "xml",
+  "segmented_turns": false,
   "n_records": 1922,
   "problems": [],
   "segments_by_type": {
     "extractive:1": 800,
     "numeric_reasoning:1": 400,
-    "tool_call:2": 422,
+    "tool_call:1": 422,
     "uncertain:1": 300
   },
-  "max_sequence_tokens": 1618,
+  "max_sequence_tokens": 1781,
   "max_length": 2048,
-  "supervised_tokens": 142600,
+  "supervised_tokens": 148448,
   "generation_prompt_ends_with_empty_think": true,
   "token_ids": {
-    "<tool_call>": 151657,
-    "<|im_end|>": 151645,
-    "<|endoftext|>": 151643
+    "<tool_call>": 248058,
+    "<|im_end|>": 248046,
+    "<|endoftext|>": 248044
   },
   "single_token": {
     "<tool_call>": true,

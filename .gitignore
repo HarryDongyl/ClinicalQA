@@ -25,6 +25,7 @@ outputs/*/tb/
 outputs/smoke/
 outputs/gpu_smoke/
 outputs/w3_8b_smoke/
+outputs/w3_q35_4b_smoke/
 outputs/*.log
 exports/
 .training.lock

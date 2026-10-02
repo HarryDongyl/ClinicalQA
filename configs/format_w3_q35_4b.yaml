@@ -1,0 +1,15 @@
+# Qwen3.5-4B: zero-shot R0 and the A-Q35-4B SFT run (D-088). Own pinned template, non-thinking mode. Qwen3.5 emits XML tool calls
+# (<function=...><parameter=...>), parsed with tool_call_format: xml. Every turn after the question renders the
+# same empty think block as the generation prompt, so the single-sequence contract holds (no segmented_turns).
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3.5-4B
+tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+chat_template_kwargs: {enable_thinking: false}
+tool_call_format: xml
+system_prompt: configs/prompts/system_v1.txt
+max_length: 2048
+output_dir: data/sft_w3_q35_4b
+train_views:
+  q5_filtered: data/processed/q5_filtered/train.jsonl
+eval_splits: [val]
+length_report: reports/w3/token_lengths_q35_4b.json

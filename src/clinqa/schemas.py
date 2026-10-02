@@ -153,8 +153,52 @@ def _loads_strict(text: str) -> Any:
     return json.loads(text, object_pairs_hook=_strict_object_pairs, parse_constant=_reject_constant)
 
 
-def parse_assistant_output(text: str) -> ParsedOutput:
-    """Parse raw assistant text (special tokens already stripped) into content + tool calls."""
+_XML_CALL = re.compile(r"\s*<function=([^>\n]+)>\n(.*?)</function>\s*", re.S)
+_XML_PARAM = re.compile(r"<parameter=([^>\n]+)>\n(.*?)\n</parameter>\n?", re.S)
+
+
+def _xml_value(name: str, key: str, raw: str) -> Any:
+    """Typed value of one XML parameter, by the tool schema (the template renders every value as text)."""
+    spec = _SCHEMA_BY_NAME.get(name, {}).get("properties", {}).get(key, {}).get("type", "string")
+    kinds = spec if isinstance(spec, list) else [spec]
+    if "null" in kinds and raw.strip() in ("None", "null"):
+        return None
+    if "number" in kinds:
+        try:
+            value = float(raw.strip())
+            return int(value) if re.fullmatch(r"-?\d+", raw.strip()) else value
+        except ValueError:
+            return raw  # left as text so validate_call reports the type error
+    return raw
+
+
+def _parse_xml_call(body: str) -> tuple[str, dict[str, Any]] | None:
+    """Qwen3.5 / Qwen3-Coder call: <function=NAME> then <parameter=KEY>value</parameter> blocks, nothing else."""
+    m = _XML_CALL.fullmatch(body)
+    if not m:
+        return None
+    name, inner = m.group(1).strip(), m.group(2)
+    args: dict[str, Any] = {}
+    pos = 0
+    for pm in _XML_PARAM.finditer(inner):
+        if inner[pos:pm.start()].strip():
+            return None
+        key = pm.group(1).strip()
+        if key in args:
+            return None
+        args[key] = _xml_value(name, key, pm.group(2))
+        pos = pm.end()
+    if inner[pos:].strip():
+        return None
+    return name, args
+
+
+def parse_assistant_output(text: str, call_format: str = "json") -> ParsedOutput:
+    """Parse raw assistant text (special tokens already stripped) into content + tool calls.
+
+    call_format: "json" (Qwen3: {"name", "arguments"} inside <tool_call>) or "xml" (Qwen3.5, D-088). Syntax
+    errors in either format keep the status name invalid_json.
+    """
     blocks = list(_BLOCK.finditer(text))
     content = _BLOCK.sub("", text).strip()
     if not blocks:
@@ -167,6 +211,13 @@ def parse_assistant_output(text: str) -> ParsedOutput:
     calls: list[ToolCall] = []
     errors: list[str] = []
     for block in blocks:
+        if call_format == "xml":
+            parsed = _parse_xml_call(block.group(1))
+            if parsed is None:
+                return ParsedOutput("invalid_json", content=content, errors=["malformed <function=...> call"])
+            errors += validate_call(*parsed)
+            calls.append(ToolCall(*parsed))
+            continue
         try:
             obj = _loads_strict(block.group(1).strip())
         except ValueError as e:

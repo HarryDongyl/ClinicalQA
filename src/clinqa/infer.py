@@ -62,8 +62,8 @@ class _State:
         return self.stop_reason is not None
 
 
-def _step(state: _State, out: GenOutput, budget: Budget, latency_s: float) -> None:
-    parsed = parse_assistant_output(out.text)
+def _step(state: _State, out: GenOutput, budget: Budget, latency_s: float, call_format: str = "json") -> None:
+    parsed = parse_assistant_output(out.text, call_format)
     turn: dict[str, Any] = {
         "raw": out.text, "status": parsed.status, "content": parsed.content, "errors": parsed.errors,
         "calls": [{"name": c.name, "arguments": c.arguments} for c in parsed.calls], "results": [],
@@ -102,6 +102,7 @@ def rollout(records: list[dict[str, Any]], generator: Generator, tokenizer: Any,
     """`demos`: fixed few-shot messages placed before every question (inference-only, D-078)."""
     budget = budget or Budget()
     states = [_State(r, system_prompt, tokenizer, demos) for r in records]
+    call_format = getattr(tokenizer, "clinqa_call_format", "json")
     while True:
         active = [s for s in states if not s.done]
         if not active:
@@ -117,7 +118,7 @@ def rollout(records: list[dict[str, Any]], generator: Generator, tokenizer: Any,
             outs = generator.generate([prompts[id(s)] for s in batch], max_new_tokens=limit)
             per_example = (time.perf_counter() - t0) / len(batch)
             for s, out in zip(batch, outs):
-                _step(s, out, budget, per_example)
+                _step(s, out, budget, per_example, call_format)
     return [{"id": s.id, "prompt": s.prompt, "prompt_sha256": hashlib.sha256(s.prompt.encode()).hexdigest(),
              "prompt_tokens": len(tokenizer(s.prompt, add_special_tokens=False)["input_ids"]),
              "turns": s.turns, "final_answer": s.final_answer, "stop_reason": s.stop_reason,

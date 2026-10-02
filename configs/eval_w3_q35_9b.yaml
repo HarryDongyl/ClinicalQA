@@ -1,0 +1,22 @@
+# Qwen3.5-9B: zero-shot R0 only (inference), prompt v1, batch 2, same budgets as every wave-three arm (D-076, D-088).
+format_config: configs/format_w3_q35_9b.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3.5-9B
+  revision: c202236235762e1c871ad0ccb60c8ee5ba337b9a
+  tokenizer: Qwen/Qwen3.5-9B
+  tokenizer_revision: c202236235762e1c871ad0ccb60c8ee5ba337b9a
+  chat_template_kwargs: {enable_thinking: false}
+  tool_call_format: xml
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}

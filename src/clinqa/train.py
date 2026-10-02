@@ -188,6 +188,8 @@ def train(cfg: dict[str, Any], resume: str | None = None) -> dict[str, Any]:
             raise ValueError(f"format config {key} {fmt.get(key)!r} differs from the model's {cfg['model'].get(key)!r}")
     if dict(fmt.get("chat_template_kwargs") or {}) != dict(cfg["model"].get("chat_template_kwargs") or {}):
         raise ValueError("chat_template_kwargs differ between the format config and the model config")
+    if fmt.get("tool_call_format", "json") != cfg["model"].get("tool_call_format", "json"):
+        raise ValueError("tool_call_format differs between the format config and the model config")
     segmented = bool(fmt.get("segmented_turns"))
     tok = load_tokenizer(cfg["model"])
     train_examples = encode_records(records, tok, system, fmt["max_length"], segmented)

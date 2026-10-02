@@ -295,3 +295,30 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - sentences with explicit example, conditional or threshold wording go to mandatory review instead of the fabrication count. Words that also occur in asserted claims ("indicates", "category") do not trigger this.
 
   Any tool call on a probe is also reported, as is "intended behaviour" (no call, no asserted value, says what is missing). `configs/w3/gates.yaml` pins `p1_classifier: p1-2`, and the gate refuses a mismatched script. The thresholds are unchanged. This does not replace D-086's required review: every one of the 34 probe responses and the 7 natural-Q5 responses is still inspected, and the gate report lists the cases needing review first. Regression tests reproduce the reviewer's synthetic fixtures (`reports/w3/gate_review_caveats.json`).
+- D-088: **Qwen3.5 replaces Qwen3-8B as the model-family extension (user request, 2026-10-01).** The Qwen3-8B SFT (A-8B, D-082) is deferred: its configs stay, and the `8b` stage runs only when named. New arms, all on validation and P1, prompt v1, batch 2:
+  - zero-shot R0-Q35-4B (`Qwen/Qwen3.5-4B` @ `851bf6e8…`);
+  - zero-shot R0-Q35-9B (`Qwen/Qwen3.5-9B` @ `c2022362…`);
+  - one SFT run, A-Q35-4B, on the locked filtered recipe: q5_filtered 1,922 rows, LR 1e-4, 2 epochs, mb1/ga16, seed 42, NF4, r16/α32/0.05.
+
+  Integration facts verified locally:
+  - The checkpoints are multimodal (`Qwen3_5ForConditionalGeneration`) with hybrid Gated DeltaNet / full-attention layers (3:1). They load text-only through `AutoModelForCausalLM`: the vision tower and MTP head are not loaded, and transformers 5.17 remaps the checkpoint prefix. Loading now fails if any parameter is missing or mismatched instead of silently initialising it.
+  - The non-thinking template gives every assistant turn after the question the same empty think block as the generation prompt. The strict single-sequence contract therefore holds; no segmentation is needed.
+  - Tool calls are XML (`<function=…><parameter=…>`), selected by `tool_call_format: xml`, and parameters are typed by the tool schema. All 422 training calls round-trip exactly.
+  - Max training length is 1,781 tokens. `<tool_call>`, `<|im_end|>` and `<|endoftext|>` are each one token, with Qwen3.5's own IDs.
+
+  Recipe deviation: the original seven LoRA module names exist only in the 8 full-attention layers. The target list adds the linear-attention projections `in_proj_qkv`, `in_proj_z` and `out_proj` so that every token-mixing layer is adapted: 30.5M LoRA parameters, versus 21.2M with the original names and 33.0M for Qwen3-4B. Linear attention uses the transformers torch fallback (no flash-linear-attention or causal-conv1d installed), so speed is measured, not assumed.
+
+  Comparisons:
+  - R0-Q35-4B vs R0-v1: same prompt, different base model;
+  - R0-Q35-9B vs R0-Q35-4B: size within the family;
+  - A-Q35-4B vs C-filtered-s42: same data and recipe, different backbone, template and call format;
+  - A-Q35-4B vs R0-Q35-4B: the SFT effect.
+
+  None of these isolates capacity (D-073). Qwen3.5 arms are generated in a later code state than the core arms. The change adds Qwen3.5 support only, and the 4B mask audit and length reports remain byte-identical.
+- D-089: **Qwen3.5 round on an A100 80GB with two speed-ups (user choice, 2026-10-02).** RTX 4090 Secure had no CUDA-13 host. The `q35` arms run on an A100, while the core arms and their comparators (R0-v1, C-filtered-s42) were generated and trained on an RTX 4090. Greedy outputs can differ slightly across GPU kernels, and wall-clock costs are hardware-specific; Qwen3.5-vs-core differences therefore include a hardware component, which is disclosed with every such comparison.
+
+  Speed-ups:
+  1. `flash-linear-attention==0.5.2` is installed as the locked Linux-only extra `qwen35` (`make setup` installs it). It provides Gated DeltaNet kernels in place of the transformers torch fallback. Only fla-core and einops are added to the lock; existing pins are unchanged. `run.json`/manifest `model_load.linear_attention_kernel` records which implementation ran, and all Qwen3.5 arms share it.
+  2. `PARALLEL=1` (the default) runs the host-bound zero-shot decoding lane as a second process beside the smoke/training lane on the same GPU. Outputs are unaffected, but those arms' seconds-per-request is measured under contention and must not be compared as a clean cost.
+
+  Not changed, to keep the recipe and protocol: generation batch 2, training micro-batch 1 / accumulation 16, NF4, no packing.

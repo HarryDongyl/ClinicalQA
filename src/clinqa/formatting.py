@@ -234,6 +234,7 @@ def load_tokenizer(cfg: dict[str, Any]) -> Any:
 
     tok = AutoTokenizer.from_pretrained(cfg["tokenizer"], revision=cfg["tokenizer_revision"])
     tok.clinqa_template_kwargs = dict(cfg.get("chat_template_kwargs") or {})
+    tok.clinqa_call_format = cfg.get("tool_call_format", "json")
     return tok
 
 

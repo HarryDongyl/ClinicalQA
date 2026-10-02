@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Wave-three round on one 24 GB RunPod GPU (EXPERIMENTS_WAVE3; DECISIONS D-075 to D-083). Validation and
-# train only; no test. Generation batch 2 for every arm. STAGES selects work (default: "core 8b"):
+# train only; no test. Generation batch 2 for every arm. STAGES selects work (default: "core q35"):
 #   core   R0-v1, C-filtered-s42 (wave-two filtered 1e-4 epoch two, regenerated), R0-v3, R0-v3-FS4,
 #          F-s42 (relabel view) -- each on val + P1 probes; D-TRAINFIT on the control and F-s42 epoch two
-#   8b     8B mask audit, R0-8B (val + P1), 8B GPU smoke, A-8B (filtered 1e-4) both epochs on val + P1 on epoch two
+#   q35    Qwen3.5 (D-088): mask audits, R0-Q35-4B and R0-Q35-9B zero-shot (val + P1), Qwen3.5-4B GPU smoke,
+#          A-Q35-4B (filtered 1e-4 recipe) both epochs on val; epoch two on P1 and D-TRAINFIT
+#   8b     deferred (D-088): Qwen3-8B mask audit, R0-8B, 8B smoke, A-8B; runs only when named explicitly
 #   seeds  F-s43, F-s44 -- only after configs/w3/gate_fs42.json records an approved pass (D-081)
 # Arms whose inputs are not approved (scripts/w3_prep.py check) are skipped with a warning and the script
 # exits 2 at the end, so a partial round is never mistaken for a complete one. Scoring, gates and C10 run
@@ -14,13 +16,14 @@ test -f scripts/runpod_env.sh && source scripts/runpod_env.sh
 exec 9>.training.lock
 flock -n 9 || { echo "Another experiment runner is active."; exit 1; }
 test -z "$(git status --porcelain --untracked-files=no)" || { echo "Tracked files are modified; commit first."; exit 1; }
-STAGES=${STAGES:-core 8b}
+STAGES=${STAGES:-core q35}
 HF_USER=${HF_USER:-Harrydongyl}
 PY="uv run --frozen python"
 SKIPPED=()
 
+EXCLUDE=""
 push() {
-  git add outputs reports
+  git add outputs reports ${EXCLUDE:+"$EXCLUDE"}
   git diff --cached --quiet || git commit -q -m "w3: $1"
   git push -q || echo "WARNING: push failed after '$1'; results are committed locally."
 }
@@ -87,6 +90,39 @@ if [[ " $STAGES " == *" core "* ]]; then
   else skip F-s42 relabel; fi
 fi
 
+if [[ " $STAGES " == *" q35 "* ]]; then
+  # 5. Qwen3.5 (D-088, D-089): template/XML-call audits, zero-shot 4B and 9B, smoke, then one SFT run on the locked
+  # filtered recipe. Zero-shot decoding is host-bound (GPU ~30%), so with PARALLEL=1 (default) it runs as a second
+  # process next to the smoke/training lane on the same GPU; outputs are unchanged, but their wall-clock cost
+  # fields are measured under contention and are reported as such. PARALLEL=0 runs everything sequentially.
+  $PY -c 'import fla.ops.gated_delta_rule' 2>/dev/null && echo "flash-linear-attention kernels available" ||
+    echo "WARNING: flash-linear-attention not importable; Qwen3.5 uses the slower torch fallback (run make setup)"
+  for sz in 4b 9b; do
+    $PY scripts/w3_prep.py audit --format "configs/format_w3_q35_$sz.yaml" --out "mask_audit_q35_$sz.json"
+    $PY -m clinqa.formatting --config "configs/format_w3_q35_$sz.yaml"
+  done
+  zero_shot() { for sz in 4b 9b; do arm "configs/eval_w3_q35_$sz.yaml" "w3_r0_q35_$sz" base; done; }
+  if test "${PARALLEL:-1}" = 1; then
+    zero_shot > outputs/w3_q35_zero_shot.console.log 2>&1 &
+    zpid=$!
+    echo "zero-shot lane running as PID $zpid (log: outputs/w3_q35_zero_shot.console.log)"
+    EXCLUDE=":!outputs/w3_r0_q35_*"  # never commit the other lane's half-written outputs
+  else
+    zero_shot; push "R0-Q35-4B/9B"
+  fi
+  test -f outputs/w3_q35_4b_smoke/smoke_report.json || $PY -m clinqa.smoke --config configs/train/w3_q35_4b_smoke.yaml
+  $PY -c 'import json; p=json.load(open("outputs/w3_q35_4b_smoke/smoke_report.json")); assert p["passed"], "Qwen3.5-4B smoke failed"'
+  push "Q35-4B smoke"
+  train w3_q35_4b_filtered_lr1e4
+  $PY scripts/w3_epochs.py generate --run w3_q35_4b_filtered_lr1e4 --config configs/eval_w3_q35_4b.yaml --trainfit
+  push "A-Q35-4B"
+  if test -n "${zpid:-}"; then
+    wait "$zpid" || { echo "zero-shot lane failed; see outputs/w3_q35_zero_shot.console.log"; exit 1; }
+    EXCLUDE=""
+    push "R0-Q35-4B/9B"
+  fi
+fi
+
 if [[ " $STAGES " == *" 8b "* ]]; then
   # 5. Qwen3-8B: template audit, zero-shot comparator, smoke, then one SFT run on the locked filtered recipe.
   $PY scripts/w3_prep.py audit-8b
@@ -113,7 +149,7 @@ if [[ " $STAGES " == *" seeds "* ]]; then
 fi
 
 if test "${UPLOAD:-0}" = 1; then
-  for run in w3_relabel_lr1e4_s42 w3_relabel_lr1e4_s43 w3_relabel_lr1e4_s44 w3_8b_filtered_lr1e4; do
+  for run in w3_relabel_lr1e4_s42 w3_relabel_lr1e4_s43 w3_relabel_lr1e4_s44 w3_q35_4b_filtered_lr1e4 w3_8b_filtered_lr1e4; do
     test -d "checkpoints/$run/final" || continue
     uv run --frozen hf upload "$HF_USER/clinqa-$run" "checkpoints/$run" --repo-type model --private \
       --exclude "*/optimizer.pt" || echo "WARNING: upload failed for $run"

@@ -1,0 +1,15 @@
+# Qwen3.5-4B GPU smoke before A-Q35-4B (D-088): overfit, reload and both tools end to end through XML calls.
+extends: configs/train/w3_q35_4b_filtered_lr1e4.yaml
+run_id: w3_q35_4b_smoke
+example_ids: [train_000, train_004, train_003, train_046, train_006, train_015]
+training:
+  learning_rate: 5.0e-4
+  epochs: 10
+  grad_accum: 1
+  scheduler: constant
+  warmup_ratio: 0.0
+  logging_steps: 1
+  save_steps: 50
+val_loss: false
+checkpoint_dir: checkpoints/w3_q35_4b_smoke
+output_dir: outputs/w3_q35_4b_smoke

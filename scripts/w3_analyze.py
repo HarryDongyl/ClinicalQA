@@ -15,6 +15,9 @@ c10       C10a final-answer mean token log-prob as a correctness *ranking* score
           as a prefix-event diagnostic (AUROC, Brier, binned counts), token-identity check and executed-call
           confusion matrices. Repeated checkpoints/seeds on one question are not independent samples.
 trainfit  D-TRAINFIT: legacy scores on the 200 frozen train IDs, per type, with the numeric failures listed.
+train     training-side metrics per run from manifest.json + train_log.jsonl: train loss by epoch, grad norm,
+          teacher-forced val loss by answer type at each epoch end, step time, throughput, peak VRAM, size.
+          Val loss is per-token under each model's own tokenizer, so it is not comparable across model families.
 """
 
 from __future__ import annotations
@@ -412,6 +415,65 @@ def cmd_trainfit(a: argparse.Namespace) -> None:
     print("\n".join(lines))
 
 
+# ---------------------------------------------------------------- training metrics
+
+
+def _median(xs: list[float]) -> float | None:
+    xs = sorted(xs)
+    return round(xs[len(xs) // 2], 4) if xs else None
+
+
+def train_summary(run: str) -> dict:
+    d = ROOT / "outputs" / run
+    m = json.loads((d / "manifest.json").read_text())
+    rows = read_jsonl(d / "train_log.jsonl")
+    steps = [r for r in rows if "loss" in r and "train_loss" not in r]
+    spe = m["steps_per_epoch"]
+    by_epoch = defaultdict(list)
+    for r in steps:
+        by_epoch[min(m["config"]["training"]["epochs"], max(1, math.ceil(r["step"] / spe)))].append(r["loss"])
+    val = {int(round(r["epoch"])): {k.split("/", 1)[1]: round(v, 4) for k, v in r.items() if k.startswith("val_loss/")}
+           for r in rows if any(k.startswith("val_loss/") for k in r)}
+    grads = [r["grad_norm"] for r in steps if "grad_norm" in r]
+    finite = all(math.isfinite(float(r.get(k, 0))) for r in rows for k in ("loss", "grad_norm"))
+    return {"run": run, "model": m["config"]["model"]["name"], "train_view": m["config"]["train_view"],
+            "seed": m["config"]["seed"], "lr": m["config"]["training"]["learning_rate"],
+            "n_train_examples": m["n_train_examples"], "n_sequences": m.get("n_sequences"),
+            "supervised_tokens": m.get("supervised_tokens"), "optimizer_steps": m["optimizer_steps"],
+            "trainable_params": m["trainable_params"], "lora_targets": m["config"]["lora"]["target_modules"],
+            "final_train_loss": round(m["final_train_loss"], 4),
+            "train_loss_by_epoch": {e: round(sum(v) / len(v), 4) for e, v in sorted(by_epoch.items())},
+            "first_logged_loss": round(steps[0]["loss"], 4) if steps else None,
+            "last_logged_loss": round(steps[-1]["loss"], 4) if steps else None,
+            "grad_norm": {"median": _median(grads), "max": round(max(grads), 4) if grads else None},
+            "all_finite": finite, "val_loss_by_epoch": val,
+            "sec_per_step_median": _median([r["sec_per_step"] for r in steps if "sec_per_step" in r]),
+            "train_runtime_s": m["runtime_s"]["train"], "tokens_per_s": m.get("tokens_per_s"),
+            "peak_vram_gb": m["peak_vram_gb"], "gpu": (m.get("hardware") or {}).get("gpu"),
+            "precision": m["precision"], "quantized_4bit": m["quantized_4bit"]}
+
+
+def cmd_train(a: argparse.Namespace) -> None:
+    out = out_dir(a.out)
+    lines = ["# Training metrics", "", "| run | model | n | steps | LoRA params | train loss ep1 / ep2 | val loss "
+             "ep1 / ep2 (all) | grad norm med / max | s/step | train min | peak GiB |", "|---|---|---|---|---|---|---|---|"
+             "---|---|---|"]
+    for run in a.runs:
+        r = train_summary(run)
+        (out / f"{run}.json").write_text(json.dumps(r, indent=2) + "\n")
+        tl, vl = r["train_loss_by_epoch"], r["val_loss_by_epoch"]
+        lines.append(f"| {run} | {r['model'].split('/')[-1]} | {r['n_train_examples']} | {r['optimizer_steps']} | "
+                     f"{r['trainable_params'] / 1e6:.1f}M | {' / '.join(str(v) for v in tl.values())} | "
+                     f"{' / '.join(str(v.get('all')) for v in vl.values())} | {r['grad_norm']['median']} / "
+                     f"{r['grad_norm']['max']} | {r['sec_per_step_median']} | {r['train_runtime_s'] / 60:.1f} | "
+                     f"{r['peak_vram_gb']} |")
+    lines += ["", "Val loss is teacher-forced on assistant tokens of the 250 validation conversations (by type in each "
+              "run's JSON). It is a per-token loss under each model's own tokenizer: compare within a model family "
+              "only. Train loss by epoch is the mean of logged step losses."]
+    (out / "summary.md").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -421,12 +483,15 @@ def main() -> None:
         s.add_argument("--out", required=True)
         if name == "c10":
             s.add_argument("--v21", default=None, help="v2.1 report dir; default uses legacy v1 correctness")
+    t = sub.add_parser("train")
+    t.add_argument("--runs", nargs="+", required=True)
+    t.add_argument("--out", required=True)
     g = sub.add_parser("gate")
     g.add_argument("--candidate", required=True)
     g.add_argument("--control", default=None)
     g.add_argument("--out", required=True)
     a = p.parse_args()
-    {"p1": cmd_p1, "gate": cmd_gate, "c10": cmd_c10, "trainfit": cmd_trainfit}[a.cmd](a)
+    {"p1": cmd_p1, "gate": cmd_gate, "c10": cmd_c10, "trainfit": cmd_trainfit, "train": cmd_train}[a.cmd](a)
 
 
 if __name__ == "__main__":
