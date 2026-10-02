@@ -21,6 +21,7 @@ runs:
   base: {adapter: null}
   w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242}  # C-filtered-s42, epoch two
   w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}  # epoch checkpoint via --adapter
+  w4_q3_refit_relabel_lr1e4_s42: {adapter: checkpoints/w4_q3_refit_relabel_lr1e4_s42/final}  # F-s42 refit (D-097)
   w3_relabel_lr1e4_s43: {adapter: checkpoints/w3_relabel_lr1e4_s43/final}
   w3_relabel_lr1e4_s44: {adapter: checkpoints/w3_relabel_lr1e4_s44/final}
 bootstrap:

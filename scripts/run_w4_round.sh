@@ -4,6 +4,11 @@
 #   r1     A-Q35-relabel: mask audit, training (PARALLEL=0), both epochs on val + P1 (Wave4-Q1), epoch two train-fit;
 #          P1 on A-Q35-filter epoch one; P1-RAW (wave-one raw_lr1e4 epoch two); parity regeneration of
 #          A-Q35-filter epoch two on val under the wave-four code (must match the wave-three output item by item)
+#   refit  F-s42 refit (D-097): the original F-s42 adapter was never uploaded. Retrains the identical recipe as
+#          w4_q3_refit_relabel_lr1e4_s42, evaluates both epochs on val + P1 (+ train-fit) under configs/eval_w3_v1.yaml,
+#          compares epoch two item by item with the original F-s42 outputs (reported, not a gate) and makes the
+#          refit the Qwen3 adapter for r2 in the same invocation (STAGES="refit r2"). A later r2-only run needs
+#          F_RUN=w4_q3_refit_relabel_lr1e4_s42.
 #   r2     Stretch A: configs/w4/gate_q35.json sets stretch_a_backbone (q3 per D-095) or, if absent, the gate decides
 #          Qwen3.5 (pass) or Qwen3 (fail -> F-s42).
 #          Mask audits; zero-shot arms A-zs-v1 / A-zs-v1e on the relabel adapter and A-zs-base; A-sft training and
@@ -21,6 +26,8 @@ HF_USER=${HF_USER:-Harrydongyl}
 PY="uv run --frozen python"
 P1=configs/w3/p1_probes.json
 EGFR="configs/w4/egfr_val.json configs/w4/egfr_age_probes.json"
+F_RUN=${F_RUN:-w3_relabel_lr1e4_s42}  # the Qwen3 relabel adapter used by r2 (refit sets it, D-097)
+REFIT=w4_q3_refit_relabel_lr1e4_s42
 
 push() {
   git add outputs reports
@@ -83,6 +90,19 @@ if [[ " $STAGES " == *" r1 "* ]]; then
   push "P1-RAW"
 fi
 
+if [[ " $STAGES " == *" refit "* ]]; then
+  # 4b. F-s42 refit (D-097): same recipe and data as F-s42, new run identity; alone on the GPU.
+  train "$REFIT"
+  $PY scripts/w3_epochs.py generate --run "$REFIT" --config configs/eval_w3_v1.yaml --trainfit --p1-all-epochs
+  mkdir -p reports/w4/refit
+  for ep in 125 250; do
+    $PY scripts/compare_rollouts.py "w3_relabel_lr1e4_s42_step000$ep" "${REFIT}_step000$ep" \
+      --out "reports/w4/refit/compare_val_step000$ep.json" || echo "WARNING: compare failed for step $ep"
+  done
+  push "F-s42 refit"
+  F_RUN=$REFIT
+fi
+
 if [[ " $STAGES " == *" r2 "* ]]; then
   # 5. Stretch A. The reviewed A-Q35-relabel gate decides the backbone (Wave4-Q2 stopping rule) unless the file sets
   #    stretch_a_backbone explicitly (D-095: Qwen3 chosen on cost at equal performance, independent of the gate).
@@ -92,10 +112,10 @@ print(g["decision"], g.get("stretch_a_backbone") or ("q35_4b" if g["decision"] =
   if test "$backbone" = q35_4b; then
     fam=q35_4b; adapter_run=w4_q35_4b_relabel_lr1e4; sft=w4_q35_4b_relabel_egfr_lr1e4
   else
-    fam=q3; adapter_run=w3_relabel_lr1e4_s42; sft=w4_q3_relabel_egfr_lr1e4
-    fetch w3_relabel_lr1e4_s42 250
+    fam=q3; adapter_run=$F_RUN; sft=w4_q3_relabel_egfr_lr1e4
+    test "$adapter_run" = w3_relabel_lr1e4_s42 && fetch w3_relabel_lr1e4_s42 250
   fi
-  echo "Stretch A backbone: $fam (gate decision: $decision; stretch_a_backbone: $backbone)"
+  echo "Stretch A backbone: $fam, adapter run $adapter_run (gate decision: $decision; stretch_a_backbone: $backbone)"
   for pv in v1 v1e; do $PY -m clinqa.formatting --config "configs/format_w4_${fam}_tools3_$pv.yaml"; done
   $PY scripts/w3_prep.py audit --format "configs/format_w4_${fam}_egfr.yaml" --view q5_relabeled_egfr \
     --out "reports/w4/mask_audit_${fam}_egfr.json"
@@ -122,7 +142,7 @@ if [[ " $STAGES " == *" test "* ]]; then
 fi
 
 if test "${UPLOAD:-0}" = 1; then
-  for run in w4_q35_4b_relabel_lr1e4 w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4; do
+  for run in w4_q35_4b_relabel_lr1e4 "$REFIT" w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4; do
     test -d "checkpoints/$run/final" || continue
     uv run --frozen hf upload "$HF_USER/clinqa-$run" "checkpoints/$run" --repo-type model --private \
       --exclude "*/optimizer.pt" || echo "WARNING: upload failed for $run"

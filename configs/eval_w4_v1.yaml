@@ -22,6 +22,7 @@ runs:
   raw_lr1e4: {adapter: checkpoints/raw_lr1e4/checkpoint-250}  # wave one, 2,000 raw rows, 250 steps, seed 42
   w2_filtered_lr1e4_mb1: {adapter: checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242}
   w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}
+  w4_q3_refit_relabel_lr1e4_s42: {adapter: checkpoints/w4_q3_refit_relabel_lr1e4_s42/final}  # F-s42 refit (D-097)
 bootstrap:
   n: 2000
   seed: 42

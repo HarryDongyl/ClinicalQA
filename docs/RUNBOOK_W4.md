@@ -167,13 +167,18 @@ uv run python scripts/w4_numeric_audit.py h2 --a w3_relabel_lr1e4_s42_step000250
 
 ---
 
-## Step 4. RunPod A100, round 2: Stretch A (about 3 h)
+## Step 4. RunPod (RTX 4090 with a CUDA-13 host, or A100), round 2: F-s42 refit + Stretch A (about 2.5 h)
+
+The original F-s42 adapter was never uploaded (D-097), so round 2 first retrains it as `w4_q3_refit_relabel_lr1e4_s42` (F′). It then runs Stretch A on F′ in the same invocation:
 
 ```bash
-cd /workspace/ClinicalQA && git pull           # gets gate_q35.json
+cd /workspace/Clinical && git pull             # gets gate_q35.json and the refit stage
+source scripts/runpod_env.sh && export GIT_TERMINAL_PROMPT=0
 tmux new -s w4r2
-STAGES=r2 UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee outputs/w4_r2.console.log
+STAGES="refit r2" UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_r2.console.log
 ```
+
+A later r2-only rerun needs `F_RUN=w4_q3_refit_relabel_lr1e4_s42`. Finished steps are reused: training is skipped when its manifest exists, and generation reuses verified outputs.
 
 The backbone comes from `stretch_a_backbone` in `configs/w4/gate_q35.json` (`q3` per D-095), or from the gate decision if the field is absent. It runs:
 
@@ -209,7 +214,7 @@ Take the A-sft step numbers from `outputs/$SFT/manifest.json`. With 2,052 rows a
 Freeze and commit the list **before** any test output exists:
 
 ```bash
-Q=w4_q35_4b_relabel_lr1e4; F3=w3_relabel_lr1e4_s42; QF=w3_q35_4b_filtered_lr1e4
+Q=w4_q35_4b_relabel_lr1e4; F3=w4_q3_refit_relabel_lr1e4_s42; QF=w3_q35_4b_filtered_lr1e4   # F3 = F′ (D-097)
 uv run python scripts/w4_test.py freeze \
   --entry f_relabel_test   configs/eval_w4_v1.yaml     $F3 checkpoints/$F3/checkpoint-250 \
   --entry q35_relabel_test configs/eval_w4_q35_4b.yaml $Q  checkpoints/$Q/checkpoint-250 \

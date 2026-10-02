@@ -19,6 +19,7 @@ model:
 runs:
   base: {adapter: null}
   w3_relabel_lr1e4_s42: {adapter: checkpoints/w3_relabel_lr1e4_s42/final}  # epoch checkpoint via --adapter
+  w4_q3_refit_relabel_lr1e4_s42: {adapter: checkpoints/w4_q3_refit_relabel_lr1e4_s42/final}  # F-s42 refit (D-097)
   w4_q3_relabel_egfr_lr1e4: {adapter: checkpoints/w4_q3_relabel_egfr_lr1e4/final}
 bootstrap:
   n: 2000

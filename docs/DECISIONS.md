@@ -358,3 +358,8 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - v2.1 does not check false *extra* numeric claims. Example: F-s42 epoch two writes "by 4.2" for a true 5.2 (val_117), calls a normal creatinine elevated (val_194), and writes "by 9 bpm" for a true 1 (val_062).
   - This is reported as a known limitation (`reports/scorer_v2/VALIDATION.md` §5).
   - The v2.2 contradiction-guard prototype (`scripts/scorer_v22.py`) is kept as future work and is not adopted. It has no clean holdout, and its guards were tuned on the evaluation sets. Numeric conclusions rest on the claim-level audit.
+- D-097: **F-s42 refit.** The wave-three F-s42 adapter (`w3_relabel_lr1e4_s42`, final sha256 `f556435f…`) was never uploaded to the Hub and its checkpoint is no longer available.
+  - Stretch A's zero-shot arms on F and the final test need an F adapter. It is retrained as `w4_q3_refit_relabel_lr1e4_s42` (F′) with the identical recipe, data view, format, seed and steps. Only the run identity differs (`configs/train/w4_q3_refit_relabel_lr1e4_s42.yaml`).
+  - F′ is evaluated on both epochs (val, P1, train-fit) under the wave-three eval config. Both epochs are compared item by item with the original F-s42 outputs (`reports/w4/refit/`). The comparison is reported, not a gate, because GPU kernels need not reproduce training bit for bit.
+  - Wave-three conclusions keep citing the original F-s42 outputs. Stretch A and the frozen test list use F′, and this is disclosed with them.
+  - Run as `STAGES="refit r2"` (`run_w4_round.sh`); the refit is uploaded with `UPLOAD=1`.

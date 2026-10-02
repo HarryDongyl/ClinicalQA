@@ -1,0 +1,8 @@
+# F-s42 refit (D-097): the wave-three F-s42 adapter was never uploaded and its checkpoint is gone. Same recipe, data
+# view, format, seed and step count as w3_relabel_lr1e4_s42; only the run identity changes so that the original
+# manifest and outputs stay untouched. Not bit-identical in general (GPU kernel nondeterminism); compared item by item
+# with the original F-s42 outputs on val and P1 before it replaces F-s42 as the Stretch A backbone and final model.
+extends: configs/train/w3_relabel_lr1e4_s42.yaml
+run_id: w4_q3_refit_relabel_lr1e4_s42
+checkpoint_dir: checkpoints/w4_q3_refit_relabel_lr1e4_s42
+output_dir: outputs/w4_q3_refit_relabel_lr1e4_s42
