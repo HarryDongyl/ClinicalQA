@@ -1,0 +1,38 @@
+{
+  "format_config": "configs/format_w4_q35_4b.yaml",
+  "tokenizer": "Qwen/Qwen3.5-4B",
+  "tokenizer_revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "tool_call_format": "xml",
+  "segmented_turns": false,
+  "view": "q5_relabeled",
+  "tools": [
+    "unit_convert",
+    "calculate_bmi"
+  ],
+  "n_records": 2000,
+  "problems": [],
+  "segments_by_type": {
+    "extractive:1": 800,
+    "numeric_reasoning:1": 400,
+    "tool_call:1": 422,
+    "uncertain:1": 378
+  },
+  "max_sequence_tokens": 1781,
+  "max_length": 2048,
+  "supervised_tokens": 150185,
+  "generation_prompt_ends_with_empty_think": true,
+  "token_ids": {
+    "<tool_call>": 248058,
+    "<|im_end|>": 248046,
+    "<|endoftext|>": 248044
+  },
+  "single_token": {
+    "<tool_call>": true,
+    "<|im_end|>": true,
+    "<|endoftext|>": true
+  },
+  "passed": true
+}
