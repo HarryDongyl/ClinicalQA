@@ -322,11 +322,3 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   2. `PARALLEL=1` (the default) runs the host-bound zero-shot decoding lane as a second process beside the smoke/training lane on the same GPU. Outputs are unaffected, but those arms' seconds-per-request is measured under contention and must not be compared as a clean cost.
 
   Not changed, to keep the recipe and protocol: generation batch 2, training micro-batch 1 / accumulation 16, NF4, no packing.
-
-
-## Completed wave-three core review (2026-10-02)
-
-- D-090: Treat F-s42 epoch two as the leading missing-input policy candidate, not a verified overall clinical winner. Reviewed P1 numeric fabrication improves 25/34 to 0/34 with intact-partner success unchanged at 33/34; natural Q5 improves 4/7 to 0/7. This is a single-seed training-policy comparison. The fresh gate suggests pass, but this record does not approve the gate or launch seeds.
-- D-091: Do not promote prompt v3: grounded tool-task success regresses from 29/55 to 9/55. FS4 restores 29/55 but leaves conversion coverage weak. Preserve v1 as comparator; any further prompt intervention needs a new frozen identity.
-- D-092: Diagnostic v2.1 numeric 46/50 is not verified numerical accuracy. Three of six apparent C-to-F gains are unreliable under output review. Audit all finalist numeric outputs with a claim-level rubric and an ambiguous/review category before choosing a numerical winner. Preserve existing scorer versions and disclose post-inspection changes; validation cases are not new training targets.
-- D-093: Continue the frozen Qwen3.5 round. Compare its filtered SFT with the filtered 4B control, assess its P1/natural-Q5 behavior, and consider a matched Q35 relabel run only after its results arrive. Do not attribute filtered-versus-relabeled differences to backbone alone. Preserve D-089's A100/kernel/concurrency caveats. Current evidence does not establish a need for RL. Evidence: WAVE3_RESULTS_REVIEW.md and W3-RESULTS-009.
