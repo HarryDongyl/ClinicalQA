@@ -1,0 +1,61 @@
+{
+  "tokenizer": "Qwen/Qwen3.5-4B",
+  "tokenizer_revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+  "chat_template_sha256": "a4aee8afcf2e0711942cf848899be66016f8d14a889ff9ede07bca099c28f715",
+  "tool_schemas_sha256": "766600e0388ae478a3545f887ba8f701d9ae9a6913c7c2a57897a3ce3fd5deb6",
+  "system_prompt_sha256": "92e4341e7055f3173d11c27aa1113338710882fbf0f53ee4b4290974225c6313",
+  "max_length": 2560,
+  "splits": {
+    "val": {
+      "measured": "full_conversation",
+      "by_answer_type": {
+        "all": {
+          "n": 250,
+          "p50": 1784,
+          "p95": 1882,
+          "p99": 1933,
+          "max": 1969
+        },
+        "extractive": {
+          "n": 100,
+          "p50": 1752,
+          "p95": 1849,
+          "p99": 1880,
+          "max": 1889
+        },
+        "numeric_reasoning": {
+          "n": 50,
+          "p50": 1795,
+          "p95": 1883,
+          "p99": 1969,
+          "max": 1969
+        },
+        "tool_call": {
+          "n": 62,
+          "p50": 1837,
+          "p95": 1913,
+          "p99": 1933,
+          "max": 1949
+        },
+        "uncertain": {
+          "n": 38,
+          "p50": 1771,
+          "p95": 1838,
+          "p99": 1867,
+          "max": 1867
+        }
+      },
+      "answer_type_counts": {
+        "extractive": 100,
+        "numeric_reasoning": 50,
+        "tool_call": 62,
+        "uncertain": 38
+      },
+      "overlength_ids": []
+    }
+  },
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "segmented_turns": false
+}
