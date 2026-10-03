@@ -60,8 +60,12 @@ make views
 $PY -m clinqa.data_views --variant q5_relabeled
 $PY -m clinqa.data_views --variant q5_relabeled_egfr
 $PY -m clinqa.data_views --variant q5_relabeled_egfr2
-$PY -c 'import fla.ops.gated_delta_rule' 2>/dev/null && echo "flash-linear-attention kernels available" ||
-  { echo "flash-linear-attention not importable; wave four requires the same kernel as A-Q35-filter (make setup)"; exit 1; }
+if $PY -c 'import fla.ops.gated_delta_rule' 2>/dev/null; then echo "flash-linear-attention kernels available"
+elif [[ " $STAGES " == *" r1 "* ]]; then
+  echo "flash-linear-attention not importable; r1 (Qwen3.5) requires the same kernel as A-Q35-filter (make setup)"; exit 1
+else
+  echo "WARNING: flash-linear-attention not importable; Qwen3 stages are unaffected, Qwen3.5 would use the torch fallback"
+fi
 
 if [[ " $STAGES " == *" r1 "* ]]; then
   # 1. A-Q35-relabel: same recipe as A-Q35-filter, reviewed relabel view; training alone on the GPU (clean timing).

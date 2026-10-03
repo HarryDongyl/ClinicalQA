@@ -1,0 +1,628 @@
+{
+ "label": "w4_q3_relabel_egfr2_lr1e4_step000138",
+ "positives": {
+  "called": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "selected": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "grounded": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "outcome": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "reported": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "context": {
+   "k": 12,
+   "n": 19,
+   "rate": 0.6316,
+   "ci95": [
+    0.4104,
+    0.8085
+   ]
+  },
+  "e2e": {
+   "k": 12,
+   "n": 19,
+   "rate": 0.6316,
+   "ci95": [
+    0.4104,
+    0.8085
+   ]
+  }
+ },
+ "probes": {
+  "fabrication": {
+   "k": 0,
+   "n": 19,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.1682
+   ]
+  },
+  "call_fabrication": {
+   "k": 0,
+   "n": 19,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.1682
+   ]
+  },
+  "intended": {
+   "k": 19,
+   "n": 19,
+   "rate": 1.0,
+   "ci95": [
+    0.8318,
+    1.0
+   ]
+  },
+  "partner_valid_call": {
+   "k": 12,
+   "n": 19,
+   "rate": 0.6316,
+   "ci95": [
+    0.4104,
+    0.8085
+   ]
+  }
+ },
+ "rows": {
+  "positives": [
+   {
+    "id": "sa_val_000",
+    "source_id": "val_008",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G5"
+    ],
+    "accepted_stages": [
+     "G4"
+    ]
+   },
+   {
+    "id": "sa_val_001",
+    "source_id": "val_009",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G2"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_002",
+    "source_id": "val_020",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G1"
+    ],
+    "accepted_stages": [
+     "G1"
+    ]
+   },
+   {
+    "id": "sa_val_003",
+    "source_id": "val_025",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G2"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_004",
+    "source_id": "val_033",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G3b"
+    ],
+    "accepted_stages": [
+     "G4"
+    ]
+   },
+   {
+    "id": "sa_val_005",
+    "source_id": "val_036",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G1"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_006",
+    "source_id": "val_044",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G1"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_007",
+    "source_id": "val_059",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G5"
+    ],
+    "accepted_stages": [
+     "G5"
+    ]
+   },
+   {
+    "id": "sa_val_008",
+    "source_id": "val_068",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G5"
+    ],
+    "accepted_stages": [
+     "G4"
+    ]
+   },
+   {
+    "id": "sa_val_009",
+    "source_id": "val_070",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G3b"
+    ],
+    "accepted_stages": [
+     "G3b"
+    ]
+   },
+   {
+    "id": "sa_val_010",
+    "source_id": "val_086",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G1"
+    ],
+    "accepted_stages": [
+     "G1"
+    ]
+   },
+   {
+    "id": "sa_val_011",
+    "source_id": "val_110",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G5"
+    ],
+    "accepted_stages": [
+     "G4"
+    ]
+   },
+   {
+    "id": "sa_val_012",
+    "source_id": "val_130",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G2"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_013",
+    "source_id": "val_141",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G2"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_014",
+    "source_id": "val_192",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G5"
+    ],
+    "accepted_stages": [
+     "G5"
+    ]
+   },
+   {
+    "id": "sa_val_015",
+    "source_id": "val_194",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G3a"
+    ],
+    "accepted_stages": [
+     "G3a",
+     "G3b"
+    ]
+   },
+   {
+    "id": "sa_val_016",
+    "source_id": "val_199",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G2"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_017",
+    "source_id": "val_223",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": false,
+    "e2e": false,
+    "stated_stages": [
+     "G1"
+    ],
+    "accepted_stages": [
+     "G2"
+    ]
+   },
+   {
+    "id": "sa_val_018",
+    "source_id": "val_233",
+    "called": true,
+    "selected": true,
+    "grounded": true,
+    "outcome": true,
+    "reported": true,
+    "context": true,
+    "e2e": true,
+    "stated_stages": [
+     "G3a"
+    ],
+    "accepted_stages": [
+     "G3a"
+    ]
+   }
+  ],
+  "probes": [
+   {
+    "id": "sa_val_age_000",
+    "source_id": "val_008",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_001",
+    "source_id": "val_009",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_002",
+    "source_id": "val_020",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_003",
+    "source_id": "val_025",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_004",
+    "source_id": "val_033",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_005",
+    "source_id": "val_036",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_006",
+    "source_id": "val_044",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_007",
+    "source_id": "val_059",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_008",
+    "source_id": "val_068",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_009",
+    "source_id": "val_070",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_010",
+    "source_id": "val_086",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_011",
+    "source_id": "val_110",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_012",
+    "source_id": "val_130",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_013",
+    "source_id": "val_141",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_014",
+    "source_id": "val_192",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_015",
+    "source_id": "val_194",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_016",
+    "source_id": "val_199",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_017",
+    "source_id": "val_223",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   },
+   {
+    "id": "sa_val_age_018",
+    "source_id": "val_233",
+    "fabrication": false,
+    "call_fabrication": false,
+    "text_age": [],
+    "text_egfr": [],
+    "intended": true
+   }
+  ]
+ },
+ "core_egfr_overcall": {
+  "all_val": {
+   "k": 0,
+   "n": 250,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.0151
+   ]
+  },
+  "table_has_egfr": {
+   "k": 0,
+   "n": 21,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.1546
+   ]
+  },
+  "ids": []
+ }
+}

@@ -363,6 +363,23 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - F′ is evaluated on both epochs (val, P1, train-fit) under the wave-three eval config. Both epochs are compared item by item with the original F-s42 outputs (`reports/w4/refit/`). The comparison is reported, not a gate, because GPU kernels need not reproduce training bit for bit.
   - Wave-three conclusions keep citing the original F-s42 outputs. Stretch A and the frozen test list use F′, and this is disclosed with them.
   - Run as `STAGES="refit r2"` (`run_w4_round.sh`); the refit is uploaded with `UPLOAD=1`.
+- D-098: **Frozen test list (option B; replaces the Qwen3.5-centred list).** Four models, frozen and committed on the pod before any test output exists.
+  - The list:
+    - `f_refit_test`: F′ epoch 2, the final model.
+    - `c_filtered_test`: C-filtered epoch 2, the same-family control.
+    - `r0_v1_test`: Qwen3 base with prompt v1.
+    - `q35_relabel_test`: Q35-relabel epoch 2, the cross-family comparator.
+  - Each model uses the eval config its validation outputs were generated with: `eval_w4_v1.yaml`, protocol-identical to `eval_w3_v1.yaml`, for the three Qwen3 models; `eval_w4_q35_4b.yaml` for Q35.
+  - Not on the list:
+    - Q35-filter and R0-Q35-4B: their questions are answered on val and P1.
+    - The eGFR A-sft adapter: test has no annotated eGFR items, so Stretch A is reported on its own 19 + 19 set only.
+  - Pre-specified report: natural-Q5 fabrication (n = 10, underpowered), grounded tool tasks, and the five assignment metrics under v1 and v2.1. Test reuse is disclosed (wave 1 and scorer validation).
+- D-099: **No further experiments before the refactor.** Remaining work:
+  - finish round 2 (Stretch A on F′), which is running;
+  - one frozen test run (D-098);
+  - the claim-level numeric audit (CPU).
+
+  Seeds, broader uncertainty probes and new interventions are next steps. F′ supplies one same-recipe retrain: P1 0/34 again, but only 136/250 validation items identical and v2.1 macro 95.0 vs 96.7. Run-to-run variance of about 1–2 pp is therefore reported, and differences of that size are not interpreted. Documentation-only refactoring (stage A) may start now. Code, config and path refactoring (stages B–D) starts only after the test run, because protocol hashes cover every `src/clinqa/*.py` file and the configs.
 - D-100: **Stretch A revision (A-sft2), designed after round 2.**
   - **Diagnosis of A-sft** (`reports/w4/r2/`):
     - **Age fabrication** on 16/19 probes, mostly an invented 65. This is a threshold shift, not lost discrimination: call probability on probes is 0.27–0.82, while positives-vs-probes AUROC is still 0.983. Zero-shot F′ has AUROC 1.0 with probes mostly below 0.5. Causes: 40 positives against 6 age negatives, and question templates that presuppose "age and sex" in both.
@@ -384,3 +401,21 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
     A fail is reported, the final model stays F′, and there is no third revision.
   - **Disclosed.** Age-negative sources are 65% G1/G2, against 48% of positives, because the 20 unpaired negatives come from the remaining G1/G2 notes. Changing `data_views.py` and `training_data.py` changes the protocol hash for later runs, so views are rebuilt; existing `train_sha256` values are unchanged.
   - Run as `STAGES=r2b` (`run_w4_round.sh`).
+- D-101: **Stretch A A-sft2 result, final models and the test list (2026-10-03).** Evidence: `reports/w4/r2b/`.
+  - **A-sft2 epoch 2** (`w4_q3_relabel_egfr2_lr1e4_step000276`):
+    - eGFR end-to-end 17/19 (was 9/19);
+    - probe fabrication 0/19 (was 16/19);
+    - P1 1/34: one real text fabrication, "170 cm, 100 lb" on val_038;
+    - natural Q5 7/7, table-eGFR over-call 0/21.
+  - **The D-100 core criteria fail.**
+    - Grounded tool tasks are 51/55 against ≥ 52. Two of the four failures (val_008, val_071) are v2.1 reader false fails: "markedly reduced renal function" is bound to creatinine as low.
+    - Discordance with F′ is 9 against ≤ 5; it is still 7 after correcting those two items. Numeric is 41/50 against F′'s 44/50.
+    - The pre-registered result is a fail and stays a fail.
+  - **Final models (user decision).**
+    - **F′** (`w4_q3_refit_relabel_lr1e4_s42`, checkpoint-250) is the core final model: two tools, prompt v1, as pre-registered.
+    - **A-sft2 epoch 2** is the Stretch A deliverable: three tools, prompt v1e2. Its core cost is disclosed.
+  - **Test list** (D-098 plus A-sft2): `f_refit_test`, `asft2_test` (`eval_w4_q3_tools3_v1e2.yaml`, checkpoint-276; core test only, because test has no eGFR items), `c_filtered_test`, `r0_v1_test` and `q35_relabel_test`.
+    - The run is on an RTX 4090. Qwen3.5 needs flash-linear-attention, which is unverified on Ada. If its import or a two-item smoke generation fails, `q35_relabel_test` is dropped before freezing and the drop is disclosed; no adapter is substituted.
+    - F′ and A-sft2 differ in prompt and tool list, so their test comparison is between two deployable configurations, not a controlled ablation.
+  - **H2 is reported as unresolved.** v1 gives 10 vs 3 (p = 0.092), v2.1 gives 3 vs 3, and an informal reading gives about 7 vs 1. None meets the pre-registered p < 0.05, and the backbone choice (D-095) does not depend on it. The claim-level audit is a next step.
+  - **After test:** `docs/SCORER_V2_1_KNOWN_ISSUES.md` (the single scorer issue list), then the repository restructure. The restructure moves 8 superseded scripts to `scripts/legacy/` with updated references, adds config and script indexes, a concise README and `CLAUDE.md`, and archives superseded docs. The two final adapters are made public on the Hub.

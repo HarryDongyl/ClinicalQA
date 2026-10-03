@@ -220,35 +220,54 @@ Take the A-sft step numbers from `outputs/$SFT/manifest.json`. With 2,052 rows a
 
 ---
 
-## Step 6. Freeze the test list (local), then run test on RunPod (about 1 h)
+## Step 6. Freeze the test list, then run test once (RTX 4090; about 1.5 h)
 
-Freeze and commit the list **before** any test output exists:
-
-```bash
-Q=w4_q35_4b_relabel_lr1e4; F3=w4_q3_refit_relabel_lr1e4_s42; QF=w3_q35_4b_filtered_lr1e4   # F3 = F′ (D-097)
-uv run python scripts/w4_test.py freeze \
-  --entry f_relabel_test   configs/eval_w4_v1.yaml     $F3 checkpoints/$F3/checkpoint-250 \
-  --entry q35_relabel_test configs/eval_w4_q35_4b.yaml $Q  checkpoints/$Q/checkpoint-250 \
-  --entry q35_filter_test  configs/eval_w4_q35_4b.yaml $QF checkpoints/$QF/checkpoint-242 \
-  --entry r0_q35_4b_test   configs/eval_w4_q35_4b.yaml base none
-git add configs/w4/final_test.json && git commit -m "w4: freeze test list" && git push
-```
-
-`freeze` hashes the adapters, so the checkpoints must be present locally (`hf download`). Alternatively, run `freeze` on the pod and commit there. F (`f_relabel_test`) is the final model (D-095); Q35-relabel is the cross-family comparator. If Stretch A's A-sft passes its criteria without harming core, decide before freezing whether the final model is F or the eGFR adapter, and add that entry.
-
-On the pod:
+The list is fixed by D-098 and D-101: F′ (core final model), A-sft2 epoch 2 (Stretch A model), C-filtered, R0-v1 and Q35-relabel. Freeze it on the pod, because `freeze` hashes the adapters. It must be committed before any test output exists. `w4_test.py run` refuses a dirty tree, and untracked files count as dirty.
 
 ```bash
-cd /workspace/ClinicalQA && git pull
-STAGES=test bash scripts/run_w4_round.sh 2>&1 | tee outputs/w4_test.console.log
+cd /workspace/Clinical && git pull && source scripts/runpod_env.sh && export GIT_TERMINAL_PROMPT=0
+git status --short                                    # must be empty
+for r in w4_q3_refit_relabel_lr1e4_s42:250 w4_q3_relabel_egfr2_lr1e4:276 w2_filtered_lr1e4_mb1:242 w4_q35_4b_relabel_lr1e4:250; do
+  run=${r%%:*}; step=${r##*:}
+  test -f checkpoints/$run/checkpoint-$step/adapter_model.safetensors ||
+    uv run --frozen hf download Harrydongyl/clinqa-$run --include "checkpoint-$step/*" --local-dir checkpoints/$run
+  ls checkpoints/$run/checkpoint-$step/adapter_model.safetensors
+done
 ```
+
+**Qwen3.5 on the RTX 4090 (D-101).** flash-linear-attention is unverified on Ada. Check it before freezing, then delete the smoke output so that the tree stays clean:
+
+```bash
+uv run --frozen python -c 'import fla.ops.gated_delta_rule; print("fla ok")'
+uv run --frozen python -m clinqa.evaluate --config configs/eval_w4_q35_4b.yaml generate --label tmp_q35_smoke \
+  --run w4_q35_4b_relabel_lr1e4 --adapter checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250 --split val --limit 2
+rm -rf outputs/tmp_q35_smoke && git status --short    # must be empty again
+```
+
+If either command fails, or a Q35 adapter is missing, freeze without the `q35_relabel_test` line and record the drop in the commit message. Do not substitute another adapter.
+
+```bash
+uv run --frozen python scripts/w4_test.py freeze \
+  --entry f_refit_test     configs/eval_w4_v1.yaml            w4_q3_refit_relabel_lr1e4_s42 checkpoints/w4_q3_refit_relabel_lr1e4_s42/checkpoint-250 \
+  --entry asft2_test       configs/eval_w4_q3_tools3_v1e2.yaml w4_q3_relabel_egfr2_lr1e4    checkpoints/w4_q3_relabel_egfr2_lr1e4/checkpoint-276 \
+  --entry c_filtered_test  configs/eval_w4_v1.yaml            w2_filtered_lr1e4_mb1         checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242 \
+  --entry r0_v1_test       configs/eval_w4_v1.yaml            base                          none \
+  --entry q35_relabel_test configs/eval_w4_q35_4b.yaml        w4_q35_4b_relabel_lr1e4       checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250
+git add configs/w4/final_test.json && git commit -m "w4: freeze test list (D-098, D-101)" && git push
+
+tmux new -s w4test
+cd /workspace/Clinical && source scripts/runpod_env.sh && export GIT_TERMINAL_PROMPT=0
+STAGES=test bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_test.console.log
+```
+
+Test runs once. A rerun needs `scripts/w4_test.py run --rerun-reason "..."`, which is written to `RERUN.txt` and disclosed.
 
 Back on the local machine:
 
 ```bash
 git pull
 uv run python scripts/score_v2.py --runs-dir outputs --split test --out reports/w4/test \
-  --labels q35_relabel_test f_relabel_test q35_filter_test r0_q35_4b_test
+  --labels f_refit_test asft2_test c_filtered_test r0_v1_test q35_relabel_test
 ```
 
 **Report only the pre-specified metrics (option B):**
@@ -257,7 +276,7 @@ uv run python scripts/score_v2.py --runs-dir outputs --split test --out reports/
 - grounded tool tasks;
 - the five assignment metrics under v1 and v2.1.
 
-Disclose that test was used once in wave 1 and for scorer validation. Test runs once: a rerun needs `scripts/w4_test.py run --rerun-reason "..."`, and the rerun is written to `RERUN.txt` and disclosed.
+Disclose that test was used once in wave 1 and for scorer validation.
 
 ---
 
