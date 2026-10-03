@@ -8,8 +8,8 @@ from clinqa.analysis.checks import Context, q5_arg_grounding
 from clinqa.analysis.features import compute_features
 from clinqa.config import load_yaml, resolve
 from clinqa.data_io import load_split, read_jsonl, sha256_file, verify_manifest
-from clinqa.data_views import (RELABEL_POLICY, STRETCH_A_ADDITIONS, STRETCH_A_POLICY, load_relabel_review,
-                               relabeled_record, stretch_a_additions)
+from clinqa.data_views import (EGFR_VIEWS, RELABEL_POLICY, RELABEL_VIEWS, VARIANTS, egfr_view_additions,
+                               load_relabel_review, relabeled_record)
 
 
 def grounding_flags(records: list[dict[str, Any]], analysis_config: str = "configs/analysis.yaml") -> list[Any]:
@@ -27,7 +27,7 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
     """
     canonical = verify_manifest(fmt["data_config"])
     view = cfg["train_view"]
-    if view not in {"raw", "q5_filtered", "q5_relabeled", "q5_relabeled_egfr"}:
+    if view not in VARIANTS:
         raise ValueError(f"unsupported training view: {view}")
     path = resolve(fmt["train_views"][view])
     manifest_path = path.parent / "manifest.json"
@@ -49,7 +49,7 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
     flagged = {f.id for f in flags}
     relabeled: list[str] = []
     additions: list[dict[str, Any]] = []
-    if view in ("q5_relabeled", "q5_relabeled_egfr"):
+    if view in RELABEL_VIEWS:
         # Transformation-aware audit: unflagged rows unchanged; accepted Q5 rows keep id and inputs and
         # get exactly the reviewed uncertain target; rejected rows are excluded (D-075).
         review_path = manifest.get("relabel_review", "")
@@ -63,11 +63,11 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
         if manifest.get("relabeled_ids") != relabeled:
             raise ValueError("view relabel list disagrees with the review file")
         expected_count = len(original) - len(flagged) + len(relabeled)
-        if view == "q5_relabeled_egfr":
+        if view in EGFR_VIEWS:
             # Stretch A: the frozen template rows follow the relabel view verbatim (hash-checked).
-            if manifest.get("stretch_a_additions_sha256") != sha256_file(resolve(STRETCH_A_ADDITIONS)):
+            if manifest.get("stretch_a_additions_sha256") != sha256_file(resolve(EGFR_VIEWS[view][0])):
                 raise ValueError("Stretch A additions changed after the view was built; rebuild the view")
-            additions = stretch_a_additions()
+            additions = egfr_view_additions(view)
             expected = expected + additions
             expected_count += len(additions)
     else:
@@ -92,7 +92,7 @@ def audit_train_view(cfg: dict[str, Any], fmt: dict[str, Any]) -> tuple[list[dic
         "remaining_q5_ids": sorted({f.id for f in remaining}),
         "raw_control_acknowledged": bool(cfg.get("allow_ungrounded_targets", False)),
         "stretch_a_ids": [r["id"] for r in additions],
-        "policy": (STRETCH_A_POLICY if view == "q5_relabeled_egfr" else RELABEL_POLICY if view == "q5_relabeled" else
+        "policy": (EGFR_VIEWS[view][3] if view in EGFR_VIEWS else RELABEL_POLICY if view == "q5_relabeled" else
                    "heuristic_Q5_quarantine_no_relabeling" if excluded else "raw_control_unchanged"),
         "relabeled_ids": relabeled,
         "clinical_adjudication": bool(manifest.get("clinical_adjudication", False)), "val_test_modified": False,

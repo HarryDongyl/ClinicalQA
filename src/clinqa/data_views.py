@@ -7,6 +7,8 @@ notes, tables and questions are never changed; rejected candidates stay excluded
 q5_relabeled_egfr (Stretch A, docs/STRETCH_A_PLAN.md section 5): q5_relabeled followed by the 52 frozen,
 template-generated calculate_egfr rows from data/stretch_a/train_additions.jsonl (hash-checked against
 data/stretch_a/manifest.json). Canonical rows are untouched; the additions carry new sa_train_* IDs.
+q5_relabeled_egfr2 (Stretch A revision, D-100): the same construction with data/stretch_a_v2/train_additions.jsonl
+(sa2_train_* IDs): 120 stage-balanced positives, 60 age-removed (40 paired) and 20 sex-removed negatives.
 """
 
 from __future__ import annotations
@@ -30,10 +32,23 @@ RELABEL_POLICY = "reviewed_Q5_relabel_to_uncertain_inputs_unchanged"
 STRETCH_A_ADDITIONS = "data/stretch_a/train_additions.jsonl"
 STRETCH_A_MANIFEST = "data/stretch_a/manifest.json"
 STRETCH_A_POLICY = RELABEL_POLICY + "+stretch_a_egfr_template_rows"
-VARIANTS = ("raw", "q5_filtered", "q5_relabeled", "q5_relabeled_egfr")
+STRETCH_A2_ADDITIONS = "data/stretch_a_v2/train_additions.jsonl"
+STRETCH_A2_MANIFEST = "data/stretch_a_v2/manifest.json"
+STRETCH_A2_POLICY = RELABEL_POLICY + "+stretch_a_v2_egfr_template_rows"
+# eGFR views: variant -> (additions file, manifest, required ID prefix, policy)
+EGFR_VIEWS = {"q5_relabeled_egfr": (STRETCH_A_ADDITIONS, STRETCH_A_MANIFEST, "sa_train_", STRETCH_A_POLICY),
+              "q5_relabeled_egfr2": (STRETCH_A2_ADDITIONS, STRETCH_A2_MANIFEST, "sa2_train_", STRETCH_A2_POLICY)}
+RELABEL_VIEWS = ("q5_relabeled", *EGFR_VIEWS)
+VARIANTS = ("raw", "q5_filtered", *RELABEL_VIEWS)
 
 
-def stretch_a_additions(path: str = STRETCH_A_ADDITIONS, manifest: str = STRETCH_A_MANIFEST) -> list[dict[str, Any]]:
+def egfr_view_additions(variant: str) -> list[dict[str, Any]]:
+    path, manifest, prefix, _ = EGFR_VIEWS[variant]
+    return stretch_a_additions(path, manifest, prefix)
+
+
+def stretch_a_additions(path: str = STRETCH_A_ADDITIONS, manifest: str = STRETCH_A_MANIFEST,
+                        prefix: str = "sa_train_") -> list[dict[str, Any]]:
     """The frozen Stretch A train rows in canonical record form (metadata stripped; no tool_calls key when none)."""
     expected = json.loads(resolve(manifest).read_text(encoding="utf-8"))["sha256"][Path(path).name]
     if sha256_file(resolve(path)) != expected:
@@ -46,8 +61,8 @@ def stretch_a_additions(path: str = STRETCH_A_ADDITIONS, manifest: str = STRETCH
         rec = {k: r[k] for k in ("id", "note", "table", "question", "answer", "answer_type")}
         if r.get("tool_calls"):
             rec["tool_calls"] = r["tool_calls"]
-        if not rec["id"].startswith("sa_train_"):
-            raise ValueError(f"{rec['id']}: Stretch A rows must use sa_train_* IDs")
+        if not rec["id"].startswith(prefix):
+            raise ValueError(f"{rec['id']}: Stretch A rows in {path} must use {prefix}* IDs")
         out.append(rec)
     return out
 
@@ -90,13 +105,13 @@ def build_view(variant: str, output_dir: str | Path = "data/processed",
         reasons.setdefault(flag.id, []).append(flag.detail)
     review: dict[str, dict[str, Any]] = {}
     additions: list[dict[str, Any]] = []
-    if variant in ("q5_relabeled", "q5_relabeled_egfr"):
+    if variant in RELABEL_VIEWS:
         review = load_relabel_review(set(reasons), review_path)
         excluded = {i for i, d in review.items() if not d["accepted"]}
         kept = [relabeled_record(r, review[r["id"]]) if r["id"] in review and r["id"] not in excluded else r
                 for r in records if r["id"] not in excluded]
-        if variant == "q5_relabeled_egfr":
-            additions = stretch_a_additions()
+        if variant in EGFR_VIEWS:
+            additions = egfr_view_additions(variant)
             if {r["id"] for r in additions} & {r["id"] for r in kept}:
                 raise ValueError("Stretch A IDs collide with canonical train IDs")
             kept = kept + additions
@@ -131,8 +146,8 @@ def build_view(variant: str, output_dir: str | Path = "data/processed",
     summary = {
         "variant": variant, "format": "raw_records_not_sft_conversations",
         "policy": {"raw": "keep_all", "q5_filtered": "exclude_train_Q5_candidates_only",
-                   "q5_relabeled": RELABEL_POLICY, "q5_relabeled_egfr": STRETCH_A_POLICY}[variant],
-        "selection_uses_splits": ["train"], "review_complete": variant in ("q5_relabeled", "q5_relabeled_egfr"),
+                   "q5_relabeled": RELABEL_POLICY, **{v: e[3] for v, e in EGFR_VIEWS.items()}}[variant],
+        "selection_uses_splits": ["train"], "review_complete": variant in RELABEL_VIEWS,
         "manual_review_complete": bool(review) and all(d.get("review_type") == "human_clinical_adjudication" for d in review.values()),
         "clinical_adjudication": bool(review) and all(d.get("review_type") == "human_clinical_adjudication" for d in review.values()),
         "review_types": sorted({d.get("review_type", "unspecified") for d in review.values()}),
@@ -146,9 +161,10 @@ def build_view(variant: str, output_dir: str | Path = "data/processed",
         },
         **({"relabel_review": review_path, "relabel_review_sha256": sha256_file(resolve(review_path)),
             "relabeled_ids": [r["id"] for r in records if r["id"] in review and r["id"] not in excluded]}
-           if variant in ("q5_relabeled", "q5_relabeled_egfr") else {}),
-        **({"stretch_a_additions": STRETCH_A_ADDITIONS, "stretch_a_additions_sha256": sha256_file(resolve(STRETCH_A_ADDITIONS)),
-            "stretch_a_ids": [r["id"] for r in additions]} if variant == "q5_relabeled_egfr" else {}),
+           if variant in RELABEL_VIEWS else {}),
+        **({"stretch_a_additions": EGFR_VIEWS[variant][0],
+            "stretch_a_additions_sha256": sha256_file(resolve(EGFR_VIEWS[variant][0])),
+            "stretch_a_ids": [r["id"] for r in additions]} if variant in EGFR_VIEWS else {}),
         "before": {"count": len(records), "answer_types": dict(sorted(Counter(r["answer_type"] for r in records).items()))},
         "after": {"count": len(kept), "answer_types": dict(sorted(Counter(r["answer_type"] for r in kept).items()))},
         "excluded_ids": [r["id"] for r in records if r["id"] in excluded],

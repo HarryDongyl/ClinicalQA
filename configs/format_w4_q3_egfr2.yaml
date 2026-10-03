@@ -1,0 +1,13 @@
+# Stretch A revision (D-100), Qwen3-4B A-sft2 training view: three tools, prompt v1e2 (v1e + the KDIGO category table),
+# train view q5_relabeled_egfr2 (2,000 relabel rows + 200 stage-balanced calculate_egfr rows from data/stretch_a_v2/).
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1e2.txt
+max_length: 2048
+output_dir: data/sft_w4_q3_egfr2
+train_views:
+  q5_relabeled_egfr2: data/processed/q5_relabeled_egfr2/train.jsonl
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q3_egfr2.json

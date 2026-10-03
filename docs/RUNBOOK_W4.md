@@ -185,6 +185,17 @@ The backbone comes from `stretch_a_backbone` in `configs/w4/gate_q35.json` (`q3`
 1. the three zero-shot arms (A-zs-v1, A-zs-v1e, A-zs-base), each on core val and both eGFR sets;
 2. A-sft training, then evaluation on val, P1 and both eGFR sets.
 
+## Step 4b. RunPod RTX 4090, Stretch A revision A-sft2 (D-100; about 1.5 h)
+
+```bash
+cd /workspace/Clinical && git pull && source scripts/runpod_env.sh && export GIT_TERMINAL_PROMPT=0
+git status --short                     # must be clean
+tmux new -s w4r2b
+STAGES=r2b UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_r2b.console.log
+```
+
+It rebuilds the views (including `q5_relabeled_egfr2`), audits the v1e2 masks (`reports/w4/mask_audit_q3_egfr2.json` must pass), trains `w4_q3_relabel_egfr2_lr1e4` (2,200 rows, about 275 steps) and evaluates both epochs on val, P1 and both eGFR sets. Score locally as in step 5, with label `w4_q3_relabel_egfr2_lr1e4_step<ep2>`; criteria are in D-100.
+
 ## Step 5. Local Stretch A scoring (CPU)
 
 ```bash

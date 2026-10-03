@@ -1,0 +1,24 @@
+# Stretch A revision (D-100), Qwen3-4B: three tools, prompt v1e2; evaluates A-sft2 on core val, P1 and both eGFR sets.
+format_config: configs/format_w4_q3_tools3_v1e2.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2  # wave-three generation batch for every matched arm (D-076); wave-two outputs (batch 4) are not reused
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3-4B-Instruct-2507
+  revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  tokenizer: Qwen/Qwen3-4B-Instruct-2507
+  tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base: {adapter: null}
+  w4_q3_relabel_egfr2_lr1e4: {adapter: checkpoints/w4_q3_relabel_egfr2_lr1e4/final}  # A-sft2 (D-100)
+bootstrap:
+  n: 2000
+  seed: 42

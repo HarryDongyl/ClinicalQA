@@ -1,0 +1,12 @@
+# Stretch A revision (D-100), Qwen3-4B: three tools, prompt v1e2. Evaluation formatting for A-sft2; no zero-shot v1e2
+# arm is run (user decision), so A-sft2 vs the zero-shot arms also differs in prompt (v1e2 vs v1e).
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3-4B-Instruct-2507
+tokenizer_revision: cdbee75f17c01a7cc42f958dc650907174af0554
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1e2.txt
+max_length: 2048
+output_dir: data/sft_w4_q3_tools3_v1e2
+train_views: {}
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q3_tools3_v1e2.json

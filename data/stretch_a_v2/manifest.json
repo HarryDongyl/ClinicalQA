@@ -1,0 +1,82 @@
+{
+ "seed": 42,
+ "formula": "CKD-EPI 2021 race-free, integer half-up",
+ "decision": "D-100",
+ "counts": {
+  "positive": 120,
+  "negative_age": 60,
+  "negative_sex": 20
+ },
+ "eligible_pool": {
+  "train": 164
+ },
+ "checks": {
+  "independent_egfr_mismatches": [],
+  "residue_flagged": [],
+  "duplicate_ids": 0,
+  "distinct_sources": 160,
+  "positive_stages": {
+   "G1": 29,
+   "G2": 29,
+   "G3b": 15,
+   "G5": 11,
+   "G4": 23,
+   "G3a": 13
+  },
+  "age_negative_source_stages": {
+   "G1": 22,
+   "G2": 17,
+   "G3a": 4,
+   "G3b": 5,
+   "G4": 8,
+   "G5": 4
+  },
+  "paired_age_negatives": 40,
+  "questions_by_kind": {
+   "positive": {
+    "0": 15,
+    "1": 15,
+    "2": 15,
+    "3": 15,
+    "4": 15,
+    "5": 15,
+    "6": 15,
+    "7": 15
+   },
+   "negative_age": {
+    "0": 8,
+    "1": 8,
+    "2": 8,
+    "3": 8,
+    "4": 7,
+    "5": 7,
+    "6": 7,
+    "7": 7
+   },
+   "negative_sex": {
+    "0": 3,
+    "1": 3,
+    "2": 3,
+    "3": 3,
+    "4": 2,
+    "5": 2,
+    "6": 2,
+    "7": 2
+   }
+  },
+  "soft_age_mentions": 9
+ },
+ "questions": [
+  "Estimate the patient's eGFR from the available serum creatinine, age and sex, and state the CKD stage.",
+  "Using the documented creatinine, age and sex, what is this patient's estimated GFR and corresponding CKD stage?",
+  "What is the patient's estimated glomerular filtration rate (CKD-EPI) based on their creatinine, age and sex?",
+  "Calculate this patient's eGFR from the creatinine in the lab table and the patient's age and sex.",
+  "What is this patient's estimated GFR, and which KDIGO category does it fall in?",
+  "Estimate this patient's kidney function with the CKD-EPI equation.",
+  "What eGFR does this patient's renal function correspond to, and what is the KDIGO GFR category?",
+  "Assess this patient's estimated glomerular filtration rate and its KDIGO category."
+ ],
+ "sha256": {
+  "train_additions.jsonl": "4d6efe3f6d9130c2ea57e50fc3fef49234f51ec9f75060160a8f6615d31e6da0"
+ }
+}

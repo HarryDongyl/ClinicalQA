@@ -1,0 +1,9 @@
+# Stretch A revision A-sft2 on Qwen3-4B (D-100): the F-s42 recipe from base with three tools, prompt v1e2 and the
+# q5_relabeled_egfr2 view (2,200 rows: 2,000 relabel + 120 stage-balanced positives, 60 age and 20 sex negatives).
+extends: configs/train/w3_relabel_lr1e4_s42.yaml
+run_id: w4_q3_relabel_egfr2_lr1e4
+format_config: configs/format_w4_q3_egfr2.yaml
+train_view: q5_relabeled_egfr2
+expected_train_examples: 2200
+checkpoint_dir: checkpoints/w4_q3_relabel_egfr2_lr1e4
+output_dir: outputs/w4_q3_relabel_egfr2_lr1e4

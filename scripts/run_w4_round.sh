@@ -13,6 +13,9 @@
 #          Qwen3.5 (pass) or Qwen3 (fail -> F-s42).
 #          Mask audits; zero-shot arms A-zs-v1 / A-zs-v1e on the relabel adapter and A-zs-base; A-sft training and
 #          evaluation on val, P1 and both eGFR sets
+#   r2b    Stretch A revision (D-100) on Qwen3: A-sft2 from base on q5_relabeled_egfr2 (200 stage-balanced eGFR rows,
+#          60 age / 20 sex negatives, 8 question templates) with prompt v1e2 (v1e + KDIGO table). Epoch two is the
+#          primary endpoint; both epochs run on val, P1 and both frozen eGFR sets. No zero-shot v1e2 arm.
 #   test   scripts/w4_test.py run (configs/w4/final_test.json must be committed)
 # Results are committed and pushed after every step; re-running resumes. Scoring runs later on CPU (make w4-score).
 set -euo pipefail
@@ -56,6 +59,7 @@ fetch() {  # run step: download one checkpoint from the private Hub if absent
 make views
 $PY -m clinqa.data_views --variant q5_relabeled
 $PY -m clinqa.data_views --variant q5_relabeled_egfr
+$PY -m clinqa.data_views --variant q5_relabeled_egfr2
 $PY -c 'import fla.ops.gated_delta_rule' 2>/dev/null && echo "flash-linear-attention kernels available" ||
   { echo "flash-linear-attention not importable; wave four requires the same kernel as A-Q35-filter (make setup)"; exit 1; }
 
@@ -135,6 +139,23 @@ print(g["decision"], g.get("stretch_a_backbone") or ("q35_4b" if g["decision"] =
   push "Stretch A A-sft ($fam)"
 fi
 
+if [[ " $STAGES " == *" r2b "* ]]; then
+  # 5b. Stretch A revision (D-100): A-sft2 on Qwen3 from base, alone on the GPU; pre-registered criteria in D-100.
+  sft2=w4_q3_relabel_egfr2_lr1e4; ev2=configs/eval_w4_q3_tools3_v1e2.yaml
+  $PY -m clinqa.formatting --config configs/format_w4_q3_tools3_v1e2.yaml
+  $PY scripts/w3_prep.py audit --format configs/format_w4_q3_egfr2.yaml --view q5_relabeled_egfr2 \
+    --out reports/w4/mask_audit_q3_egfr2.json
+  $PY -m clinqa.formatting --config configs/format_w4_q3_egfr2.yaml
+  train "$sft2"
+  $PY scripts/w3_epochs.py generate --run "$sft2" --config "$ev2" --p1-all-epochs --records-files $EGFR
+  ck1=$($PY scripts/w3_epochs.py ckpt --run "$sft2" --epoch 1)  # epoch one on the eGFR sets: diagnostic only
+  step1=$(basename "$ck1" | sed 's/checkpoint-//')
+  for f in $EGFR; do
+    gen "$ev2" "${sft2}_step$(printf '%06d' "$step1")" --run "$sft2" --adapter "$ck1" --split val --records-file "$f"
+  done
+  push "Stretch A A-sft2 (q3, D-100)"
+fi
+
 if [[ " $STAGES " == *" test "* ]]; then
   # 6. One confirmatory test run from the committed freeze (option B).
   $PY scripts/w4_test.py run
@@ -142,7 +163,7 @@ if [[ " $STAGES " == *" test "* ]]; then
 fi
 
 if test "${UPLOAD:-0}" = 1; then
-  for run in w4_q35_4b_relabel_lr1e4 "$REFIT" w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4; do
+  for run in w4_q35_4b_relabel_lr1e4 "$REFIT" w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4 w4_q3_relabel_egfr2_lr1e4; do
     test -d "checkpoints/$run/final" || continue
     uv run --frozen hf upload "$HF_USER/clinqa-$run" "checkpoints/$run" --repo-type model --private \
       --exclude "*/optimizer.pt" || echo "WARNING: upload failed for $run"

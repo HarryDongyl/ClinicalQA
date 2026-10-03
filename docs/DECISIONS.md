@@ -363,3 +363,24 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - F′ is evaluated on both epochs (val, P1, train-fit) under the wave-three eval config. Both epochs are compared item by item with the original F-s42 outputs (`reports/w4/refit/`). The comparison is reported, not a gate, because GPU kernels need not reproduce training bit for bit.
   - Wave-three conclusions keep citing the original F-s42 outputs. Stretch A and the frozen test list use F′, and this is disclosed with them.
   - Run as `STAGES="refit r2"` (`run_w4_round.sh`); the refit is uploaded with `UPLOAD=1`.
+- D-100: **Stretch A revision (A-sft2), designed after round 2.**
+  - **Diagnosis of A-sft** (`reports/w4/r2/`):
+    - **Age fabrication** on 16/19 probes, mostly an invented 65. This is a threshold shift, not lost discrimination: call probability on probes is 0.27–0.82, while positives-vs-probes AUROC is still 0.983. Zero-shot F′ has AUROC 1.0 with probes mostly below 0.5. Causes: 40 positives against 6 age negatives, and question templates that presuppose "age and sex" in both.
+    - **KDIGO mapping not learned.** Errors are ±1 category in both directions. G3a and G5 had 3 and 1 training examples, against about 410 BMI calls for 4 WHO classes.
+    - **Core regression** 54 → 51 of 55. Three of the four failures also occur in F or F′ (val_029, val_105, val_233); only val_052 (imperial drift) is new. F′ vs A-sft discordance (5) equals F vs F′ (5).
+  - **Changes**, user decisions after grill-me:
+    1. Prompt v1e2 = v1e plus the KDIGO category table. No zero-shot v1e2 arm, so A-sft2 vs the zero-shot arms also differs in prompt.
+    2. Stage-balanced data: `data/stretch_a_v2/`, 200 rows from 160 of the 164 eligible train notes. 120 positives (all G3a/G3b/G4/G5 plus 29 G1 and 29 G2). 60 age negatives, 40 of them paired with positives and stratified by category. 20 sex negatives.
+    3. Four neutral question templates added to the four original ones, round-robin within each kind.
+    4. Positive answers state the KDIGO range before the category. Negative answers state what is documented, with values, and what is missing.
+    5. Training from base with the F recipe (2,200 rows), as before. Epoch 2 is the primary endpoint.
+  - **Evaluation.** The same frozen 19 + 19 sets. They were inspected during the diagnosis.
+  - **Pre-registered criteria** (revised after the A-sft failure; the original criteria and result stay reported):
+    - eGFR end-to-end ≥ 15/19 and probe fabrication ≤ 2/19, both unchanged;
+    - P1 ≤ 1/34 and table-eGFR over-call ≤ 1/21, both unchanged;
+    - core grounded tool ≥ 52/55, with discordance vs F′ ≤ 5 (was ≥ 53/55; relaxed by one item on the measured retrain variance: F ep1 53, F′ 54, F′ ep1 55);
+    - natural Q5 ≥ 6/7 (new).
+
+    A fail is reported, the final model stays F′, and there is no third revision.
+  - **Disclosed.** Age-negative sources are 65% G1/G2, against 48% of positives, because the 20 unpaired negatives come from the remaining G1/G2 notes. Changing `data_views.py` and `training_data.py` changes the protocol hash for later runs, so views are rebuilt; existing `train_sha256` values are unchanged.
+  - Run as `STAGES=r2b` (`run_w4_round.sh`).
