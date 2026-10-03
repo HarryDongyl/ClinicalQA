@@ -16,7 +16,10 @@
 #   r2b    Stretch A revision (D-100) on Qwen3: A-sft2 from base on q5_relabeled_egfr2 (200 stage-balanced eGFR rows,
 #          60 age / 20 sex negatives, 8 question templates) with prompt v1e2 (v1e + KDIGO table). Epoch two is the
 #          primary endpoint; both epochs run on val, P1 and both frozen eGFR sets. No zero-shot v1e2 arm.
-#   test   scripts/w4_test.py run (configs/w4/final_test.json must be committed)
+#   r2c    Stretch A on Qwen3.5 (D-105): zero-shot v1e2 on the Qwen3.5 relabel adapter (core val + both eGFR sets),
+#          then A-sft2-Q35 from base on q5_relabeled_egfr2 with prompt v1e2, both epochs on val, P1 and both eGFR sets.
+#          Requires flash-linear-attention like r1 (same kernel as the Qwen3.5 relabel training).
+#   test   scripts/w4_test.py run (TEST_LIST=configs/w4/<list>.json selects a second frozen list; default final_test.json) (configs/w4/final_test.json must be committed)
 # Results are committed and pushed after every step; re-running resumes. Scoring runs later on CPU (make w4-score).
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -61,8 +64,8 @@ $PY -m clinqa.data_views --variant q5_relabeled
 $PY -m clinqa.data_views --variant q5_relabeled_egfr
 $PY -m clinqa.data_views --variant q5_relabeled_egfr2
 if $PY -c 'import fla.ops.gated_delta_rule' 2>/dev/null; then echo "flash-linear-attention kernels available"
-elif [[ " $STAGES " == *" r1 "* ]]; then
-  echo "flash-linear-attention not importable; r1 (Qwen3.5) requires the same kernel as A-Q35-filter (make setup)"; exit 1
+elif [[ " $STAGES " == *" r1 "* || " $STAGES " == *" r2c "* ]]; then
+  echo "flash-linear-attention not importable; r1/r2c (Qwen3.5) require the same kernel as A-Q35-filter (make setup)"; exit 1
 else
   echo "WARNING: flash-linear-attention not importable; Qwen3 stages are unaffected, Qwen3.5 would use the torch fallback"
 fi
@@ -160,14 +163,37 @@ if [[ " $STAGES " == *" r2b "* ]]; then
   push "Stretch A A-sft2 (q3, D-100)"
 fi
 
+if [[ " $STAGES " == *" r2c "* ]]; then
+  # 5c. Stretch A on Qwen3.5 (D-105). Alone on the GPU; criteria are pre-registered in D-105.
+  q=w4_q35_4b_relabel_lr1e4; sftq=w4_q35_4b_relabel_egfr2_lr1e4; evq=configs/eval_w4_q35_4b_tools3_v1e2.yaml
+  fetch "$q" 250
+  $PY -m clinqa.formatting --config configs/format_w4_q35_4b_tools3_v1e2.yaml
+  $PY scripts/w3_prep.py audit --format configs/format_w4_q35_4b_egfr2.yaml --view q5_relabeled_egfr2 \
+    --out reports/w4/mask_audit_q35_4b_egfr2.json
+  $PY -m clinqa.formatting --config configs/format_w4_q35_4b_egfr2.yaml
+  qck=$($PY scripts/w3_epochs.py ckpt --run "$q" --epoch 2)
+  gen "$evq" w4_sa_zs_v1e2_q35_4b --run "$q" --adapter "$qck" --split val
+  for f in $EGFR; do gen "$evq" w4_sa_zs_v1e2_q35_4b --run "$q" --adapter "$qck" --split val --records-file "$f"; done
+  push "Stretch A zero-shot v1e2 (q35_4b, D-105)"
+  train "$sftq"
+  $PY scripts/w3_epochs.py generate --run "$sftq" --config "$evq" --p1-all-epochs --records-files $EGFR
+  qck1=$($PY scripts/w3_epochs.py ckpt --run "$sftq" --epoch 1)  # epoch one on the eGFR sets: diagnostic only
+  qstep1=$(basename "$qck1" | sed 's/checkpoint-//')
+  for f in $EGFR; do
+    gen "$evq" "${sftq}_step$(printf '%06d' "$qstep1")" --run "$sftq" --adapter "$qck1" --split val --records-file "$f"
+  done
+  push "Stretch A A-sft2 (q35_4b, D-105)"
+fi
+
 if [[ " $STAGES " == *" test "* ]]; then
   # 6. One confirmatory test run from the committed freeze (option B).
-  $PY scripts/w4_test.py run
+  $PY scripts/w4_test.py run ${TEST_LIST:+--frozen "$TEST_LIST"}
   push "test (frozen list)"
 fi
 
 if test "${UPLOAD:-0}" = 1; then
-  for run in w4_q35_4b_relabel_lr1e4 "$REFIT" w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4 w4_q3_relabel_egfr2_lr1e4; do
+  for run in w4_q35_4b_relabel_lr1e4 "$REFIT" w4_q35_4b_relabel_egfr_lr1e4 w4_q3_relabel_egfr_lr1e4 w4_q3_relabel_egfr2_lr1e4 \
+             w4_q35_4b_relabel_egfr2_lr1e4; do
     test -d "checkpoints/$run/final" || continue
     uv run --frozen hf upload "$HF_USER/clinqa-$run" "checkpoints/$run" --repo-type model --private \
       --exclude "*/optimizer.pt" || echo "WARNING: upload failed for $run"

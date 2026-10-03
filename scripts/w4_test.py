@@ -25,7 +25,8 @@ sys.path.insert(0, str(ROOT / "src"))
 from clinqa.config import load_yaml, resolve  # noqa: E402
 from clinqa.run_info import adapter_sha256, git_state, sha256_file  # noqa: E402
 
-FROZEN = ROOT / "configs" / "w4" / "final_test.json"
+DEFAULT_FROZEN = ROOT / "configs" / "w4" / "final_test.json"
+FROZEN = DEFAULT_FROZEN  # --frozen selects another list (D-105: a second, disclosed test use); never overwritten
 REPORT = ["natural Q5 fabrication on test (n = 10; underpowered, disclosed)", "grounded tool tasks on test",
           "five assignment metrics on test under legacy v1 and diagnostic v2.1"]
 
@@ -91,9 +92,16 @@ def main() -> int:
     sub = p.add_subparsers(dest="cmd", required=True)
     f = sub.add_parser("freeze")
     f.add_argument("--entry", nargs=4, action="append", required=True, metavar=("LABEL", "EVAL_CONFIG", "RUN", "ADAPTER"))
+    f.add_argument("--frozen", default=None, help="list path (default configs/w4/final_test.json)")
     r = sub.add_parser("run")
     r.add_argument("--rerun-reason", default=None)
+    r.add_argument("--frozen", default=None, help="list path (default configs/w4/final_test.json)")
     a = p.parse_args()
+    global FROZEN
+    if a.frozen:
+        FROZEN = (ROOT / a.frozen).resolve()
+        if FROZEN.parent != DEFAULT_FROZEN.parent or FROZEN.suffix != ".json":
+            raise SystemExit("--frozen must be a .json file in configs/w4/")
     if a.cmd == "freeze":
         cmd_freeze(a)
         return 0

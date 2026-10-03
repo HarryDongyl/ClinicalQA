@@ -445,3 +445,26 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - The "1–2 pp retrain variance" wording in D-099 and D-100 rests on one same-recipe refit (114/250 outputs and 1.7 pp of macro differ). It is an observation, not a variance estimate.
   - The Qwen3.5 run records the Transformers linear-attention implementation; flash-linear-attention use is not verified. Inference `peak_vram_gb` is not reset between sequential arms and is not compared.
   - `reports/REPORT.md`, `reports/w4/test/TEST_REPORT.md`, `docs/STRETCH_A.md`, `docs/PROJECT_WALKTHROUGH.md` and `docs/SCORER_V2_1_KNOWN_ISSUES.md` carry the corrected statements. The report now ends with its key findings, as the assignment requires.
+
+## Final backbone switch to Qwen3.5 (2026-10-03)
+
+- D-105: **The final models move to Qwen3.5-4B (user decision).** This supersedes the final-model choice of D-101; F′ and the Qwen3 A-sft2 stay reported as results.
+  - **Core final model: Qwen3.5 relabel epoch 2** (`w4_q35_4b_relabel_lr1e4`, checkpoint 250, adapter sha256 `b28d7cc2…`). It is not retrained. Its validation, P1 and frozen-test results already exist.
+  - **Rationale, as stated by the user:** manual reading of validation outputs. On numeric, an informal item reading gives Qwen3.5 about 7 correct-only items against 1 for F, and v1 gives 10 vs 3; grounding and tool metrics are tied.
+  - **Disclosed:**
+    - H2's pre-registered criterion was not met (v2.1 3 vs 3; v1 p = 0.092).
+    - The decision was taken after the frozen test results were available (D-102), so an influence of test cannot be excluded, even though the stated rationale rests on validation.
+    - This reverses the pre-registered final choice (D-098, D-101) and the cost-based backbone choice (D-095).
+  - **Stretch A on Qwen3.5: A-sft2-Q35** (`w4_q35_4b_relabel_egfr2_lr1e4`). It uses the A-sft2 data (`q5_relabeled_egfr2`, 2,200 rows) and prompt v1e2 with the Qwen3.5 relabel recipe, trained from base. Only the backbone differs from the Qwen3 A-sft2.
+    - Format `max_length` is 2,560, because Qwen3.5 renders about 10% longer than Qwen3. Nothing is truncated in either case; the limit is a fail-loud guard.
+    - A **zero-shot v1e2 arm** on the Qwen3.5 relabel adapter is run first, as the comparator missing in D-100.
+  - **Pre-registered criteria for A-sft2-Q35, fixed before any output**, epoch 2 primary:
+    - eGFR end-to-end ≥ 15/19 and age-probe fabrication ≤ 2/19;
+    - P1 fabrication ≤ 1/34; table-eGFR over-call ≤ 1/21; natural Q5 ≥ 6/7;
+    - core grounded tool ≥ 52/55, and discordance with the Qwen3.5 relabel epoch 2 ≤ 5 over all 250 validation items.
+
+    If the eGFR criteria are met, A-sft2-Q35 is the Stretch A deliverable, with any core-gate failure reported. If they are not met, the Stretch A deliverable stays the Qwen3 A-sft2. No further revision is run.
+  - **Second test use, disclosed.** After training, `asft2_q35_test` alone is frozen in a separate list (`configs/w4/final_test_q35.json`, so the committed `final_test.json` is untouched) and run once.
+    - It measures core retention only, because test has no eGFR items.
+    - It is the second use of test after its results were seen. It is reported as such and never used for selection. The Qwen3.5 relabel core model already has its frozen test result (D-102).
+  - **Hardware.** An A100, as for the Qwen3.5 relabel training; the earlier test run was on an RTX 4090. The difference is disclosed.

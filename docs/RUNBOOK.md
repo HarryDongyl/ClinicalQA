@@ -45,6 +45,33 @@ uv run --frozen python -m clinqa.evaluate --config configs/eval_w3_v1.yaml gener
   --run w4_q3_refit_relabel_lr1e4_s42 --adapter checkpoints/w4_q3_refit_relabel_lr1e4_s42/checkpoint-250 --split val
 ```
 
+### Qwen3.5 final models (D-105)
+
+The core model, Qwen3.5 relabel epoch 2, already exists and is evaluated. Stretch A on Qwen3.5 runs in one A100 session:
+
+```bash
+STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_r2c.console.log
+```
+
+This runs, in order:
+
+1. a zero-shot v1e2 arm on the Qwen3.5 relabel adapter;
+2. the v1e2 mask audit (`reports/w4/mask_audit_q35_4b_egfr2.json` must pass);
+3. A-sft2-Q35 training (2,200 rows, 276 steps);
+4. both epochs on val, P1 and the eGFR sets.
+
+flash-linear-attention must import. Then freeze and run the second, disclosed test use:
+
+```bash
+uv run --frozen python scripts/w4_test.py freeze --frozen configs/w4/final_test_q35.json \
+  --entry asft2_q35_test configs/eval_w4_q35_4b_tools3_v1e2.yaml w4_q35_4b_relabel_egfr2_lr1e4 \
+          checkpoints/w4_q35_4b_relabel_egfr2_lr1e4/checkpoint-276
+git add configs/w4/final_test_q35.json && git commit -m "w4: freeze second test list (D-105)" && git push
+STAGES=test TEST_LIST=configs/w4/final_test_q35.json bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_test_q35.console.log
+```
+
+Take the epoch-2 step from `outputs/w4_q35_4b_relabel_egfr2_lr1e4/manifest.json`; 276 is expected for 2,200 rows.
+
 ## 3. Score locally (CPU)
 
 ```bash

@@ -1,0 +1,10 @@
+# A-sft2-Q35 (D-105): the Qwen3.5-4B relabel recipe (w4_q35_4b_relabel_lr1e4: LoRA r16/alpha32/0.05 on attention and
+# Gated DeltaNet projections, NF4, LR 1e-4, 2 epochs, mb1/ga16, seed 42), trained from base on the A-sft2 data
+# (q5_relabeled_egfr2, 2,200 rows) with prompt v1e2. Same data and prompt as the Qwen3 A-sft2; only the backbone differs.
+extends: configs/train/w4_q35_4b_relabel_lr1e4.yaml
+run_id: w4_q35_4b_relabel_egfr2_lr1e4
+format_config: configs/format_w4_q35_4b_egfr2.yaml
+train_view: q5_relabeled_egfr2
+expected_train_examples: 2200
+checkpoint_dir: checkpoints/w4_q35_4b_relabel_egfr2_lr1e4
+output_dir: outputs/w4_q35_4b_relabel_egfr2_lr1e4

@@ -1,0 +1,17 @@
+# Stretch A A-sft2 on Qwen3.5-4B (D-105): three tools, prompt v1e2, train view q5_relabeled_egfr2 (2,000 relabel rows +
+# 200 stage-balanced calculate_egfr rows), i.e. the Qwen3 A-sft2 data on the Qwen3.5 template (XML calls, no thinking).
+# max_length 2560: Qwen3.5 renders about 10% longer than Qwen3 (A-sft2 Qwen3 max 1,879 tokens). Nothing is truncated in
+# either case; the limit is a fail-loud guard only, so raising it changes no training example.
+data_config: configs/data.yaml
+tokenizer: Qwen/Qwen3.5-4B
+tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+chat_template_kwargs: {enable_thinking: false}
+tool_call_format: xml
+tools: [unit_convert, calculate_bmi, calculate_egfr]
+system_prompt: configs/prompts/system_v1e2.txt
+max_length: 2560
+output_dir: data/sft_w4_q35_4b_egfr2
+train_views:
+  q5_relabeled_egfr2: data/processed/q5_relabeled_egfr2/train.jsonl
+eval_splits: [val]
+length_report: reports/w4/token_lengths_q35_4b_egfr2.json

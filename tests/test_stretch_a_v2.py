@@ -90,3 +90,27 @@ def test_prompt_v1e2_only_adds_the_kdigo_table():
     v1e2 = (PROJECT_ROOT / "configs" / "prompts" / "system_v1e2.txt").read_text(encoding="utf-8")
     line = " KDIGO GFR categories (mL/min/1.73m²): G1 ≥90, G2 60–89, G3a 45–59, G3b 30–44, G4 15–29, G5 <15."
     assert v1e2.replace(line, "") == v1e
+
+
+def test_qwen35_asft2_config_differs_from_the_relabel_recipe_only_in_data_and_prompt():
+    from clinqa.config import load_run_config, load_yaml
+    from clinqa.training_data import audit_train_view
+    base = load_run_config("configs/train/w4_q35_4b_relabel_lr1e4.yaml")
+    sft = load_run_config("configs/train/w4_q35_4b_relabel_egfr2_lr1e4.yaml")
+    assert sorted(k for k in set(base) | set(sft) if base.get(k) != sft.get(k)) == [
+        "checkpoint_dir", "expected_train_examples", "format_config", "output_dir", "run_id", "train_view"]
+    fmt = load_yaml(sft["format_config"])
+    assert fmt["system_prompt"] == "configs/prompts/system_v1e2.txt" and fmt["tokenizer"] == "Qwen/Qwen3.5-4B"
+    assert fmt["tools"] == ["unit_convert", "calculate_bmi", "calculate_egfr"] and fmt["max_length"] >= 2048
+    records, _ = audit_train_view(sft, fmt)
+    assert len(records) == 2200
+    ev = load_yaml("configs/eval_w4_q35_4b_tools3_v1e2.yaml")
+    assert {"base", "w4_q35_4b_relabel_lr1e4", "w4_q35_4b_relabel_egfr2_lr1e4"} <= set(ev["runs"])
+    assert load_yaml(ev["format_config"])["system_prompt"] == "configs/prompts/system_v1e2.txt"
+
+
+def test_second_test_list_cannot_leave_configs_w4():
+    import subprocess
+    r = subprocess.run([sys.executable, str(PROJECT_ROOT / "scripts" / "w4_test.py"), "run", "--frozen", "outputs/x.json"],
+                       capture_output=True, text=True, cwd=PROJECT_ROOT)
+    assert r.returncode != 0 and "configs/w4/" in (r.stdout + r.stderr)
