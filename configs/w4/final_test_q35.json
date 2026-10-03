@@ -1,0 +1,19 @@
+{
+ "status": "frozen",
+ "runs": [
+  {
+   "label": "asft2_q35_test",
+   "eval_config": "configs/eval_w4_q35_4b_tools3_v1e2.yaml",
+   "eval_config_sha256": "d8341945c3b3130b3ff3f611f5d0e2b50566be19e686d155ba7994a19a354834",
+   "protocol_sha256": "133897eaf59b89490f8b36005296b50741c77383f4833207f70c30a2837cd733",
+   "run": "w4_q35_4b_relabel_egfr2_lr1e4",
+   "adapter": "checkpoints/w4_q35_4b_relabel_egfr2_lr1e4/checkpoint-276",
+   "adapter_sha256": "ec4141ffeb04a6aa4a2312f03a27f0d1acb3ff5b64ec9af44c900b6f6819fea9"
+  }
+ ],
+ "pre_specified_report": [
+  "natural Q5 fabrication on test (n = 10; underpowered, disclosed)",
+  "grounded tool tasks on test",
+  "five assignment metrics on test under legacy v1 and diagnostic v2.1"
+ ]
+}
