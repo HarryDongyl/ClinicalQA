@@ -85,13 +85,14 @@
       "train_998"
     ],
     "raw_control_acknowledged": true,
+    "stretch_a_ids": [],
     "policy": "raw_control_unchanged",
     "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
     "review_types": [],
     "train_sha256": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
-    "view_manifest_sha256": "aa3ce94596b899c9981a42133265fca782969962c62495ae4cdd354fac972f74"
+    "view_manifest_sha256": "3917fc9ea18b93125ca04cf41dc00c417db12e5274a955c846e1d902762a469e"
   },
   "raw_lr5e5": {
     "view": "raw",
@@ -179,13 +180,14 @@
       "train_998"
     ],
     "raw_control_acknowledged": true,
+    "stretch_a_ids": [],
     "policy": "raw_control_unchanged",
     "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
     "review_types": [],
     "train_sha256": "acda49fd834b9de1c155c76c5a15fb2f0f126caaac40a1ca3b357c00c6d3f278",
-    "view_manifest_sha256": "aa3ce94596b899c9981a42133265fca782969962c62495ae4cdd354fac972f74"
+    "view_manifest_sha256": "3917fc9ea18b93125ca04cf41dc00c417db12e5274a955c846e1d902762a469e"
   },
   "q5filtered_lr5e5": {
     "view": "q5_filtered",
@@ -273,12 +275,13 @@
     ],
     "remaining_q5_ids": [],
     "raw_control_acknowledged": false,
+    "stretch_a_ids": [],
     "policy": "heuristic_Q5_quarantine_no_relabeling",
     "relabeled_ids": [],
     "clinical_adjudication": false,
     "val_test_modified": false,
     "review_types": [],
     "train_sha256": "13ff01abc5269f5c7a1b11129e2532d0bd46cbaf9f04839e4835de238f12d262",
-    "view_manifest_sha256": "0da53add7f68bb1a549a5f7ef3f808239b9394f65f014745fe086d34bfc79de9"
+    "view_manifest_sha256": "ac15159346fed67c8c8d74ac9f56712ca5c31f955abd14debe2faf60cdb577dc"
   }
 }

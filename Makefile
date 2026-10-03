@@ -9,44 +9,42 @@ TRAIN_CONFIG := configs/train/$(RUN).yaml
 RESUME ?=
 EVAL_CONFIG ?= configs/eval_core.yaml
 
-.PHONY: help setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
+.PHONY: help views-all setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
         compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation \
         w2-round w2-epochs w2-stable score-v21 w2-score w3-prep w3-views w3-check w3-round w3-score c10
 
 help:
-	@echo "setup        install the locked environment incl. the train and qwen35 extras (uv sync --frozen)"
-	@echo "setup-cpu    analysis-only environment (no torch)"
-	@echo "lock         re-resolve dependencies and regenerate requirements.txt"
-	@echo "data         copy + validate provided data into data/ (writes data/MANIFEST.json)"
-	@echo "analyze      data statistics + quality checks -> reports/"
-	@echo "views        raw and Q5-filtered train selections"
-	@echo "format       native Qwen chat conversations -> data/sft/, token lengths -> reports/token_lengths.json"
-	@echo "audit-masks  loss-mask audit + formatted examples -> reports/"
-	@echo "smoke        tiny overfit + adapter reload + rollout with Qwen3-0.6B (not a result)"
-	@echo "train        RUN=raw_lr1e4|raw_lr5e5|q5filtered_lr5e5 [RESUME=latest]"
-	@echo "eval         RUN=base|train_run [ADAPTER=path LABEL=name] rollout + score on val"
-	@echo "epochs       RUN=train_run  evaluate epoch checkpoints on val and select"
-	@echo "compare      A=label B=label  paired val comparison"
-	@echo "core         train/evaluate the current RUN after GPU smoke has passed (val only)"
-	@echo "data-check   verify training views, quarantine policy and unchanged labels"
-	@echo "preflight    data checks plus CUDA/precision/token-prefix checks (RunPod)"
-	@echo "gpu-smoke    4B NF4 overfit + reload + both tools, required before formal training"
-	@echo "freeze       RUNS='...' select across validation checkpoints and write final config"
-	@echo "final-eval   frozen test comparison from configs/final_eval.yaml (runs once)"
-	@echo "test         unit tests"
-	@echo "score-v2     validation-only contract scoring into a new report directory; no automatic selection"
-	@echo "prompt-ablation  W2-E1 generation only: system v1 vs v2 on fixed wave-one weights (val, GPU, batch 4)"
-	@echo "w2-round     RunPod: whole wave-two round (E1 + filtered LR ladder at mb1) [CROSS=1 adds prompt v2; MB=mb4]"
-	@echo "w2-epochs    RUN=w2_run PROMPT=v1|v2  evaluate both epoch checkpoints on val, no selection (GPU)"
-	@echo "w2-stable    RUN=w2_run  exit 1 on non-finite loss/grad_norm or unfinished training"
-	@echo "score-v21    LABELS='...' OUT=dir  candidate scorer v2.1 on val labels (diagnostic, CPU)"
-	@echo "w2-score     local CPU: v2.1 + bounded v2 + legacy paired comparisons + rollout diffs for wave two"
-	@echo "w3-prep      local CPU: Q5 review sheet, draft few-shot demos, train-fit IDs, draft P1 probes, 8B mask audit"
-	@echo "w3-views     build the q5_relabeled view from the completed review (configs/w3/q5_relabel_review.jsonl)"
-	@echo "w3-check     readiness of the wave-three approvals (prompt v3, demos, P1, train-fit, relabel review)"
-	@echo "w3-round     RunPod: wave three [STAGES='core q35' default; 'seeds' after the F-s42 gate; '8b' deferred; UPLOAD=1]"
-	@echo "w3-score     local CPU: v2.1 + bounded v2 + P1 + train-fit + training metrics + C10 + F-s42 gate + paired compares"
-	@echo "c10          LABELS='...' OUT=dir  C10 confidence diagnostics on validation labels (CPU)"
+	@echo "Setup and data (CPU)"
+	@echo "  setup        locked environment incl. train and qwen35 extras (uv sync --frozen; GPU pods)"
+	@echo "  setup-cpu    analysis-only environment (no torch)"
+	@echo "  test         unit tests (pytest)"
+	@echo "  data         copy the provided _data/ files into data/ and write data/MANIFEST.json"
+	@echo "  analyze      data statistics and quality checks -> reports/"
+	@echo "  views        raw and Q5-filtered train views; views-all adds q5_relabeled and both eGFR views"
+	@echo "  data-check   verify training views, quarantine policy and unchanged labels"
+	@echo ""
+	@echo "Training and evaluation (GPU; see docs/RUNBOOK.md)"
+	@echo "  train        RUN=<configs/train/NAME> [RESUME=latest]"
+	@echo "  eval         RUN=base|<run> [EVAL_CONFIG=... ADAPTER=path LABEL=name SPLIT=val] rollout + v1 score"
+	@echo "  gpu-smoke    4B NF4 overfit + reload + both tools; run once per new pod image"
+	@echo "  preflight    data checks plus CUDA, precision and token-prefix checks"
+	@echo "  w3-round     wave-three round (scripts/run_w3_round.sh); wave four: scripts/run_w4_round.sh STAGES=..."
+	@echo ""
+	@echo "Scoring (CPU)"
+	@echo "  score-v21    LABELS='...' OUT=dir  scorer v2.1 on validation labels"
+	@echo "  w3-score     v2.1 + bounded v2 + P1 + train-fit + training metrics + C10 + gate for wave three"
+	@echo "  c10          LABELS='...' OUT=dir  confidence diagnostics"
+	@echo "  compare      A=label B=label  paired validation comparison (v1)"
+	@echo ""
+	@echo "Historical (kept for reproducibility; see configs/README.md and scripts/legacy/README.md)"
+	@echo "  format audit-masks smoke epochs core freeze final-eval   wave one"
+	@echo "  score-v2 prompt-ablation w2-round w2-epochs w2-stable w2-score   wave two"
+	@echo "  w3-prep w3-views w3-check   wave-three preparation"
+
+views-all: views
+	$(PY) python -m clinqa.data_views --variant q5_relabeled
+	$(PY) python -m clinqa.data_views --variant q5_relabeled_egfr
+	$(PY) python -m clinqa.data_views --variant q5_relabeled_egfr2
 
 setup:
 	$(UV) sync --frozen --extra train --extra qwen35
@@ -72,7 +70,7 @@ test:
 	$(PY) pytest
 
 score-v2:
-	$(PY) python scripts/rescore_validation_v2.py $(if $(OUT),--out $(OUT),)
+	$(PY) python scripts/legacy/rescore_validation_v2.py $(if $(OUT),--out $(OUT),)
 
 # W2-E1 generation (GPU): arm x fixed wave-one weights under one code state, batch 4. Labels: w2p_<arm>_<run>.
 # Scoring is separate and local (w2-score); the pod only generates and runs the legacy scorer (D-047).
@@ -83,7 +81,7 @@ prompt-ablation:
 	    --label w2p_$${arm}_$$r || exit 1; done; done
 
 w2-round:
-	CROSS=$(CROSS) MB=$(MB) bash scripts/run_w2_round.sh
+	CROSS=$(CROSS) MB=$(MB) bash scripts/legacy/run_w2_round.sh
 
 PROMPT ?= v1
 w2-epochs:
@@ -103,7 +101,7 @@ W2_LABELS = $(sort $(patsubst outputs/%/val/scored.jsonl,%,$(wildcard outputs/w2
 w2-score:
 	@test -n "$(W2_LABELS)" || (echo "no wave-two validation outputs found"; exit 1)
 	$(PY) python scripts/score_v21_val.py --out $(W2_OUT)/v21 --labels $(W2_LABELS)
-	$(PY) python scripts/rescore_validation_v2.py --out $(W2_OUT)/bounded_v2 --labels $(W2_LABELS)
+	$(PY) python scripts/legacy/rescore_validation_v2.py --out $(W2_OUT)/bounded_v2 --labels $(W2_LABELS)
 	@for r in $(PROMPT_ABLATION_RUNS); do \
 	  test -f outputs/w2p_v1_$$r/val/scored.jsonl && test -f outputs/w2p_v2_$$r/val/scored.jsonl || continue; \
 	  $(PY) python -m clinqa.evaluate compare --a w2p_v1_$$r --b w2p_v2_$$r --split val >/dev/null && \
@@ -200,7 +198,7 @@ W3_FS42 = $(patsubst outputs/%/p1_probes/run.json,%,$(wildcard outputs/w3_relabe
 w3-score:
 	@test -n "$(W3_VAL)" || (echo "no wave-three validation outputs found"; exit 1)
 	$(PY) python scripts/score_v21_val.py --out $(W3_OUT)/v21 --labels $(W3_VAL)
-	$(PY) python scripts/rescore_validation_v2.py --out $(W3_OUT)/bounded_v2 --labels $(W3_VAL)
+	$(PY) python scripts/legacy/rescore_validation_v2.py --out $(W3_OUT)/bounded_v2 --labels $(W3_VAL)
 	$(if $(W3_P1),$(PY) python scripts/w3_analyze.py p1 --labels $(W3_P1) --out $(W3_OUT)/p1,)
 	$(if $(W3_FIT),$(PY) python scripts/w3_analyze.py trainfit --labels $(W3_FIT) --out $(W3_OUT)/trainfit,)
 	$(PY) python scripts/w3_analyze.py train --runs $(W3_TRAIN) --out $(W3_OUT)/training

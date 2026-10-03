@@ -1,301 +1,107 @@
-# Clinical QA Fine-Tuning
+# Clinical QA fine-tuning
 
-Supervised fine-tuning of a language model that answers clinical questions grounded in one encounter note
-plus one structured table. The model has to:
+This project applies supervised fine-tuning (QLoRA) to Qwen3-4B-Instruct-2507. The model answers a clinical question from one encounter note and one structured table. It extracts facts, does simple numeric reasoning, calls tools (`unit_convert`, `calculate_bmi`, and in Stretch A `calculate_egfr`), and says what is missing instead of inventing it. The assignment is in [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md).
 
-- **extract** facts from the note or table,
-- do **simple numeric reasoning** over those values,
-- **call tools** (`unit_convert`, `calculate_bmi`) with correct arguments and use the results,
-- **state uncertainty**: say what is missing instead of making it up.
+**Start with [reports/REPORT.md](reports/REPORT.md).** It covers the approach, trade-offs, results, limitations and key findings.
 
-The assignment text is in [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md) (moved there word for word from the original
-`requirements.txt`).
+## Results (test, run once from a frozen list)
 
-## Current scorer review and navigation
+| Model | Natural-Q5 fabrication | Grounded tool tasks | v2.1 macro |
+|---|---|---|---|
+| **F′**, core final model (two tools) | **0/10** | **89/90** | **97.5** |
+| **A-sft2**, Stretch A model (three tools) | 0/10 | 87/90 | 96.2 |
+| Filter-only control | 6/10 | 87/90 | 95.8 |
+| Base model, same prompt | 1/10 | 48/90 | 79.3 |
 
-The supplied v2.1 results are **diagnostic only**, pending evaluation repair. Start with [the audit and next experiments](docs/SCORER_V2_1_AUDIT.md), then [the maintained journal](docs/EXPERIMENT_JOURNAL.md).
+The adapters are public on the Hugging Face Hub:
 
-- **Historical v1:** `src/clinqa/metrics.py`; original run evidence in `outputs/`. Retained for reproducibility.
-- **Bounded-contract v2:** `src/clinqa/scoring_v2.py`, `scripts/rescore_validation_v2.py`, [design](docs/SCORER_V2.md), `reports/scorer_v2_validation/`.
-- **Candidate v2.1:** `scripts/score_v2.py` and `reports/scorer_v2/`. Its core `src/clinqa/scorer_v2.py` is installed and hash-matched; 16 tests pass and 1,750 validation scores reproduce. Known false-pass defects still block semantic checkpoint selection.
-- **Command routing:** `make score-v2` runs the bounded-contract scorer. `make prompt-ablation` and `make w2-round` only generate, and run the legacy scorer on the pod. `make w2-score` (CPU) runs candidate v2.1 through the guarded `scripts/score_v21_val.py` wrapper, then bounded v2, then the legacy paired comparisons and rollout diffs (D-047). Legacy model-selection commands still do not implement semantic release gates.
-- **Project history:** [decisions](docs/DECISIONS.md), [data findings](docs/FINDINGS.md), [repository design review](docs/REPOSITORY_DESIGN_REVIEW.md). These document the reasoning and are preserved.
-
-## Latest wave-three planning review
-
-[Reviewed experiment plan](docs/EXPERIMENTS_WAVE3.md) and [evidence/merge review](docs/WAVE3_REVIEW.md) supersede stale planning assumptions, not historical results. Imported decision IDs are D-053..D-068; planning updates are D-069..D-074.
-
-**Wave three is implemented but not run** (journal W3-PLAN-005, DECISIONS D-075..D-083). The round covers:
-- R0-v1 / R0-v3 / R0-v3-FS4 prompted baselines;
-- the regenerated filtered control;
-- F-s42 on the reviewed Q5 relabel view;
-- P1 both-missing probes;
-- D-TRAINFIT;
-- C10;
-- Qwen3-8B zero-shot plus one 8B SFT run on the locked filtered recipe;
-- seeds 43/44 after the F-s42 gate.
-
-All generation runs at batch 2. Human approvals come first: the Q5 relabel review, prompt v3, the demonstrations and the P1 probes.
-
-```bash
-make w3-prep             # local: review sheets, drafts, frozen train-fit IDs, 8B mask audit (done once)
-make w3-check            # which approvals are still missing
-make w3-views            # after the Q5 review: build and audit q5_relabeled
-make w3-round            # on the pod (STAGES="core 8b"; later STAGES=seeds)
-make w3-score            # locally on CPU after pulling outputs
-```
-
-## Status
-
-Current development policy: **validation only; declare no winner until the scorer is repaired** (D-038, D-049).
-Wave one is complete. The frozen rule selected raw_lr1e4 step125. Its single test evaluation scored 84.72% legacy grounded macro vs 45.28% for base; see [Experiment journal](docs/EXPERIMENT_JOURNAL.md) section 3 and the Q5 regression noted there.
-
-Wave two is **in progress** (journal W2-PLAN-006 and W2-RUN-007, DECISIONS D-041 to D-052). One pod round covers two experiments:
-- the v1/v2 prompt ablation on four fixed wave-one checkpoints plus base;
-- a Q5-filtered LR ladder: 1e-4, then 1.5e-4, then 2e-4.
-
-Generation uses batch 4 throughout. The ladder trains at micro-batch 1 with accumulation 16, as in wave one (D-052). Micro-batch 4 was measured slower and is kept only as `MB=mb4`.
-
-```bash
-make w2-round            # on the pod, after make setup and hf auth login; CROSS=1 adds prompt v2 on the ladder; resumes
-make w2-score            # locally on CPU, after pulling outputs: v2.1 + bounded v2 + legacy compare + rollout diffs
-```
-
-Do not use the legacy `select`/`freeze` commands to announce a winner. Q5 relabel proposals, the pre-call sentence experiment and generation batch 8 are deferred (D-048).
-
-| Phase | Scope | Status |
-|---|---|---|
-| 0-1b | Data copy + checksums, tools, 19 quality checks, data report, train views | done |
-| 2 | Native Qwen chat formatting, assistant-only loss masks, token lengths, formatted examples | done (CPU-verified) |
-| 3 | Legacy scorer, rollout state machine, evaluation/compare/select | historical v1; retained for reproducibility |
-| 4 | QLoRA training script + smoke test | first-wave GPU runs completed |
-| 5 | Base + three QLoRA runs and their downloaded artifacts | reviewed; see experiment journal |
-| 6 | Validation-only contract scorer v2 and wave-two configurations | implemented; semantic adjudication pending |
-| 7 | Wave-two round: prompt ablation + filtered LR ladder at mb1, generation bs4 | E1 generated; ladder running |
-
-Plan: [docs/PLAN.md](docs/PLAN.md). Decisions: [docs/DECISIONS.md](docs/DECISIONS.md) (revision 4: D-037 onward covers the wave-one outcome and wave two).
-Target: one 24GB NVIDIA GPU, Qwen3-4B-Instruct-2507 QLoRA SFT. RL is not required; see PLAN section 11.
+- [`Harrydongyl/clinqa-w4_q3_refit_relabel_lr1e4_s42`](https://huggingface.co/Harrydongyl/clinqa-w4_q3_refit_relabel_lr1e4_s42) (F′, checkpoint-250);
+- [`Harrydongyl/clinqa-w4_q3_relabel_egfr2_lr1e4`](https://huggingface.co/Harrydongyl/clinqa-w4_q3_relabel_egfr2_lr1e4) (A-sft2, checkpoint-276).
 
 ## Quickstart
 
-Requirements: [uv](https://docs.astral.sh/uv/) and Python 3.11 (uv installs Python if needed).
-
 ```bash
-make setup        # uv sync --frozen --extra train (torch/transformers/peft/bitsandbytes pinned in uv.lock)
-make all          # data + analyze + views + test (CPU)
-make audit-masks  # format + mask audit (raw and q5_filtered views) -> reports/
-make smoke        # CPU/GPU pipeline smoke with Qwen3-0.6B (not a result)
-make preflight    # RunPod: data policy, one >=20 GiB CUDA GPU, disk, token-prefix checks
-make gpu-smoke    # RunPod: 4B NF4 overfit + reload + both tools; required before formal training
+make setup-cpu && make test            # CPU: analysis environment and unit tests
+make data analyze views-all            # copy the provided data, quality report, train views
 ```
 
-Experiments (configs in `configs/train/`; all use Qwen3-4B-Instruct-2507 QLoRA, 2 epochs, effective batch 16):
-
-| RUN | Train view | LR | Purpose |
-|---|---|---|---|
-| `q5filtered_lr5e5` | Q5-filtered (1,922) | 5e-5 | mitigated candidate |
-| `raw_lr5e5` | raw (2,000) | 5e-5 | filtering ablation vs `q5filtered_lr5e5` |
-| `raw_lr1e4` | raw (2,000) | 1e-4 | learning-rate ablation vs `raw_lr5e5` |
-
-Individual steps:
+On a GPU (RTX 4090 24 GB or larger, Linux; pod setup in [docs/RUNBOOK.md](docs/RUNBOOK.md)):
 
 ```bash
-make eval RUN=base                                  # base model + tools on val -> outputs/base/val/
-make train RUN=q5filtered_lr5e5                     # full resumable checkpoints every 50 steps and at each epoch end
-make train RUN=q5filtered_lr5e5 RESUME=latest       # resume after an interruption (same code/config/packages only)
-make epochs RUN=q5filtered_lr5e5                    # eval epoch checkpoints on val -> outputs/<run>/selection.json
-make compare A=base B=q5filtered_lr5e5_step000121
-make freeze RUNS="q5filtered_lr5e5 raw_lr5e5 raw_lr1e4"   # cross-run selection on val -> configs/final_eval.yaml
-make final-eval                                     # frozen test comparison, runs once
-uv run python -m clinqa.evaluate score --label <label> --split val   # rescore without a GPU
-```
-
-## Running on RunPod (24GB GPU)
-
-The GPU steps are run by hand on a RunPod pod (D-018). Pod disks are ephemeral: code, caches, checkpoints and
-outputs live on a network volume mounted at `/workspace`.
-
-### 0. Before RunPod (local machine)
-
-The pod gets the code with `git clone`, so the repository must be committed and pushed first.
-
-```bash
-make test
-git add -A && git status        # no .claude/, .venv/, checkpoints/ or data/sft/ should appear
-git commit -m "..." && git push -u origin main   # private GitHub repo
-```
-
-Create two tokens: a GitHub fine-grained token (Contents read/write on this repo only) for pushing results from
-the pod, and a Hugging Face write token for uploading adapters to private repos.
-
-### 1. Create the pod
-
-- Network volume: at least 60 GB (preflight refuses less than 25 GiB free; each run keeps several resumable
-  checkpoints, plus about 8 GB of model cache).
-- Pod: exactly one 24 GB GPU (RTX 4090 recommended; A5000 fine; L4 works but is slow), PyTorch/CUDA 12 template,
-  container disk about 30 GB, volume mounted at `/workspace`, SSH exposed (HTTP 6006 optional for TensorBoard).
-- Prefer a recent CUDA driver: torch 2.14 ships its own CUDA runtime, and `make preflight` catches a mismatch.
-
-### 2. Pod setup (once)
-
-```bash
-apt-get update && apt-get install -y tmux git
-tmux new -s clinqa                  # reattach after a disconnect: tmux attach -t clinqa
-cat >> ~/.bashrc <<'RC'
-export HF_HOME=/workspace/hf_cache
-export UV_CACHE_DIR=/workspace/uv_cache
-export PATH=$HOME/.local/bin:$PATH
-RC
-source ~/.bashrc
-curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.local/bin/env
-
-cd /workspace
-git clone https://<github-user>:<GITHUB_TOKEN>@github.com/<github-user>/<repo>.git clinqa
-cd clinqa
-git config user.name "<name>" && git config user.email "<email>"
-
 make setup
-uv run --frozen hf auth login       # Hugging Face write token
-nvidia-smi && uv run --frozen python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
+STAGES=refit UPLOAD=1 bash scripts/run_w4_round.sh     # train F′, evaluate both epochs on val and P1
+STAGES=r2b   UPLOAD=1 bash scripts/run_w4_round.sh     # train A-sft2, evaluate on val, P1 and the eGFR sets
 ```
 
-### 3. Gates (in order; each must pass before the next)
+To evaluate the published F′ adapter without training:
 
 ```bash
-make all
-make audit-masks
-make preflight                      # -> outputs/runpod_preflight.json
-make gpu-smoke                      # every check must be true; if not, stop and fix before training
-git add outputs reports && git commit -m "RunPod preflight + GPU smoke" && git push
+uv run --frozen hf download Harrydongyl/clinqa-w4_q3_refit_relabel_lr1e4_s42 --include "checkpoint-250/*" \
+  --local-dir checkpoints/w4_q3_refit_relabel_lr1e4_s42
+make eval EVAL_CONFIG=configs/eval_w3_v1.yaml RUN=w4_q3_refit_relabel_lr1e4_s42 \
+  ADAPTER=checkpoints/w4_q3_refit_relabel_lr1e4_s42/checkpoint-250 LABEL=my_fprime_val
+uv run python scripts/score_v21_val.py --out reports/my_fprime --labels my_fprime_val     # CPU
 ```
 
-### 4. Train and validate
+Training F′ takes about 45 min and 7.8 GiB on an RTX 4090; evaluating 250 validation items takes about 20 min. `make help` lists every target.
 
-The base model is evaluated on val once; each run then trains and evaluates its epoch checkpoints. Use explicit
-steps rather than `make core`, which re-runs the base evaluation every time.
+## Add a new experiment
 
-```bash
-set -o pipefail
-( make eval RUN=base && \
-  for r in q5filtered_lr5e5 raw_lr5e5 raw_lr1e4; do
-    make train RUN=$r && make epochs RUN=$r && \
-    git add outputs && git commit -m "val: $r" && git push || exit 1
-  done ) 2>&1 | tee outputs/runs.log
-```
+1. **Training config.** Create `configs/train/<run>.yaml` with `extends: configs/train/w3_relabel_lr1e4_s42.yaml` (the F recipe). Set `run_id`, `checkpoint_dir` and `output_dir` to `<run>`, and override only what changes (for example `seed` or `training.learning_rate`).
+2. **New training data, if any.**
+   - Add a train view in `src/clinqa/data_views.py` (train-only, hash-checked; see `EGFR_VIEWS`).
+   - Build it with `uv run python -m clinqa.data_views --variant <view>`.
+   - Point a new `configs/format_<name>.yaml` at it (tokenizer, tools, system prompt).
+   - Set `format_config`, `train_view` and `expected_train_examples` in the training config.
+3. **Eval config.** Add `<run>: {adapter: checkpoints/<run>/final}` under `runs:` in the eval config of the same format, for example `configs/eval_w3_v1.yaml`. Adding a run does not change the evaluation protocol hash.
+4. **Train and evaluate (GPU).**
 
-Monitor from a second tmux window (`Ctrl-b c`):
+   ```bash
+   make train RUN=<run>
+   uv run python scripts/w3_epochs.py generate --run <run> --config <eval config>
+   ```
 
-```bash
-tail -f outputs/<run>/train_log.jsonl    # loss, lr, grad_norm, sec_per_step, peak_vram_gb
-watch -n 5 nvidia-smi
-uv run --frozen tensorboard --logdir outputs --host 0.0.0.0 --port 6006   # optional
-```
+   The second command evaluates both epochs on val, and epoch 2 on the P1 probes. Add `--p1-all-epochs`, `--trainfit` or `--records-files configs/w4/egfr_val.json …` as needed.
+5. **Score (CPU).**
 
-Each run is about 242-250 optimizer steps. Wave one measured about 2,520-2,621 s per run at micro-batch 1 on an RTX 4090, with a peak of 7.81 GiB.
+   ```bash
+   uv run python scripts/score_v21_val.py --out reports/<new dir> --labels <run>_step000<N>
+   uv run python scripts/w3_analyze.py p1 --out reports/<new dir>/p1 --labels <run>_step000<N>
+   ```
 
-**Interrupted run.** Start a pod on the same volume, then:
+6. **Record the decision.** Add a numbered entry to [docs/DECISIONS.md](docs/DECISIONS.md) before looking at results, stating the comparison and the criterion. Never select on test.
 
-```bash
-cd /workspace/clinqa
-make train RUN=<run> RESUME=latest      # restores adapter, optimizer, scheduler and RNG state
-make epochs RUN=<run>                   # already-scored checkpoints are reused
-```
-
-Resuming is refused unless config, data, source code and package versions match the original run (the run
-contract in `outputs/<run>/run_contract.json`). Do not `git pull` or edit code during a run; if code must change,
-use a new `run_id`.
-
-### 5. Freeze, then test once
-
-```bash
-git status                              # must be clean
-make freeze RUNS="q5filtered_lr5e5 raw_lr5e5 raw_lr1e4"
-cat configs/final_eval.yaml outputs/final_selection.json
-git add configs/final_eval.yaml outputs && git commit -m "Freeze final selection" && git push
-make final-eval                         # refuses a dirty tree, a changed adapter hash or an existing test run
-git add outputs && git commit -m "Final test evaluation" && git push
-```
-
-`make freeze` writes the selected checkpoint into `configs/final_eval.yaml` automatically; do not edit it by hand.
-
-### 6. Save adapters and stop billing
-
-```bash
-for r in q5filtered_lr5e5 raw_lr5e5 raw_lr1e4; do
-  uv run --frozen hf upload <hf-user>/clinqa-$r checkpoints/$r --repo-type model --private
-done
-```
-
-Stop or terminate the pod. The network volume is billed until deleted; delete it only after the uploads and
-`git push` have succeeded.
-
-## Artifacts
-
-| Path | Contents | Committed |
-|---|---|---|
-| `reports/` | data analysis, formatted examples, mask audit, token lengths, REPORT | yes |
-| `data/sft/` | formatted conversations + gold sidecars | no (regenerate with `make format`) |
-| `outputs/<run>/` | training manifest, `train_log.jsonl`, TensorBoard events | yes (small) |
-| `outputs/<label>/<split>/` | `trajectories.jsonl`, `scored.jsonl`, `metrics.json`, `error_analysis.md`, `run.json` | yes |
-| `checkpoints/<run>/` | LoRA adapters per epoch | no (private HF Hub) |
+Outputs are never overwritten: use a new label or output directory. [configs/README.md](configs/README.md) and [scripts/README.md](scripts/README.md) index every config and script.
 
 ## Repository layout
 
-```text
-_data/                  provided files, untouched (source of truth)
-data/                   byte-identical copies under canonical names + MANIFEST.json (sha256)
-  train.jsonl val.jsonl test.jsonl reference.jsonl
-configs/
-  data.yaml             source -> target mapping and expected split sizes
-  analysis.yaml         thresholds for the quality checks
-  format_core.yaml      tokenizer/template pin, system prompt, max length
-  prompts/system_v1.txt frozen system prompt (hashed into every run)
-  train_raw.yaml        R1 QLoRA config; train_grounded.yaml (R2) and smoke.yaml extend it
-  eval_core.yaml        runs, budgets, selection rule, bootstrap
-  final_eval.yaml       frozen test comparison list
-src/clinqa/
-  data_io.py            copy/validate/load raw data (strict JSON)
-  validation.py         structural record validation (types, IDs, table shape, tool args)
-  data_views.py         raw / Q5-filtered train-only record views + manifests
-  tools.py              unit_convert, calculate_bmi, execute_tool (deterministic)
-  parsing.py            regex extractors: weight/height, stated BMI, allergies, medications, table panels
-  seed.py               global seeding
-  analyze.py            Phase 1 entry point
-  analysis/             features, statistics, checks Q1-Q19, Markdown report
-  schemas.py            tool JSON schemas, strict call validation, <tool_call> wire parsing
-  formatting.py         records -> native Qwen conversations, assistant-only labels (prefix-diff masks)
-  audit_masks.py        mask audit + formatted examples report
-  metrics.py            deterministic per-example scoring rules
-  infer.py              rollout state machine (generate -> parse -> validate -> execute -> answer)
-  modeling.py           tokenizer/model loading (NF4 on CUDA)
-  train.py              Trainer + PEFT QLoRA training with JSONL/TensorBoard logging
-  smoke.py              pre-training smoke checks
-  evaluate.py           generate / score / compare / select / final
-  run_info.py           provenance (git, versions, hardware, hashes)
-tests/                  pytest suite
-reports/                generated: data_analysis.md, data_stats.json, quality_flags.jsonl
-docs/                   assignment, plan, findings, decisions, data card
-```
+| Path | Contents |
+|---|---|
+| `_data/` | The provided files, unmodified |
+| `data/` | Canonical copies (`make data`), train views (`processed/`), Stretch A rows |
+| `src/clinqa/` | Formatting, training, rollout and evaluation, tools and schemas, scorers (v1 `metrics.py`, v2.1 `scorer_v2.py`) |
+| `configs/` | Format, training, evaluation and prompt configs; frozen probe sets and the test list |
+| `scripts/` | Experiment runners, scoring and analysis (`legacy/` holds superseded scripts) |
+| `tests/` | Unit tests (`make test`) |
+| `outputs/` | Training manifests and logs, and every evaluation's trajectories, scores and metrics |
+| `reports/` | [REPORT.md](reports/REPORT.md), [DATA_QUALITY.md](reports/DATA_QUALITY.md), scorer validation and per-round scoring |
+| `docs/` | Decisions, journal, walkthrough, scorer, Stretch A, runbook; `history/` holds archived reviews |
 
 ## Documentation
 
-| Document | Contents |
+| Document | Use |
 |---|---|
-| [docs/ASSIGNMENT.md](docs/ASSIGNMENT.md) | The assignment specification (verbatim) |
-| [docs/PLAN.md](docs/PLAN.md) | Phased plan, priorities, gates, deliverables, status |
-| [docs/FINDINGS.md](docs/FINDINGS.md) | How the requirements were interpreted, data findings, limits of the heuristics |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | Current decisions, superseded choices and resolutions of P-xxx |
-| [docs/DATA.md](docs/DATA.md) | Data card: files, schema, conventions, known issues, lineage |
-| [reports/data_analysis.md](reports/data_analysis.md) | Generated statistics, quality checks and examples |
+| [reports/REPORT.md](reports/REPORT.md) | The report |
+| [reports/DATA_QUALITY.md](reports/DATA_QUALITY.md) | Formatted examples, statistics, data issues and their handling |
+| [docs/PROJECT_WALKTHROUGH.md](docs/PROJECT_WALKTHROUGH.md) | The project in order, with evidence and decisions |
+| [docs/DECISIONS.md](docs/DECISIONS.md), [docs/EXPERIMENT_JOURNAL.md](docs/EXPERIMENT_JOURNAL.md) | Decision log (D-001 to D-104) and experiment journal |
+| [docs/SCORER.md](docs/SCORER.md), [docs/SCORER_V2_1_KNOWN_ISSUES.md](docs/SCORER_V2_1_KNOWN_ISSUES.md) | How answers are scored, its validation, and known defects |
+| [docs/STRETCH_A.md](docs/STRETCH_A.md) | The `calculate_egfr` tool, data, diagnosis and results |
+| [docs/RUNBOOK.md](docs/RUNBOOK.md) | RunPod setup and reproduction |
 
 ## Reproducibility
 
-- Dependencies are pinned in `uv.lock`, and `requirements.txt` is exported from it.
-- `_data/` is never modified. `data/MANIFEST.json` records the SHA-256 of every copied file, and a test checks it.
-- `make analyze` gives identical output every run, including across `PYTHONHASHSEED` values. The seed comes from
-  `configs/analysis.yaml`.
-- Test labels have already been inspected for data auditing. Test is not used for training or model selection; final model comparison is frozen before generating test outputs.
-- The raw view keeps all 2,000 train rows; the optional Q5-filtered view keeps 1,922 heuristic-selected rows and includes review/provenance files. val/test stay unchanged.
-- Seeds: 42 everywhere (`configs/*.yaml`); training uses deterministic kernels where torch allows; decoding is greedy.
-- Every training and eval run records git commit/dirty state, package versions, hardware, data/prompt/template hashes and runtime.
-- Measured wave-one results are recorded in the experiment journal. Wave-two entries are plans until their outputs exist; no planned result is reported as measured.
+- Dependencies are pinned in `uv.lock`. Every run records its git commit, package versions, hardware and the sha256 of its data, prompt, chat template, tool schemas and configs.
+- Seed 42; greedy decoding.
+- The provided files are checksum-verified before use, and validation and test are never edited.
+- The test split was used once for the final comparison, from a list frozen before any output.

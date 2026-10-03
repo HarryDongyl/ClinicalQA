@@ -1,6 +1,6 @@
 # Decisions — merged wave-three review
 
-Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-052). Revision 3 was dated 2026-09-28. [PLAN.md](PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
+Revision 4 updated 2026-09-30: wave-one outcome decisions (D-037 to D-040) and the wave-two round (D-041 to D-052). Revision 3 was dated 2026-09-28. [PLAN.md](history/PLAN.md) is the implementation specification for wave one, and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) records the evidence behind each decision. Every entry gives the decision and the reason for it. Entries marked *user decision* were made by the user; where one overrides earlier advice, the entry names that advice and the confound it introduces. Planned results are never recorded as measured.
 ## Current decisions (original IDs retained)
 
 - D-001: NVIDIA CUDA, Transformers + TRL + PEFT; single 24GB GPU target confirmed by the user.
@@ -143,7 +143,7 @@ Measured: three filtered LR runs at micro-batch 1, both epoch outputs, and eight
 
 ## Wave-three proposals (merged 2026-09-30; implementation not activated)
 
-A four-layer review: loss/optimisation, input/output representation, data, evaluation. It is based on wave-1 and wave-2 results, rescored with scorer v2.1. The supplied narrative is now in [ROUND4_FINDINGS.md](ROUND4_FINDINGS.md), with review corrections; independently verified evidence is in [WAVE3_REVIEW.md](WAVE3_REVIEW.md); the run list is in [EXPERIMENTS_WAVE3.md](EXPERIMENTS_WAVE3.md). These are imported proposals. The review qualifications below take precedence; they do not silently supersede historical evaluation safeguards. No code has been changed for them yet.
+A four-layer review: loss/optimisation, input/output representation, data, evaluation. It is based on wave-1 and wave-2 results, rescored with scorer v2.1. The supplied narrative is now in [ROUND4_FINDINGS.md](history/ROUND4_FINDINGS.md), with review corrections; independently verified evidence is in [WAVE3_REVIEW.md](history/WAVE3_REVIEW.md); the run list is in [EXPERIMENTS_WAVE3.md](history/EXPERIMENTS_WAVE3.md). These are imported proposals. The review qualifications below take precedence; they do not silently supersede historical evaluation safeguards. No code has been changed for them yet.
 
 **Layer 1: loss and optimisation**
 
@@ -419,3 +419,29 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
     - F′ and A-sft2 differ in prompt and tool list, so their test comparison is between two deployable configurations, not a controlled ablation.
   - **H2 is reported as unresolved.** v1 gives 10 vs 3 (p = 0.092), v2.1 gives 3 vs 3, and an informal reading gives about 7 vs 1. None meets the pre-registered p < 0.05, and the backbone choice (D-095) does not depend on it. The claim-level audit is a next step.
   - **After test:** `docs/SCORER_V2_1_KNOWN_ISSUES.md` (the single scorer issue list), then the repository restructure. The restructure moves 8 superseded scripts to `scripts/legacy/` with updated references, adds config and script indexes, a concise README and `CLAUDE.md`, and archives superseded docs. The two final adapters are made public on the Hub.
+
+## Test result and repository consolidation (2026-10-03)
+
+- D-102: **Test result.** The frozen five-model list ran once at `7ae0034` on an RTX 4090. All hashes match and there were no reruns. Qwen3.5's run records the Transformers linear-attention implementation; use of the flash-linear-attention path is not verified. Report: `reports/w4/test/TEST_REPORT.md`.
+  - Natural-Q5 fabrication (frozen p1-2 classifier, every case read): F′, A-sft2 and Q35-relabel 0/10; C-filtered 6/10; R0-v1 1/10. C's test_288 invents 50 kg and 150 cm, then says BMI cannot be calculated; v2.1 credits it as an abstention (S-17), so v2.1 shows C at 5/10.
+  - Residual fabrication outside Q5: on test_020 (uncertain), F′ invents 145.5 lb and A-sft2 invents 68.0 kg while refusing BMI.
+  - Grounded tool tasks: F′ 89/90, Q35-relabel 88/90, A-sft2 and C-filtered 87/90, R0-v1 48/90.
+  - v2.1 macro: F′ 97.5, Q35-relabel 97.4, A-sft2 96.2, C-filtered 95.8, R0-v1 79.3. A-sft2 − F′ = −1.28 pp [−2.66, −0.06]; two of A-sft2's three tool failures are v2.1 reader false fails (S-04).
+
+  F′ stays the core final model and A-sft2 the Stretch A model (D-101).
+- D-103: **Repository consolidation** (user decisions, after the test run as D-099 requires).
+  - `docs/SCORER_V2_1_KNOWN_ISSUES.md` is the single list of scorer defects (S-01 to S-16); the old audit is archived.
+  - The reviewer path is `README.md` → `reports/REPORT.md` → `reports/DATA_QUALITY.md`. `docs/` keeps `ASSIGNMENT`, `DECISIONS`, `EXPERIMENT_JOURNAL`, `PROJECT_WALKTHROUGH` (follow-up notes removed), `SCORER`, `SCORER_V2_1_KNOWN_ISSUES`, `STRETCH_A` and `RUNBOOK`. Superseded documents are moved unchanged to `docs/history/` behind a one-line archive banner.
+  - Eight superseded scripts move to `scripts/legacy/`, with active references (Makefile, scripts, active docs) updated. Historical prose in `DECISIONS.md` and the journal, and config comments, keep the old paths; `scripts/legacy/README.md` maps them.
+  - Configs are not moved, because their paths and hashes are recorded. `configs/README.md` and `scripts/README.md` index them, and a project `CLAUDE.md` records the rules.
+  - Interview preparation material is removed from the repository.
+  - `_data/` is kept: it holds the provided originals that `make data` copies and checksums.
+  - Every repository file is in English. The full unit suite passes on CPU (273 passed, 4 skipped for missing GPU packages), and `make data analyze views-all data-check` reproduces the committed data manifests.
+  - Delivery: `w4` fast-forwards into `master`, tagged `submission-v1`. The two final adapters are made public on the Hub.
+- D-104: **Corrections after an external read-only audit of the final artefacts** (2026-10-03; nothing was regenerated, rescored or reselected).
+  - Natural-Q5 fabrication for C-filtered on test is **6/10**, not the 5/10 first reported from v2.1. test_288 invents values while declining, and v2.1's Q5 branch does not check fabricated values (new issue S-17). F′ invents a weight on test_020 (uncertain), so fabrication is reduced, not eliminated.
+  - The A-sft2 discordance in D-101 (9; 7 after correction) is counted over all 250 core validation items (A-sft2 better on 2, F′ on 7). Tool-only discordance is 3.
+  - D-100's statement that KDIGO errors were "±1 category" is wrong: sa_val_003 (eGFR 67, G2) was written as G3b. Both of A-sft2's remaining eGFR failures are the two G5 items.
+  - The "1–2 pp retrain variance" wording in D-099 and D-100 rests on one same-recipe refit (114/250 outputs and 1.7 pp of macro differ). It is an observation, not a variance estimate.
+  - The Qwen3.5 run records the Transformers linear-attention implementation; flash-linear-attention use is not verified. Inference `peak_vram_gb` is not reset between sequential arms and is not compared.
+  - `reports/REPORT.md`, `reports/w4/test/TEST_REPORT.md`, `docs/STRETCH_A.md`, `docs/PROJECT_WALKTHROUGH.md` and `docs/SCORER_V2_1_KNOWN_ISSUES.md` carry the corrected statements. The report now ends with its key findings, as the assignment requires.

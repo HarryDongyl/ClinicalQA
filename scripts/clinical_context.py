@@ -168,14 +168,14 @@ def cmd_gold(a: argparse.Namespace) -> None:
 
 
 def cmd_score(a: argparse.Namespace) -> None:
-    records = {r["id"]: r for r in read_jsonl(ROOT / "data" / "val.jsonl")}
+    records = {r["id"]: r for r in read_jsonl(ROOT / "data" / f"{a.split}.jsonl")}
     ids = applicable(records)
     out = ROOT / a.out
     out.mkdir(parents=True, exist_ok=True)
     md = ["# Clinical-context check (post-hoc diagnostic, rules developed on train gold)", "",
           "| label | BMI | conversion | all | no executed call |", "|---|---|---|---|---|"]
     for label in a.labels:
-        traj = {t["id"]: t for t in read_jsonl(ROOT / "outputs" / label / "val" / "trajectories.jsonl")}
+        traj = {t["id"]: t for t in read_jsonl(ROOT / "outputs" / label / a.split / "trajectories.jsonl")}
         rows = []
         for i in ids:
             t = traj[i]
@@ -203,6 +203,8 @@ def main() -> None:
     g.add_argument("--split", default="train", choices=["train", "val"])
     s = sub.add_parser("score")
     s.add_argument("--labels", nargs="+", required=True)
+    s.add_argument("--split", default="val", choices=["val", "test"],
+                   help="test only for frozen *_test outputs (post-hoc diagnostic, never for selection)")
     s.add_argument("--out", required=True)
     a = p.parse_args()
     {"gold": cmd_gold, "score": cmd_score}[a.cmd](a)

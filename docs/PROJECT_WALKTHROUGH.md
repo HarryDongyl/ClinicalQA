@@ -6,10 +6,9 @@ This document retells the project in order, starting from nothing but [ASSIGNMEN
 - **What was done**;
 - **Evidence**: concrete numbers and IDs;
 - **Decisions**: the choice and why;
-- **Hindsight**: what was wrong or would be done differently;
-- **Follow-ups**: questions to expect in an interview.
+- **Hindsight**: what was wrong or would be done differently.
 
-Status: 2026-10-02. Wave 4 round 1 is complete and scored (stage 16). Later experiments use Qwen3 (D-095). The gate review, the numeric audit, round 2 (Stretch A on Qwen3) and test are pending.
+Status: 2026-10-03, final. The final models are F′ (core) and A-sft2 epoch 2 (Stretch A); the frozen test run is complete (stage 19).
 
 Numbers below are validation unless marked test. Scores are labelled by scorer:
 
@@ -18,12 +17,11 @@ Numbers below are validation unless marked test. Scores are labelled by scorer:
 
 Detailed evidence lives in:
 
-- [INTERVIEW_PREP.md](INTERVIEW_PREP.md);
-- [ROUND4_FINDINGS.md](ROUND4_FINDINGS.md);
-- [WAVE3_RESULTS_REVIEW_8349.md](WAVE3_RESULTS_REVIEW_8349.md);
-- [SCORER_V2.md](SCORER_V2.md) and [../reports/scorer_v2/VALIDATION.md](../reports/scorer_v2/VALIDATION.md);
-- [STRETCH_A_PLAN.md](STRETCH_A_PLAN.md);
-- [RUNBOOK_W4.md](RUNBOOK_W4.md).
+- [DECISIONS.md](DECISIONS.md) and [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md);
+- [SCORER.md](SCORER.md), [SCORER_V2_1_KNOWN_ISSUES.md](SCORER_V2_1_KNOWN_ISSUES.md) and [../reports/scorer_v2/VALIDATION.md](../reports/scorer_v2/VALIDATION.md);
+- [STRETCH_A.md](STRETCH_A.md);
+- [../reports/REPORT.md](../reports/REPORT.md), [../reports/DATA_QUALITY.md](../reports/DATA_QUALITY.md) and [../reports/w4/test/TEST_REPORT.md](../reports/w4/test/TEST_REPORT.md);
+- archived round reviews in [history/](history/).
 
 ---
 
@@ -48,7 +46,9 @@ Detailed evidence lives in:
 | 15 | Wave 4 design | H1 cross-family replication, H2 numeric superiority (sign test), H3 tool transfer. Gates and stop rules frozen |
 | 16 | Wave 4 round 1 | **H1 holds** (Qwen3.5 P1 29/34 → 0/34); P1-RAW 32/34 rules out rows/steps; the families tie on relabel data (+0.25 pp), so **Qwen3 is kept** for later experiments, on cost (sequences 11% longer on Qwen3.5); gate needs review (val_104) |
 | 17 | Scorer finding | v1 over-fails numeric (51% agreement on the clean holdout); v2.1 under-fails false *extra* claims. A guarded v2.2 was prototyped, **not adopted** |
-| 18 | Limitations & next steps | Single seed, test reused, LLM adjudicators, regex parsing, template-bound data |
+| 18 | F′ refit and Stretch A | F′ retrained (adapter lost): P1 0/34 again, but only 136/250 val items identical and macro 1.7 pp lower (one refit, not a variance estimate). A-sft fabricated ages (16/19); the diagnosed fix, A-sft2, reaches 17/19 end-to-end with 0/19 fabrication at about 1 pp core cost |
+| 19 | Test run | Frozen five-model list, run once: F′ 97.5 v2.1 macro and 0/10 natural-Q5 fabrication; filter-only 6/10; Qwen3.5 relabel ties F′ |
+| 20 | Limitations & next steps | Single seed, test reused, LLM adjudicators, regex parsing, template-bound data |
 
 ---
 
@@ -79,12 +79,6 @@ Detailed evidence lives in:
 
 **Central tension**, which became the spine of the project. Pushing the model to call tools reliably encourages it to call when inputs are absent and to invent the arguments. Making it cautious suppresses correct calls. So both sides are measured together, every time: abstention on missing inputs **and** correct calls on intact inputs.
 
-**Follow-ups.**
-
-- "Hardest requirement?" → the call-vs-abstain tension above.
-- "How did you make *calibrated* measurable?" → behaviour metrics, plus diagnostic confidence (stage 13).
-- "You spent far more than 4 hours. Why?" → the Core was done early. The extra time went into evaluation validity and one data-policy finding, which the 20% "going beyond" covers. Say this honestly.
-
 ---
 
 ## 2. Constraints and the definition of success
@@ -110,11 +104,6 @@ Detailed evidence lives in:
 Costs: only the most likely trajectory is seen, so a sampled deployment could expose fabrication that greedy hides; there is no self-consistency confidence; outputs are not bit-identical across GPU kernels.
 
 **Hindsight.** The pre-registered wave-1 rule turned out to be wrong (stage 7). It was replaced openly, with the reason documented, and applied only to later waves. A rule may change, but only before seeing the results it judges.
-
-**Follow-ups.**
-
-- "Isn't pre-registration rigid?"
-- "Why not carve more validation data out of train?" Answer: the splits must be used as-is, and val is small by design; the mitigations are paired comparisons and targeted probes.
 
 ---
 
@@ -162,15 +151,6 @@ Generated report: `reports/data_analysis.md`. Every flag: `reports/quality_flags
 | Allergy questions that mention allergy: 51 train examples; implicit ones: **5**. Val accuracy 36/36 vs 8/18 | 10 |
 | The table eGFR is not derivable from creatinine, age and sex (median deviation 26–37) | 14 |
 
-**Follow-ups.**
-
-- **"How do you know the 78 are gold errors and not parser misses?"**
-  1. The check searches the note, table *and* question, with lb→kg and in→cm conversions; the 67 question-only cases are correctly *not* flagged.
-  2. Every flagged packet was reviewed (`reports/w3/q5_review_packet.md`).
-  3. The base model abstains on all 7 val Q5 items.
-  4. The parser has regression tests.
-- "Why not just fix the labels?" → see stages 9–11.
-
 ---
 
 ## 4. Input/output representation
@@ -188,12 +168,6 @@ Generated report: `reports/data_analysis.md`. Every flag: `reports/quality_flags
 | One `render()` path for training and inference; calls are re-rendered through the template during rollout | Train/inference parity by construction |
 | System prompt v1: grounding, tool use, missing information, "missing allergy documentation ≠ no allergies", concise final answer | Frozen and hashed into every run |
 | Gold metric arguments copied as targets; imperial conversion is learned implicitly | Follows the dataset contract. An explicit conversion chain is a separate ablation |
-
-**Follow-ups.**
-
-- "Why not JSON for the table?" → the table is not a measured bottleneck.
-- "Why not put reasoning before the call?" → stage 10, the R-VIS ablation.
-- "Is the end-of-turn token trained?" → yes, confirmed by the mask audit.
 
 ---
 
@@ -222,12 +196,6 @@ Re-weighting was rejected: the under-weighted parts (extractive and the call dec
 
 **Evidence: micro-batch.** Micro-batch 4 × accumulation 4 (wave 2) was **32% slower** per optimiser step (13.5 vs 10.2 s) and used 17.75 vs 7.8 GB. Its loss curve was identical to micro-batch 1 (1.915 / 0.858 / 0.582 vs 1.918 / 0.867 / 0.583 at steps 1 / 10 / 20). This is direct evidence that the loss normalisation is correct. The slowdown is probably padding forcing a slower SDPA kernel (a hypothesis). The fix would be padding-free packing.
 
-**Follow-ups.**
-
-- "QLoRA when bf16 LoRA fits?" → headroom; the accuracy cost is unmeasured, and a bf16 control is a documented next step.
-- "Did you tune r?" → no; literature plus the train-fit diagnostic.
-- "Why micro-batch 1?" → measured above.
-
 ---
 
 ## 6. Evaluation design (v1)
@@ -242,11 +210,6 @@ Re-weighting was rejected: the under-weighted parts (extractive and the call dec
 - **Scorer v1** (regex): extractive = gold numbers at gold precision, plus direction words in the same sentence, with a token-F1 fallback; numeric = gold numbers; tool funnel = selected → valid → arguments within ±0.05 → executed → result in the answer; uncertainty = abstention phrase + missing field named + no fabricated value.
 - Extra diagnostics: tool end-to-end, over-call, over-refusal, unsupported-argument rate, Wilson CIs, paired bootstrap.
 - The test set is guarded: `generate` refuses test; `final` requires a clean tree and a frozen adapter.
-
-**Follow-ups.**
-
-- "Why real execution instead of teacher forcing?" → it measures the deployed behaviour: the decision, the arguments, and whether the result is used.
-- "Why no LLM judge?" → determinism and cost first. The judge was deferred until the deterministic scorer's limits were known (stage 8).
 
 ---
 
@@ -274,11 +237,6 @@ Re-weighting was rejected: the under-weighted parts (extractive and the call dec
 - The scorer could not be trusted for per-type claims, so it had to be rebuilt.
 
 **Hindsight.** The 0.44 → 0.82 headline mostly reflected the v1 scorer rewarding the gold answer style. It was not a pure capability gain.
-
-**Follow-ups.**
-
-- "So did SFT help?" → yes, durably for tool use, abstention and format; extractive was largely already solved (stage 8).
-- "Why did you pick a fabricating model?" → the rule's blind spot.
 
 ---
 
@@ -331,11 +289,6 @@ Rater agreement: 0.92 / 1.00 / 0.93.
 - Reporting the honest 76.7% holdout result, then fixing by question type and re-validating on a second unseen holdout, is the methodological highlight.
 - **Remaining weakness:** both parsing layers are regex rules fitted to this dataset's templates. Numeric answers are still over-credited (stage 11); stage 17 pins down the mechanism.
 
-**Follow-ups.**
-
-- "Who validated the validators?" → LLM adjudicators with safeguards, plus an informal human check of about 20 items that was not recorded.
-- "Isn't 92.6% overfit?" → it is measured on unseen items. The holdout-1 tuning bias cannot be quantified exactly, so it is disclosed.
-
 ---
 
 ## 9. Wave 2 (learning rate, batch, prompt)
@@ -350,8 +303,6 @@ Rater agreement: 0.92 / 1.00 / 0.93.
 | **Natural Q5 behaviour across all runs** | Raw: **50/56 fabricate via a call (89%)**. Filtered at lr 5e-5: 1/28. **Filtered at lr ≥ 1e-4: 17/42 fabricate in text** ("The patient's weight is documented at 68.5 kg…", with no call) | Filtering removes the wrong signal but teaches nothing; the fabrication moves into prose, worse at higher lr |
 
 **Hindsight.** The wave-1 impression that "filtering fixes it" was measured at lr 5e-5. Data decisions must be checked at the learning rate that will actually be used.
-
-**Follow-ups.** "Why stop tuning?" → the differences are inside noise; more sweeping only adds winner's curse. Seeds are more informative than a best lr.
 
 ---
 
@@ -374,11 +325,6 @@ Rater agreement: 0.92 / 1.00 / 0.93.
 | Scorer | v2.1 frozen; v1 always reported | Stage 8 |
 | Test | Second use disclosed; frozen list | Stage 2 discipline |
 | Probes | Counterfactual P1–P5 | Asks "does the model read the note?" without hand-written answers |
-
-**Follow-ups.**
-
-- "Isn't relabelling editing gold?" → train only, records whose gold is provably unsupported by its own input, and documented.
-- "Why not weight the loss?" → layer 1 above.
 
 ---
 
@@ -436,11 +382,6 @@ What the table shows:
 - Numeric needs a claim-level audit.
 - Do not claim "92% numeric" or "96.7% clinical accuracy".
 
-**Follow-ups.**
-
-- "Lucky seed?" → the effect size (25 vs 0 of 34) plus the replications in stages 9 and 12; more seeds are a next step.
-- "Is the effect from the extra rows and steps?" → P1-RAW, a label-only control (stage 15).
-
 ---
 
 ## 12. Qwen3.5 round (A100; one seed)
@@ -469,7 +410,7 @@ What the table shows:
 1. **The filtered failure replicates on a different family, template, call format and GPU.** The model even writes "Using calculate_bmi with these values (weight_kg=108.5, height_cm=162.0)… BMI 41.4" **without calling**: a hallucinated tool call in prose. The pre-registered trigger for a Qwen3.5 relabel run was met.
 2. **Fabrication grows with training**: natural Q5 abstention 7/7 at epoch 1 vs 2/7 at epoch 2.
 3. **Zero-shot Qwen3.5 is a stronger tool caller** (53/55) but over-calls (50/188), abstains less, and rarely states the BMI category.
-4. **Numeric looks better after SFT.** v1 34 vs 25/50, v2.1 0.96 vs 0.80, train-fit 38 vs 32. Both scorers agree, and v1 errs towards false negatives, which strengthens the signal. Still pending the audit.
+4. **Numeric looks better after SFT.** v1 34 vs 25/50, v2.1 0.96 vs 0.80, train-fit 38 vs 32. Both scorers agree here, but on the matched relabel comparison they disagree (stage 17); H2 is reported as unresolved (D-101).
 5. **Cost**: 63.3 min and 11.3 GiB (A100, contention), so not a clean comparison.
 
 Smoke-test note: the tool-argument smoke check failed on one imperial example (train_006) and was overridden; the override is recorded.
@@ -585,14 +526,14 @@ Readings:
 4. **Parity passed:** 250/250 identical (raw outputs, calls, final answers, stop reasons). The Stretch A code did not change core behaviour.
 5. Clinical context 54/55; call ECE 0.0016; train-fit tool and uncertain 50/50; 56.6 min training, 11.3 GiB.
 
-**Gate (needs review).** Four of five screen checks pass. "No new valid-call failures on P1 partners" fails on **val_104**:
+**Gate (reviewed: pass, Harry, 2026-10-02).** Four of five screen checks pass. "No new valid-call failures on P1 partners" fails on **val_104**:
 
 - the note gives 68.9 in (175.006 cm); the model passed 174.9 cm, 0.106 off, outside the ±0.05 argument tolerance;
 - the BMI (21.1), category and context are correct, and v2.1 scores the item correct on outcome;
 - it is an imperial-conversion drift, the class seen on test in wave 1, not a suppressed call;
 - epoch 1 passes it (175.0); totals are equal (33/34 each; the control's failure is val_105, which the candidate passes).
 
-The pre-registered rule says a failed screen goes to review, never to a moved threshold or another epoch. Recommendation: pass after review, disclosing the strict-check failure and its cause.
+The pre-registered rule says a failed screen goes to review, never to a moved threshold or another epoch. The review passed it, disclosing the strict-check failure and its cause (`configs/w4/gate_q35.json`).
 
 **Evidence: full family comparison** (`reports/w4/r1/family_compare/TABLE.md`).
 
@@ -689,31 +630,76 @@ Results:
 
 **Decision.** Keep **v2.1 as the reported scorer**. Report this as a known limitation, with v2.2 as documented future work. Reasons: there is no clean holdout for v2.2, the guards were tuned on the same sets, and numeric conclusions rest on the claim-level audit anyway. Details: `reports/scorer_v2/VALIDATION.md` §5.
 
-**Follow-ups.**
+---
 
-- "So which numeric number is right?" → neither scorer alone. v1 over-fails and v2.1 over-passes on extra claims; the audit decides H2.
-- "Why not adopt v2.2?" → it was built on the evaluation sets, so adopting it would repeat the v2.0 mistake (stage 8) of trusting a scorer validated only on its development data.
+## 18. F′ refit and Stretch A (rounds 2 and 2b, RTX 4090)
+
+**F′.** The wave-3 F-s42 adapter had never been uploaded, so F was retrained with an identical recipe as F′ (D-097).
+
+| | F (wave 3) | F′ |
+|---|---|---|
+| P1 fabrication | 0/34 | 0/34 |
+| Partner valid calls | 33/34 | 34/34 |
+| Natural Q5 | 7/7 | 7/7 |
+| Grounded tool | 54/55 | 54/55 |
+| v2.1 macro | 96.7 | 95.0 |
+| Identical validation items | — | 136/250 |
+
+**Reading.** The safety findings reproduce, but this one same-recipe refit moved the macro by 1.7 pp (one observation, not a variance estimate; kernel nondeterminism is plausible but not isolated). Differences of 1–2 pp (including the +0.25 pp family comparison) are therefore not interpreted.
+
+**First A-sft failed** its pre-registered criteria: end-to-end 9/19, age-probe fabrication 16/19, grounded tool 51/55. The diagnosis (D-100):
+
+- **A threshold shift, not lost discrimination.** Probe call probability sat around 0.5 while the positives-vs-probes AUROC was 0.983. The causes were 40 positives against 6 age negatives, and question templates that presuppose age.
+- **An unlearned KDIGO mapping.** G3a and G5 had 3 and 1 examples.
+- **Core regression overlapping the refit differences**: three of four tool failures also occur in F or F′.
+
+**A-sft2.** Prompt v1e2 (with the KDIGO table), 120 stage-balanced positives, 60 age negatives (40 paired), 20 sex negatives and neutral templates. Result: end-to-end 17/19, probe fabrication 0/19, P1 1/34, natural Q5 7/7.
+
+The two core criteria still fail: grounded tool 51/55 (two v2.1 reader false fails, S-04) and discordance 9 against ≤ 5. Following the pre-registered rule, **F′ stays the core final model**, and A-sft2 is delivered as the Stretch A model with its core cost disclosed (D-101). Details: [STRETCH_A.md](STRETCH_A.md).
+
+**Hindsight.** The first A-sft repeated the project's central lesson on a new tool: tool SFT with too few no-call examples teaches fabrication. The fix was the same kind of change as the Q5 relabel.
 
 ---
 
-## 18. Current claims, limitations and next steps
+## 19. Confirmatory test run (RTX 4090; run once)
 
-**What can be claimed now** (single seed, validation):
+The five-model list was frozen and committed before any output (`configs/w4/final_test.json`; D-098, D-101), then run once at commit `7ae0034`. Report: [../reports/w4/test/TEST_REPORT.md](../reports/w4/test/TEST_REPORT.md).
+
+| | F′ | A-sft2 | C-filtered | R0-v1 | Q35-relabel |
+|---|---|---|---|---|---|
+| Natural Q5 fabrication | **0/10** | 0/10 | **6/10** | 1/10 | 0/10 |
+| Grounded tool tasks | **89/90** | 87/90 | 87/90 | 48/90 | 88/90 |
+| v2.1 macro | **97.5** | 96.2 | 95.8 | 79.3 | 97.4 |
+
+**Readings.**
+
+1. **The headline replicates on test.** C-filtered fabricates on 6/10: four in prose (three of them claiming a calculate_bmi call that was never made), one through the call with the memorised height 178.5 cm, and one (test_288) that invents 50 kg and 150 cm and then says BMI cannot be calculated. v2.1 credits that last one as an abstention.
+2. **F′ is the strongest core model.** Q35-relabel ties it (−0.09 pp), and A-sft2 is −1.28 pp [−2.66, −0.06]; two of its three tool failures are scorer false fails.
+
+**Caveats.** Test was used before, so this is an exploratory confirmation, and n = 10 natural-Q5 items is underpowered. Fabrication is reduced, not eliminated: on test_020, an uncertain record outside the Q5 set, F′ invents a weight of 145.5 lb.
+
+---
+
+## 20. Current claims, limitations and next steps
+
+**What can be claimed** (single seed; validation, and confirmed on a reused test split where noted):
 
 1. Relabelling input-deficient tool records as explicit abstentions removes missing-measurement fabrication (25/34 → 0/34) without hurting tool use (54/55; partners 33/34).
 2. Filtering alone moves the hallucination from tool arguments into prose, and the same happens on a second model family (29/34).
 3. SFT beats prompting decisively on tool use (54/55 vs at best 29/55). Neither a stricter prompt nor an 8B base fixes grounding.
 4. The validated scorer is far more reliable than the simple one (92.6% vs 65.7% on an unseen holdout).
 5. The relabel effect replicates across model families (Qwen3.5: 29/34 → 0/34), and a label-only control (P1-RAW, 32/34) rules out row count and training length.
-6. On the same data the two backbones tie (+0.25 pp [−2.15, +3.10]): the data policy matters far more than the newer base.
+6. On the same data the two backbones tie (+0.25 pp [−2.15, +3.10] on val; −0.09 pp on test): the data policy matters far more than the newer base.
+7. On test, relabel models abstain on 10/10 natural-Q5 items, while filter-only fabricates on 6/10.
+8. A third tool can be added by SFT (17/19 end-to-end, 0/19 fabrication) once no-call examples are sufficient, at about 1 pp core cost.
 
-**What cannot be claimed yet.**
+**What cannot be claimed.**
 
-- Numeric accuracy (pending the claim-level audit; v1 over-fails and v2.1 misses false extra claims, stage 17).
-- Qwen3.5 superiority (pending H2).
+- Numeric accuracy: v1 over-fails and v2.1 misses false extra claims (stage 17); the claim-level audit was not run.
+- Qwen3.5 superiority on numeric (H2 unresolved).
 - Population-level fabrication rates (0/34 has an upper bound of about 10%).
 - Seed robustness.
-- A clean test estimate.
+- A clean test estimate (test is reused).
 
 **Limitations.**
 
@@ -725,6 +711,7 @@ Results:
 - Tool-result faithfulness is untested (copy vs recompute).
 - Synthetic, template-generated data.
 - Hardware and code-state differences between rounds.
+- One same-recipe refit (F vs F′): 114/250 outputs and 1.7 pp of macro differ; not a variance estimate.
 
 **Next steps** (with more time, in order of value):
 
@@ -738,4 +725,4 @@ Results:
 8. 8B SFT with a tuned lr.
 9. A data-size curve.
 10. Multi-call support (µmol/L → eGFR).
-11. Repository consolidation: README → REPORT as the reviewer path, history archived.
+11. A claim-level numeric audit (H2), and the paired v2.2 guards validated on a fresh holdout.

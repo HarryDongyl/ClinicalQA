@@ -1,7 +1,7 @@
 # Scorer v2 validation (2026-09-29)
 
-Design: `docs/SCORER_V2.md`. Reproduce the numbers in section 3:
-`uv run python scripts/scorer_v2_agreement.py`. Reproduce the gold self-check:
+Design: `docs/SCORER.md`. Reproduce the numbers in section 3:
+`uv run python scripts/legacy/scorer_v2_agreement.py`. Reproduce the gold self-check:
 `uv run python scripts/scorer_v2_gold_check.py train|val`.
 
 ## 1. Artifacts in this directory
@@ -66,7 +66,7 @@ Wave-1 inputs: `~/Downloads/outputs_9599.zip` (RunPod, RTX 4090). Raw outputs ar
   - 1 tool status-consistency false fail;
   - 2 uncertain "missing field" taxonomy misses (timestamp vs "prior value");
   - 2 false passes: a hedged "cannot be safely initiated" counted as hedged, and a final "Answer:" line contradicting the body on a "most" question.
-- These all come from regex parsing of answers. Replacing that layer is the proposed next step: an LLM parser with a deterministic verifier (see `docs/SCORER_V2.md` section 5).
+- These all come from regex parsing of answers. Replacing that layer is the proposed next step: an LLM parser with a deterministic verifier (see `docs/history/SCORER_V2.md` section 5).
 
 ### Gold self-check (gold as the prediction)
 
@@ -108,7 +108,7 @@ work: the module, tests and `--scorer 2.2` option stay in the repository, and th
 below is reported as a known v2.1 limitation.
 
 **Why.** v2.1 checks only what the question asks, and a numeric check passes when any number falls in its band. False
-extra claims therefore pass. `docs/SCORER_V2.md` already counts them as errors "when the checker can establish them",
+extra claims therefore pass. `docs/history/SCORER_V2.md` already counts them as errors "when the checker can establish them",
 but v2.1 implemented this only inside set checks. On the wave-4 validation outputs, F-s42 epoch 2 had three such false
 passes (val_062, val_117, val_194). The section-3 holdouts came from wave-1 models, whose numeric errors sat mostly in
 the asked part, so they could not reveal this.

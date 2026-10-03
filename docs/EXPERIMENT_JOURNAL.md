@@ -1,10 +1,24 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-10-02. Latest entry: W3-RESULTS-009.
+Maintained record. Last updated: 2026-10-03. Latest entry: W4-FINAL-010.
+
+
+## W4-FINAL-010 — Wave four complete: refit, Stretch A, test, consolidation
+
+Date: 2026-10-03.
+
+- **Round 1 (A100).** Qwen3.5 relabel: P1 0/34 against 29/34 for filter. P1-RAW 32/34. Parity 250/250. The families tie on the same data (D-094). Qwen3 is kept for cost (D-095).
+- **F′ refit (RTX 4090; D-097).** The F-s42 adapter was lost. The same recipe again gives P1 0/34, but only 136/250 identical items and v2.1 macro 95.0 vs 96.7, which is the retrain-variance estimate.
+- **Stretch A.**
+  - The first A-sft failed: 9/19 end-to-end and 16/19 age fabrication.
+  - The diagnosis was a threshold shift from too few negatives, plus an unlearned KDIGO mapping (D-100).
+  - A-sft2 reaches 17/19 and 0/19, but fails the two core criteria (51/55 grounded tool, two of them scorer false fails; discordance 9). It is delivered as the Stretch A model, with F′ as the core final model (D-101).
+- **Test** (run once, five models; D-102): F′ 97.5 v2.1 macro with 0/10 natural-Q5 fabrication; filter-only 6/10 (one, test_288, credited by v2.1 as an abstention). F′ still invents a weight on test_020, an uncertain record.
+- **Consolidation** (D-103): scorer issue list, report, data-quality report, README, CLAUDE.md, script and config indexes, and archived documents. Not run: the claim-level numeric audit (H2 unresolved) and seeds.
 
 ## W3-RESULTS-009 — Completed core results and numerical-score audit
 
-Date: 2026-10-02. Status: validation/P1/train-fit review complete; Qwen3.5 outcomes pending. Full evidence: [WAVE3_RESULTS_REVIEW.md](WAVE3_RESULTS_REVIEW.md); fresh CPU reports: `reports/w3/results_2026-10-02/`.
+Date: 2026-10-02. Status: validation/P1/train-fit review complete; Qwen3.5 outcomes pending. Full evidence: [WAVE3_RESULTS_REVIEW.md](history/WAVE3_RESULTS_REVIEW.md); fresh CPU reports: `reports/w3/results_2026-10-02/`.
 
 Primary comparison: filtered C-s42 checkpoint 242 versus Q5-relabeled F-s42 checkpoint 250, Qwen3-4B-Instruct-2507, LR 1e-4, two epochs, mb1/ga16, NF4/r16, prompt v1, generation batch 2 on RTX 4090. The training view grows from 1,922 to 2,000 rows; this is a policy comparison, not a pure label effect. Inference protocol objects match.
 
@@ -301,7 +315,7 @@ This is an implementation specification, not a claim that relabeling has been ac
 
 ## W2-AUDIT-004 — independent review of supplied scorer v2.1
 
-Date: 2026-09-30. Status: diagnostic use only; not released for automatic semantic checkpoint selection. See `docs/SCORER_V2_1_AUDIT.md` for evidence and the revised experiment gates. This entry supersedes earlier assumptions that completing agreement alone establishes scorer validity.
+Date: 2026-09-30. Status: diagnostic use only; not released for automatic semantic checkpoint selection. See `docs/history/SCORER_V2_1_AUDIT.md` for evidence and the revised experiment gates. This entry supersedes earlier assumptions that completing agreement alone establishes scorer validity.
 
 - Reconciled all seven saved validation runs: 250 unique canonical IDs each and matching aggregate pass counts. No new model generation or training.
 - Core `clinqa.scorer_v2` is absent; the supplied scripts fail to import. The separate `scoring_v2.py` is an older implementation. New tests were found in Downloads/tests but cannot run against the missing core. The old 83-test result does not validate this scorer.
@@ -343,7 +357,7 @@ Prompt v2 inside SFT is a separate, labeled training-input change and is not par
 
 ## W2-RESEARCH-002 — repository-informed prompt and evaluator review
 
-Date: 2026-09-29. Documentation-only review; no new training, inference, external grading or test inspection. See `docs/REPOSITORY_DESIGN_REVIEW.md` for source links, design boundaries and next decisions.
+Date: 2026-09-29. Documentation-only review; no new training, inference, external grading or test inspection. See `docs/history/REPOSITORY_DESIGN_REVIEW.md` for source links, design boundaries and next decisions.
 
 - Verified actual configuration wiring: default training/evaluation still use system v1. The one-rule reference v2 exists as a separate candidate, not an active or validated replacement.
 - Inspected official HealthBench scorer and meta-evaluator, BFCL AST checker and prompt templates, and tau2 agent/evaluator source. Borrow criterion-level semantics, evaluator calibration, typed tool checks, explicit missing-parameter policy, and separate protocol/policy/task outcomes. Do not copy their output formats or domain objectives wholesale.
@@ -361,7 +375,7 @@ Date: 2026-09-29. Documentation-only review; no new training, inference, externa
 - Implemented `src/clinqa/scoring_v2.py`: prediction-independent question contracts, input-derived reference comparisons and calculations, cross-sentence subject tracking, compositional negation, explicit contradiction checks, and pass/fail/review results. Gold phrasing and its optional intermediate numbers are no longer an extractive/numeric correctness oracle.
 - Preserved `metrics.py` and original outputs as v1. Tool syntax, execution, completion and legacy argument counters remain separate from semantic answer scoring. Missing-input policy success is also reported separately from tool E2E.
 - Added `scripts/rescore_validation_v2.py` and `make score-v2`. They score seven validation evaluations (1,750 predictions), store contracts and evidence, and emit a blinded adjudication packet that includes automatic passes as well as failures. The command cannot read a test split and refuses to overwrite an existing report directory.
-- Added synthetic adversarial/metamorphic tests. All 83 cases in the new scorer and historical train/validation scorer suites passed. The 1,750-row validation audit, source hashes and unchanged training-source hash also passed verification. See `docs/SCORER_V2.md` for the design, limitations, and adjudication release gate.
+- Added synthetic adversarial/metamorphic tests. All 83 cases in the new scorer and historical train/validation scorer suites passed. The 1,750-row validation audit, source hashes and unchanged training-source hash also passed verification. See `docs/history/SCORER_V2.md` for the design, limitations, and adjudication release gate.
 - Added a one-rule reference-grounding prompt variant, four proposed filtered-training configurations, and evaluation batch-size 4/8 configurations. No new training or generation was launched.
 - Produced 78 **unreviewed training-only** Q5 uncertain-label proposals in `reports/q5_uncertain_proposals/`. Original data and the active filtered view were not changed; proposals are not registered for training.
 
@@ -384,7 +398,7 @@ Date: 2026-09-29. Documentation-only review; no new training, inference, externa
 
 ### What the new scores do and do not establish
 
-The new report is `reports/scorer_v2_validation/REPORT.md`; the schema and rubric are in `docs/SCORER_V2.md`. Many base false negatives become automatic passes, including the reviewed cross-sentence examples. However, many open note questions and clinical/numeric subquestions require adjudication. In the current bounded checker, base extractive results are 53 pass / 5 fail / 42 review; raw1e4 epoch one is 62 / 1 / 37; filtered5e5 epoch one is 63 / 0 / 37. **These are not replacement full accuracies.** The unresolved cases must not be counted as failures or silently excluded from model comparisons.
+The new report is `reports/scorer_v2_validation/REPORT.md`; the schema and rubric are in `docs/history/SCORER_V2.md`. Many base false negatives become automatic passes, including the reviewed cross-sentence examples. However, many open note questions and clinical/numeric subquestions require adjudication. In the current bounded checker, base extractive results are 53 pass / 5 fail / 42 review; raw1e4 epoch one is 62 / 1 / 37; filtered5e5 epoch one is 63 / 0 / 37. **These are not replacement full accuracies.** The unresolved cases must not be counted as failures or silently excluded from model comparisons.
 
 The independent tool-argument and grounding verifiers also disagree on some calls, including validation `val_104`. Such disagreement is a review item, not justification to widen conversion tolerances. A call that matches gold must still be checked against the input.
 

@@ -6,7 +6,7 @@ Uses:
   ablation     which items change between prompt arms (e.g. w2p_v1_base vs w2p_v2_base)
 
 Compares raw assistant turns, parsed calls, final answers and stop reasons per record id, and writes
-a JSON summary plus the differing ids. Refuses test labels, like rescore_validation_v2.py.
+a JSON summary plus the differing ids. Refuses test labels, like legacy/rescore_validation_v2.py.
 """
 
 from __future__ import annotations
