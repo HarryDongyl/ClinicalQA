@@ -1,0 +1,55 @@
+{
+ "status": "frozen",
+ "runs": [
+  {
+   "label": "f_refit_test",
+   "eval_config": "configs/eval_w4_v1.yaml",
+   "eval_config_sha256": "14bb026748ec7ce033084b9de409d8b54d1780853a43268e1a8351e69cebde4c",
+   "protocol_sha256": "0bca4b52ea670285257e86fa6715ab19646f662054bd4be0d0ea69702af16c9a",
+   "run": "w4_q3_refit_relabel_lr1e4_s42",
+   "adapter": "checkpoints/w4_q3_refit_relabel_lr1e4_s42/checkpoint-250",
+   "adapter_sha256": "556eb57331ed4b1840587af9a7d5dac5ed2a04826a45991870d640e3b3162c66"
+  },
+  {
+   "label": "asft2_test",
+   "eval_config": "configs/eval_w4_q3_tools3_v1e2.yaml",
+   "eval_config_sha256": "a41b24600969302aed8e4473c5dc2a681bb12e62026454074f7fdfb4fc645743",
+   "protocol_sha256": "cd63f160366ab41a7f9cefed77ab71ae0f527b94499be9feb0a3cb920288d9ff",
+   "run": "w4_q3_relabel_egfr2_lr1e4",
+   "adapter": "checkpoints/w4_q3_relabel_egfr2_lr1e4/checkpoint-276",
+   "adapter_sha256": "bd88eb7af6451f353e68694c04affa13351794f87d795f3bab8660eb7a36049a"
+  },
+  {
+   "label": "c_filtered_test",
+   "eval_config": "configs/eval_w4_v1.yaml",
+   "eval_config_sha256": "14bb026748ec7ce033084b9de409d8b54d1780853a43268e1a8351e69cebde4c",
+   "protocol_sha256": "0bca4b52ea670285257e86fa6715ab19646f662054bd4be0d0ea69702af16c9a",
+   "run": "w2_filtered_lr1e4_mb1",
+   "adapter": "checkpoints/w2_filtered_lr1e4_mb1/checkpoint-242",
+   "adapter_sha256": "8758304b0666b0609cb1c2096919f6cb265b874a6470438cdc15a2e28505596f"
+  },
+  {
+   "label": "r0_v1_test",
+   "eval_config": "configs/eval_w4_v1.yaml",
+   "eval_config_sha256": "14bb026748ec7ce033084b9de409d8b54d1780853a43268e1a8351e69cebde4c",
+   "protocol_sha256": "0bca4b52ea670285257e86fa6715ab19646f662054bd4be0d0ea69702af16c9a",
+   "run": "base",
+   "adapter": null,
+   "adapter_sha256": null
+  },
+  {
+   "label": "q35_relabel_test",
+   "eval_config": "configs/eval_w4_q35_4b.yaml",
+   "eval_config_sha256": "5046b772a7b37c36e144d43cca3de05c54b06ac67a24c72d8792f25358a873cb",
+   "protocol_sha256": "bc53f615a8eede186c3f8b1e99bb36cfa8fe37ab767e52d4548c84727f136c89",
+   "run": "w4_q35_4b_relabel_lr1e4",
+   "adapter": "checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250",
+   "adapter_sha256": "b28d7cc22bd8251c8a92abe97e1abc47f3ff4d2b255d83efd6303b854204a3ff"
+  }
+ ],
+ "pre_specified_report": [
+  "natural Q5 fabrication on test (n = 10; underpowered, disclosed)",
+  "grounded tool tasks on test",
+  "five assignment metrics on test under legacy v1 and diagnostic v2.1"
+ ]
+}
