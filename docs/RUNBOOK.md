@@ -1,109 +1,123 @@
-# Runbook: reproducing the final models on RunPod
+# Runbook: inspect, evaluate, or reproduce the final models
 
-GPU work runs on a RunPod pod (RTX 4090 24 GB with a CUDA-13 host driver ≥ 580.95.05, or an A100). Scoring and analysis run on any CPU machine. The archived round-by-round runbook is [history/RUNBOOK_W4.md](history/RUNBOOK_W4.md).
+Run commands from the repository root. The three paths below have different output identities: shipped evidence, fresh-label adapter evaluation, and fresh-run training. None requires deleting historical outputs or rerunning test. Historical orchestration is documented in [history/RUNBOOK_W4.md](history/RUNBOOK_W4.md).
 
-## 1. Pod setup (once per volume)
+## 1. Inspect and score the shipped evidence (CPU)
+
+Install uv and Python 3.11, then:
+
+```bash
+make setup-cpu
+make test
+make data analyze views-all
+make w4-score OUT=reports/final_validation_review
+```
+
+`w4-score` defaults to the delivered Qwen3.5 Core epoch 2 and A-sft2-Q35 epoch 2. It reads their saved outputs and writes full v1 metrics, frozen v2.1 summaries, P1 reports, and the Stretch eGFR report. It neither generates model answers nor selects a new checkpoint. Use a new `OUT` on a later invocation; existing report directories are rejected.
+
+The saved final test results are in `reports/w4/test/` and `reports/w4/test_q35/`. The final selection and evaluation chronology, including prior exposure, remains in D-105/D-106 and the experiment journal.
+
+## 2. Prepare a GPU pod
+
+Use Linux with an RTX 4090 24 GB or larger; the pinned CUDA stack requires a compatible host driver (the recorded RunPod setup checks CUDA 13 / driver 580.95.05 or later).
 
 ```bash
 cd /workspace
-git clone https://github.com/HarryDongyl/ClinicalQA.git Clinical && cd Clinical   # scripts expect /workspace/Clinical
-source scripts/runpod_env.sh        # every new terminal: PATH, uv and HF caches on /workspace
-bash scripts/setup_runpod.sh        # uv 0.12.19, Python 3.11.13; checks the host driver
-make setup                          # uv sync --frozen --extra train --extra qwen35 (installs torch, transformers, hf)
-uv run --frozen pytest -q
+git clone https://github.com/HarryDongyl/ClinicalQA.git Clinical
+cd Clinical
+source scripts/runpod_env.sh
+bash scripts/setup_runpod.sh
+make setup
+make test
+make data analyze views-all
 ```
 
-- Do not run a bare `uv sync`: it removes the `train` extra, including `hf`.
-- **Hugging Face.** `uv run --frozen hf auth login` with a write token, needed to upload adapters.
-- **GitHub.** The runners commit and push after every step. Use a fine-grained personal access token (Contents: read and write) as the password; an account password is rejected.
+`make setup` installs the training and Qwen3.5 extras. Do not run `make setup-cpu` or bare `uv sync` inside an active GPU environment: that removes the optional training dependencies. `causal-conv1d` is not installed; the recorded short-convolution path is PyTorch. Initial steps include Triton compilation.
 
-  ```bash
-  git config --global credential.helper "store --file /workspace/.git-credentials"
-  git push --dry-run origin <branch>      # enter the token once
-  chmod 600 /workspace/.git-credentials
-  export GIT_TERMINAL_PROMPT=0            # a failed push warns instead of hanging inside tmux
-  ```
+The direct commands below do not upload artifacts or push to GitHub. A GPU smoke run is useful on a new image, but the existing `make gpu-smoke` is a Qwen3 check, not proof of the Qwen3.5 path.
 
-## 2. Final models
+## 3. Evaluate an existing adapter with a fresh label
 
-Run each in `tmux`. Every runner refuses to start with modified tracked files and resumes finished steps: training is skipped when its manifest exists, and evaluations reuse verified outputs.
+The recorded Core repository is `Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4`. Anonymous access returned 401 during release review; confirm access or use a supplied local checkpoint. If access is intentionally private, a read token is sufficient (`uv run --frozen hf auth login`). No write token is needed for evaluation.
 
-| Model | Command | Measured |
-|---|---|---|
-| **Core: Qwen3.5 relabel** | `make train RUN=w4_q35_4b_relabel_lr1e4`, then `scripts/w3_epochs.py generate --run w4_q35_4b_relabel_lr1e4 --config configs/eval_w4_q35_4b.yaml --p1-all-epochs --trainfit` (or `STAGES=r1`, which adds its controls) | 56.6 min training, 11.3 GiB (A100) |
-| **Stretch A: A-sft2-Q35** | `STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh` | 87.0 min training, 12.1 GiB (RTX 4090) |
-| F′ (Qwen3 comparator) | `STAGES=refit UPLOAD=1 bash scripts/run_w4_round.sh` | 42.5 min, 7.8 GiB (RTX 4090) |
-| A-sft2 (Qwen3 comparator) | `STAGES=r2b UPLOAD=1 bash scripts/run_w4_round.sh` | 59.7 min, 8.4 GiB (RTX 4090) |
-
-Qwen3.5 needs `flash-linear-attention` to import (installed by `make setup`). `causal-conv1d` is not installed. The first steps are slow while Triton compiles kernels; `scripts/runpod_env.sh` keeps that cache on `/workspace`.
-
-Without GPU training, download the published adapter and evaluate only:
+For a Hub download, set `CLINQA_HUB_REVISION` to the immutable revision supplied with the adapter before running this block:
 
 ```bash
-uv run --frozen hf download Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4 --include "checkpoint-250/*" \
+: "${CLINQA_HUB_REVISION:?Set the verified immutable Hub revision first}"
+uv run --frozen hf download Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4 \
+  --revision "$CLINQA_HUB_REVISION" --include "checkpoint-250/*" \
   --local-dir checkpoints/w4_q35_4b_relabel_lr1e4
-uv run --frozen python -m clinqa.evaluate --config configs/eval_w4_q35_4b.yaml generate --label my_q35_val \
-  --run w4_q35_4b_relabel_lr1e4 --adapter checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250 --split val
+uv run --frozen python -c 'from clinqa.run_info import adapter_sha256; assert adapter_sha256("checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250") == "b28d7cc22bd8251c8a92abe97e1abc47f3ff4d2b255d83efd6303b854204a3ff", "adapter hash mismatch"'
 ```
 
-### Stretch A on Qwen3.5 and the second test use (D-105; done, do not repeat)
-
-The Stretch A model was produced in one RTX 4090 session:
+Once that local checkpoint is available:
 
 ```bash
-STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_r2c.console.log
+make eval EVAL_CONFIG=configs/eval_w4_q35_4b.yaml RUN=w4_q35_4b_relabel_lr1e4 \
+  ADAPTER=checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250 LABEL=my_q35_val
+uv run --frozen python scripts/score_v21_val.py --out reports/my_q35_val --labels my_q35_val
 ```
 
-This runs, in order:
+Choose a fresh label and report directory for another evaluation. Historical labels are hash-checked against their original protocol; downloading weights does not authorize overwriting them. The immutable public revision remains an artifact-release requirement, not an invented value in this runbook.
 
-1. a zero-shot v1e2 arm on the Qwen3.5 relabel adapter;
-2. the v1e2 mask audit (`reports/w4/mask_audit_q35_4b_egfr2.json` must pass);
-3. A-sft2-Q35 training (2,200 rows, 276 steps);
-4. both epochs on val, P1 and the eGFR sets.
+## 4. Reproduce the training recipe under fresh run IDs
 
-flash-linear-attention must import. Then freeze and run the second, disclosed test use:
+The supplied reproduction configs inherit the final training recipe and change only run ID, checkpoint directory, and output directory. Evaluation configs are self-contained because the evaluation CLI does not support `extends`. New outputs remain under `outputs/`, as required by the existing scoring helpers.
+
+### Core: Qwen3.5 relabel
 
 ```bash
-uv run --frozen python scripts/w4_test.py freeze --frozen configs/w4/final_test_q35.json \
-  --entry asft2_q35_test configs/eval_w4_q35_4b_tools3_v1e2.yaml w4_q35_4b_relabel_egfr2_lr1e4 \
-          checkpoints/w4_q35_4b_relabel_egfr2_lr1e4/checkpoint-276
-git add configs/w4/final_test_q35.json && git commit -m "w4: freeze second test list (D-105)" && git push
-STAGES=test TEST_LIST=configs/w4/final_test_q35.json bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_test_q35.console.log
+make train RUN=reproduce_core_q35
+uv run --frozen python scripts/w3_epochs.py generate --run reproduce_core_q35 \
+  --config configs/eval_reproduce_core_q35.yaml --p1-all-epochs --trainfit
 ```
 
-Take the epoch-2 step from `outputs/w4_q35_4b_relabel_egfr2_lr1e4/manifest.json`; 276 is expected for 2,200 rows.
-
-## 3. Score locally (CPU)
+This trains from the pinned base on 2,000 reviewed records. Expected epoch checkpoints are 125 and 250. Both are evaluated on validation; epoch 2 is the fixed primary endpoint. To score this Core run alone:
 
 ```bash
-git pull
-uv run python scripts/score_v21_val.py --out reports/<new_dir>/v21 --labels w4_q3_refit_relabel_lr1e4_s42_step000250
-uv run python scripts/w3_analyze.py p1 --out reports/<new_dir>/p1 --labels w4_q3_refit_relabel_lr1e4_s42_step000250
-uv run python scripts/stretch_a_score.py score --out reports/<new_dir>/stretch_a --labels w4_q3_relabel_egfr2_lr1e4_step000276
+make score-v21 LABELS=reproduce_core_q35_step000250 OUT=reports/reproduce_core_v21
+uv run --frozen python scripts/w3_analyze.py p1 --out reports/reproduce_core_p1 \
+  --labels reproduce_core_q35_step000250
 ```
 
-Run these under bash, because zsh does not word-split `$VAR` label lists. Output directories are never overwritten; always choose a new one.
+### Optional Stretch: A-sft2-Q35 recipe
 
-## 4. The test run (done once; do not repeat)
+```bash
+make train RUN=reproduce_stretch_q35
+uv run --frozen python scripts/w3_epochs.py generate --run reproduce_stretch_q35 \
+  --config configs/eval_reproduce_stretch_q35.yaml --p1-all-epochs \
+  --records-files configs/w4/egfr_val.json configs/w4/egfr_age_probes.json
+make w4-score OUT=reports/reproduced_final_validation \
+  CORE_LABEL=reproduce_core_q35_step000250 \
+  STRETCH_LABEL=reproduce_stretch_q35_step000276
+```
 
-Test was run once on 2026-10-03 from the frozen list `configs/w4/final_test.json`, at commit `7ae0034` on an RTX 4090 (D-098, D-101), and once more for A-sft2-Q35 only from `configs/w4/final_test_q35.json` at `724e707` (D-105, D-106). Results: `outputs/*_test/test/` and `reports/w4/test/TEST_REPORT.md`.
+The extension is another fresh-base training run, using 2,200 records and prompt v1e2. Expected epoch checkpoints are 138 and 276. `--records-files` is required to produce the eGFR inputs for scoring. Verify actual steps against each new training manifest. The combined scoring command assumes both reproduction paths have completed; it preserves all historical gate decisions.
 
-The protocol, for the record:
+These names are fresh in the submission. For another full rerun, copy the corresponding train/eval configs and change the run ID and both output paths consistently. Resume only an interrupted run with complete matching state:
 
-1. `scripts/w4_test.py freeze --entry LABEL EVAL_CONFIG RUN ADAPTER …` writes the list. It hashes each eval config, its protocol and each adapter, and is committed before any test output exists.
-2. `STAGES=test bash scripts/run_w4_round.sh` calls `w4_test.py run`. It refuses a dirty tree (untracked files count), any changed hash, or existing test outputs.
-3. A rerun needs `--rerun-reason`, which is written to `RERUN.txt` and disclosed.
+```bash
+make train RUN=reproduce_core_q35 RESUME=latest
+```
 
-## 5. Other rounds
+A completed run must get a new name. Current-source reproduction need not produce byte-identical outputs to a historical run; retain the new manifest and source hashes.
 
-The wave-3 round is `make w3-round` (`scripts/run_w3_round.sh`). Wave-4 stages are `r1` (Qwen3.5 relabel; requires flash-linear-attention) and `r2` (first Stretch A). Wave 2 is `make w2-round` (`scripts/legacy/run_w2_round.sh`). Each round's commands, labels and expected outputs are recorded in [EXPERIMENT_JOURNAL.md](EXPERIMENT_JOURNAL.md) and [history/RUNBOOK_W4.md](history/RUNBOOK_W4.md).
+## 5. Resources and historical runners
+
+- Recorded Core training: 56.6 minutes and 11.3 GiB peak allocated memory on A100.
+- Recorded Stretch training: 87.0 minutes and 12.1 GiB on RTX 4090.
+- Validation generation: approximately 20 minutes for 250 items; runtime depends on output length and hardware.
+
+These are measured historical jobs, not guaranteed timings for every pod.
+
+`run_w3_round.sh` and `run_w4_round.sh` retain the original experiment orchestration. They use historical run names and may commit, push, or upload. They are not the fresh-clone quickstart. `configs/w4/final_test.json` and `final_test_q35.json` preserve the frozen test lists; do not refreeze or rerun them as a reproduction setup step. Test reruns require an explicit recorded reason.
 
 ## Troubleshooting
 
-| Symptom | Cause and fix |
-|---|---|
-| `Tracked files are modified; commit first.` | `make views` regenerated `data/processed/*/manifest.json`. If `train_sha256` is unchanged (`git diff data/processed \| grep train_sha256` prints nothing), commit the manifests |
-| `Failed to spawn: hf` | `make setup` was not run, or a bare `uv sync` removed the `train` extra |
-| The runner hangs after a step | `git push` is waiting for credentials. Set up the token and `export GIT_TERMINAL_PROMPT=0` |
-| `hf download` 404 | The adapter repository is private, or was never uploaded. Check with `HfApi().list_models(author='Harrydongyl')` |
-| `flash-linear-attention not importable` | Needed only for Qwen3.5 (`r1`). Qwen3 stages warn and continue |
+- **Run artifacts already exist:** choose a new reproduction run ID; resume only an incomplete matching run. Do not delete the shipped evidence.
+- **Historical protocol mismatch:** use a fresh evaluation label and preserve the new manifest; do not bypass the hash check.
+- **Missing P1/eGFR files:** generate the required probe sets before scoring; use the exact commands above.
+- **Report directory exists:** choose a new `OUT`; reports are not overwritten.
+- **Missing hf / training packages:** run `make setup` in the GPU environment.
+- **Hub 401/404:** check the repository name, revision and access; public availability must be verified separately.
+- **FLA import failure:** the final Core and Stretch configurations both require the Qwen3.5 dependency stack.

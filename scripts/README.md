@@ -2,6 +2,8 @@
 
 Library code lives in `src/clinqa/` (formatting, training, evaluation, tools, scorers). These scripts orchestrate it. Run everything from the repository root with `uv run python scripts/<name>.py`. GPU scripts run on a RunPod pod; everything else is CPU-only.
 
+Current entry points: `make w4-score OUT=reports/new_dir` scores the delivered Q35 validation outputs on CPU. Fresh training and adapter-evaluation commands are in [docs/RUNBOOK.md](../docs/RUNBOOK.md). The round scripts below retain historical orchestration and are not the clean-clone quickstart.
+
 ## Pod setup and experiment rounds (GPU)
 
 | Script | Purpose |

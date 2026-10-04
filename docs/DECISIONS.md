@@ -497,3 +497,16 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - **Environment facts, disclosed:**
     - `causal-conv1d` is not installed in any Qwen3.5 run, so the short convolution uses the PyTorch path.
     - The recorded `linear_attention_kernel` field inspects a module-level function and always names the Transformers module, so flash-linear-attention use is not established from the manifests. The recorder is fixed for future runs.
+
+
+### D-107 — Release explanation and reproduction-entry correction (2026-10-04)
+
+- No model, training data, prompt, frozen scorer, metric, or historical selection is changed.
+- LR differences were modest in this comparison, but not demonstrated equivalent. Retain the D-054 qualification: epoch-two 2e-4 minus 1e-4 was +2.72 pp, unadjusted CI about [+0.35, +5.53]. Keeping 1e-4 is a conservative locked-control decision under single-seed and scorer uncertainty, not proof of an optimum.
+- Use same-family base-to-SFT evidence for SFT attribution. Treat cross-family results as system comparisons; do not interpret non-significance as equivalence.
+- Scope zero-fabrication results to their measured cohorts. A-sft2-Q35 val_204 invents weight/height despite a stated BMI; it is fabrication, not imperial conversion drift. The failed Core gate remains failed.
+- Describe the first Stretch failure as a call-prone policy despite high discrimination. Negative-example count and template wording are plausible contributors, not isolated causes; the revision was bundled.
+- Correct LoRA coverage, token-share versus gradient-share terminology, the Q35 failure taxonomy, and label denominators in current explanatory documents. Historical decision entries and frozen outputs remain intact.
+- Keep the main report's evaluation-independence limitation concise and factual; retain the detailed test/selection chronology in this log.
+- Add fresh-run train/eval configs for the unchanged final recipes, and a CPU-only `w4-score` target for final Q35 validation v1/v2.1, P1 and eGFR. Historical outputs are inputs, not overwrite targets. This target does not approve or change any gate.
+- Adapter public access and immutable Hub revisions still need release verification. Do not claim that a successful local training/reproduction path proves public availability.

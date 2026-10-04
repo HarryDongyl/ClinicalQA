@@ -31,7 +31,7 @@ Detailed evidence lives in:
 |---|---|---|
 | 1 | Requirements | Four behaviours. The central tension is *call tools reliably* vs *never invent inputs* |
 | 2 | Constraints & success definition | One 24 GB GPU, train/val/test discipline, pre-registered selection, behavioural metrics beside the five required ones |
-| 3 | Data analysis | 19 quality checks. 3.9% of training tool labels call BMI with invented measurements (Q5) |
+| 3 | Data analysis | 19 quality checks. 3.9% of all training records (15.6% of tool-labelled records) call BMI with invented measurements (Q5) |
 | 4 | Representation | Native Qwen chat template and tool-call format, assistant-only loss masks, Markdown table, one call |
 | 5 | Model & training | Qwen3-4B-Instruct-2507, QLoRA r16, lr 1e-4, 2 epochs, effective batch 16, token-mean CE |
 | 6 | Evaluation v1 | Rollout with real tool execution; five metrics plus diagnostics; simple regex scorer |
@@ -44,7 +44,7 @@ Detailed evidence lives in:
 | 13 | CPU gap work | Clinical-context check, call-decision ECE, numeric audit strata |
 | 14 | Stretch A | Third tool `calculate_egfr`: data generated, evaluation set reviewed and frozen |
 | 15 | Wave 4 design | H1 cross-family replication, H2 numeric superiority (sign test), H3 tool transfer. Gates and stop rules frozen |
-| 16 | Wave 4 round 1 | **H1 holds** (Qwen3.5 P1 29/34 → 0/34); P1-RAW 32/34 rules out rows/steps; the families tie on relabel data (+0.25 pp), so **Qwen3 is kept** for later experiments, on cost (sequences 11% longer on Qwen3.5); gate needs review (val_104) |
+| 16 | Wave 4 round 1 | **H1 holds** (Qwen3.5 P1 29/34 → 0/34); P1-RAW 32/34 shows that matching rows/steps alone is insufficient; the families tie on relabel data (+0.25 pp), so **Qwen3 is kept** for later experiments, on cost (sequences 11% longer on Qwen3.5); gate needs review (val_104) |
 | 17 | Scorer finding | v1 over-fails numeric (51% agreement on the clean holdout); v2.1 under-fails false *extra* claims. A guarded v2.2 was prototyped, **not adopted** |
 | 18 | F′ refit and Stretch A | F′ retrained (adapter lost): P1 0/34 again, but only 136/250 val items identical and macro 1.7 pp lower (one refit, not a variance estimate). A-sft fabricated ages (16/19); the diagnosed fix, A-sft2, reaches 17/19 end-to-end with 0/19 fabrication at about 1 pp core cost |
 | 19 | Test run | Frozen five-model list, run once: F′ 97.5 v2.1 macro and 0/10 natural-Q5 fabrication; filter-only 6/10; Qwen3.5 relabel ties F′ |
@@ -184,18 +184,18 @@ Generated report: `reports/data_analysis.md`. Every flag: `reports/quality_flags
 | Loss | **Token-mean cross-entropy** over supervised tokens, normalised with `num_items_in_batch` across accumulation | The standard after the HF gradient-accumulation fix |
 | Seed / provenance | 42; every run records git commit, packages, hardware and hashes | Reproducibility requirement |
 
-**Evidence: gradient share by type** (supervised-token estimate):
+**Evidence: supervised-token share by type** (not a gradient measurement):
 
-| Type | Share of examples | Share of gradient |
+| Type | Share of examples | Share of supervised tokens |
 |---|---|---|
 | extractive | 40% | about 16% |
 | numeric | 20% | about 23% |
 | uncertain | 15% | about 20% |
 | tool | 25% | about 41%, of which the call turn is about 10% |
 
-Re-weighting was rejected: the under-weighted parts (extractive and the call decision) turned out to be already solved, and numeric errors are reasoning errors, not lack of gradient. No verified study supports up-weighting call tokens for tool SFT.
+Re-weighting was not prioritized. The observed failures did not establish that token weighting was their cause; supervised-token share is not measured gradient influence. Unweighted token loss remained the control, and the project did not test whether call-token reweighting would help.
 
-**Evidence: micro-batch.** Micro-batch 4 × accumulation 4 (wave 2) was **32% slower** per optimiser step (13.5 vs 10.2 s) and used 17.75 vs 7.8 GB. Its loss curve was identical to micro-batch 1 (1.915 / 0.858 / 0.582 vs 1.918 / 0.867 / 0.583 at steps 1 / 10 / 20). This is direct evidence that the loss normalisation is correct. The slowdown is probably padding forcing a slower SDPA kernel (a hypothesis). The fix would be padding-free packing.
+**Evidence: micro-batch.** Micro-batch 4 × accumulation 4 (wave 2) was **32% slower** per optimiser step (13.5 vs 10.2 s) and used 17.75 vs 7.8 GB. Its early loss trace closely matched micro-batch 1 (1.915 / 0.858 / 0.582 vs 1.918 / 0.867 / 0.583 at steps 1 / 10 / 20). This is consistent with the intended normalization, but similar losses do not prove correctness; implementation checks and resume tests provide separate evidence. The slowdown is probably padding forcing a slower SDPA kernel (a hypothesis). The fix would be padding-free packing.
 
 ---
 
@@ -298,7 +298,7 @@ Rater agreement: 0.92 / 1.00 / 0.93.
 
 | Experiment | Evidence | Reading |
 |---|---|---|
-| LR ladder on the filtered view: 1e-4 / 1.5e-4 / 2e-4 (v2.1 macro, epoch 1 / epoch 2) | 0.936 / 0.914, 0.931 / 0.921, 0.908 / 0.941 | All differences ≤ 0.03: **noise** |
+| LR ladder on the filtered view: 1e-4 / 1.5e-4 / 2e-4 (v2.1 macro, epoch 1 / epoch 2) | 0.936 / 0.914, 0.931 / 0.921, 0.908 / 0.941 | Differences were a few macro points. At epoch 2, 2e-4 − 1e-4 = +2.72 pp, unadjusted CI [+0.35, +5.53]; exploratory, single-seed and scorer-dependent, not proof of equivalence or a robust optimum |
 | Micro-batch 4 | See stage 5 | Slower, same optimisation; stopped on purpose |
 | Prompt v2 (v1 + "use only reference ranges supplied in the input"), inference only | Paired: 0–2 items flip per type; every CI includes 0. The prompt targeted numeric, which gained 1 item | SFT models are insensitive to small prompt changes. The new line also contradicts 36 correct train golds (Q11) |
 | **Natural Q5 behaviour across all runs** | Raw: **50/56 fabricate via a call (89%)**. Filtered at lr 5e-5: 1/28. **Filtered at lr ≥ 1e-4: 17/42 fabricate in text** ("The patient's weight is documented at 68.5 kg…", with no call) | Filtering removes the wrong signal but teaches nothing; the fabrication moves into prose, worse at higher lr |
@@ -314,7 +314,7 @@ Rater agreement: 0.92 / 1.00 / 0.93.
 | Layer | Decision | Logic / evidence |
 |---|---|---|
 | Loss | Keep token-mean CE; no type or segment weights | Stage 5 gradient-share evidence; no supporting literature |
-| Hyperparameters | Lock lr 1e-4, 2 epochs, effective batch 16; run seeds instead of more sweeps | Stage 9 noise band |
+| Hyperparameters | Lock lr 1e-4, 2 epochs, effective batch 16; run seeds instead of more sweeps | Conservative control choice under limited evidence; not a claim that all LRs are equivalent |
 | Prompt | **v1** for training and inference | v2 effect is 0–2 items; it contradicts Q11 golds |
 | Baselines | R0-v1 (parity prompt), R0-v3 (strong prompt), R0-v3-FS4 (+4 shots) | Tests "SFT vs prompting" fairly |
 | Call-turn reasoning | Core keeps the empty call turn. R-VIS ablation: `Working:` + `Answer:` numeric targets built from input-derived keys | ToolACE reports +12 pp from thinking, but our only tool error was on test, so it is an ablation, not core |
@@ -393,7 +393,7 @@ What the table shows:
 
 - Hybrid Gated DeltaNet / full attention (3:1).
 - XML tool calls; an empty think block in every assistant turn.
-- LoRA extended to the linear-attention projections: 30.5M parameters (the original seven names would adapt only 8 of 32 layers).
+- LoRA extended to the linear-attention projections: 30.5M parameters (q/k/v/o cover the eight full-attention layers; gate/up/down already cover decoder MLPs, and the added names cover linear-attention projections).
 - flash-linear-attention kernels.
 - Vocabulary about 248k vs 152k. That adds only about 3 points to the lm_head share of per-token compute; the slowdown comes mainly from linear attention, longer sequences (XML plus the think block) and contention under `PARALLEL=1`.
 
@@ -559,7 +559,7 @@ Paired, v2.1 macro (type-stratified bootstrap, 2,000 resamples):
 
 Readings:
 
-1. **On the same relabel data, the families tie.** Safety metrics are identical. The data policy moves P1 by 25–29 items; the backbone moves it by 0.
+1. **On the same relabel data, there is no clear Core separation.** The measured probe-fabrication counts are identical; this is not an equivalence result. The data policy moves P1 by 25–29 items; the backbone moves it by 0.
 2. **Zero-shot Qwen3.5 is the stronger tool caller but reckless**: over-calls 51/188, abstains less, rarely states the category, and its call ECE is 0.20. SFT removes all of it.
 3. **Answer-confidence AUROC falls from epoch 1 to epoch 2 in both families** (0.748 → 0.640; 0.795 → 0.682): possible late-training overconfidence; diagnostic only (few errors).
 4. **Best training per family:** Qwen3 F-relabel ep2 is best on every Qwen3 metric. Qwen3.5 relabel ep1 and ep2 are indistinguishable (97.0 vs 96.9); ep2 is reported because it is the pre-registered endpoint, not because it is better.
@@ -650,7 +650,7 @@ Results:
 
 **First A-sft failed** its pre-registered criteria: end-to-end 9/19, age-probe fabrication 16/19, grounded tool 51/55. The diagnosis (D-100):
 
-- **A threshold shift, not lost discrimination.** Probe call probability sat around 0.5 while the positives-vs-probes AUROC was 0.983. The causes were 40 positives against 6 age negatives, and question templates that presuppose age.
+- **A call-prone policy despite high discrimination.** The positives-vs-probes call-prefix AUROC was 0.983, yet calls were generated on 16/19 age-missing probes. Sparse negative supervision and age-presupposing templates are plausible contributors, not isolated causes. The generator has no explicit binary call threshold.
 - **An unlearned KDIGO mapping.** G3a and G5 had 3 and 1 examples.
 - **Core regression overlapping the refit differences**: three of four tool failures also occur in F or F′.
 
@@ -675,7 +675,7 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 **Readings.**
 
 1. **The headline replicates on test.** C-filtered fabricates on 6/10: four in prose (three of them claiming a calculate_bmi call that was never made), one through the call with the memorised height 178.5 cm, and one (test_288) that invents 50 kg and 150 cm and then says BMI cannot be calculated. v2.1 credits that last one as an abstention.
-2. **F′ is the strongest core model.** Q35-relabel ties it (−0.09 pp), and A-sft2 is −1.28 pp [−2.66, −0.06]; two of its three tool failures are scorer false fails.
+2. **F′ has the highest observed macro in this comparison.** Q35-relabel is close (−0.09 pp), without evidence of equivalence, and A-sft2 is −1.28 pp [−2.66, −0.06]; two of its three tool failures are scorer false fails.
 
 **Caveats.** Test was used before, so this is an exploratory confirmation, and n = 10 natural-Q5 items is underpowered. Fabrication is reduced, not eliminated: on test_020, an uncertain record outside the Q5 set, F′ invents a weight of 145.5 lb.
 
@@ -693,9 +693,9 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 
 - **Length guard.** The longest conversation is 2,053 tokens, so the length guard was raised to 2,560. Nothing is truncated.
 - **Validation:** eGFR 19/19 end-to-end (both G5 items now right), 0/19 fabrication, P1 0/34, natural Q5 7/7.
-- **Zero-shot comparator:** v1e2 on Qwen3.5 relabel gives 7/19, so most of the gain comes from training.
+- **Zero-shot comparator:** v1e2 on Qwen3.5 relabel gives 7/19 versus 19/19 for the trained extension under the same offered prompt/schema. This supports a training-package comparison, without isolating its individual components.
 - **Against the Qwen3 A-sft2** (identical data): core macro +3.56 pp [+0.25, +7.10].
-- **Pre-registered gate:** fails on discordance, 6 against ≤ 5. The control's four wins are real errors, three of them imperial drift. A-sft2-Q35 is delivered because its eGFR criteria are met (D-106).
+- **Pre-registered gate:** fails on discordance, 6 against ≤ 5. The control's four wins are imperial drift on val_052 and val_105, a wrong entity on val_069, and fabricated measurements on val_204 (100.5 kg and 1.75 m are absent from the input; the note states BMI 39.3). A-sft2-Q35 is delivered because its eGFR criteria are met (D-106).
 
 **Second test use** (A-sft2-Q35 only; frozen separately; disclosed):
 
@@ -703,7 +703,7 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 - v2.1 macro 97.2, which is −0.20 pp [−1.76, +1.35] against its own core model (the Qwen3 extension cost −1.28 pp);
 - of its nine v2.1 failures, five are scorer false fails (S-04, and the new S-18) and one is a real error.
 
-**Hindsight.** The backbone barely matters for the core task, but it matters for absorbing a third tool. That would have been worth testing before the first test run, so the switch would not need a post-test disclosure.
+**Hindsight.** This comparison did not clearly separate Core performance, while the Q35 extension had a smaller observed retention cost. One run per configuration does not establish a general backbone effect. That would have been worth testing before the first test run, so the switch would not need a post-test disclosure.
 
 ---
 
@@ -715,8 +715,8 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 2. Filtering alone moves the hallucination from tool arguments into prose, and the same happens on a second model family (29/34).
 3. SFT beats prompting decisively on tool use (54/55 vs at best 29/55). Neither a stricter prompt nor an 8B base fixes grounding.
 4. The validated scorer is far more reliable than the simple one (92.6% vs 65.7% on an unseen holdout).
-5. The relabel effect replicates across model families (Qwen3.5: 29/34 → 0/34), and a label-only control (P1-RAW, 32/34) rules out row count and training length.
-6. On the same data the two backbones tie on the core task (+0.25 pp [−2.15, +3.10] on val; −0.09 pp on test): the data policy matters far more than the newer base. Qwen3.5 absorbs a third tool with less core cost (−0.2 vs −1.3 pp on test).
+5. The relabel effect replicates across model families (Qwen3.5: 29/34 → 0/34), and a same-size raw control (P1-RAW, 32/34) shows that matching row count and steps alone does not reproduce the relabel result.
+6. On the same data the two backbones show no clear separation on the measured Core task (+0.25 pp [−2.15, +3.10] on val; −0.09 pp on test): the data policy matters far more than the newer base. Qwen3.5 absorbs a third tool with less core cost (−0.2 vs −1.3 pp on test).
 7. On test, relabel models abstain on 10/10 natural-Q5 items, while filter-only fabricates on 6/10.
 8. A third tool can be added by SFT once no-call examples are sufficient: 17/19 on Qwen3 and 19/19 on Qwen3.5, with 0/19 fabrication.
 

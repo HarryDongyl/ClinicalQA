@@ -20,7 +20,7 @@
 #          then A-sft2-Q35 from base on q5_relabeled_egfr2 with prompt v1e2, both epochs on val, P1 and both eGFR sets.
 #          Requires flash-linear-attention like r1 (same kernel as the Qwen3.5 relabel training).
 #   test   scripts/w4_test.py run (TEST_LIST=configs/w4/<list>.json selects a second frozen list; default final_test.json) (configs/w4/final_test.json must be committed)
-# Results are committed and pushed after every step; re-running resumes. Scoring runs later on CPU (make w4-score).
+# Results are committed and pushed after every step; re-running resumes. Historical runner; current reproduction commands are in docs/RUNBOOK.md. Final scoring: make w4-score OUT=reports/new_dir.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 test -f scripts/runpod_env.sh && source scripts/runpod_env.sh
@@ -119,7 +119,7 @@ if [[ " $STAGES " == *" r2 "* ]]; then
   #    stretch_a_backbone explicitly (D-095: Qwen3 chosen on cost at equal performance, independent of the gate).
   read -r decision backbone < <($PY -c 'import json; g=json.load(open("configs/w4/gate_q35.json")); assert g["approved"], g
 print(g["decision"], g.get("stretch_a_backbone") or ("q35_4b" if g["decision"] == "pass" else "q3"))') ||
-    { echo "configs/w4/gate_q35.json missing or not approved; run make w4-score and review the gate first."; exit 1; }
+    { echo "configs/w4/gate_q35.json missing or not approved; review the historical r1 gate procedure in docs/history/RUNBOOK_W4.md. Final w4-score does not approve gates."; exit 1; }
   if test "$backbone" = q35_4b; then
     fam=q35_4b; adapter_run=w4_q35_4b_relabel_lr1e4; sft=w4_q35_4b_relabel_egfr_lr1e4
   else
@@ -199,4 +199,4 @@ if test "${UPLOAD:-0}" = 1; then
       --exclude "*/optimizer.pt" || echo "WARNING: upload failed for $run"
   done
 fi
-echo "Wave-four stages finished: $STAGES. Stop the pod, pull, then run make w4-score locally."
+echo "Wave-four stages finished: $STAGES. Stop the pod and pull. For completed final Q35 runs: make w4-score OUT=reports/new_dir; other historical stages use their documented labels."

@@ -11,7 +11,7 @@ EVAL_CONFIG ?= configs/eval_core.yaml
 
 .PHONY: help views-all setup setup-cpu lock data analyze views test all format audit-masks smoke train eval epochs \
         compare core final-eval clean data-check preflight gpu-smoke freeze score-v2 prompt-ablation \
-        w2-round w2-epochs w2-stable score-v21 w2-score w3-prep w3-views w3-check w3-round w3-score c10
+        w2-round w2-epochs w2-stable score-v21 w2-score w3-prep w3-views w3-check w3-round w3-score w4-score c10
 
 help:
 	@echo "Setup and data (CPU)"
@@ -31,6 +31,7 @@ help:
 	@echo "  w3-round     wave-three round (scripts/run_w3_round.sh); wave four: scripts/run_w4_round.sh STAGES=..."
 	@echo ""
 	@echo "Scoring (CPU)"
+	@echo "  w4-score     OUT=new_dir  final Q35 validation v1/v2.1, P1 and Stretch eGFR; optional CORE_LABEL/STRETCH_LABEL"
 	@echo "  score-v21    LABELS='...' OUT=dir  scorer v2.1 on validation labels"
 	@echo "  w3-score     v2.1 + bounded v2 + P1 + train-fit + training metrics + C10 + gate for wave three"
 	@echo "  c10          LABELS='...' OUT=dir  confidence diagnostics"
@@ -214,3 +215,22 @@ w3-score:
 c10:
 	@test -n "$(LABELS)" && test -n "$(OUT)" || (echo "usage: make c10 LABELS='a b' OUT=reports/new_dir [V21=dir]"; exit 1)
 	$(PY) python scripts/w3_analyze.py c10 --labels $(LABELS) --out $(OUT) $(if $(V21),--v21 $(V21),)
+
+# Final delivered configurations: CPU scoring only. Historical labels are inputs, never overwritten.
+CORE_LABEL ?= w4_q35_4b_relabel_lr1e4_step000250
+STRETCH_LABEL ?= w4_q35_4b_relabel_egfr2_lr1e4_step000276
+w4-score:
+	@test -n "$(OUT)" || (echo "usage: make w4-score OUT=reports/new_dir [CORE_LABEL=... STRETCH_LABEL=...]"; exit 1)
+	@test ! -e "$(OUT)" || (echo "$(OUT) already exists; choose a new report directory"; exit 1)
+	@for label in $(CORE_LABEL) $(STRETCH_LABEL); do for artifact in val/trajectories.jsonl val/scored.jsonl val/metrics.json p1_probes/trajectories.jsonl; do \
+	  test -f "outputs/$$label/$$artifact" || { echo "Missing outputs/$$label/$$artifact; generate validation and P1 first"; exit 1; }; \
+	done; done
+	@for split in egfr_val egfr_age_probes; do \
+	  test -f "outputs/$(STRETCH_LABEL)/$$split/trajectories.jsonl" || { echo "Missing Stretch $$split outputs; see docs/RUNBOOK.md"; exit 1; }; \
+	done
+	$(PY) python scripts/score_v21_val.py --out "$(OUT)/v21" --labels $(CORE_LABEL) $(STRETCH_LABEL)
+	$(PY) python scripts/w3_analyze.py p1 --out "$(OUT)/p1" --labels $(CORE_LABEL) $(STRETCH_LABEL)
+	$(PY) python scripts/stretch_a_score.py score --out "$(OUT)/stretch_a" --labels $(STRETCH_LABEL)
+	@mkdir -p "$(OUT)/v1"
+	@for label in $(CORE_LABEL) $(STRETCH_LABEL); do cp "outputs/$$label/val/metrics.json" "$(OUT)/v1/$$label.json"; done
+	@echo "Reports in $(OUT): v1 metrics, frozen v2.1, P1 and eGFR. Gate decisions are not changed."

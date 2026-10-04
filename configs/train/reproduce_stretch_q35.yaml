@@ -1,0 +1,5 @@
+# Fresh output identity for reproducing the final recipe; no hyperparameter changes.
+extends: configs/train/w4_q35_4b_relabel_egfr2_lr1e4.yaml
+run_id: reproduce_stretch_q35
+checkpoint_dir: checkpoints/reproduce_stretch_q35
+output_dir: outputs/reproduce_stretch_q35

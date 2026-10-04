@@ -90,10 +90,10 @@ The models within each comparison differ in prompt and tool list from their core
 
 ## What went wrong in the first A-sft, and the fix (D-100)
 
-1. **Age fabrication was a threshold shift, not lost discrimination.** On probes the call probability sat at 0.27–0.82 (mostly near 0.5), while positives-vs-probes AUROC stayed 0.983; zero-shot F′ had AUROC 1.0. The model invented ages, mostly 65.
-   - Causes: 40 positives against 6 age negatives, and question templates presupposing "age and sex".
-   - Fix: 60 age negatives (40 paired) and neutral templates. Probe fabrication fell from 16/19 to 0/19.
-   - This mirrors the core finding: tool SFT with too few no-call examples teaches fabrication.
+1. **Age fabrication coexisted with high call-prefix discrimination.** On probes the call probability sat at 0.27–0.82 (mostly near 0.5), while positives-vs-probes AUROC stayed 0.983; zero-shot F′ had AUROC 1.0. The model invented ages, mostly 65.
+   - Plausible contributors: 40 positives against 6 age negatives, and question templates presupposing "age and sex". These factors were not isolated. No explicit 0.5 call threshold was deployed.
+   - The bundled revision added 60 age negatives (40 paired), neutral templates and other prompt/target changes. Probe fabrication fell from 16/19 to 0/19.
+   - This is consistent with the Core evidence that explicit missing-input supervision helps; the causal contribution of negative-example count alone is not identified.
 2. **The KDIGO mapping was not learned.** Errors run in both directions and are not all adjacent: sa_val_003 (eGFR 67, G2) was written as G3b. G3a and G5 had 3 and 1 examples.
    - Fix: a KDIGO table in the prompt (v1e2), stage-balanced positives, and answers that state the range before the category. Category accuracy rose from 9/19 to 17/19. Both remaining failures are the two G5 cases: eGFR 12 and 13 are written as "in the 15–29 range (G4)" despite the table in the prompt, which motivates a deterministic category mapping.
 3. **Core regression overlaps the refit differences and scorer artefacts.** Of the first A-sft's four tool failures, three also occur in F or F′. Of A-sft2's, two per split are v2.1 reader false fails ("reduced renal function" read as creatinine low; S-04).
@@ -130,7 +130,7 @@ The control is Qwen3.5 relabel epoch 2.
 | Grounded tool ≥ 52/55 | Met (52) |
 | Discordance with the control ≤ 5, over all 250 core val items | **Not met: 6** (A-sft2-Q35 better on 2, control on 4) |
 
-- The control's four wins are real A-sft2-Q35 errors: imperial drift on val_052 and val_105; a wrong entity on val_069; a wrong BMI on val_204.
+- The control's four wins are real A-sft2-Q35 errors: imperial drift on val_052 and val_105; a wrong entity on val_069; fabricated weight/height on val_204, where only BMI 39.3 is documented. The extension invents 100.5 kg and 1.75 m and reports BMI 32.8, outside the Q5/P1 probe cohorts.
 - One of A-sft2-Q35's two wins is a v2.1 false fail of the control (val_062). Correcting it would give 5, but the pre-registered result stays a fail.
 - Per D-105, the eGFR criteria are met, so **A-sft2-Q35 is the Stretch A deliverable**, and the core gate failure is reported.
 
@@ -138,7 +138,7 @@ The control is Qwen3.5 relabel epoch 2.
 
 - The template-generated training rows and the probes share the same age-removal generator, so probe results are in-distribution. The validation items were inspected during the A-sft diagnosis.
 - Age-removed negatives are 65% G1/G2, against 48% of positives.
-- There is one seed. The revision changed data, prompt, templates and steps together, so the gain is attributed to the package. The Qwen3.5 zero-shot v1e2 arm (7/19) shows that the prompt table alone recovers only part of it.
+- There is one seed. The revision changed data, prompt, templates and steps together, so the gain is attributed to the package. The Qwen3.5 zero-shot v1e2 arm scores 7/19 under the same offered prompt/schema as the 19/19 trained extension. This does not isolate the category table or individual training-data changes.
 - The switch of the final models to Qwen3.5 came after the first test run (D-105).
 - A-sft2-Q35 trained on an RTX 4090, and its control on an A100.
 - Sex-removed negatives are trained but not evaluated. Missing creatinine, µmol/L units and conflicting inputs are untested.

@@ -20,6 +20,10 @@ Configs are never moved or renamed. Their paths and sha256 are recorded in run m
 | F′ (Qwen3 comparator; pre-registered core until D-105) | `train/w4_q3_refit_relabel_lr1e4_s42.yaml` (extends `train/w3_relabel_lr1e4_s42.yaml`) | `format_w3.yaml` | `eval_w3_v1.yaml` (val), `eval_w4_v1.yaml` (test) |
 | A-sft2 (Qwen3 Stretch A comparator) | `train/w4_q3_relabel_egfr2_lr1e4.yaml` | `format_w4_q3_egfr2.yaml` | `eval_w4_q3_tools3_v1e2.yaml` |
 
+## Fresh reproduction identities
+
+`train/reproduce_core_q35.yaml` and `train/reproduce_stretch_q35.yaml` inherit the corresponding final recipe and change only run identity and artifact paths. Their evaluation configs are `eval_reproduce_core_q35.yaml` and `eval_reproduce_stretch_q35.yaml`. Evaluation configs are self-contained: unlike training, the evaluation CLI does not resolve `extends`. See the runbook for generation and scoring commands. Frozen historical configs and paths remain unchanged.
+
 ## Comparators and ablations
 
 | Arm | Train | Eval |

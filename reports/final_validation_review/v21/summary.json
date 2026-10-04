@@ -1,0 +1,485 @@
+{
+  "scorer": "2.1",
+  "split": "val",
+  "runs": {
+    "w4_q35_4b_relabel_lr1e4_step000250": {
+      "extractive": {
+        "v2": {
+          "k": 100,
+          "n": 100,
+          "rate": 1.0,
+          "ci95": [
+            0.963,
+            1.0
+          ]
+        },
+        "v1": {
+          "k": 100,
+          "n": 100,
+          "rate": 1.0,
+          "ci95": [
+            0.963,
+            1.0
+          ]
+        }
+      },
+      "numeric_reasoning": {
+        "v2": {
+          "k": 46,
+          "n": 50,
+          "rate": 0.92,
+          "ci95": [
+            0.8116,
+            0.9685
+          ]
+        },
+        "v1": {
+          "k": 36,
+          "n": 50,
+          "rate": 0.72,
+          "ci95": [
+            0.5833,
+            0.8253
+          ]
+        }
+      },
+      "tool_call": {
+        "v2": {
+          "k": 61,
+          "n": 62,
+          "rate": 0.9839,
+          "ci95": [
+            0.9141,
+            0.9971
+          ]
+        },
+        "v1": {
+          "k": 54,
+          "n": 62,
+          "rate": 0.871,
+          "ci95": [
+            0.7655,
+            0.9331
+          ]
+        }
+      },
+      "uncertain": {
+        "v2": {
+          "k": 37,
+          "n": 38,
+          "rate": 0.9737,
+          "ci95": [
+            0.865,
+            0.9953
+          ]
+        },
+        "v1": {
+          "k": 37,
+          "n": 38,
+          "rate": 0.9737,
+          "ci95": [
+            0.865,
+            0.9953
+          ]
+        }
+      },
+      "check_kinds": {
+        "set": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9
+        },
+        "text": {
+          "k": 20,
+          "n": 20,
+          "rate": 1.0
+        },
+        "value": {
+          "k": 72,
+          "n": 72,
+          "rate": 1.0
+        },
+        "diff": {
+          "k": 38,
+          "n": 39,
+          "rate": 0.9744
+        },
+        "entity": {
+          "k": 15,
+          "n": 17,
+          "rate": 0.8824
+        },
+        "status": {
+          "k": 65,
+          "n": 65,
+          "rate": 1.0
+        },
+        "pct": {
+          "k": 2,
+          "n": 2,
+          "rate": 1.0
+        },
+        "yesno": {
+          "k": 4,
+          "n": 4,
+          "rate": 1.0
+        },
+        "ratio": {
+          "k": 4,
+          "n": 4,
+          "rate": 1.0
+        },
+        "bmi": {
+          "k": 3,
+          "n": 3,
+          "rate": 1.0
+        }
+      },
+      "tool": {
+        "expected_call": {
+          "k": 54,
+          "n": 55,
+          "rate": 0.9818,
+          "ci95": [
+            0.9039,
+            0.9968
+          ]
+        },
+        "expected_abstain_q5": {
+          "k": 7,
+          "n": 7,
+          "rate": 1.0,
+          "ci95": [
+            0.6457,
+            1.0
+          ]
+        },
+        "relevance": {
+          "k": 62,
+          "n": 62,
+          "rate": 1.0,
+          "ci95": [
+            0.9417,
+            1.0
+          ]
+        },
+        "name_ok|called": {
+          "k": 55,
+          "n": 55,
+          "rate": 1.0,
+          "ci95": [
+            0.9347,
+            1.0
+          ]
+        },
+        "outcome_ok|called": {
+          "k": 55,
+          "n": 55,
+          "rate": 1.0,
+          "ci95": [
+            0.9347,
+            1.0
+          ]
+        },
+        "args_exact_v1|called": {
+          "k": 54,
+          "n": 55,
+          "rate": 0.9818,
+          "ci95": [
+            0.9039,
+            0.9968
+          ]
+        },
+        "parse_error": {
+          "k": 0,
+          "n": 62,
+          "rate": 0.0,
+          "ci95": [
+            -0.0,
+            0.0583
+          ]
+        }
+      },
+      "over_refusal": {
+        "k": 0,
+        "n": 150,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.025
+        ]
+      },
+      "over_call": {
+        "k": 0,
+        "n": 188,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.02
+        ]
+      },
+      "macro": 0.9694,
+      "macro_v1": 0.8912,
+      "errors": {
+        "extractive": {},
+        "numeric_reasoning": {
+          "set:false_member(HbA1c)": 1,
+          "diff:out_of_band": 1,
+          "entity:wrong(ALT)": 1,
+          "entity:wrong(WBC)": 1
+        },
+        "tool_call": {
+          "status_contradicts_input": 1
+        },
+        "uncertain": {
+          "no_abstention": 1
+        }
+      },
+      "coverage": {
+        "structured": 209,
+        "partial": 21,
+        "text": 20
+      }
+    },
+    "w4_q35_4b_relabel_egfr2_lr1e4_step000276": {
+      "extractive": {
+        "v2": {
+          "k": 100,
+          "n": 100,
+          "rate": 1.0,
+          "ci95": [
+            0.963,
+            1.0
+          ]
+        },
+        "v1": {
+          "k": 98,
+          "n": 100,
+          "rate": 0.98,
+          "ci95": [
+            0.93,
+            0.9945
+          ]
+        }
+      },
+      "numeric_reasoning": {
+        "v2": {
+          "k": 46,
+          "n": 50,
+          "rate": 0.92,
+          "ci95": [
+            0.8116,
+            0.9685
+          ]
+        },
+        "v1": {
+          "k": 39,
+          "n": 50,
+          "rate": 0.78,
+          "ci95": [
+            0.6476,
+            0.8725
+          ]
+        }
+      },
+      "tool_call": {
+        "v2": {
+          "k": 59,
+          "n": 62,
+          "rate": 0.9516,
+          "ci95": [
+            0.8671,
+            0.9834
+          ]
+        },
+        "v1": {
+          "k": 52,
+          "n": 62,
+          "rate": 0.8387,
+          "ci95": [
+            0.7279,
+            0.91
+          ]
+        }
+      },
+      "uncertain": {
+        "v2": {
+          "k": 37,
+          "n": 38,
+          "rate": 0.9737,
+          "ci95": [
+            0.865,
+            0.9953
+          ]
+        },
+        "v1": {
+          "k": 37,
+          "n": 38,
+          "rate": 0.9737,
+          "ci95": [
+            0.865,
+            0.9953
+          ]
+        }
+      },
+      "check_kinds": {
+        "set": {
+          "k": 9,
+          "n": 10,
+          "rate": 0.9
+        },
+        "text": {
+          "k": 20,
+          "n": 20,
+          "rate": 1.0
+        },
+        "value": {
+          "k": 72,
+          "n": 72,
+          "rate": 1.0
+        },
+        "diff": {
+          "k": 39,
+          "n": 39,
+          "rate": 1.0
+        },
+        "entity": {
+          "k": 15,
+          "n": 17,
+          "rate": 0.8824
+        },
+        "status": {
+          "k": 65,
+          "n": 65,
+          "rate": 1.0
+        },
+        "pct": {
+          "k": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "yesno": {
+          "k": 4,
+          "n": 4,
+          "rate": 1.0
+        },
+        "ratio": {
+          "k": 4,
+          "n": 4,
+          "rate": 1.0
+        },
+        "bmi": {
+          "k": 2,
+          "n": 3,
+          "rate": 0.6667
+        }
+      },
+      "tool": {
+        "expected_call": {
+          "k": 52,
+          "n": 55,
+          "rate": 0.9455,
+          "ci95": [
+            0.8515,
+            0.9813
+          ]
+        },
+        "expected_abstain_q5": {
+          "k": 7,
+          "n": 7,
+          "rate": 1.0,
+          "ci95": [
+            0.6457,
+            1.0
+          ]
+        },
+        "relevance": {
+          "k": 62,
+          "n": 62,
+          "rate": 1.0,
+          "ci95": [
+            0.9417,
+            1.0
+          ]
+        },
+        "name_ok|called": {
+          "k": 55,
+          "n": 55,
+          "rate": 1.0,
+          "ci95": [
+            0.9347,
+            1.0
+          ]
+        },
+        "outcome_ok|called": {
+          "k": 53,
+          "n": 55,
+          "rate": 0.9636,
+          "ci95": [
+            0.8768,
+            0.99
+          ]
+        },
+        "args_exact_v1|called": {
+          "k": 52,
+          "n": 55,
+          "rate": 0.9455,
+          "ci95": [
+            0.8515,
+            0.9813
+          ]
+        },
+        "parse_error": {
+          "k": 0,
+          "n": 62,
+          "rate": 0.0,
+          "ci95": [
+            -0.0,
+            0.0583
+          ]
+        }
+      },
+      "over_refusal": {
+        "k": 0,
+        "n": 150,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.025
+        ]
+      },
+      "over_call": {
+        "k": 0,
+        "n": 188,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.02
+        ]
+      },
+      "macro": 0.9613,
+      "macro_v1": 0.8931,
+      "errors": {
+        "extractive": {},
+        "numeric_reasoning": {
+          "set:false_member(HbA1c)": 1,
+          "entity:wrong(Phosphorus)": 1,
+          "entity:wrong(Hemoglobin)": 1,
+          "bmi:out_of_band": 1
+        },
+        "tool_call": {
+          "outcome_out_of_band": 2,
+          "status_contradicts_input": 1
+        },
+        "uncertain": {
+          "no_abstention": 1
+        }
+      },
+      "coverage": {
+        "structured": 209,
+        "partial": 21,
+        "text": 20
+      }
+    }
+  }
+}

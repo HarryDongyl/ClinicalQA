@@ -25,6 +25,7 @@ The final models are on Qwen3.5 (D-106): `w4_q35_4b_relabel_lr1e4` (core, checkp
 make setup-cpu        # analysis environment (CPU); make setup on GPU pods (train + qwen35 extras)
 make test             # unit tests; must pass before any commit
 make data analyze views-all
+make w4-score OUT=reports/new_dir  # CPU: final Q35 validation evidence
 make help
 ```
 
@@ -57,7 +58,7 @@ Run commands from the repository root. Never run a bare `uv sync`, because it dr
 
 ## Adding an experiment
 
-Follow `README.md` → "Add a new experiment". Write the decision and its pre-registered criterion in `docs/DECISIONS.md` (next ID after D-106) before generating results. Report a failed criterion as a fail; never move a threshold after seeing results.
+Follow `README.md` → "Add a new experiment". Write the decision and its pre-registered criterion in `docs/DECISIONS.md` (next ID after D-107) before generating results. Report a failed criterion as a fail; never move a threshold after seeing results.
 
 ## Documentation conventions
 

@@ -16,7 +16,7 @@ This project applies supervised fine-tuning (QLoRA) to a 4B instruction model; t
 
 The switch of the final models from F′ to Qwen3.5 was made after the first test run and is disclosed in the report (D-105, D-106).
 
-The final adapters are public on the Hugging Face Hub:
+Recorded adapter repositories (confirm access before download; see the runbook):
 
 - [`Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4`](https://huggingface.co/Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4): core model, checkpoint-250;
 - [`Harrydongyl/clinqa-w4_q35_4b_relabel_egfr2_lr1e4`](https://huggingface.co/Harrydongyl/clinqa-w4_q35_4b_relabel_egfr2_lr1e4): Stretch A model, checkpoint-276.
@@ -26,38 +26,31 @@ The final adapters are public on the Hugging Face Hub:
 ```bash
 make setup-cpu && make test            # CPU: analysis environment and unit tests
 make data analyze views-all            # copy the provided data, quality report, train views
+make w4-score OUT=reports/final_validation_review  # rescore shipped final validation evidence
 ```
 
 On a GPU (RTX 4090 24 GB or larger, Linux; pod setup in [docs/RUNBOOK.md](docs/RUNBOOK.md)):
 
 ```bash
-make setup                                                         # includes flash-linear-attention for Qwen3.5
-make train RUN=w4_q35_4b_relabel_lr1e4                             # core model
-uv run --frozen python scripts/w3_epochs.py generate --run w4_q35_4b_relabel_lr1e4 --config configs/eval_w4_q35_4b.yaml
-STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh                   # Stretch A model: zero-shot arm, training, evaluation
+make setup
+make train RUN=reproduce_core_q35
+uv run --frozen python scripts/w3_epochs.py generate --run reproduce_core_q35 \
+  --config configs/eval_reproduce_core_q35.yaml --p1-all-epochs --trainfit
 ```
 
-To evaluate the published core adapter without training:
-
-```bash
-uv run --frozen hf download Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4 --include "checkpoint-250/*" \
-  --local-dir checkpoints/w4_q35_4b_relabel_lr1e4
-make eval EVAL_CONFIG=configs/eval_w4_q35_4b.yaml RUN=w4_q35_4b_relabel_lr1e4 \
-  ADAPTER=checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250 LABEL=my_q35_val
-uv run python scripts/score_v21_val.py --out reports/my_q35 --labels my_q35_val     # CPU
-```
+These configs preserve the final recipe but write to fresh run directories. For optional Stretch training, adapter download/evaluation, or scoring new runs, follow [docs/RUNBOOK.md](docs/RUNBOOK.md). Historical `w4_*` run IDs already contain committed evidence and must not be reused for a new training job. Adapter downloads require verified access and an immutable revision.
 
 Training the core model takes about 57 min and 11.3 GiB (A100); the Stretch A model about 87 min and 12.1 GiB (RTX 4090). Evaluating 250 validation items takes about 20 min. `make help` lists every target.
 
 ## Add a new experiment
 
-1. **Training config.** Create `configs/train/<run>.yaml` with `extends: configs/train/w4_q35_4b_relabel_lr1e4.yaml` (the core recipe; `configs/train/w3_relabel_lr1e4_s42.yaml` for Qwen3). Set `run_id`, `checkpoint_dir` and `output_dir` to `<run>`, and override only what changes (for example `seed` or `training.learning_rate`).
+1. **Training config.** Create `configs/train/<run>.yaml` with `extends: configs/train/w4_q35_4b_relabel_lr1e4.yaml` (the core recipe; `configs/train/w3_relabel_lr1e4_s42.yaml` for Qwen3). Set `run_id: <run>`, `checkpoint_dir: checkpoints/<run>` and `output_dir: outputs/<run>`, and override only what changes (for example `seed` or `training.learning_rate`).
 2. **New training data, if any.**
    - Add a train view in `src/clinqa/data_views.py` (train-only, hash-checked; see `EGFR_VIEWS`).
    - Build it with `uv run python -m clinqa.data_views --variant <view>`.
    - Point a new `configs/format_<name>.yaml` at it (tokenizer, tools, system prompt).
    - Set `format_config`, `train_view` and `expected_train_examples` in the training config.
-3. **Eval config.** Add `<run>: {adapter: checkpoints/<run>/final}` under `runs:` in the eval config of the same format, for example `configs/eval_w4_q35_4b.yaml`. Adding a run does not change the evaluation protocol hash.
+3. **Eval config.** Add `<run>: {adapter: checkpoints/<run>/final}` under `runs:` in the eval config of the same format, for example `configs/eval_w4_q35_4b.yaml`. Adding a run does not change the evaluation protocol hash, but it does change the config file hash. Copy a frozen eval config before editing it; evaluation YAML does not support `extends`.
 4. **Train and evaluate (GPU).**
 
    ```bash
@@ -98,7 +91,7 @@ Outputs are never overwritten: use a new label or output directory. [configs/REA
 | [reports/REPORT.md](reports/REPORT.md) | The report |
 | [reports/DATA_QUALITY.md](reports/DATA_QUALITY.md) | Formatted examples, statistics, data issues and their handling |
 | [docs/PROJECT_WALKTHROUGH.md](docs/PROJECT_WALKTHROUGH.md) | The project in order, with evidence and decisions |
-| [docs/DECISIONS.md](docs/DECISIONS.md), [docs/EXPERIMENT_JOURNAL.md](docs/EXPERIMENT_JOURNAL.md) | Decision log (D-001 to D-104) and experiment journal |
+| [docs/DECISIONS.md](docs/DECISIONS.md), [docs/EXPERIMENT_JOURNAL.md](docs/EXPERIMENT_JOURNAL.md) | Decision log and experiment journal |
 | [docs/SCORER.md](docs/SCORER.md), [docs/SCORER_V2_1_KNOWN_ISSUES.md](docs/SCORER_V2_1_KNOWN_ISSUES.md) | How answers are scored, its validation, and known defects |
 | [docs/STRETCH_A.md](docs/STRETCH_A.md) | The `calculate_egfr` tool, data, diagnosis and results |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | RunPod setup and reproduction |
@@ -108,4 +101,4 @@ Outputs are never overwritten: use a new label or output directory. [configs/REA
 - Dependencies are pinned in `uv.lock`. Every run records its git commit, package versions, hardware and the sha256 of its data, prompt, chat template, tool schemas and configs.
 - Seed 42; greedy decoding.
 - The provided files are checksum-verified before use, and validation and test are never edited.
-- The test split was used once for the final comparison, from a list frozen before any output.
+- Final result configurations were frozen for generation; evaluation exposure and selection limitations are disclosed in the report and decision log.

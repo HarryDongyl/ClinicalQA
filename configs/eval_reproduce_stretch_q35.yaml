@@ -1,0 +1,30 @@
+# Reproduction evaluation: same protocol as eval_w4_q35_4b_tools3_v1e2.yaml; fresh run mapping.
+# Evaluation configs are self-contained; this CLI does not resolve extends.
+format_config: configs/format_w4_q35_4b_tools3_v1e2.yaml
+analysis_config: configs/analysis.yaml
+output_dir: outputs
+batch_size: 2
+budget:
+  max_calls: 1
+  max_assistant_turns: 2
+  max_new_tokens: 256
+  max_total_new_tokens: 512
+model:
+  name: Qwen/Qwen3.5-4B
+  revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+  tokenizer: Qwen/Qwen3.5-4B
+  tokenizer_revision: 851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a
+  chat_template_kwargs:
+    enable_thinking: false
+  tool_call_format: xml
+  quantization: nf4
+  attn: sdpa
+  compute_dtype: auto
+runs:
+  base:
+    adapter: null
+  reproduce_stretch_q35:
+    adapter: checkpoints/reproduce_stretch_q35/final
+bootstrap:
+  n: 2000
+  seed: 42
