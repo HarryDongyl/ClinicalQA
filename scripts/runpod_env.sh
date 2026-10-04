@@ -7,3 +7,4 @@ export HF_HOME=/workspace/.cache/huggingface
 export HF_HUB_DISABLE_TELEMETRY=1
 export TOKENIZERS_PARALLELISM=false
 export PYTHONUNBUFFERED=1
+export TRITON_CACHE_DIR=/workspace/.cache/triton   # keep compiled Triton kernels (flash-linear-attention) across pods

@@ -1,4 +1,4 @@
-# Confirmatory test run (D-098, D-101, D-102): pre-specified report
+# Confirmatory test runs (D-098, D-101, D-102, D-105, D-106): pre-specified report
 
 ## Integrity
 
@@ -13,6 +13,8 @@
 - The canonical test was evaluated in wave 1 and used for scorer validation (v2.1 was tuned on holdout 1). These are frozen comparisons on a reused test set, not a fresh blind holdout.
 - F′ and A-sft2 differ in prompt (v1 vs v1e2) and in tool list (two vs three tools). Their comparison is between configurations, not an ablation.
 - The test has no eGFR items, so A-sft2 is measured here on core retention only.
+
+**Final models (D-106).** Core: **Qwen3.5 relabel** epoch 2. Stretch A: **A-sft2-Q35** epoch 2. The first run's list (D-098) named F′ as the core model; the switch to Qwen3.5 came after this run (D-105) and is disclosed there. The second run (last section) is the A-sft2-Q35 core-retention check.
 
 ## Required metrics (v1)
 
@@ -127,6 +129,44 @@ This list is not exhaustive and is not converted into a corrected accuracy. Nume
 ## Readings
 
 1. **The data-policy result replicates.** Relabel-trained models abstain on all ten natural-Q5 items in both families, while filter-only fabricates on six, four of them in prose.
-2. **F′ is the strongest core configuration on most columns** (v2.1 macro 97.5, grounded tool 89/90), tied with Qwen3.5 relabel. It does not dominate every column (v1 numeric, strict v1 tools). It was chosen before test, from the validation evidence.
+2. **F′, the pre-registered core model at the time, is the strongest core configuration on most columns** (v2.1 macro 97.5, grounded tool 89/90), tied with Qwen3.5 relabel. It does not dominate every column (v1 numeric, strict v1 tools). It was chosen before test, from the validation evidence. The later switch of the final models to Qwen3.5 (D-105, D-106), which ties F′ here, is disclosed as a post-test decision.
 3. **The gain over base is behavioural**: tool policy +42 items and uncertainty +15, against +3 each for extraction and numeric under v2.1.
 4. **Fabrication is reduced, not eliminated** (test_020), and numeric answers contain false extra claims that both scorers miss.
+
+## Second test use: A-sft2-Q35 (D-105, D-106)
+
+**The run.** One model, `asft2_q35_test`, frozen in a separate list (`configs/w4/final_test_q35.json`, commit `724e707`) and run once on an RTX 4090 (33.6 min). It covers the 400 test IDs; the adapter and frozen-config hashes match, and there was no rerun. Scores: `reports/w4/test_q35/`.
+
+**Disclosed.**
+
+- This is the second use of test, and it happened after the first run's results were known. It measures core retention for the Stretch A model and was not used for selection.
+- Test has no eGFR items.
+
+| Metric | A-sft2-Q35 | Qwen3.5 relabel | A-sft2 (Qwen3) | F′ |
+|---|---|---|---|---|
+| Natural-Q5 fabrication /10 | **0** (ten clean abstentions) | 0 | 0 | 0 |
+| v1 extractive / numeric | 155 / 48 | 153 / 47 | 151 / 44 | 151 / 42 |
+| v1 tool selection / arguments / uncertainty | 90 / 88 / 58 | 90 / 88 / 59 | 90 / 84 / 59 | 90 / 84 / 59 |
+| Grounded tool /90, v2.1 (strict v1) | 87 (88) | 88 (87) | 87 (83) | 89 (83) |
+| Clinical context (post-hoc) | 88/90 | 89/90 | 86/90 | 88/90 |
+| v2.1 macro | 97.2 | 97.4 | 96.2 | 97.5 |
+
+**Paired v2.1 macro**, A-sft2-Q35 minus the other model (2,000 stratified bootstrap resamples, seed 42):
+
+| Comparison | Δ (pp) [95% CI] |
+|---|---|
+| vs Qwen3.5 relabel | −0.20 [−1.76, +1.35] |
+| vs A-sft2 (Qwen3) | +0.99 [−1.04, +3.04] |
+| vs F′ | −0.29 [−2.21, +1.65] |
+
+**A-sft2-Q35's nine v2.1 failures,** each read:
+
+| Kind | Items |
+|---|---|
+| Reader false fails (S-04) | test_173, test_214 ("within the desirable range (<5.18)" read as low cholesterol); test_373 ("postprandial hyperglycemia" bound to fasting glucose) |
+| Fabricated-value false fails (S-18) | test_163 and test_307 state the documented weight correctly (63.7 kg; 133.6 lb) and quote the standard BMI range 18.5–24.9, which is flagged as an invented value |
+| Shared with F′ | test_006, test_043 (correct all-normal answers missed; partial keys) |
+| Ambiguous | test_347 ("closest to the upper limit") |
+| Real error | test_210 (computes the 156 midpoint, then calls 71.4 above it) |
+
+**Reading.** Adding the third tool cost Qwen3.5 almost nothing on the core test (−0.2 pp against its own core model), while the Qwen3 extension cost −1.3 pp. A-sft2-Q35 has the highest v1 extractive and numeric counts of all arms.

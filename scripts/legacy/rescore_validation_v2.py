@@ -1,6 +1,6 @@
 """Validation-only scoring and blinded review packet. Never opens a test artifact.
 
-Run: .venv/bin/python scripts/legacy/rescore_validation_v2.py --out reports/scorer_v2_validation
+Run: .venv/bin/python scripts/legacy/rescore_validation_v2.py --out reports/history/scorer_v2_validation
 Output directories must be new. Original scores are never replaced.
 """
 from __future__ import annotations
@@ -42,7 +42,7 @@ def summarize(rows):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--out", default="reports/scorer_v2_validation")
+    ap.add_argument("--out", default="reports/history/scorer_v2_validation")
     ap.add_argument("--labels", nargs="+", default=DEFAULT_LABELS)
     args = ap.parse_args()
     if any("test" in label.lower() or Path(label).name != label for label in args.labels):

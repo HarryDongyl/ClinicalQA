@@ -12,7 +12,7 @@ from clinqa.training_data import grounding_flags
 
 
 def main():
-    out = ROOT / "reports/q5_uncertain_proposals"
+    out = ROOT / "reports/history/q5_uncertain_proposals"
     if out.exists():
         raise FileExistsError("Proposal directory exists; preserve it and version subsequent audits explicitly.")
     source = ROOT / "data/train.jsonl"

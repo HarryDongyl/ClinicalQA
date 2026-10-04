@@ -4,7 +4,9 @@ Guidance for AI coding assistants working in this repository. Start with `README
 
 ## What this is
 
-This repository applies QLoRA SFT to Qwen3-4B-Instruct-2507 for clinical QA over one note and one table, with tool calls (`unit_convert`, `calculate_bmi`, and in Stretch A `calculate_egfr`) and abstention when information is missing. The final models are F′ (`w4_q3_refit_relabel_lr1e4_s42`, core) and A-sft2 (`w4_q3_relabel_egfr2_lr1e4`, Stretch A).
+This repository applies QLoRA SFT to 4B instruction models (Qwen3-4B-Instruct-2507 and Qwen3.5-4B) for clinical QA over one note and one table, with tool calls (`unit_convert`, `calculate_bmi`, and in Stretch A `calculate_egfr`) and abstention when information is missing.
+
+The final models are on Qwen3.5 (D-106): `w4_q35_4b_relabel_lr1e4` (core, checkpoint 250) and `w4_q35_4b_relabel_egfr2_lr1e4` (Stretch A, checkpoint 276). The Qwen3 models F′ and A-sft2 are reported comparators.
 
 ## Layout
 
@@ -55,7 +57,7 @@ Run commands from the repository root. Never run a bare `uv sync`, because it dr
 
 ## Adding an experiment
 
-Follow `README.md` → "Add a new experiment". Write the decision and its pre-registered criterion in `docs/DECISIONS.md` (next ID after D-104) before generating results. Report a failed criterion as a fail; never move a threshold after seeing results.
+Follow `README.md` → "Add a new experiment". Write the decision and its pre-registered criterion in `docs/DECISIONS.md` (next ID after D-106) before generating results. Report a failed criterion as a fail; never move a threshold after seeing results.
 
 ## Documentation conventions
 

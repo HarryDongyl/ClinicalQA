@@ -92,8 +92,9 @@ def test_prompt_v1e2_only_adds_the_kdigo_table():
     assert v1e2.replace(line, "") == v1e
 
 
-def test_qwen35_asft2_config_differs_from_the_relabel_recipe_only_in_data_and_prompt():
+def test_qwen35_asft2_config_differs_from_the_relabel_recipe_only_in_data_and_prompt(tmp_path):
     from clinqa.config import load_run_config, load_yaml
+    from clinqa.data_views import build_view
     from clinqa.training_data import audit_train_view
     base = load_run_config("configs/train/w4_q35_4b_relabel_lr1e4.yaml")
     sft = load_run_config("configs/train/w4_q35_4b_relabel_egfr2_lr1e4.yaml")
@@ -102,7 +103,11 @@ def test_qwen35_asft2_config_differs_from_the_relabel_recipe_only_in_data_and_pr
     fmt = load_yaml(sft["format_config"])
     assert fmt["system_prompt"] == "configs/prompts/system_v1e2.txt" and fmt["tokenizer"] == "Qwen/Qwen3.5-4B"
     assert fmt["tools"] == ["unit_convert", "calculate_bmi", "calculate_egfr"] and fmt["max_length"] >= 2048
-    records, _ = audit_train_view(sft, fmt)
+    # Train views are generated and git-ignored (data/processed/*/train.jsonl), so build this one in a temporary
+    # directory instead of relying on `make views-all` having been run in the checkout.
+    build_view("q5_relabeled_egfr2", output_dir=tmp_path)
+    fmt_tmp = {**fmt, "train_views": {"q5_relabeled_egfr2": str(tmp_path / "q5_relabeled_egfr2" / "train.jsonl")}}
+    records, _ = audit_train_view(sft, fmt_tmp)
     assert len(records) == 2200
     ev = load_yaml("configs/eval_w4_q35_4b_tools3_v1e2.yaml")
     assert {"base", "w4_q35_4b_relabel_lr1e4", "w4_q35_4b_relabel_egfr2_lr1e4"} <= set(ev["runs"])

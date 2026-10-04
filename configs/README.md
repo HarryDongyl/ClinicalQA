@@ -15,8 +15,10 @@ Configs are never moved or renamed. Their paths and sha256 are recorded in run m
 
 | Model | Train | Format | Eval (val, test) |
 |---|---|---|---|
-| **F′**, core final model: Qwen3-4B-Instruct-2507, relabel view, two tools, prompt v1 | `train/w4_q3_refit_relabel_lr1e4_s42.yaml` (extends `train/w3_relabel_lr1e4_s42.yaml`) | `format_w3.yaml` | `eval_w3_v1.yaml` (val), `eval_w4_v1.yaml` (test) |
-| **A-sft2**, Stretch A model: three tools, prompt v1e2, `q5_relabeled_egfr2` view | `train/w4_q3_relabel_egfr2_lr1e4.yaml` | `format_w4_q3_egfr2.yaml` | `eval_w4_q3_tools3_v1e2.yaml` |
+| **Core final model**: Qwen3.5-4B, relabel view, two tools, prompt v1 | `train/w4_q35_4b_relabel_lr1e4.yaml` (extends `train/w3_q35_4b_filtered_lr1e4.yaml`) | `format_w4_q35_4b.yaml` | `eval_w4_q35_4b.yaml` |
+| **Stretch A final model, A-sft2-Q35**: three tools, prompt v1e2, `q5_relabeled_egfr2` view | `train/w4_q35_4b_relabel_egfr2_lr1e4.yaml` | `format_w4_q35_4b_egfr2.yaml` (`max_length` 2560) | `eval_w4_q35_4b_tools3_v1e2.yaml` |
+| F′ (Qwen3 comparator; pre-registered core until D-105) | `train/w4_q3_refit_relabel_lr1e4_s42.yaml` (extends `train/w3_relabel_lr1e4_s42.yaml`) | `format_w3.yaml` | `eval_w3_v1.yaml` (val), `eval_w4_v1.yaml` (test) |
+| A-sft2 (Qwen3 Stretch A comparator) | `train/w4_q3_relabel_egfr2_lr1e4.yaml` | `format_w4_q3_egfr2.yaml` | `eval_w4_q3_tools3_v1e2.yaml` |
 
 ## Comparators and ablations
 
@@ -37,7 +39,7 @@ Configs are never moved or renamed. Their paths and sha256 are recorded in run m
 |---|---|
 | Zero-shot arms (three tools; prompt v1 or v1e) | `format_w4_q3_tools3_v1{,e}.yaml`, `eval_w4_q3_tools3_v1{,e}.yaml` (Qwen3.5 variants: `*_q35_4b_tools3_*`) |
 | First A-sft (52 rows; failed its criteria, D-100) | `train/w4_q3_relabel_egfr_lr1e4.yaml`, `format_w4_q3_egfr.yaml` |
-| A-sft2 | see Final models |
+| A-sft2, A-sft2-Q35 | see Final models; the Qwen3.5 zero-shot v1e2 arm uses `eval_w4_q35_4b_tools3_v1e2.yaml` |
 | Frozen evaluation sets | `w4/egfr_val.json` (19 positives), `w4/egfr_age_probes.json` (19 age-removed probes) |
 
 ## Prompts
@@ -61,4 +63,4 @@ These are kept for reproducibility and are not used by current runs:
 - `smoke.yaml`, `train/gpu_smoke.yaml`, `train/*_smoke.yaml` (smoke tests);
 - `w3/approvals.json`, `w3/gates.yaml`, `w4/gates_q35.yaml`, `w4/gate_q35.json` (reviewed gates).
 
-**Frozen; do not edit:** `w3/p1_probes.json`, `w3/q5_relabel_review.jsonl`, `w3/trainfit_ids.json`, `w4/egfr_val.json`, `w4/egfr_age_probes.json`, `w4/final_test.json`.
+**Frozen; do not edit:** `w3/p1_probes.json`, `w3/q5_relabel_review.jsonl`, `w3/trainfit_ids.json`, `w4/egfr_val.json`, `w4/egfr_age_probes.json`, `w4/final_test.json`, `w4/final_test_q35.json`.

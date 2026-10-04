@@ -22,7 +22,7 @@ This is the single list of known v2.1 defects. It supersedes `docs/history/SCORE
 | S-01 | Extra claims are never checked | FP | numeric, extractive | F ep2: val_117, val_194; F′ test: test_191, test_223, test_290, test_293, test_330, test_273 | High |
 | S-02 | Any in-band number passes; contradicting numbers are ignored | FP | numeric | F ep2: val_062 | High |
 | S-03 | Partial keys count as full correctness | FP | numeric, extractive | 15 numeric and 6 extractive partial val keys; val_004, val_005, val_001, val_085 | High |
-| S-04 | Bound-relative or incidental wording read as an analyte state | FF | tool (conversion), numeric | A-sft2: val_008, val_071, test_135, test_214; F′ test_026; C test_012, test_261; Q35 test_373 | Medium |
+| S-04 | Bound-relative or incidental wording read as an analyte state | FF | tool (conversion), numeric | A-sft2: val_008, val_071, test_135, test_214; F′ test_026; C test_012, test_261; Q35 test_373; A-sft2-Q35 test_173, test_214, test_373 | Medium |
 | S-05 | Set check rejects analytes the question itself names | FF | numeric | val_001 (base, Qwen3.5) | Medium |
 | S-06 | Last-assertion rule picks the wrong statement | FF and FP | extractive, numeric | 3 on holdout 2; Qwen3.5 val_062; test_391 (F′ passes a contradiction, Q35 fails a correct answer) | Medium |
 | S-07 | Plural and blanket sentences bind states to the wrong analyte | FF | numeric | 4 train golds and val_009 under the v2.2 guards | Medium |
@@ -36,6 +36,7 @@ This is the single list of known v2.1 defects. It supersedes `docs/history/SCORE
 | S-15 | Error profile shifts as models improve | Process | numeric | F′ vs F; wave 1 vs wave 4 | High |
 | S-16 | Tooling: silent ID intersection, overwrite, null-as-false | Tooling | all | See entry | Low |
 | S-17 | Q5 abstention accepted without checking fabricated values | FP | tool (Q5) | C-filtered test_288 | High |
+| S-18 | A quoted standard reference range is flagged as a fabricated value | FF | uncertain | A-sft2-Q35 test_163, test_307 | Medium |
 
 **Measured scale.**
 
@@ -153,6 +154,13 @@ This is the single list of known v2.1 defects. It supersedes `docs/history/SCORE
 - **Evidence.** C-filtered test_288: "The patient's weight is documented at 50.0 kg and height at 150.0 cm; however, the BMI calculation cannot be completed …". Neither value is in the input. v2.1 scores it correct, so C shows 5/10 natural-Q5 failures under v2.1 against 6/10 fabrications when every case is read.
 - **Handling.** Natural-Q5 fabrication is reported from the frozen P1 classifier plus reading every case, never from v2.1 alone.
 - **Fix later.** Apply the fabricated-value detector to Q5 abstentions.
+
+### S-18 A quoted standard reference range is flagged as a fabricated value (FF, medium)
+
+- **Mechanism.** Uncertain records are scored with `v1.score_uncertain` (via `score_abstain`), whose fabricated-value detector rejects numbers that are absent from the input. A standard range quoted for context, such as the BMI normal range 18.5–24.9, is such a number.
+- **Evidence.** A-sft2-Q35 test_163 and test_307 correctly state the documented weight (63.7 kg; 133.6 lb), say that height is missing and that BMI cannot be calculated, and add "(18.5–24.9 kg/m²)". Both fail as `fabricated_value`. The Qwen3.5 relabel model, which omits the range, passes.
+- **Handling.** Reported as false fails in the test report; scores are not repaired.
+- **Fix later.** Exempt recognised reference ranges and thresholds from the fabricated-value check.
 
 ## C. Scoring policy
 

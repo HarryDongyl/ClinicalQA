@@ -96,7 +96,7 @@ score-v21:
 
 # Wave-two scoring on CPU after the pod is stopped. Scores every wave-two validation label present:
 # E1 (w2p_*) and the LR-ladder epoch checkpoints (w2_filtered_*_step*). No winner is declared (D-049).
-W2_OUT = $(or $(OUT),reports/w2_round)
+W2_OUT = $(or $(OUT),reports/history/w2_round)
 W2_LABELS = $(sort $(patsubst outputs/%/val/scored.jsonl,%,$(wildcard outputs/w2p_*/val/scored.jsonl outputs/w2_filtered_*_step*/val/scored.jsonl)))
 w2-score:
 	@test -n "$(W2_LABELS)" || (echo "no wave-two validation outputs found"; exit 1)
@@ -114,7 +114,7 @@ w2-score:
 	@for l in $(filter w2_filtered_%,$(W2_LABELS)); do for ref in w2p_v1_raw_lr1e4 w2p_v1_q5filtered_lr5e5; do \
 	  test -f outputs/$$ref/val/scored.jsonl || continue; \
 	  $(PY) python -m clinqa.evaluate compare --a $$ref --b $$l --split val >/dev/null || exit 1; done; done
-	@echo "Reports in $(W2_OUT); legacy paired comparisons in outputs/compare_*_val_full.{md,json}"
+	@echo "Reports in $(W2_OUT); legacy paired comparisons in outputs/compare_*_val_full.{md,json} (earlier ones archived in outputs/comparisons/)"
 
 all: data analyze views test
 

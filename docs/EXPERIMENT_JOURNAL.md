@@ -1,7 +1,19 @@
 # Clinical QA experiment journal
 
-Maintained record. Last updated: 2026-10-03. Latest entry: W4-FINAL-010.
+Maintained record. Last updated: 2026-10-04. Latest entry: W4-Q35-011.
 
+## W4-Q35-011 — Qwen3.5 final models and the second test use
+
+Date: 2026-10-04.
+
+- **Decision (D-105, user).** Move the final models to Qwen3.5, on a manual reading of validation numeric outputs. The decision came after the first test, so test influence cannot be excluded.
+- **A-sft2-Q35** (RTX 4090, 87 min) is the A-sft2 data and prompt on the Qwen3.5 relabel recipe. On validation:
+  - eGFR 19/19 end-to-end, 0/19 fabrication, P1 0/34, natural Q5 7/7, core macro 96.1;
+  - the D-105 core gate fails on discordance (6 vs ≤ 5).
+- **Zero-shot v1e2 on Qwen3.5 relabel:** 7/19.
+- **Against the Qwen3 A-sft2:** +3.56 pp core macro [+0.25, +7.10].
+- **Second test use** (A-sft2-Q35 only): natural Q5 0/10, v2.1 macro 97.2, −0.2 pp against Qwen3.5 relabel.
+- **Final:** Qwen3.5 relabel (core) and A-sft2-Q35 (Stretch A) (D-106).
 
 ## W4-FINAL-010 — Wave four complete: refit, Stretch A, test, consolidation
 
@@ -281,7 +293,7 @@ Estimate the filtering effect within an LR and prompt; estimate the LR effect wi
 
 ### Q5 relabel: audited transformation, not blanket replacement
 
-The existing `reports/q5_uncertain_proposals/proposals.jsonl` contains 78 train-only proposals and is not an approved training view. Q5 is a heuristic flag for unsupported arguments, not proof that every record is unanswerable.
+The existing `reports/history/q5_uncertain_proposals/proposals.jsonl` contains 78 train-only proposals and is not an approved training view. Q5 is a heuristic flag for unsupported arguments, not proof that every record is unanswerable.
 
 For each proposal, inspect note, table and question, including units and alternate measurement notation, and assign one of these decisions:
 
@@ -377,7 +389,7 @@ Date: 2026-09-29. Documentation-only review; no new training, inference, externa
 - Added `scripts/rescore_validation_v2.py` and `make score-v2`. They score seven validation evaluations (1,750 predictions), store contracts and evidence, and emit a blinded adjudication packet that includes automatic passes as well as failures. The command cannot read a test split and refuses to overwrite an existing report directory.
 - Added synthetic adversarial/metamorphic tests. All 83 cases in the new scorer and historical train/validation scorer suites passed. The 1,750-row validation audit, source hashes and unchanged training-source hash also passed verification. See `docs/history/SCORER_V2.md` for the design, limitations, and adjudication release gate.
 - Added a one-rule reference-grounding prompt variant, four proposed filtered-training configurations, and evaluation batch-size 4/8 configurations. No new training or generation was launched.
-- Produced 78 **unreviewed training-only** Q5 uncertain-label proposals in `reports/q5_uncertain_proposals/`. Original data and the active filtered view were not changed; proposals are not registered for training.
+- Produced 78 **unreviewed training-only** Q5 uncertain-label proposals in `reports/history/q5_uncertain_proposals/`. Original data and the active filtered view were not changed; proposals are not registered for training.
 
 ### Observations, interpretation, and corresponding actions
 
@@ -398,7 +410,7 @@ Date: 2026-09-29. Documentation-only review; no new training, inference, externa
 
 ### What the new scores do and do not establish
 
-The new report is `reports/scorer_v2_validation/REPORT.md`; the schema and rubric are in `docs/history/SCORER_V2.md`. Many base false negatives become automatic passes, including the reviewed cross-sentence examples. However, many open note questions and clinical/numeric subquestions require adjudication. In the current bounded checker, base extractive results are 53 pass / 5 fail / 42 review; raw1e4 epoch one is 62 / 1 / 37; filtered5e5 epoch one is 63 / 0 / 37. **These are not replacement full accuracies.** The unresolved cases must not be counted as failures or silently excluded from model comparisons.
+The new report is `reports/history/scorer_v2_validation/REPORT.md`; the schema and rubric are in `docs/history/SCORER_V2.md`. Many base false negatives become automatic passes, including the reviewed cross-sentence examples. However, many open note questions and clinical/numeric subquestions require adjudication. In the current bounded checker, base extractive results are 53 pass / 5 fail / 42 review; raw1e4 epoch one is 62 / 1 / 37; filtered5e5 epoch one is 63 / 0 / 37. **These are not replacement full accuracies.** The unresolved cases must not be counted as failures or silently excluded from model comparisons.
 
 The independent tool-argument and grounding verifiers also disagree on some calls, including validation `val_104`. Such disagreement is a review item, not justification to widen conversion tolerances. A call that matches gold must still be checked against the input.
 
@@ -447,7 +459,7 @@ This document records completed experiments separately from proposed experiments
 
 ## 1. Scope, evidence, and reproducibility
 
-Inputs: `outputs/*/{val,test}/{run.json,metrics.json,scored.jsonl,trajectories.jsonl}`, three training manifests/logs/selections, local adapters, canonical validation/test records, and current scoring/generation source. The analysis script is `scripts/review_wave1.py`. Its outputs are under `reports/wave1_review/`:
+Inputs: `outputs/*/{val,test}/{run.json,metrics.json,scored.jsonl,trajectories.jsonl}`, three training manifests/logs/selections, local adapters, canonical validation/test records, and current scoring/generation source. The analysis script is `scripts/review_wave1.py`. Its outputs are under `reports/history/wave1_review/`:
 
 - `summary.json`: full metrics, run parameters, fixed record-based subgroups, training losses, token costs, adapter checks, and paired comparisons.
 - `case_evidence.json`: original input, gold answer, generated answers and calls for the reviewed validation cases, including every numeric failure of the selected checkpoint.

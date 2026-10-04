@@ -1,7 +1,7 @@
 """Reproduce the wave-one artifact audit without generating or replacing predictions.
 
 Run from Clinical: .venv/bin/python scripts/legacy/review_wave1.py [--verify-hf]
-Only reports/wave1_review is written. Hugging Face access is read-only and optional.
+Only reports/history/wave1_review is written. Hugging Face access is read-only and optional.
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from clinqa.metrics import score_example, args_ok
 from clinqa.analysis.features import classify_uncertain
 import numpy as np
 
-OUT = ROOT / "reports/wave1_review"
+OUT = ROOT / "reports/history/wave1_review"
 INPUTS = {}
 
 

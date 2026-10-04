@@ -28,26 +28,27 @@ uv run --frozen pytest -q
 
 Run each in `tmux`. Every runner refuses to start with modified tracked files and resumes finished steps: training is skipped when its manifest exists, and evaluations reuse verified outputs.
 
-| Model | Command | Time (RTX 4090) |
+| Model | Command | Measured |
 |---|---|---|
-| **F′** (core final) | `STAGES=refit UPLOAD=1 bash scripts/run_w4_round.sh` | About 45 min training plus 40 min evaluation |
-| **A-sft2** (Stretch A) | `STAGES=r2b UPLOAD=1 bash scripts/run_w4_round.sh` | About 60 min training plus 40 min evaluation |
+| **Core: Qwen3.5 relabel** | `make train RUN=w4_q35_4b_relabel_lr1e4`, then `scripts/w3_epochs.py generate --run w4_q35_4b_relabel_lr1e4 --config configs/eval_w4_q35_4b.yaml --p1-all-epochs --trainfit` (or `STAGES=r1`, which adds its controls) | 56.6 min training, 11.3 GiB (A100) |
+| **Stretch A: A-sft2-Q35** | `STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh` | 87.0 min training, 12.1 GiB (RTX 4090) |
+| F′ (Qwen3 comparator) | `STAGES=refit UPLOAD=1 bash scripts/run_w4_round.sh` | 42.5 min, 7.8 GiB (RTX 4090) |
+| A-sft2 (Qwen3 comparator) | `STAGES=r2b UPLOAD=1 bash scripts/run_w4_round.sh` | 59.7 min, 8.4 GiB (RTX 4090) |
 
-- **`refit`** trains `w4_q3_refit_relabel_lr1e4_s42`, the F-s42 recipe on the Q5-relabelled view (2,000 rows, 250 steps). It evaluates both epochs on val, the P1 probes and train-fit, then compares them item by item with the original F-s42 outputs.
-- **`r2b`** trains `w4_q3_relabel_egfr2_lr1e4` (2,200 rows, 276 steps). It evaluates both epochs on val, P1 and the two frozen eGFR sets.
+Qwen3.5 needs `flash-linear-attention` to import (installed by `make setup`). `causal-conv1d` is not installed. The first steps are slow while Triton compiles kernels; `scripts/runpod_env.sh` keeps that cache on `/workspace`.
 
-Without GPU training, download the published adapters and evaluate only:
+Without GPU training, download the published adapter and evaluate only:
 
 ```bash
-uv run --frozen hf download Harrydongyl/clinqa-w4_q3_refit_relabel_lr1e4_s42 --include "checkpoint-250/*" \
-  --local-dir checkpoints/w4_q3_refit_relabel_lr1e4_s42
-uv run --frozen python -m clinqa.evaluate --config configs/eval_w3_v1.yaml generate --label my_fprime_val \
-  --run w4_q3_refit_relabel_lr1e4_s42 --adapter checkpoints/w4_q3_refit_relabel_lr1e4_s42/checkpoint-250 --split val
+uv run --frozen hf download Harrydongyl/clinqa-w4_q35_4b_relabel_lr1e4 --include "checkpoint-250/*" \
+  --local-dir checkpoints/w4_q35_4b_relabel_lr1e4
+uv run --frozen python -m clinqa.evaluate --config configs/eval_w4_q35_4b.yaml generate --label my_q35_val \
+  --run w4_q35_4b_relabel_lr1e4 --adapter checkpoints/w4_q35_4b_relabel_lr1e4/checkpoint-250 --split val
 ```
 
-### Qwen3.5 final models (D-105)
+### Stretch A on Qwen3.5 and the second test use (D-105; done, do not repeat)
 
-The core model, Qwen3.5 relabel epoch 2, already exists and is evaluated. Stretch A on Qwen3.5 runs in one A100 session:
+The Stretch A model was produced in one RTX 4090 session:
 
 ```bash
 STAGES=r2c UPLOAD=1 bash scripts/run_w4_round.sh 2>&1 | tee -a outputs/w4_r2c.console.log
@@ -85,7 +86,7 @@ Run these under bash, because zsh does not word-split `$VAR` label lists. Output
 
 ## 4. The test run (done once; do not repeat)
 
-Test was run once on 2026-10-03 from the frozen list `configs/w4/final_test.json`, at commit `7ae0034` on an RTX 4090 (D-098, D-101). Results: `outputs/*_test/test/` and `reports/w4/test/TEST_REPORT.md`.
+Test was run once on 2026-10-03 from the frozen list `configs/w4/final_test.json`, at commit `7ae0034` on an RTX 4090 (D-098, D-101), and once more for A-sft2-Q35 only from `configs/w4/final_test_q35.json` at `724e707` (D-105, D-106). Results: `outputs/*_test/test/` and `reports/w4/test/TEST_REPORT.md`.
 
 The protocol, for the record:
 

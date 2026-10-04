@@ -64,7 +64,8 @@ def load_base_model(model_cfg: dict[str, Any], for_training: bool) -> Any:
     model.clinqa_load_info = {"device": kind, "quantization": "nf4" if "quantization_config" in kwargs else "none",
                               "dtype": str(kwargs["dtype"]).replace("torch.", ""),
                               "ignored_checkpoint_keys": len(info.get("unexpected_keys", [])),
-                              "linear_attention_kernel": _linear_attention_kernel(model)}
+                              "linear_attention_kernel": _linear_attention_kernel(model),
+                              "linear_attention_ops": _linear_attention_ops(model)}
     return model
 
 
@@ -75,6 +76,20 @@ def _linear_attention_kernel(model: Any) -> str | None:
     module = sys.modules.get(type(model).__module__)
     fn = getattr(module, "torch_chunk_gated_delta_rule", None)  # rebound to the fla kernel when fla imports
     return getattr(fn, "__module__", None) if fn is not None else None
+
+
+def _linear_attention_ops(model: Any) -> dict[str, str | None] | None:
+    """Module of each op a Gated DeltaNet layer actually holds (D-106).
+
+    `_linear_attention_kernel` reads a module-level fallback name and therefore always reports the Transformers module.
+    Each layer binds its ops at construction (fla / causal-conv1d when importable, torch fallbacks otherwise), so the
+    first layer that has them shows what really runs. None without linear attention.
+    """
+    names = ("chunk_gated_delta_rule", "recurrent_gated_delta_rule", "causal_conv1d_fn", "causal_conv1d_update")
+    for module in model.modules():
+        if any(hasattr(module, n) for n in names):
+            return {n: getattr(getattr(module, n, None), "__module__", None) for n in names}
+    return None
 
 
 def compute_dtype(model_cfg: dict[str, Any]) -> Any:

@@ -1,3 +1,5 @@
+> **Archived 2026-10-04.** Superseded by `reports/REPORT.md`. Kept unchanged below as a historical record.
+
 # Revision 2 — changes and verification
 
 Date: 2026-09-28. Scope: update the implementation plan and repair current data processing. No GPU training or model evaluation was performed. No git commit or push was made.

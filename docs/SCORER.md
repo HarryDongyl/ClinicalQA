@@ -12,6 +12,23 @@ Four scorers exist. **v2.1 is the reported scorer, and v1 is always reported bes
 - Known v2.1 defects: [SCORER_V2_1_KNOWN_ISSUES.md](SCORER_V2_1_KNOWN_ISSUES.md).
 - Full validation record: [../reports/scorer_v2/VALIDATION.md](../reports/scorer_v2/VALIDATION.md).
 
+## v1 → v2.1 at a glance, by answer type
+
+**The core change.** v1 asks whether the answer *reproduces the gold answer*. v2.1 asks whether it *answers the question correctly given the input*: keys are computed from the note, table and question before the prediction is read.
+
+On the clean holdout, agreement with blinded adjudication rises from 65.7% (v1) to 92.6% (v2.1); on its numeric items, from 51% to 97%. What remains is mostly one blind spot: v2.1 checks the parts of an answer that the question asks for, not every claim the answer makes.
+
+Validation counts below are correct under v1 → v2.1. In brackets: items v2.1 newly passes / newly fails.
+
+| Type | v1 problem | What v2.1 fixes | What remains (see the issue list) |
+|---|---|---|---|
+| **Extractive** | Requires the gold's numbers at the gold's precision, with its direction words in the same sentence, so correct answers in other wording fail. Base model: 39/100 under v1 vs 93/100 under v2.1 (+55 / −1); about 58 of base's 61 wave-1 failures were false fails | Value and status checks from the table; a negation-aware state reader that binds across sentences; "most abnormal" accepts relative or absolute deviation | Short answers on free-text questions can fail the text fallback's term recall (S-10). Partial keys can pass incomplete answers (S-03). Canonical ranges are assumed for note-only labs (S-11) |
+| **Numeric** | Every number the gold derives must reappear, including incidental comparisons and the gold's choice of fold vs percent. 51% agreement on clean numeric items. F ep2: 29 → 46 of 50 (+17 / 0) | Only the asked results are required. Each operation (difference, ratio, percentage, percentage points) is computed from the input with its own tolerance | **False extra claims are not checked** (S-01). Any in-band number passes even with a contradicting one (S-02). Unrecognised clauses still count as correct (S-03). The last assertion can pick the wrong statement (S-06). Numeric accuracy is therefore not established |
+| **Tool** | Q5 records, whose gold arguments are absent from the input, are scored as "should call with the gold arguments", which rewards fabrication. Strict ±0.05 arguments and the exact displayed result fail benign imperial rounding. F ep2: 54 → 61 of 62; the 7 gains are exactly the 7 Q5 records | Q5 records expect abstention. Calls are scored on the executed outcome (result within tolerance, arguments grounded in the input, result reported). The stated status must not contradict the input | The status reader can bind "reduced renal function" to creatinine as low, failing correct conversions (S-04). A Q5 abstention that still states invented values passes (S-17). Strict v1 and tolerant v2.1 tool counts are both reported |
+| **Uncertain** | Mostly sound: an abstention phrase, the missing field named, no fabricated value. Its gaps: a definite "safe to give" conclusion could pass, and an unsupported call was not checked | Keeps the v1 checks and adds a failure for unsupported calls and for definite conclusions despite missing information. Base: 25 → 23 of 38 (0 / −2, stricter); SFT models unchanged | The missing-field taxonomy is narrow (S-09), and the expected category is inferred from the gold wording (S-12). Hedged phrasings can be mis-scored (S-08) |
+
+**How to read the two scorers together.** Large effects such as base vs SFT on tool use, and the Q5 fabrication contrasts, agree under both scorers and were confirmed by reading every case. Differences of a few items, especially on numeric, depend on the scorer and are not interpreted.
+
 ## v1 (rule-based, gold-driven)
 
 **Extractive.** Every number in the gold answer that is grounded in the input must appear in the prediction at the gold's precision. Direction words (high, low, normal) in the sentences holding those numbers must match the gold's. If the gold has no grounded number, a token-F1 of at least 0.5 is required.

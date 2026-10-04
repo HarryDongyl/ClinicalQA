@@ -8,7 +8,7 @@ This document retells the project in order, starting from nothing but [ASSIGNMEN
 - **Decisions**: the choice and why;
 - **Hindsight**: what was wrong or would be done differently.
 
-Status: 2026-10-03, final. The final models are F′ (core) and A-sft2 epoch 2 (Stretch A); the frozen test run is complete (stage 19).
+Status: 2026-10-04, final. The final models are Qwen3.5 relabel (core) and A-sft2-Q35 (Stretch A), adopted after the first test run (stage 20). Both test runs are complete.
 
 Numbers below are validation unless marked test. Scores are labelled by scorer:
 
@@ -48,7 +48,8 @@ Detailed evidence lives in:
 | 17 | Scorer finding | v1 over-fails numeric (51% agreement on the clean holdout); v2.1 under-fails false *extra* claims. A guarded v2.2 was prototyped, **not adopted** |
 | 18 | F′ refit and Stretch A | F′ retrained (adapter lost): P1 0/34 again, but only 136/250 val items identical and macro 1.7 pp lower (one refit, not a variance estimate). A-sft fabricated ages (16/19); the diagnosed fix, A-sft2, reaches 17/19 end-to-end with 0/19 fabrication at about 1 pp core cost |
 | 19 | Test run | Frozen five-model list, run once: F′ 97.5 v2.1 macro and 0/10 natural-Q5 fabrication; filter-only 6/10; Qwen3.5 relabel ties F′ |
-| 20 | Limitations & next steps | Single seed, test reused, LLM adjudicators, regex parsing, template-bound data |
+| 20 | Switch to Qwen3.5 | Final models moved to Qwen3.5 after the first test, on validation numeric reading (disclosed). A-sft2-Q35: eGFR 19/19, 0/19 fabrication, core cost −0.2 pp on test; its core gate fails by one item |
+| 21 | Limitations & next steps | Single seed, test reused twice, post-test backbone switch, LLM adjudicators, regex parsing, template-bound data |
 
 ---
 
@@ -400,7 +401,7 @@ What the table shows:
 
 | Arm | P1 fabrication (call / text) | Partner | Grounded tool | Natural Q5 abstain | Over-call | v1 numeric | Clinical context |
 |---|---|---|---|---|---|---|---|
-| R0-Q35-4B | 3/34 (3 / 0) | 30/34 | 53/55 | 5/7 | **50/188** | 17/50 | **12/55** |
+| R0-Q35-4B | 3/34 (3 / 0) | 30/34 | 53/55 | 5/7 | **51/188** | 17/50 | **12/55** |
 | R0-Q35-9B | 14/34 | 29/34 | 48/55 | 3/7 | 38/188 | 23/50 | 25/49 |
 | **A-Q35-4B filtered, epoch 2** | **29/34 (1 / 28)** | 33/34 | 54/55 | **2/7** | 0 | **34/50** | 53/55 |
 | A-Q35-4B filtered, epoch 1 | (P1 not run) | — | 53/55 | **7/7** | 2 | 35/50 | 52/55 |
@@ -409,7 +410,7 @@ What the table shows:
 
 1. **The filtered failure replicates on a different family, template, call format and GPU.** The model even writes "Using calculate_bmi with these values (weight_kg=108.5, height_cm=162.0)… BMI 41.4" **without calling**: a hallucinated tool call in prose. The pre-registered trigger for a Qwen3.5 relabel run was met.
 2. **Fabrication grows with training**: natural Q5 abstention 7/7 at epoch 1 vs 2/7 at epoch 2.
-3. **Zero-shot Qwen3.5 is a stronger tool caller** (53/55) but over-calls (50/188), abstains less, and rarely states the BMI category.
+3. **Zero-shot Qwen3.5 is a stronger tool caller** (53/55) but over-calls (51/188), abstains less, and rarely states the BMI category.
 4. **Numeric looks better after SFT.** v1 34 vs 25/50, v2.1 0.96 vs 0.80, train-fit 38 vs 32. Both scorers agree here, but on the matched relabel comparison they disagree (stage 17); H2 is reported as unresolved (D-101).
 5. **Cost**: 63.3 min and 11.3 GiB (A100, contention), so not a clean comparison.
 
@@ -655,7 +656,7 @@ Results:
 
 **A-sft2.** Prompt v1e2 (with the KDIGO table), 120 stage-balanced positives, 60 age negatives (40 paired), 20 sex negatives and neutral templates. Result: end-to-end 17/19, probe fabrication 0/19, P1 1/34, natural Q5 7/7.
 
-The two core criteria still fail: grounded tool 51/55 (two v2.1 reader false fails, S-04) and discordance 9 against ≤ 5. Following the pre-registered rule, **F′ stays the core final model**, and A-sft2 is delivered as the Stretch A model with its core cost disclosed (D-101). Details: [STRETCH_A.md](STRETCH_A.md).
+The two core criteria still fail: grounded tool 51/55 (two v2.1 reader false fails, S-04) and discordance 9 against ≤ 5. Following the pre-registered rule, **F′ stayed the core final model at this point** (until D-105, stage 20), and A-sft2 was delivered as the Stretch A model with its core cost disclosed (D-101). Details: [STRETCH_A.md](STRETCH_A.md).
 
 **Hindsight.** The first A-sft repeated the project's central lesson on a new tool: tool SFT with too few no-call examples teaches fabrication. The fix was the same kind of change as the Q5 relabel.
 
@@ -680,7 +681,33 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 
 ---
 
-## 20. Current claims, limitations and next steps
+## 20. Switch to Qwen3.5 and the second test use
+
+**Decision (D-105, user, 2026-10-03).** The final models move to Qwen3.5.
+
+- **Rationale:** a manual reading of validation numeric answers. Qwen3.5 relabel makes fewer real numeric errors than F (about 7 vs 1 items; v1 10 vs 3, p = 0.092; v2.1 3 vs 3). Grounding and tool metrics are tied.
+- **Timing:** the decision came after the first test run, so test influence cannot be excluded. It reverses the pre-registered final choice (D-098, D-101).
+- **Core model:** Qwen3.5 relabel epoch 2 already existed (val, P1 and test), so it was not retrained.
+
+**Stretch A on Qwen3.5 (A-sft2-Q35).** The A-sft2 data and prompt on the Qwen3.5 relabel recipe; RTX 4090, 87 min, 12.1 GiB.
+
+- **Length guard.** The longest conversation is 2,053 tokens, so the length guard was raised to 2,560. Nothing is truncated.
+- **Validation:** eGFR 19/19 end-to-end (both G5 items now right), 0/19 fabrication, P1 0/34, natural Q5 7/7.
+- **Zero-shot comparator:** v1e2 on Qwen3.5 relabel gives 7/19, so most of the gain comes from training.
+- **Against the Qwen3 A-sft2** (identical data): core macro +3.56 pp [+0.25, +7.10].
+- **Pre-registered gate:** fails on discordance, 6 against ≤ 5. The control's four wins are real errors, three of them imperial drift. A-sft2-Q35 is delivered because its eGFR criteria are met (D-106).
+
+**Second test use** (A-sft2-Q35 only; frozen separately; disclosed):
+
+- natural Q5 0/10, with ten clean abstentions;
+- v2.1 macro 97.2, which is −0.20 pp [−1.76, +1.35] against its own core model (the Qwen3 extension cost −1.28 pp);
+- of its nine v2.1 failures, five are scorer false fails (S-04, and the new S-18) and one is a real error.
+
+**Hindsight.** The backbone barely matters for the core task, but it matters for absorbing a third tool. That would have been worth testing before the first test run, so the switch would not need a post-test disclosure.
+
+---
+
+## 21. Current claims, limitations and next steps
 
 **What can be claimed** (single seed; validation, and confirmed on a reused test split where noted):
 
@@ -689,9 +716,9 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 3. SFT beats prompting decisively on tool use (54/55 vs at best 29/55). Neither a stricter prompt nor an 8B base fixes grounding.
 4. The validated scorer is far more reliable than the simple one (92.6% vs 65.7% on an unseen holdout).
 5. The relabel effect replicates across model families (Qwen3.5: 29/34 → 0/34), and a label-only control (P1-RAW, 32/34) rules out row count and training length.
-6. On the same data the two backbones tie (+0.25 pp [−2.15, +3.10] on val; −0.09 pp on test): the data policy matters far more than the newer base.
+6. On the same data the two backbones tie on the core task (+0.25 pp [−2.15, +3.10] on val; −0.09 pp on test): the data policy matters far more than the newer base. Qwen3.5 absorbs a third tool with less core cost (−0.2 vs −1.3 pp on test).
 7. On test, relabel models abstain on 10/10 natural-Q5 items, while filter-only fabricates on 6/10.
-8. A third tool can be added by SFT (17/19 end-to-end, 0/19 fabrication) once no-call examples are sufficient, at about 1 pp core cost.
+8. A third tool can be added by SFT once no-call examples are sufficient: 17/19 on Qwen3 and 19/19 on Qwen3.5, with 0/19 fabrication.
 
 **What cannot be claimed.**
 
@@ -699,7 +726,8 @@ The five-model list was frozen and committed before any output (`configs/w4/fina
 - Qwen3.5 superiority on numeric (H2 unresolved).
 - Population-level fabrication rates (0/34 has an upper bound of about 10%).
 - Seed robustness.
-- A clean test estimate (test is reused).
+- A clean test estimate (test is reused, twice in the final round).
+- That Qwen3.5 is the better core backbone: the switch was made after test, and H2 is unresolved.
 
 **Limitations.**
 

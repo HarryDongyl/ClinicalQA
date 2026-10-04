@@ -1,6 +1,6 @@
 """Guarded wrapper around scripts/score_v2.py (candidate scorer v2.1; DECISIONS D-040, D-047).
 
-    uv run python scripts/score_v21_val.py --out reports/w2_round/v21 --labels w2p_v1_base ...
+    uv run python scripts/score_v21_val.py --out reports/<new dir>/v21 --labels w2p_v1_base ...
 
 score_v2.py accepts --split test, overwrites its output directory and silently scores the intersection
 of IDs. This wrapper refuses all three: validation only, a new output directory, and every label must

@@ -139,7 +139,7 @@ These supersede earlier entries where they conflict. Superseded: D-014 (the repo
 
 ## Status after wave two
 
-Measured: three filtered LR runs at micro-batch 1, both epoch outputs, and eight fixed-weight prompt evaluations. These are recorded in `reports/w2_round/`. Wave-three code, relabel audit, seed variance, stronger prompted baseline and probes remain unimplemented/unmeasured. Scorer validity remains unresolved.
+Measured: three filtered LR runs at micro-batch 1, both epoch outputs, and eight fixed-weight prompt evaluations. These are recorded in `reports/history/w2_round/`. Wave-three code, relabel audit, seed variance, stronger prompted baseline and probes remain unimplemented/unmeasured. Scorer validity remains unresolved.
 
 ## Wave-three proposals (merged 2026-09-30; implementation not activated)
 
@@ -467,4 +467,33 @@ Implements the EXPERIMENTS_WAVE3 core queue plus the user-requested 8B SFT run. 
   - **Second test use, disclosed.** After training, `asft2_q35_test` alone is frozen in a separate list (`configs/w4/final_test_q35.json`, so the committed `final_test.json` is untouched) and run once.
     - It measures core retention only, because test has no eGFR items.
     - It is the second use of test after its results were seen. It is reported as such and never used for selection. The Qwen3.5 relabel core model already has its frozen test result (D-102).
-  - **Hardware.** An A100, as for the Qwen3.5 relabel training; the earlier test run was on an RTX 4090. The difference is disclosed.
+  - **Hardware.** An A100 or an RTX 4090 (24 GB fits the expected 12–13 GiB peak). The GPU actually used is recorded in each manifest and `run.json` and reported. The Qwen3.5 relabel model was trained on an A100, and the first test run was on an RTX 4090. No timing is compared across GPUs.
+- D-106: **A-sft2-Q35 result, second test use, final models** (2026-10-04). Evidence: `reports/w4/r2c/` (val) and `reports/w4/test_q35/` (test).
+  - **Validation, epoch 2** (`w4_q35_4b_relabel_egfr2_lr1e4_step000276`; RTX 4090, 87.0 min, 12.14 GiB, not resumed):
+    - eGFR end-to-end 19/19 (epoch 1 also 19/19), including both G5 items; age-probe fabrication 0/19;
+    - P1 0/34 (intact partners 31/34); natural Q5 7/7; table-eGFR over-call 0/21;
+    - core grounded tool 52/55; v2.1 macro 96.1 (control 96.9).
+    - The longest training conversation is 2,053 tokens, so the raised `max_length` (D-105) was needed.
+  - **D-105 criteria.** All met except discordance with the Qwen3.5 relabel epoch 2: 6 against ≤ 5 (A-sft2-Q35 better on 2, control on 4).
+    - The control's 4 are real A-sft2-Q35 errors: imperial drift on val_052 and val_105; a wrong entity on val_069; a wrong BMI on val_204.
+    - One of A-sft2-Q35's 2 is a v2.1 false fail of the control (val_062, S-06). Correcting it would give 5, but the pre-registered result stays a fail.
+    - Per D-105, the eGFR criteria are met, so **A-sft2-Q35 is the Stretch A deliverable**, with this core-gate failure reported.
+  - **Comparators** (validation):
+    - Zero-shot v1e2 on the Qwen3.5 relabel adapter: 7/19 end-to-end and 1/19 fabrication, so most of the gain comes from training, not from the prompt table.
+    - Against the Qwen3 A-sft2 (same data and prompt): eGFR 19/19 vs 17/19; core v2.1 macro +3.56 pp [+0.25, +7.10] (10 vs 3 discordant, sign p = 0.092).
+    - The extension costs Qwen3.5 0.8 pp of core macro, against 2.4 pp for Qwen3. All single seed.
+  - **Second test use** (`configs/w4/final_test_q35.json`, frozen at `724e707`, run once on an RTX 4090; 400 items; hashes match; no rerun):
+    - natural Q5 0/10, with all ten clean abstentions;
+    - grounded tool 87/90 under v2.1 (all three misses are S-04 reader false fails) and 88/90 under strict v1;
+    - v2.1 macro 97.2: vs Qwen3.5 relabel −0.20 pp [−1.76, +1.35]; vs the Qwen3 A-sft2 +0.99 [−1.04, +3.04];
+    - v1: extractive 155/160, numeric 48/80, selection 90/100, arguments 88/100, uncertainty 58/60.
+    - Two uncertainty misses (test_163, test_307) are v2.1 false fails: a quoted BMI reference range is flagged as a fabricated value (new S-18).
+    - Disclosed: this is the second test use, after the first test's results were known. It measures core retention only and was not used for selection.
+  - **Final models:**
+    - **core**: Qwen3.5 relabel epoch 2 (`w4_q35_4b_relabel_lr1e4`, checkpoint 250);
+    - **Stretch A**: A-sft2-Q35 epoch 2 (`w4_q35_4b_relabel_egfr2_lr1e4`, checkpoint 276).
+
+    F′ and the Qwen3 A-sft2 remain reported comparators.
+  - **Environment facts, disclosed:**
+    - `causal-conv1d` is not installed in any Qwen3.5 run, so the short convolution uses the PyTorch path.
+    - The recorded `linear_attention_kernel` field inspects a module-level function and always names the Transformers module, so flash-linear-attention use is not established from the manifests. The recorder is fixed for future runs.
