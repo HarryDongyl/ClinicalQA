@@ -81,7 +81,8 @@ The first SFT model raised test v1 macro from 0.44 (base) to 0.82. Subsequent it
 
 - Token-mean cross-entropy over assistant tokens only: the call, the answer and the end-of-turn marker. Tool observations and evidence are masked.
 - Masks are built by prefix-difference rendering, because TRL's assistant mask does not support these templates. The audits pass on every conversation.
-- Six rendered examples: `reports/w3/relabel_mask_audit/formatted_examples.md`.
+- Six rendered examples: `reports/w3/relabel_mask_audit/formatted_examples.md`
+`reports/w4/q35_egfr2_mask_audit/formatted_examples.md`.
 
 **Recipe** (resolved config and manifest of the core model):
 
