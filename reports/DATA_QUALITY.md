@@ -26,7 +26,7 @@ Validation and test are never edited.
 
 ## Formatted examples
 
-[w3/relabel_mask_audit/formatted_examples.md](w3/relabel_mask_audit/formatted_examples.md) shows six examples as rendered for the final training view (`q5_relabeled`): train_000 (extractive), train_004 (numeric), train_003 (uncertain), train_046 (BMI), train_015 (unit conversion) and train_006 (imperial BMI). Each shows the exact rendered model input (native Qwen chat template, system prompt v1, tool schemas, generation prompt) and the exact supervised continuation. The wave-1 rendering of the same six examples is [formatted_examples.md](formatted_examples.md).
+[w4/q35_relabel_mask_audit/formatted_examples.md](w4/q35_relabel_mask_audit/formatted_examples.md) shows six examples as rendered for the final training view (`q5_relabeled`): train_000 (extractive), train_004 (numeric), train_003 (uncertain), train_046 (BMI), train_015 (unit conversion) and train_006 (imperial BMI). Each shows the exact rendered model input (native Qwen chat template, system prompt v1, tool schemas, generation prompt) and the exact supervised continuation. 
 
 A reviewed Q5 relabel, before and after (`train_009`; the input documents no weight or height):
 
